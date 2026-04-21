@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --surface-0: 255 255 255;      /* white */
+    --surface-1: 249 250 251;      /* gray-50 */
+    --surface-2: 243 244 246;      /* gray-100 */
+    --ink: 17 24 39;                /* gray-900 */
+    --ink-muted: 75 85 99;          /* gray-600 */
+    --ink-subtle: 107 114 128;      /* gray-500 */
+    --line: 229 231 235;            /* gray-200 */
+  }
+
+  html.dark {
+    --surface-0: 2 6 23;            /* slate-950 */
+    --surface-1: 15 23 42;          /* slate-900 */
+    --surface-2: 30 41 59;          /* slate-800 */
+    --ink: 241 245 249;             /* slate-100 */
+    --ink-muted: 148 163 184;       /* slate-400 */
+    --ink-subtle: 100 116 139;      /* slate-500 */
+    --line: 51 65 85;               /* slate-700 */
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Offset anchor jumps and section snaps so the fixed nav (h-16/h-20) doesn't clip the heading */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply font-sans antialiased bg-surface-0 text-ink;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 text-ink;
+  }
+
+  .card {
+    @apply bg-surface-0 rounded-lg shadow-lg p-6 transition-shadow hover:shadow-xl border border-line;
+  }
+
+  .dark .card {
+    @apply bg-surface-1 shadow-none;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs tracking-[0.2em] uppercase text-ink-muted;
+  }
+}
+
+/* Print Styles */
+@media print {
+  nav,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+
+  * {
+    background: white !important;
+    color: black !important;
+  }
+
+  .section-container {
+    page-break-inside: avoid;
+  }
+}
