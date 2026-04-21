@@ -1,0 +1,99 @@
+name: Deploy site
+
+# Builds the Next.js app and syncs it to the S3 bucket backing the CloudFront
+# distribution, then invalidates the cache. Does NOT run CDK.
+#
+# Stage mapping:
+#   push to dev   → stage=dev   → bucket=cv-michaelgroff-dev   → dev.cv.michaelgroff.info
+#   push to main  → stage=prod  → bucket=cv-michaelgroff-prod  → cv.michaelgroff.info
+#
+# Fires on changes to frontend/** or this workflow file. README / infrastructure
+# / docs changes don't trigger a site redeploy.
+
+on:
+  push:
+    branches: [dev, main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-site.yml'
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: 'Target stage'
+        required: true
+        type: choice
+        options: [dev, prod]
+
+permissions:
+  id-token: write      # for OIDC
+  contents: read
+
+concurrency:
+  group: site-${{ github.event.inputs.stage || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build · Sync · Invalidate
+    runs-on: ubuntu-latest
+    environment: ${{ (github.event.inputs.stage == 'prod' || github.ref == 'refs/heads/main') && 'production' || 'dev' }}
+    env:
+      STAGE: ${{ github.event.inputs.stage || (github.ref == 'refs/heads/main' && 'prod' || 'dev') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/cv-website-github-actions
+          aws-region: us-east-1
+
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build Next.js static export
+        working-directory: frontend
+        run: npm run build
+
+      - name: Fetch bucket + distribution from CDK stack
+        id: stack
+        run: |
+          BUCKET=$(aws cloudformation describe-stacks \
+            --stack-name "CvWebsite-${STAGE}" \
+            --query 'Stacks[0].Outputs[?OutputKey==`WebsiteBucketName`].OutputValue' \
+            --output text)
+          DIST=$(aws cloudformation describe-stacks \
+            --stack-name "CvWebsite-${STAGE}" \
+            --query 'Stacks[0].Outputs[?OutputKey==`DistributionId`].OutputValue' \
+            --output text)
+          if [ -z "$BUCKET" ] || [ -z "$DIST" ]; then
+            echo "Stack CvWebsite-${STAGE} missing expected outputs — did infra deploy?" >&2
+            exit 1
+          fi
+          echo "bucket=$BUCKET" >> $GITHUB_OUTPUT
+          echo "distribution=$DIST" >> $GITHUB_OUTPUT
+          echo "Deploying to bucket=$BUCKET  distribution=$DIST"
+
+      - name: Sync build to S3
+        run: aws s3 sync frontend/out "s3://${{ steps.stack.outputs.bucket }}" --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ steps.stack.outputs.distribution }}" \
+            --paths "/*" \
+            --query 'Invalidation.Id' --output text
+
+      - name: Summary
+        run: |
+          URL="${{ env.STAGE == 'prod' && 'https://cv.michaelgroff.info' || 'https://dev.cv.michaelgroff.info' }}"
+          echo "::notice::✅ Deployed to $URL"
