@@ -51,6 +51,15 @@ export class GitHubOidcStack extends cdk.Stack {
       ),
     });
 
+    // Landing Zone Accelerator network-perimeter SCP (NetworkPerimeter-SCP) denies
+    // all API calls from principals whose source IP isn't in the org-wide
+    // TrustedSourceIps list. GitHub Actions runners call AWS from GitHub-owned
+    // IP ranges, so without an exemption every deploy would fail.
+    // The SCP's DenyAccessFromUntrustedNetworks statement checks for either
+    // LZA:EXC:NET=true (network perimeter only) or LZA:EXC:ALL=true (all LZA
+    // perimeters). We opt for the tighter NET-only exemption.
+    cdk.Tags.of(this.role).add('LZA:EXC:NET', 'true');
+
     this.role.addToPolicy(new iam.PolicyStatement({
       sid: 'AssumeCdkBootstrapRoles',
       actions: ['sts:AssumeRole'],
