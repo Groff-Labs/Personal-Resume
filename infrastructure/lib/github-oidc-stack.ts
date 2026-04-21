@@ -63,6 +63,22 @@ export class GitHubOidcStack extends cdk.Stack {
       resources: [`arn:aws:ssm:*:${this.account}:parameter/cdk-bootstrap/*`],
     }));
 
+    // The site workflow queries our CFN stack outputs (bucket name + dist id)
+    // at runtime. The infra workflow's `cdk diff` needs the same read access.
+    this.role.addToPolicy(new iam.PolicyStatement({
+      sid: 'ReadCfnStackOutputs',
+      actions: [
+        'cloudformation:DescribeStacks',
+        'cloudformation:DescribeStackEvents',
+        'cloudformation:GetTemplate',
+        'cloudformation:ListStacks',
+      ],
+      resources: [
+        `arn:aws:cloudformation:*:${this.account}:stack/CvWebsite-*/*`,
+        `arn:aws:cloudformation:*:${this.account}:stack/CDKToolkit/*`,
+      ],
+    }));
+
     this.role.addToPolicy(new iam.PolicyStatement({
       sid: 'SyncWebsiteBucket',
       actions: [
