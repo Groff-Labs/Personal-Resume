@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!--><html lang="en-US" class="no-js">
+<!--<![endif]-->
+<head>
+	<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+		<meta name="theme-color" content="#dd9933">	<link rel="profile" href="https://gmpg.org/xfn/11">
+	<title>Michael Groff &#8211; AWS Solutions Architect</title>
+<meta name="robots" content="max-image-preview:large">
+<link rel="dns-prefetch" href="//patterns.hiive.cloud">
+<link rel="dns-prefetch" href="//maps.googleapis.com">
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="alternate" type="application/rss+xml" title="Michael Groff &raquo; Feed" href="/legacy/feed/">
+<link rel="alternate" type="application/rss+xml" title="Michael Groff &raquo; Comments Feed" href="/legacy/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Michael Groff &raquo; Home Comments Feed" href="/legacy/home-2/feed/">
+		<!-- This site uses the Google Analytics by ExactMetrics plugin v8.2.2 - Using Analytics tracking - https://www.exactmetrics.com/ -->
+							<script src="//www.googletagmanager.com/gtag/js?id=G-KN9F064VWE" data-cfasync="false" data-wpfc-render="false" async></script>
+			<script data-cfasync="false" data-wpfc-render="false">var em_version = '8.2.2';
+				var em_track_user = true;
+				var em_no_track_reason = '';
+								var ExactMetricsDefaultLocations = {"page_location":"\/legacy\/?simply_static_page=264"};
+				if ( typeof ExactMetricsPrivacyGuardFilter === 'function' ) {
+					var ExactMetricsLocations = (typeof ExactMetricsExcludeQuery === 'object') ? ExactMetricsPrivacyGuardFilter( ExactMetricsExcludeQuery ) : ExactMetricsPrivacyGuardFilter( ExactMetricsDefaultLocations );
+				} else {
+					var ExactMetricsLocations = (typeof ExactMetricsExcludeQuery === 'object') ? ExactMetricsExcludeQuery : ExactMetricsDefaultLocations;
+				}
+
+								var disableStrs = [
+										'ga-disable-G-KN9F064VWE',
+									];
+
+				/* Function to detect opted out users */
+				function __gtagTrackerIsOptedOut() {
+					for (var index = 0; index < disableStrs.length; index++) {
+						if (document.cookie.indexOf(disableStrs[index] + '=true') > -1) {
+							return true;
+						}
+					}
+
+					return false;
+				}
+
+				/* Disable tracking if the opt-out cookie exists. */
+				if (__gtagTrackerIsOptedOut()) {
+					for (var index = 0; index < disableStrs.length; index++) {
+						window[disableStrs[index]] = true;
+					}
+				}
+
+				/* Opt-out function */
+				function __gtagTrackerOptout() {
+					for (var index = 0; index < disableStrs.length; index++) {
+						document.cookie = disableStrs[index] + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+						window[disableStrs[index]] = true;
+					}
+				}
+
+				if ('undefined' === typeof gaOptout) {
+					function gaOptout() {
+						__gtagTrackerOptout();
+					}
+				}
+								window.dataLayer = window.dataLayer || [];
+
+				window.ExactMetricsDualTracker = {
+					helpers: {},
+					trackers: {},
+				};
+				if (em_track_user) {
+					function __gtagDataLayer() {
+						dataLayer.push(arguments);
+					}
+
+					function __gtagTracker(type, name, parameters) {
+						if (!parameters) {
+							parameters = {};
+						}
+
+						if (parameters.send_to) {
+							__gtagDataLayer.apply(null, arguments);
+							return;
+						}
+
+						if (type === 'event') {
+														parameters.send_to = exactmetrics_frontend.v4_id;
+							var hookName = name;
+							if (typeof parameters['event_category'] !== 'undefined') {
+								hookName = parameters['event_category'] + ':' + name;
+							}
+
+							if (typeof ExactMetricsDualTracker.trackers[hookName] !== 'undefined') {
+								ExactMetricsDualTracker.trackers[hookName](parameters);
+							} else {
+								__gtagDataLayer('event', name, parameters);
+							}
+							
+						} else {
+							__gtagDataLayer.apply(null, arguments);
+						}
+					}
+
+					__gtagTracker('js', new Date());
+					__gtagTracker('set', {
+						'developer_id.dNDMyYj': true,
+											});
+					if ( ExactMetricsLocations.page_location ) {
+						__gtagTracker('set', ExactMetricsLocations);
+					}
+										__gtagTracker('config', 'G-KN9F064VWE', {"forceSSL":"true"} );
+															window.gtag = __gtagTracker;										(function () {
+						/* https://developers.google.com/analytics/devguides/collection/analyticsjs/ */
+						/* ga and __gaTracker compatibility shim. */
+						var noopfn = function () {
+							return null;
+						};
+						var newtracker = function () {
+							return new Tracker();
+						};
+						var Tracker = function () {
+							return null;
+						};
+						var p = Tracker.prototype;
+						p.get = noopfn;
+						p.set = noopfn;
+						p.send = function () {
+							var args = Array.prototype.slice.call(arguments);
+							args.unshift('send');
+							__gaTracker.apply(null, args);
+						};
+						var __gaTracker = function () {
+							var len = arguments.length;
+							if (len === 0) {
+								return;
+							}
+							var f = arguments[len - 1];
+							if (typeof f !== 'object' || f === null || typeof f.hitCallback !== 'function') {
+								if ('send' === arguments[0]) {
+									var hitConverted, hitObject = false, action;
+									if ('event' === arguments[1]) {
+										if ('undefined' !== typeof arguments[3]) {
+											hitObject = {
+												'eventAction': arguments[3],
+												'eventCategory': arguments[2],
+												'eventLabel': arguments[4],
+												'value': arguments[5] ? arguments[5] : 1,
+											}
+										}
+									}
+									if ('pageview' === arguments[1]) {
+										if ('undefined' !== typeof arguments[2]) {
+											hitObject = {
+												'eventAction': 'page_view',
+												'page_path': arguments[2],
+											}
+										}
+									}
+									if (typeof arguments[2] === 'object') {
+										hitObject = arguments[2];
+									}
+									if (typeof arguments[5] === 'object') {
+										Object.assign(hitObject, arguments[5]);
+									}
+									if ('undefined' !== typeof arguments[1].hitType) {
+										hitObject = arguments[1];
+										if ('pageview' === hitObject.hitType) {
+											hitObject.eventAction = 'page_view';
+										}
+									}
+									if (hitObject) {
+										action = 'timing' === arguments[1].hitType ? 'timing_complete' : hitObject.eventAction;
+										hitConverted = mapArgs(hitObject);
+										__gtagTracker('event', action, hitConverted);
+									}
+								}
+								return;
+							}
+
+							function mapArgs(args) {
+								var arg, hit = {};
+								var gaMap = {
+									'eventCategory': 'event_category',
+									'eventAction': 'event_action',
+									'eventLabel': 'event_label',
+									'eventValue': 'event_value',
+									'nonInteraction': 'non_interaction',
+									'timingCategory': 'event_category',
+									'timingVar': 'name',
+									'timingValue': 'value',
+									'timingLabel': 'event_label',
+									'page': 'page_path',
+									'location': 'page_location',
+									'title': 'page_title',
+									'referrer' : 'page_referrer',
+								};
+								for (arg in args) {
+																		if (!(!args.hasOwnProperty(arg) || !gaMap.hasOwnProperty(arg))) {
+										hit[gaMap[arg]] = args[arg];
+									} else {
+										hit[arg] = args[arg];
+									}
+								}
+								return hit;
+							}
+
+							try {
+								f.hitCallback();
+							} catch (ex) {
+							}
+						};
+						__gaTracker.create = newtracker;
+						__gaTracker.getByName = newtracker;
+						__gaTracker.getAll = function () {
+							return [];
+						};
+						__gaTracker.remove = noopfn;
+						__gaTracker.loaded = true;
+						window['__gaTracker'] = __gaTracker;
+					})();
+									} else {
+										console.log("");
+					(function () {
+						function __gtagTracker() {
+							return null;
+						}
+
+						window['__gtagTracker'] = __gtagTracker;
+						window['gtag'] = __gtagTracker;
+					})();
+									}</script>
+				<!-- / Google Analytics by ExactMetrics -->
+		<script>
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/svg\/","svgExt":".svg","source":{"concatemoji":"\/legacy\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.7"}};
+/*! This file is auto-generated */
+!function(i,n){var o,s,e;function c(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function p(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data),r=(e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0),new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data));return t.every(function(e,t){return e===r[t]})}function u(e,t,n){switch(t){case"flag":return n(e,"🏳️‍⚧️","🏳️​⚧️")?!1:!n(e,"🇺🇳","🇺​🇳")&&!n(e,"🏴󠁧󠁢󠁥󠁮󠁧󠁿","🏴​󠁧​󠁢​󠁥​󠁮​󠁧​󠁿");case"emoji":return!n(e,"🐦‍⬛","🐦​⬛")}return!1}function f(e,t,n){var r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):i.createElement("canvas"),a=r.getContext("2d",{willReadFrequently:!0}),o=(a.textBaseline="top",a.font="600 32px Arial",{});return e.forEach(function(e){o[e]=t(a,e,n)}),o}function t(e){var t=i.createElement("script");t.src=e,t.defer=!0,i.head.appendChild(t)}"undefined"!=typeof Promise&&(o="wpEmojiSettingsSupports",s=["flag","emoji"],n.supports={everything:!0,everythingExceptFlag:!0},e=new Promise(function(e){i.addEventListener("DOMContentLoaded",e,{once:!0})}),new Promise(function(t){var n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"}),a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=function(e){c(n=e.data),a.terminate(),t(n)})}catch(e){}c(n=f(s,u,p))}t(n)}).then(function(e){for(var t in e)n.supports[t]=e[t],n.supports.everything=n.supports.everything&&n.supports[t],"flag"!==t&&(n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&n.supports[t]);n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&!n.supports.flag,n.DOMReady=!1,n.readyCallback=function(){n.DOMReady=!0}}).then(function(){return e}).then(function(){var e;n.supports.everything||(n.readyCallback(),(e=n.source||{}).concatemoji?t(e.concatemoji):e.wpemoji&&e.twemoji&&(t(e.twemoji),t(e.wpemoji)))}))}((window,document),window._wpemojiSettings);
+</script>
+<link rel="stylesheet" id="sgr-css" href="/legacy/wp-content/plugins/simple-google-recaptcha/sgr.css?ver=1663350016" media="all">
+<style id="wp-emoji-styles-inline-css">img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}</style>
+<link rel="stylesheet" id="wp-block-library-css" href="/legacy/wp-includes/css/dist/block-library/style.min.css?ver=6.7" media="all">
+<style id="wp-block-library-theme-inline-css">.wp-block-audio :where(figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-audio :where(figcaption){color:#ffffffa6}.wp-block-audio{margin:0 0 1em}.wp-block-code{border:1px solid #ccc;border-radius:4px;font-family:Menlo,Consolas,monaco,monospace;padding:.8em 1em}.wp-block-embed :where(figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-embed :where(figcaption){color:#ffffffa6}.wp-block-embed{margin:0 0 1em}.blocks-gallery-caption{color:#555;font-size:13px;text-align:center}.is-dark-theme .blocks-gallery-caption{color:#ffffffa6}:root :where(.wp-block-image figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme :root :where(.wp-block-image figcaption){color:#ffffffa6}.wp-block-image{margin:0 0 1em}.wp-block-pullquote{border-bottom:4px solid;border-top:4px solid;color:currentColor;margin-bottom:1.75em}.wp-block-pullquote cite,.wp-block-pullquote footer,.wp-block-pullquote__citation{color:currentColor;font-size:.8125em;font-style:normal;text-transform:uppercase}.wp-block-quote{border-left:.25em solid;margin:0 0 1.75em;padding-left:1em}.wp-block-quote cite,.wp-block-quote footer{color:currentColor;font-size:.8125em;font-style:normal;position:relative}.wp-block-quote:where(.has-text-align-right){border-left:none;border-right:.25em solid;padding-left:0;padding-right:1em}.wp-block-quote:where(.has-text-align-center){border:none;padding-left:0}.wp-block-quote.is-large,.wp-block-quote.is-style-large,.wp-block-quote:where(.is-style-plain){border:none}.wp-block-search .wp-block-search__label{font-weight:700}.wp-block-search__button{border:1px solid #ccc;padding:.375em .625em}:where(.wp-block-group.has-background){padding:1.25em 2.375em}.wp-block-separator.has-css-opacity{opacity:.4}.wp-block-separator{border:none;border-bottom:2px solid;margin-left:auto;margin-right:auto}.wp-block-separator.has-alpha-channel-opacity{opacity:1}.wp-block-separator:not(.is-style-wide):not(.is-style-dots){width:100px}.wp-block-separator.has-background:not(.is-style-dots){border-bottom:none;height:1px}.wp-block-separator.has-background:not(.is-style-wide):not(.is-style-dots){height:2px}.wp-block-table{margin:0 0 1em}.wp-block-table td,.wp-block-table th{word-break:normal}.wp-block-table :where(figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-table :where(figcaption){color:#ffffffa6}.wp-block-video :where(figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-video :where(figcaption){color:#ffffffa6}.wp-block-video{margin:0 0 1em}:root :where(.wp-block-template-part.has-background){margin-bottom:0;margin-top:0;padding:1.25em 2.375em}</style>
+<link rel="stylesheet" id="nfd-wonder-blocks-utilities-css" href="https://patterns.hiive.cloud/assets/css/utilities.css?ver=1731627868" media="all">
+<style id="classic-theme-styles-inline-css">/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}</style>
+<style id="global-styles-inline-css">:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #FFF;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--accent: #dd9933;--wp--preset--color--dark-gray: #111;--wp--preset--color--light-gray: #767676;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}</style>
+<link rel="stylesheet" id="contact-form-7-css" href="/legacy/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.0" media="all">
+<link rel="stylesheet" id="tp_twitter_plugin_css-css" href="/legacy/wp-content/plugins/recent-tweets-widget/tp_twitter_plugin.css?ver=1.0" media="screen">
+<link rel="stylesheet" id="the7-font-css" href="/legacy/wp-content/themes/dt-the7/fonts/icomoon-the7-font/icomoon-the7-font.min.css?ver=12.1.0" media="all">
+<link rel="stylesheet" id="the7-awesome-fonts-css" href="/legacy/wp-content/themes/dt-the7/fonts/FontAwesome/css/all.min.css?ver=12.1.0" media="all">
+<link rel="stylesheet" id="the7-awesome-fonts-back-css" href="/legacy/wp-content/themes/dt-the7/fonts/FontAwesome/back-compat.min.css?ver=12.1.0" media="all">
+<link rel="stylesheet" id="the7-Defaults-css" href="/legacy/wp-content/uploads/smile_fonts/Defaults/Defaults.css?ver=6.7" media="all">
+<link rel="stylesheet" id="js_composer_front-css" href="/legacy/wp-content/plugins/js_composer/assets/css/js_composer.min.css?ver=7.9" media="all">
+<link rel="stylesheet" id="dt-web-fonts-css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" media="all">
+<link rel="stylesheet" id="dt-main-css" href="/legacy/wp-content/themes/dt-the7/css/main.min.css?ver=12.1.0" media="all">
+<style id="dt-main-inline-css">body #load {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  z-index: 9901;
+  opacity: 1;
+  visibility: visible;
+  transition: all .35s ease-out;
+}
+.load-wrap {
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-align: center;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -ms-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-flow: column wrap;
+  flex-flow: column wrap;
+  -ms-flex-pack: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+.load-wrap > svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+#load {
+  background: var(--the7-elementor-beautiful-loading-bg,#ffffff);
+  --the7-beautiful-spinner-color2: var(--the7-beautiful-spinner-color,#b1b1b1);
+}</style>
+<link rel="stylesheet" id="the7-custom-scrollbar-css" href="/legacy/wp-content/themes/dt-the7/lib/custom-scrollbar/custom-scrollbar.min.css?ver=12.1.0" media="all">
+<link rel="stylesheet" id="the7-wpbakery-css" href="/legacy/wp-content/themes/dt-the7/css/wpbakery.min.css?ver=12.1.0" media="all">
+<link rel="stylesheet" id="the7-core-css" href="/legacy/wp-content/plugins/dt-the7-core/assets/css/post-type.min.css?ver=2.7.10" media="all">
+<link rel="stylesheet" id="the7-css-vars-css" href="/legacy/wp-content/uploads/the7-css/css-vars.css?ver=034cbb40c7ab" media="all">
+<link rel="stylesheet" id="dt-custom-css" href="/legacy/wp-content/uploads/the7-css/custom.css?ver=034cbb40c7ab" media="all">
+<link rel="stylesheet" id="dt-media-css" href="/legacy/wp-content/uploads/the7-css/media.css?ver=034cbb40c7ab" media="all">
+<link rel="stylesheet" id="the7-mega-menu-css" href="/legacy/wp-content/uploads/the7-css/mega-menu.css?ver=034cbb40c7ab" media="all">
+<link rel="stylesheet" id="the7-elements-albums-portfolio-css" href="/legacy/wp-content/uploads/the7-css/the7-elements-albums-portfolio.css?ver=034cbb40c7ab" media="all">
+<link rel="stylesheet" id="the7-elements-css" href="/legacy/wp-content/uploads/the7-css/post-type-dynamic.css?ver=034cbb40c7ab" media="all">
+<link rel="stylesheet" id="style-css" href="/legacy/wp-content/themes/dt-the7/style.css?ver=12.1.0" media="all">
+<link rel="stylesheet" id="ultimate-vc-addons-google-fonts-css" href="https://fonts.googleapis.com/css?family=Muli|Roboto" media="all">
+<link rel="stylesheet" id="ultimate-vc-addons-style-min-css" href="/legacy/wp-content/plugins/Ultimate_VC_Addons/assets/min-css/ultimate.min.css?ver=3.19.22" media="all">
+<script src="/legacy/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script src="/legacy/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<script id="sgr-js-extra">var sgr = {"sgr_site_key":"6LfiXNIeAAAAANzURUPqmvf_WvpoA2H9E2k8GhO1"};</script>
+<script src="/legacy/wp-content/plugins/simple-google-recaptcha/sgr.js?ver=1663350016" id="sgr-js"></script>
+<script src="/legacy/wp-content/plugins/google-analytics-dashboard-for-wp/assets/js/frontend-gtag.min.js?ver=8.2.2" id="exactmetrics-frontend-script-js" async data-wp-strategy="async"></script>
+<script data-cfasync="false" data-wpfc-render="false" id="exactmetrics-frontend-script-js-extra">var exactmetrics_frontend = {"js_events_tracking":"true","download_extensions":"zip,mp3,mpeg,pdf,docx,pptx,xlsx,rar","inbound_paths":"[{\"path\":\"\\\/go\\\/\",\"label\":\"affiliate\"},{\"path\":\"\\\/recommend\\\/\",\"label\":\"affiliate\"}]","home_url":"","hash_tracking":"false","v4_id":"G-KN9F064VWE"};</script>
+<script src="https://patterns.hiive.cloud/assets/js/utilities.js?ver=1731627868" id="nfd-wonder-blocks-utilities-js"></script>
+<script src="/legacy/wp-content/plugins/revslider/sr6/assets/js/rbtools.min.js?ver=6.7.21" async id="tp-tools-js"></script>
+<script src="/legacy/wp-content/plugins/revslider/sr6/assets/js/rs6.min.js?ver=6.7.21" async id="revmin-js"></script>
+<script id="dt-above-fold-js-extra">
+var dtLocal = {"themeUrl":"\/legacy\/wp-content\/themes\/dt-the7","passText":"To view this protected post, enter the password below:","moreButtonText":{"loading":"Loading...","loadMore":"Load more"},"postID":"14831","ajaxurl":"\/legacy\/wp-admin\/admin-ajax.php","REST":{"baseUrl":"\/legacy\/wp-json\/the7\/v1","endpoints":{"sendMail":"\/legacy\/send-mail"}},"contactMessages":{"required":"One or more fields have an error. Please check and try again.","terms":"Please accept the privacy policy.","fillTheCaptchaError":"Please, fill the captcha."},"captchaSiteKey":"","ajaxNonce":"d18e198a9f","pageData":{"type":"page","template":"microsite","layout":null},"themeSettings":{"smoothScroll":"off","lazyLoading":false,"desktopHeader":{"height":104},"ToggleCaptionEnabled":"disabled","ToggleCaption":"Navigation","floatingHeader":{"showAfter":150,"showMenu":true,"height":60,"logo":{"showLogo":true,"html":"<img class=\" preload-me\" src=\"\/legacy\/wp-content\/uploads\/2016\/03\/Groff-Logo-Header.png\" srcset=\"\/legacy\/wp-content\/uploads\/2016\/03\/Groff-Logo-Header.png 160w, \/legacy\/wp-content\/uploads\/2016\/03\/Groff-Logo-Header.png 160w\" width=\"160\" height=\"39\"   sizes=\"160px\" alt=\"Michael Groff\" \/>","url":"\/legacy\/"}},"topLine":{"floatingTopLine":{"logo":{"showLogo":false,"html":""}}},"mobileHeader":{"firstSwitchPoint":1150,"secondSwitchPoint":800,"firstSwitchPointHeight":60,"secondSwitchPointHeight":60,"mobileToggleCaptionEnabled":"disabled","mobileToggleCaption":"Menu"},"stickyMobileHeaderFirstSwitch":{"logo":{"html":"<img class=\" preload-me\" src=\"\/legacy\/wp-content\/uploads\/2016\/03\/Groff-Logo-Header.png\" srcset=\"\/legacy\/wp-content\/uploads\/2016\/03\/Groff-Logo-Header.png 160w, \/legacy\/wp-content\/uploads\/2016\/03\/Groff-Logo-Header.png 160w\" width=\"160\" height=\"39\"   sizes=\"160px\" alt=\"Michael Groff\" \/>"}},"stickyMobileHeaderSecondSwitch":{"logo":{"html":"<img class=\" preload-me\" src=\"\/legacy\/wp-content\/uploads\/2016\/03\/Groff-Logo-Header.png\" srcset=\"\/legacy\/wp-content\/uploads\/2016\/03\/Groff-Logo-Header.png 160w, \/legacy\/wp-content\/uploads\/2016\/03\/Groff-Logo-Header.png 160w\" width=\"160\" height=\"39\"   sizes=\"160px\" alt=\"Michael Groff\" \/>"}},"sidebar":{"switchPoint":970},"boxedWidth":"1280px"},"VCMobileScreenWidth":"768"};
+var dtShare = {"shareButtonText":{"facebook":"Share on Facebook","twitter":"Share on X","pinterest":"Pin it","linkedin":"Share on Linkedin","whatsapp":"Share on Whatsapp"},"overlayOpacity":"85"};
+</script>
+<script src="/legacy/wp-content/themes/dt-the7/js/above-the-fold.min.js?ver=12.1.0" id="dt-above-fold-js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCE3lWKfJFomjGLN97L0tdtFqB3VtmeOS8" id="ultimate-vc-addons-googleapis-js"></script>
+<script src="/legacy/wp-includes/js/jquery/ui/core.min.js?ver=1.13.3" id="jquery-ui-core-js"></script>
+<script src="/legacy/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/ultimate.min.js?ver=3.19.22" id="ultimate-vc-addons-script-js"></script>
+<script src="/legacy/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/ultimate_bg.min.js?ver=3.19.22" id="ultimate-vc-addons-row-bg-js"></script>
+<script></script><link rel="https://api.w.org/" href="/legacy/wp-json/">
+<link rel="alternate" title="JSON" type="application/json" href="/legacy/wp-json/wp/v2/pages/14831">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="/legacy/xmlrpc.php?rsd">
+<meta name="generator" content="WordPress 6.7">
+<link rel="canonical" href="/legacy/">
+<link rel="shortlink" href="/legacy/">
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/legacy/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2F">
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/legacy/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2F#038;format=xml">
+<link rel="pingback" href="/legacy/xmlrpc.php">
+<meta property="og:site_name" content="Michael Groff">
+<meta property="og:title" content="Home">
+<meta property="og:url" content="/legacy/">
+<meta property="og:type" content="website">
+<style>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+<meta name="generator" content="Powered by WPBakery Page Builder - drag and drop page builder for WordPress.">
+<style type="text/css">.broken_link, a.broken_link {
+	text-decoration: line-through;
+}</style>
+<meta name="generator" content="Powered by Slider Revolution 6.7.21 - responsive, Mobile-Friendly Slider Plugin for WordPress with comfortable drag and drop interface.">
+<script type="text/javascript" id="the7-loader-script">document.addEventListener("DOMContentLoaded", function(event) {
+	var load = document.getElementById("load");
+	if(!load.classList.contains('loader-removed')){
+		var removeLoading = setTimeout(function() {
+			load.className += " loader-removed";
+		}, 300);
+	}
+});</script>
+		<link rel="icon" href="/legacy/wp-content/uploads/2016/03/Favicon-Low-Res.png" type="image/png" sizes="16x16">
+<link rel="icon" href="/legacy/wp-content/uploads/2016/03/Favicon-High-Res.png" type="image/png" sizes="32x32">
+<script>function setREVStartSize(e){
+			//window.requestAnimationFrame(function() {
+				window.RSIW = window.RSIW===undefined ? window.innerWidth : window.RSIW;
+				window.RSIH = window.RSIH===undefined ? window.innerHeight : window.RSIH;
+				try {
+					var pw = document.getElementById(e.c).parentNode.offsetWidth,
+						newh;
+					pw = pw===0 || isNaN(pw) || (e.l=="fullwidth" || e.layout=="fullwidth") ? window.RSIW : pw;
+					e.tabw = e.tabw===undefined ? 0 : parseInt(e.tabw);
+					e.thumbw = e.thumbw===undefined ? 0 : parseInt(e.thumbw);
+					e.tabh = e.tabh===undefined ? 0 : parseInt(e.tabh);
+					e.thumbh = e.thumbh===undefined ? 0 : parseInt(e.thumbh);
+					e.tabhide = e.tabhide===undefined ? 0 : parseInt(e.tabhide);
+					e.thumbhide = e.thumbhide===undefined ? 0 : parseInt(e.thumbhide);
+					e.mh = e.mh===undefined || e.mh=="" || e.mh==="auto" ? 0 : parseInt(e.mh,0);
+					if(e.layout==="fullscreen" || e.l==="fullscreen")
+						newh = Math.max(e.mh,window.RSIH);
+					else{
+						e.gw = Array.isArray(e.gw) ? e.gw : [e.gw];
+						for (var i in e.rl) if (e.gw[i]===undefined || e.gw[i]===0) e.gw[i] = e.gw[i-1];
+						e.gh = e.el===undefined || e.el==="" || (Array.isArray(e.el) && e.el.length==0)? e.gh : e.el;
+						e.gh = Array.isArray(e.gh) ? e.gh : [e.gh];
+						for (var i in e.rl) if (e.gh[i]===undefined || e.gh[i]===0) e.gh[i] = e.gh[i-1];
+											
+						var nl = new Array(e.rl.length),
+							ix = 0,
+							sl;
+						e.tabw = e.tabhide>=pw ? 0 : e.tabw;
+						e.thumbw = e.thumbhide>=pw ? 0 : e.thumbw;
+						e.tabh = e.tabhide>=pw ? 0 : e.tabh;
+						e.thumbh = e.thumbhide>=pw ? 0 : e.thumbh;
+						for (var i in e.rl) nl[i] = e.rl[i]<window.RSIW ? 0 : e.rl[i];
+						sl = nl[0];
+						for (var i in nl) if (sl>nl[i] && nl[i]>0) { sl = nl[i]; ix=i;}
+						var m = pw>(e.gw[ix]+e.tabw+e.thumbw) ? 1 : (pw-(e.tabw+e.thumbw)) / (e.gw[ix]);
+						newh =  (e.gh[ix] * m) + (e.tabh + e.thumbh);
+					}
+					var el = document.getElementById(e.c);
+					if (el!==null && el) el.style.height = newh+"px";
+					el = document.getElementById(e.c+"_wrapper");
+					if (el!==null && el) {
+						el.style.height = newh+"px";
+						el.style.display = "block";
+					}
+				} catch(e){
+					console.log("Failure at Presize of Slider:" + e)
+				}
+			//});
+		  };</script>
+<style type="text/css" data-type="vc_shortcodes-default-css">.vc_do_cta3{padding-top:28px;padding-right:28px;padding-bottom:28px;padding-left:28px;margin-bottom:35px;}.vc_do_message{padding-top:1em;padding-bottom:1em;padding-right:1em;padding-left:4em;margin-bottom:22px;}</style>
+<style type="text/css" data-type="vc_shortcodes-custom-css">.vc_custom_1457461308019{background-color: #f2f3f3 !important;}.vc_custom_1704695484412{background-color: #1e73be !important;}</style>
+<noscript><style>.wpb_animate_when_almost_visible { opacity: 1; }</style></noscript>
+</head>
+<body id="the7-body" class="home page-template page-template-template-microsite page-template-template-microsite-php page page-id-14831 wp-embed-responsive the7-core-ver-2.7.10 one-page-row transparent slideshow-on dt-responsive-on right-mobile-menu-close-icon ouside-menu-close-icon mobile-hamburger-close-bg-enable mobile-hamburger-close-bg-hover-enable  fade-medium-mobile-menu-close-icon fade-small-menu-close-icon srcset-enabled btn-flat custom-btn-color custom-btn-hover-color phantom-fade phantom-shadow-decoration phantom-custom-logo-on floating-mobile-menu-icon top-header first-switch-logo-center first-switch-menu-right second-switch-logo-center second-switch-menu-right right-mobile-menu layzr-loading-on popup-message-style the7-ver-12.1.0 dt-fa-compatibility wpb-js-composer js-comp-ver-7.9 vc_responsive">
+<!-- The7 12.1.0 -->
+<div id="load" class="ring-loader">
+	<div class="load-wrap">
+<style type="text/css">.the7-spinner {
+        width: 72px;
+        height: 72px;
+        position: relative;
+    }
+    .the7-spinner > div {
+        border-radius: 50%;
+        width: 9px;
+        left: 0;
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        border: 9px solid #fff;
+        width: 72px;
+        height: 72px;
+    }
+    .the7-spinner-ring-bg{
+        opacity: 0.25;
+    }
+    div.the7-spinner-ring {
+        animation: spinner-animation 0.8s cubic-bezier(1, 1, 1, 1) infinite;
+        border-color:var(--the7-beautiful-spinner-color2) transparent transparent transparent;
+    }
+
+    @keyframes spinner-animation{
+        from{
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }</style>
+
+<div class="the7-spinner">
+    <div class="the7-spinner-ring-bg"></div>
+    <div class="the7-spinner-ring"></div>
+</div>
+</div>
+</div>
+<div id="page">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+<div class="masthead inline-header center light-preset-color widgets full-height surround shadow-decoration shadow-mobile-header-decoration small-mobile-menu-icon mobile-menu-icon-bg-on mobile-menu-icon-hover-bg-on show-sub-menu-on-hover" style="background-color: rgba(255,255,255,0.5);" role="banner">
+
+	<div class="top-bar line-content">
+	<div class="top-bar-bg" style="background-color: rgba(255,255,255,0);"></div>
+	<div class="left-widgets mini-widgets">
+<span class="mini-contacts phone show-on-desktop in-top-bar-left in-menu-second-switch"><a href="tel:+1-830-688-2830">(830) 688-2830</a></span><span class="mini-contacts email show-on-desktop in-top-bar-left in-menu-second-switch"><a href="mailto:mg1459.mg@gmail.com?Subject=Career%20Opportunity" target="_top">mg1459.mg@gmail.com</a></span>
+</div>
+<div class="right-widgets mini-widgets"><div class="soc-ico show-on-desktop in-menu-first-switch in-menu-second-switch custom-bg disabled-border border-off hover-accent-bg hover-disabled-border  hover-border-off">
+<a title="Website page opens in new window" href="http://michaelgroff.info/" target="_blank" class="website"><span class="soc-font-icon"></span><span class="screen-reader-text">Website page opens in new window</span></a><a title="Linkedin page opens in new window" href="https://www.linkedin.com/in/michael-groff-8b367489" target="_blank" class="linkedin"><span class="soc-font-icon"></span><span class="screen-reader-text">Linkedin page opens in new window</span></a><a title="X page opens in new window" href="https://twitter.com/Groffskiii" target="_blank" class="twitter"><span class="soc-font-icon"></span><span class="screen-reader-text">X page opens in new window</span></a><a title="Github page opens in new window" href="https://github.com/mgroff2" target="_blank" class="github"><span class="soc-font-icon"></span><span class="screen-reader-text">Github page opens in new window</span></a><a title="Website page opens in new window" href="https://www.youracclaim.com/users/michael-groff.1872e705" target="_blank" class="website"><span class="soc-font-icon"></span><span class="screen-reader-text">Website page opens in new window</span></a>
+</div></div>
+</div>
+
+	<header class="header-bar">
+
+		<div class="branding">
+	<div id="site-title" class="assistive-text">Michael Groff</div>
+	<div id="site-description" class="assistive-text">AWS Solutions Architect</div>
+	<a class="" href="/legacy/"><img class=" preload-me" src="/legacy/wp-content/uploads/2016/03/Groff-Logo-Header.png" srcset="/legacy/wp-content/uploads/2016/03/Groff-Logo-Header.png 160w, /legacy/wp-content/uploads/2016/03/Groff-Logo-Header.png 160w" width="160" height="39" sizes="160px" alt="Michael Groff"></a>
+</div>
+
+		<ul id="primary-menu" class="main-nav underline-decoration upwards-line outside-item-remove-margin">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14946 first depth-0"><a href="#!/up" data-level="1"><span class="menu-item-text"><span class="menu-text">Home</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14900 depth-0"><a href="#!/aboutme" data-level="1"><span class="menu-item-text"><span class="menu-text">About Me</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14901 depth-0"><a href="#!/experience" data-level="1"><span class="menu-item-text"><span class="menu-text">Experience</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14915 depth-0"><a href="#!/education" data-level="1"><span class="menu-item-text"><span class="menu-text">Education</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14949 depth-0"><a href="#!/certs" data-level="1"><span class="menu-item-text"><span class="menu-text">Certifications</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14971 last depth-0"><a href="#!/contact" data-level="1"><span class="menu-item-text"><span class="menu-text">Contact Me</span></span></a></li> </ul>
+		
+	</header>
+
+</div>
+<div role="navigation" aria-label="Main Menu" class="dt-mobile-header mobile-menu-show-divider">
+	<div class="dt-close-mobile-menu-icon" aria-label="Close" role="button" tabindex="0"><div class="close-line-wrap">
+<span class="close-line"></span><span class="close-line"></span><span class="close-line"></span>
+</div></div>	<ul id="mobile-menu" class="mobile-main-nav">
+		<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14946 first depth-0"><a href="#!/up" data-level="1"><span class="menu-item-text"><span class="menu-text">Home</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14900 depth-0"><a href="#!/aboutme" data-level="1"><span class="menu-item-text"><span class="menu-text">About Me</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14901 depth-0"><a href="#!/experience" data-level="1"><span class="menu-item-text"><span class="menu-text">Experience</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14915 depth-0"><a href="#!/education" data-level="1"><span class="menu-item-text"><span class="menu-text">Education</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14949 depth-0"><a href="#!/certs" data-level="1"><span class="menu-item-text"><span class="menu-text">Certifications</span></span></a></li> <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14971 last depth-0"><a href="#!/contact" data-level="1"><span class="menu-item-text"><span class="menu-text">Contact Me</span></span></a></li> 	</ul>
+	<div class="mobile-mini-widgets-in-menu"></div>
+</div>
+
+<div id="main-slideshow">
+			<!-- START Home_Slider REVOLUTION SLIDER 6.7.21 --><p class="rs-p-wp-fix"></p>
+			<rs-module-wrap id="rev_slider_3_1_wrapper" data-source="gallery" style="visibility:hidden;background:transparent;padding:0;">
+				<rs-module id="rev_slider_3_1" style="" data-version="6.7.21">
+					<rs-slides style="overflow: hidden; position: absolute;">
+						<rs-slide style="position: absolute;" data-key="rs-10" data-title="Slide" data-anim="adpr:false;" data-mediafilter="perpetua">
+							<img src="/legacy/wp-content/plugins/revslider/sr6/assets/assets/dummy.png" alt="" title="Home" class="rev-slidebg tp-rs-img rs-lazyload" data-lazyload="/legacy/wp-content/uploads/2019/01/apple-computer-cup-7974.jpg" data-no-retina>
+<!--
+							--><rs-layer id="slider-3-slide-10-layer-1" class="Gym-Subline" data-type="text" data-color="rgba(255, 255, 255, 1)" data-xy="x:c;y:456px;" data-text="w:normal;s:60;l:30;fw:600;a:center;" data-dim="w:387px;" data-frame_0="tp:600;" data-frame_1="tp:600;e:power2.inOut;st:500;sp:350;sR:500;" data-frame_999="o:0;tp:600;e:nothing;st:w;sR:8150;" style="z-index:5;font-family:'Advent Pro';letter-spacing:5px;">Michael Groff 
+							</rs-layer><!--
+
+							--><rs-layer id="slider-3-slide-10-layer-3" class="Gym-Subline" data-type="text" data-color="rgba(255, 255, 255, 1)" data-xy="x:c;y:550px;" data-text="w:normal;s:34;l:30;fw:600;a:center;" data-dim="w:441px;h:61px;" data-frame_0="tp:600;" data-frame_1="tp:600;e:power2.inOut;st:500;sp:350;sR:500;" data-frame_999="o:0;tp:600;e:nothing;st:w;sR:8150;" style="z-index:6;font-family:'Advent Pro';letter-spacing:5px;">Systems Administrator 
+							</rs-layer><!--
+
+							--><rs-layer id="slider-3-slide-10-layer-5" class="Gym-Subline" data-type="text" data-color="rgba(255, 255, 255, 1)" data-xy="x:c;xo:1px;y:507px;" data-text="w:normal;s:34;l:30;fw:600;a:center;" data-dim="w:565px;h:64px;" data-frame_0="tp:600;" data-frame_1="tp:600;e:power2.inOut;st:500;sp:350;sR:500;" data-frame_999="o:0;tp:600;e:nothing;st:w;sR:8150;" style="z-index:7;font-family:'Advent Pro';letter-spacing:5px;">Solutions Architect/Engineer 
+							</rs-layer><!--
+
+							--><a id="slider-3-slide-10-layer-7" class="rs-layer" href="#actioncall" target="_self" data-type="text" data-color="#ffffff" data-xy="x:c;xo:20px;y:b;yo:-1px;" data-text="s:64;l:22;a:inherit;" data-dim="w:68px;" data-vbility="t,t,f,f" data-rsp_o="off" data-rsp_bd="off" data-frame_0="tp:600;" data-frame_1="tp:600;e:power1.in;st:2500;sp:500;sR:2500;" data-frame_999="o:0;tp:600;st:w;sR:6000;" style="z-index:8;font-family:'Open Sans';"><i class="fa-arrow-circle-down"></i> 
+							</a><!--
+-->					</rs-slide>
+					</rs-slides>
+				</rs-module>
+				<script>setREVStartSize({c: 'rev_slider_3_1',rl:[1240,1024,778,480],el:[],gw:[1240],gh:[868],type:'hero',justify:'',layout:'fullscreen',offsetContainer:'.header',offset:'',mh:"0"});if (window.RS_MODULES!==undefined && window.RS_MODULES.modules!==undefined && window.RS_MODULES.modules["revslider31"]!==undefined) {window.RS_MODULES.modules["revslider31"].once = false;window.revapi3 = undefined;if (window.RS_MODULES.checkMinimal!==undefined) window.RS_MODULES.checkMinimal()}</script>
+			</rs-module-wrap>
+			<!-- END REVOLUTION SLIDER -->
+</div>
+
+<div id="main" class="sidebar-none sidebar-divider-vertical">
+
+	
+	<div class="main-gradient"></div>
+	<div class="wf-wrap">
+	<div class="wf-container-main">
+
+	
+
+<div id="content" class="content" role="main">
+
+	<div class="wpb-content-wrapper">
+<div id="actioncall" data-vc-full-width="true" data-vc-full-width-init="false" data-vc-stretch-content="true" class="vc_row wpb_row vc_row-fluid vc_row-no-padding"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><section class="vc_cta3-container"><div class="vc_general vc_do_cta3 vc_cta3 vc_cta3-style-classic vc_cta3-shape-rounded vc_cta3-align-center vc_cta3-color-classic vc_cta3-icon-size-md vc_cta3-actions-bottom"><div class="vc_cta3_content-container">
+<div class="vc_cta3-content"><header class="vc_cta3-content-header"><h2>Download my one-page résumé in PDF format</h2></header></div>
+<div class="vc_cta3-actions"><div class="vc_btn3-container vc_btn3-center"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-rounded vc_btn3-style-modern vc_btn3-icon-left vc_btn3-color-sky" href="https://drive.google.com/file/d/1YRQZrG65zgBZWwy2JWRBj4eTtd7WWHYw/view" title="" target="_blank"><i class="vc_btn3-icon fas fa-file-download"></i> Download</a></div></div>
+</div></div></section></div></div></div></div>
+<div class="vc_row-full-width vc_clearfix"></div>
+<div id="aboutme" data-anchor="#aboutme" data-min-height="80%" class="vc_row wpb_row vc_row-fluid dt-default" style="margin-top: 0px;margin-bottom: 0px"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div id="ultimate-heading-9999673703ac96d40" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-9999673703ac96d40 uvc-8533  uvc-heading-default-font-sizes" data-hspacer="no_spacer" data-halign="center" style="text-align:center">
+<div class="uvc-heading-spacer no_spacer" style="/top"></div>
+<div class="uvc-sub-heading ult-responsive" data-ultimate-target=".uvc-heading.ultimate-heading-9999673703ac96d40 .uvc-sub-heading " data-responsive-json-new='{"font-size":"","line-height":""}' style="font-family:'Roboto';font-weight:bold;">
+<h1>About Me</h1>
+<p></p>
+</div>
+</div>
+<div class="vc_empty_space" style="height: 12px"><span class="vc_empty_space_inner"></span></div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+<div class="vc_empty_space" style="height: 12px"><span class="vc_empty_space_inner"></span></div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Stats &amp; Characteristics</h3>
+<ul>
+<li>Native Texan from Bandera, TX</li>
+<li>Married to a Texas Public School Teacher</li>
+<li>Father to two beautiful daughters</li>
+<li>Fur-father of three &#8211; Two Huskies, One Lab</li>
+<li>Avid tech enthusiast</li>
+</ul>
+
+		</div>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p>Goal-oriented Solutions Architect with a strong foundation in AWS Cloud technologies, and a proven track record in deploying, managing, and optimizing cloud-based solutions. Adept at problem-solving and proficient in both Windows and Linux environments, I bring a combination of technical acumen and effective communication skills. Committed to excellence, I thrive in both autonomous and team settings, readily adapting to new challenges and technologies to drive project success.</p>
+
+		</div>
+	</div>
+</div></div></div>
+</div>
+<div class="vc_empty_space" style="height: 12px"><span class="vc_empty_space_inner"></span></div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div id="ultimate-heading-830673703ac98749" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-830673703ac98749 uvc-701  uvc-heading-default-font-sizes" data-hspacer="no_spacer" data-halign="center" style="text-align:center">
+<div class="uvc-heading-spacer no_spacer" style="/top"></div>
+<div class="uvc-sub-heading ult-responsive" data-ultimate-target=".uvc-heading.ultimate-heading-830673703ac98749 .uvc-sub-heading " data-responsive-json-new='{"font-size":"","line-height":""}' style="font-weight:normal;">
+<h3 style="text-align: center;"> Top 5 Gallup Strengths</h3>
+<p></p>
+</div>
+</div>
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_wobble wobble">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img decoding="async" class="vc_single_image-img " src="/legacy/wp-content/uploads/2015/03/top-5-gallup-strengths-450x400.png" width="450" height="400" alt="top 5 gallup strengths" title="top 5 gallup strengths" loading="lazy" data-dt-location="/legacy/home-2/top-5-gallup-strengths/"></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element  vc_custom_1457461308019">
+		<div class="wpb_wrapper">
+			<h4 style="text-align: center;">Using Gallup’s Strengths Solutions, <a href="https://www.gallupstrengthscenter.com/" target="_blank" rel="noopener noreferrer"><span style="color: blue;">StrengthsFinder</span></a> I learned to be a more engaged, productive, and happier employee.</h4>
+
+		</div>
+	</div>
+<div class="vc_message_box vc_message_box-standard vc_message_box-rounded vc_color-info">
+<div class="vc_message_box-icon"><i class="fas fa-file-alt"></i></div>
+<p>View my Clifton Strengths Signature Theme Report <a href="/legacy/wp-content/uploads/2021/05/Michael-Groff-Signature-Themes.pdf" target="_blank" rel="noopener">HERE</a></p>
+</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/legacy/wp-content/uploads/2024/05/ce69df37-ad38-4151-a08d-2d87fadca976-e1715362527216.jpeg" target="_self" data-large_image_width="1536" data-large_image_height="1080" class="vc_single_image-wrapper vc_box_border  vc_box_border_grey dt-pswp-item"><img fetchpriority="high" decoding="async" width="1024" height="720" src="/legacy/wp-content/uploads/2024/05/ce69df37-ad38-4151-a08d-2d87fadca976-e1715362527216-1024x720.jpeg" class="vc_single_image-img attachment-large" alt="" title="ce69df37-ad38-4151-a08d-2d87fadca976" srcset="/legacy/wp-content/uploads/2024/05/ce69df37-ad38-4151-a08d-2d87fadca976-e1715362527216-1024x720.jpeg 1024w, /legacy/wp-content/uploads/2024/05/ce69df37-ad38-4151-a08d-2d87fadca976-e1715362527216-300x211.jpeg 300w, /legacy/wp-content/uploads/2024/05/ce69df37-ad38-4151-a08d-2d87fadca976-e1715362527216-768x540.jpeg 768w, /legacy/wp-content/uploads/2024/05/ce69df37-ad38-4151-a08d-2d87fadca976-e1715362527216.jpeg 1536w" sizes="(max-width: 1024px) 100vw, 1024px" data-dt-location="/legacy/home-2/ce69df37-ad38-4151-a08d-2d87fadca976/"></a>
+		</figure>
+	</div>
+</div></div></div>
+</div>
+</div></div></div></div>
+<div id="experience" data-anchor="#experience" data-min-height="80%" class="vc_row wpb_row vc_row-fluid dt-default" style="margin-top: 0px;margin-bottom: 0px"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div id="ultimate-heading-520673703ac9b0ad" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-520673703ac9b0ad uvc-9459  uvc-heading-default-font-sizes" data-hspacer="no_spacer" data-halign="center" style="text-align:center">
+<div class="uvc-heading-spacer no_spacer" style="/top"></div>
+<div class="uvc-sub-heading ult-responsive" data-ultimate-target=".uvc-heading.ultimate-heading-520673703ac9b0ad .uvc-sub-heading " data-responsive-json-new='{"font-size":"","line-height":""}' style="font-family:'Roboto';font-weight:bold;">
+<h1>Experience</h1>
+<p></p>
+</div>
+</div>
+<div class="vc_empty_space" style="height: 12px"><span class="vc_empty_space_inner"></span></div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInLeft fadeInLeft">
+		<h2 class="wpb_heading wpb_singleimage_heading">Professional</h2>
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper vc_box_border_circle  vc_box_border_grey"><img decoding="async" width="72" height="72" src="/legacy/wp-content/uploads/2015/03/administrator_721.png" class="vc_single_image-img attachment-thumbnail" alt="" title="administrator_721" data-dt-location="/legacy/home-2/administrator_721/"></div>
+		</figure>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInUp fadeInUp">
+		<h2 class="wpb_heading wpb_singleimage_heading">Intelligent</h2>
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper vc_box_border_circle  vc_box_border_grey"><img decoding="async" width="72" height="72" src="/legacy/wp-content/uploads/2015/03/diploma_72.png" class="vc_single_image-img attachment-thumbnail" alt="" title="diploma_72" data-dt-location="/legacy/home-2/diploma_72/"></div>
+		</figure>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInRight fadeInRight">
+		<h2 class="wpb_heading wpb_singleimage_heading">Trustworthy</h2>
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper vc_box_border_circle  vc_box_border_grey"><img loading="lazy" decoding="async" width="72" height="72" src="/legacy/wp-content/uploads/2015/03/lock_closed_72.png" class="vc_single_image-img attachment-thumbnail" alt="" title="lock_closed_72" data-dt-location="/legacy/home-2/lock_closed_72/"></div>
+		</figure>
+	</div>
+</div></div></div>
+</div>
+<div class="vc_empty_space" style="height: 12px"><span class="vc_empty_space_inner"></span></div>
+<div id="ultimate-heading-5074673703ac9d4b4" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-5074673703ac9d4b4 uvc-7623  uvc-heading-default-font-sizes" data-hspacer="line_only" data-halign="left" style="text-align:left">
+<div class="uvc-sub-heading ult-responsive" data-ultimate-target=".uvc-heading.ultimate-heading-5074673703ac9d4b4 .uvc-sub-heading " data-responsive-json-new='{"font-size":"","line-height":""}' style="font-family:'Roboto';font-weight:bold;">
+<h3>Past and Current Employment</h3>
+<p></p>
+</div>
+<div class="uvc-heading-spacer line_only" style="topheight:1px;"><span class="uvc-headings-line" style="border-style:solid;border-bottom-width:1px;border-color:#ccc;width:autopx;"></span></div>
+</div>
+<div class="vc_tta-container" data-vc-action="collapseAll"><div class="vc_general vc_tta vc_tta-accordion vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-spacing-4 vc_tta-controls-align-default vc_tta-o-all-clickable"><div class="vc_tta-panels-container"><div class="vc_tta-panels">
+<div class="vc_tta-panel vc_active" id="1704695121716-162f812f-fff7" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1704695121716-162f812f-fff7" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Vivsoft Technologies</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInLeft fadeInLeft vc_custom_1704695484412">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img loading="lazy" decoding="async" width="300" height="80" src="/legacy/wp-content/uploads/2024/01/vivsoft_logo-300x80.webp" class="vc_single_image-img attachment-medium" alt="" title="vivsoft_logo" srcset="/legacy/wp-content/uploads/2024/01/vivsoft_logo-300x80.webp 300w, /legacy/wp-content/uploads/2024/01/vivsoft_logo.webp 322w" sizes="auto, (max-width: 300px) 100vw, 300px" data-dt-location="/legacy/home-2/vivsoft_logo/"></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">13221 Woodland Park Rd Suite 310</p>
+<p style="text-align: center;">Herndon, VA 20171</p>
+<p style="text-align: center;">(703) 801-9664</p>
+<p style="text-align: center;"><a href="https://vivsoft.io/">vivsoft.io</a></p>
+<div id="gtx-trans" style="position: absolute; left: 406px; top: 125px;">
+<div class="gtx-trans-icon"></div>
+</div>
+
+		</div>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<h3>Vivsoft</h3>
+<h4>Solutions Architect</h4>
+<h5><em>September 2022 &#8211; Present</em></h5>
+<p><strong>Job Responsibilities:</strong></p>
+<ul>
+<li>Spearheaded cloud architecture solutions for critical Government projects, focusing on secure, scalable, and resilient systems design.</li>
+<li>Directed the strategic integration of cloud services to bolster operational capabilities, emphasizing secure data exchange and enhanced service accessibility for defense platforms.</li>
+<li>Led the design and implementation of cloud migration strategies, ensuring seamless transition and system optimization for mission-critical applications.</li>
+<li>Innovated deployment methodologies, including Blue/Green deployments, to optimize service continuity and agility in a high-stakes, secure computing environment.</li>
+<li>Collaborated closely with cross-functional teams to ensure alignment with stringent DoD security and operational standards, contributing to significant advancements in cloud infrastructure utilization and efficiency.</li>
+<li>Developed and promoted a compelling and innovative vision and value proposition, enabling customer executives to understand the financial</li>
+</ul>
+
+		</div>
+	</div>
+</div></div></div>
+</div></div>
+</div>
+<div class="vc_tta-panel" id="1456119001616-92081500-455f" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1456119001616-92081500-455f" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Innovative Solutions</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInLeft fadeInLeft">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img loading="lazy" decoding="async" width="300" height="83" src="/legacy/wp-content/uploads/2021/05/innovLogo-black.png" class="vc_single_image-img attachment-medium" alt="" title="innovLogo-black" data-dt-location="/legacy/home-2/innovlogo-black/"></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">4545 E River Rd #100</p>
+<p style="text-align: center;">West Henrietta, NY 14586</p>
+<p style="text-align: center;">(585) 292-5070</p>
+<p style="text-align: center;"><a href="https://innovativesol.com/">innovativesol.com</a></p>
+<div id="gtx-trans" style="position: absolute; left: 406px; top: 125px;">
+<div class="gtx-trans-icon"></div>
+</div>
+
+		</div>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<h3>Innovative Solutions</h3>
+<h4>Sr. Solutions Architect</h4>
+<h5><em>Jan 2022 &#8211; Sept 2022</em></h5>
+<p><strong>Job Responsibilities:</strong></p>
+<ul>
+<li>Lead and facilitate customer discussions on migration and modernization strategies, ensuring a clear understanding of the benefits and challenges involved in moving to the AWS cloud.</li>
+<li>Collaborate with IT operations teams, both internally and on the customer side, to identify and develop repeatable patterns and architectures for efficient cloud migration.</li>
+<li>Develop, articulate, and promote a compelling and innovative vision and value proposition, enabling customer executives to understand the financial benefits and transformational value of migrating to AWS.</li>
+<li>Analyze and identify opportunities for platform improvements, influencing future iterations of the AWS platform and enhancing the Innovative Managed Cloud Services Offering.</li>
+<li>Work as an integral part of a cross-functional team to identify, develop, and close deals based on solution engineering efforts, ensuring successful outcomes for all parties involved.</li>
+<li>Promote AWS adoption through customer education on the value proposition of AWS, including various migration strategies, tools, and services to facilitate seamless transitions to the cloud.</li>
+<li>Capture and share best-practice knowledge among the AWS solutions architect community, fostering a culture of continuous learning and improvement.</li>
+<li>Address and resolve complex core business migration and modernizastion concerns related to the AWS platform through in-depth discussions, strategic presentations, recommendations, and hands-on demonstrations within the AWS environment</li>
+<li>Collaborate with AWS service teams to provide customer feedback, driving enhancements and new feature development to better meet customer needs.</li>
+<li>Stay up-to-date with the latest AWS offerings, industry trends, and emerging technologies to ensure customers receive the most relevant and effective solutions.</li>
+<li>Develop and deliver technical presentations, whitepapers, and architectural diagrams to assist customers in understanding the intricacies of AWS services and design principles.</li>
+<li>Establish and maintain strong working relationships with customers, acting as a trusted advisor and assisting in the creation of comprehensive cloud strategies.</li>
+</ul>
+<h4>Cloud Architect</h4>
+<h5><em>May 2021 &#8211; Dec 2021</em></h5>
+<p><strong>Job Responsibilities:</strong></p>
+<ul>
+<li>Design and implement AWS cloud infrastructure solutions for scalability, reliability, and high availability.</li>
+<li>Migrate on-premises applications and data to the AWS cloud using migration tools and best practices.</li>
+<li>Configure and manage AWS services such as EC2, S3, RDS, VPC, SSM, and IAM to support application deployment and maintenance.</li>
+<li>Implement cost-optimization strategies to reduce AWS service costs and improve resource utilization</li>
+<li>Monitor and maintain the security of cloud infrastructure using AWS security services, including Security Groups, NACLs, and AWS WAF.</li>
+<li>Automate infrastructure deployment and management using Infrastructure as Code (IAC) tools like AWS CloudFormation and Terraform.</li>
+<li>Set up and manage continuous integration and continuous deployment (CI/CD) pipelines using AWS CodePipeline, CodeBuild, and CodeDeploy.</li>
+<li>Troubleshoot and resolve cloud-related issues, working closely with application and development teams.</li>
+<li>Develop and implement disaster recovery and backup strategies using AWS services such as AWS Backup and AWS Elastic Disaster Recovery.</li>
+<li>Monitor cloud infrastructure performance and usage using AWS monitoring tools like Amazon CloudWatch and AWS X-Ray</li>
+<li>Collaborate with stakeholders to gather and refine requirements, ensuring alignment with organizational objectives.</li>
+<li>Maintain up-to-date knowledge of AWS best practices, new features, and emerging technologies to recommend improvements and enhancements to existing cloud infrastructure.</li>
+</ul>
+
+		</div>
+	</div>
+</div></div></div>
+</div></div>
+</div>
+<div class="vc_tta-panel" id="1621313243534-dc3f26c6-2625" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1621313243534-dc3f26c6-2625" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Accenture Federal Services</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInLeft fadeInLeft">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img loading="lazy" decoding="async" width="300" height="82" src="/legacy/wp-content/uploads/2020/01/accenture-1-300x82.png" class="vc_single_image-img attachment-medium" alt="" title="accenture" srcset="/legacy/wp-content/uploads/2020/01/accenture-1-300x82.png 300w, /legacy/wp-content/uploads/2020/01/accenture-1-1024x281.png 1024w, /legacy/wp-content/uploads/2020/01/accenture-1-768x210.png 768w, /legacy/wp-content/uploads/2020/01/accenture-1-1536x421.png 1536w, /legacy/wp-content/uploads/2020/01/accenture-1.png 2000w" sizes="auto, (max-width: 300px) 100vw, 300px" data-dt-location="/legacy/home-2/accenture-2/"></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">10931 Laureate Drive</p>
+<p style="text-align: center;">San Antonio, TX 78249</p>
+<p style="text-align: center;">(210) 558-3409</p>
+<p style="text-align: center;"><a href="https://aws.amazon.com/">accenture.com</a></p>
+<div id="gtx-trans" style="position: absolute; left: 513px; top: 93px;">
+<div class="gtx-trans-icon"></div>
+</div>
+
+		</div>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<h3>Accenture Federal Services</h3>
+<h4>Cloud Tech Architect Delivery Specialist</h4>
+<h5><em>Dec 2019 &#8211; May 2021</em></h5>
+<p><strong>Job Responsibilities:</strong></p>
+<ul>
+<li>Designed architecture of environments in Azure and AWS clouds using IaaS, Paas and SaaS services from both Cloud Service Providers.</li>
+<li>Architecture of environments included network setup of VPC/VNet, Subnets,and Load Balancers as well as application destination setup of Virtual Machines/EC2 or Application level SaaS/PaaS services (RDS, Azure SQL, Elastic Beanstalk, App Service Environment).</li>
+<li>Designed and constructed reusable plans to implement migrations from on-premise to customer&#8217;s requested Cloud Service Provider.</li>
+<li>Collaborated with other project teams and senior leadership to ensure client requirements and expectations are met</li>
+<li>Followed Agile Project Management Methodology on migration project ensuring customer expectations and requirements are met in a timely manner.</li>
+<li>Reviewed customer on-premise application data to determine cloud migration candidates.</li>
+<li>Created cost comparison analysis between Azure and AWS for desired infrastructure.</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_message_box vc_message_box-standard vc_message_box-rounded vc_color-success">
+<div class="vc_message_box-icon"><i class="fas fa-id-badge"></i></div>
+<h5>Obtained an Active Security Clearance, type of clearance available upon request.</h5>
+</div>
+</div></div></div>
+</div></div>
+</div>
+<div class="vc_tta-panel" id="1579320881266-d6322499-52da" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1579320881266-d6322499-52da" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">AWS (Amazon Web Services, Inc.)</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInLeft fadeInLeft">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img loading="lazy" decoding="async" width="300" height="180" src="/legacy/wp-content/uploads/2019/05/1200px-Amazon_Web_Services_Logo.svg_-300x180.png" class="vc_single_image-img attachment-medium" alt="" title="1200px-Amazon_Web_Services_Logo.svg" srcset="/legacy/wp-content/uploads/2019/05/1200px-Amazon_Web_Services_Logo.svg_-300x180.png 300w, /legacy/wp-content/uploads/2019/05/1200px-Amazon_Web_Services_Logo.svg_-768x460.png 768w, /legacy/wp-content/uploads/2019/05/1200px-Amazon_Web_Services_Logo.svg_-1024x613.png 1024w, /legacy/wp-content/uploads/2019/05/1200px-Amazon_Web_Services_Logo.svg_.png 1200w" sizes="auto, (max-width: 300px) 100vw, 300px" data-dt-location="/legacy/home-2/1200px-amazon_web_services_logo-svg/"></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">13455 Noel Road</p>
+<p style="text-align: center;">Dallas, TX 75240</p>
+<p style="text-align: center;"><a href="https://aws.amazon.com/">aws.amazon.com</a></p>
+
+		</div>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<h3>Amazon Web Services, Inc.</h3>
+<h4>Cloud Support Engineer</h4>
+<h5><em>May 2019 &#8211; Dec 2019 </em></h5>
+<p><strong>Job Responsibilities:</strong></p>
+<ul>
+<li>Supported customers with use of AWS Services with a direct focus on Windows EC2, VPC, Auto-Scaling Groups, Directory Services, SSM, VMImport, CloudEndure, WorkSpaces, WorkDocs, WorkMail, ECS, ELB, EBS, S3, RDS, AWS Backup and more.</li>
+<li>Customer support included assisting with implementation of customer applications on the AWS platform, troubleshooting technical problems, migrating Windows Systems/Applications from on-premises to AWS Cloud and educating customers to better utilize AWS Services. Assisted customer with on-premises/AWS Cloud DR and HA implementations.</li>
+<li>As a Windows centric role, assisted customers with common Windows Roles and Features: Active Directory Domain Services, Active Directory Certificate Services MSSQL, Exchange, Terminal Server, Web Server IIS, DNS Server, etc.</li>
+<li>Worked directly with AWS Service and Documentation Teams to evaluate and implement global changes to update services and documentation in order to better customer experience.</li>
+<li>Worked with AWS CLI, AWS API and AWS Powershell to automate tasks for customer.</li>
+<li>Communicated with customers through phone, chat and email support and utilized screen-sharing applications to better troubleshoot customer problems and educate them on service utilization.</li>
+</ul>
+
+		</div>
+	</div>
+</div></div></div>
+</div></div>
+</div>
+<div class="vc_tta-panel" id="1557764865638-a1c5df8c-28e3" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1557764865638-a1c5df8c-28e3" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Unique Digital (UDI)</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInLeft fadeInLeft">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img loading="lazy" decoding="async" width="300" height="154" src="/legacy/wp-content/uploads/2015/03/uniquedigital-logo-300x154.png" class="vc_single_image-img attachment-medium" alt="" title="uniquedigital-logo" srcset="/legacy/wp-content/uploads/2015/03/uniquedigital-logo-300x154.png 300w, /legacy/wp-content/uploads/2015/03/uniquedigital-logo.png 750w" sizes="auto, (max-width: 300px) 100vw, 300px" data-dt-location="/legacy/home-2/uniquedigital-logo/"></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">9901 IH-10 West &#8211; Suite 250</p>
+<p style="text-align: center;">San Antonio, TX 78230</p>
+<p style="text-align: center;">(210) 561-5477</p>
+<p style="text-align: center;"><a href="http://www.uniquedigital.com/" target="_blank" rel="noopener noreferrer">www.uniquedigital.com</a></p>
+
+		</div>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<h3>Unique Digital</h3>
+<h4>Solutions Architect / Solutions Engineer</h4>
+<h5><em>Apr 2017 &#8211; May 2019</em></h5>
+<h5 style="text-align: center;"><span style="color: #498edd;">Unique Solutions for a Digital World</span></h5>
+<p><strong>Job Responsibilities:</strong></p>
+<ul>
+<li>Plan, architect, engineer and implement IT solutions based on DellEMC and other partner technologies.</li>
+<li>Considered customers application requirements as well as customer&#8217;s 3, 5, and 7 year goals and expectations when designing solutions</li>
+<li>Work with various vendors and customers across all verticals to understand their needs and requirements in order to develop and shape strategies that fulfill their IT needs.</li>
+<li>Responsible for providing technical expertise and leadership to internal sales teams.</li>
+<li>Assist the outside sales teams in all IT facets.</li>
+<li>Collaborate closely with product management in assessing business strategy and priorities, and tuning solutions to business goals.</li>
+</ul>
+
+		</div>
+	</div>
+</div></div></div>
+</div></div>
+</div>
+<div class="vc_tta-panel" id="1508785292787-751e882e-64b7" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1508785292787-751e882e-64b7" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Rackspace</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInLeft fadeInLeft">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img loading="lazy" decoding="async" width="150" height="150" src="/legacy/wp-content/uploads/2015/03/rackspace_logo_2-150x150.jpg" class="vc_single_image-img attachment-thumbnail" alt="" title="rackspace_logo_2" srcset="/legacy/wp-content/uploads/2015/03/rackspace_logo_2-150x150.jpg 150w, /legacy/wp-content/uploads/2015/03/rackspace_logo_2-200x200.jpg 200w, /legacy/wp-content/uploads/2015/03/rackspace_logo_2-500x500.jpg 500w" sizes="auto, (max-width: 150px) 100vw, 150px" data-dt-location="/legacy/home-2/rackspace_logo_2/"></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">1 Fanatical Place</p>
+<p style="text-align: center;">San Antonio, TX 78218</p>
+<p style="text-align: center;">(210) 312-4000</p>
+<p style="text-align: center;"><a href="https://www.rackspace.com/" target="_blank" rel="noopener noreferrer">www.rackspace.com</a></p>
+
+		</div>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<h3>Rackspace</h3>
+<h4><strong>Windows Administrator I (Jan &#8217;15 &#8211; March &#8217;16);</strong></h4>
+<h4><strong>Windows Administrator II (March &#8217;16 &#8211; Apr &#8217;17)</strong></h4>
+<h5><em>Jan 2015 &#8211; Apr 2017</em></h5>
+<h6 style="text-align: center;"><span style="color: #498edd;">&#8220;What we all want from work is to be valued members of a winning team on an inspiring mission.&#8221; &#8211; Graham Weston</span></h6>
+<p>&nbsp;</p>
+<p><strong>Job Responsibilities:</strong></p>
+<ul>
+<li>Engaged with our customers over the phone, in chat and through Rackspace&#8217;s support portal</li>
+<li>Proactively addressed potentially impacting server issues for customers</li>
+<li>Increased technical knowledge by solving challenging problems</li>
+<li>Part of a team of experts who know the value of mentoring and technical growth for all members of the team</li>
+<li>Installed and Configured Windows Operating Systems as stand-alone, bare metal systems as well as on Hypervisors (Hyper-V and VMware esxi) as Virtual Machines</li>
+<li>Performed System Maintenance across all Windows platforms according to patching best practices. Installed Windows patches, updates and service packs, MSSQL cumulative updates, application updates, etc.</li>
+<li>Monitored system performance and proactively addressed potential technical issues.</li>
+<li>Performed system/file backups and restores based on Rackspace and customer policy</li>
+<li>Installed and Configured Windows Roles and Features based on customer needs: Active Directory Domain Services, Active Directory Certificate Services MSSQL, Exchange, Terminal Server, Web Server IIS, DNS Server, etc.</li>
+<li>Created Powershell Scripts to reduce time to perform tasks and automate other tasks based on need and requirements.</li>
+</ul>
+
+		</div>
+	</div>
+</div></div></div>
+</div></div>
+</div>
+<div class="vc_tta-panel" id="1455820657801-0f381884-d683" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1455820657801-0f381884-d683" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">R &amp; K Specialized Homes Inc.</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_single_image wpb_content_element vc_align_center  wpb_animate_when_almost_visible wpb_fadeInLeft fadeInLeft">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img loading="lazy" decoding="async" width="150" height="150" src="/legacy/wp-content/uploads/2015/03/RK-Logo-150x150.jpg" class="vc_single_image-img attachment-thumbnail" alt="" title="RK-Logo" srcset="/legacy/wp-content/uploads/2015/03/RK-Logo-150x150.jpg 150w, /legacy/wp-content/uploads/2015/03/RK-Logo-200x200.jpg 200w, /legacy/wp-content/uploads/2015/03/RK-Logo-500x500.jpg 500w" sizes="auto, (max-width: 150px) 100vw, 150px" data-dt-location="/legacy/home-2/rk-logo/"></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">1550 NE Loop 410 Suites 110 &amp; 206</p>
+<p style="text-align: center;">San Antonio, TX 78209</p>
+<p style="text-align: center;">(210) 805-0802</p>
+<p style="text-align: center;"><a href="http://www.rkhomes.net/" target="_blank" rel="noopener noreferrer">www.rkhomes.net</a></p>
+
+		</div>
+	</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<h3>R &amp; K Specialized Homes Inc.</h3>
+<h4>IT / Network Administrator</h4>
+<h5><em>July 2013 &#8211; January 2015</em></h5>
+<h6 style="text-align: center;"><span style="color: #498edd;">R&amp;K Specialized Homes Inc. provides services to people in San Antonio with developmental disabilities through ICF, HCS and Texas Home Living Programs.</span></h6>
+<ul>
+<li>Installed, configured and maintained applications on multiple Windows Servers, a FreeNAS server, 47 client computers at the main office and 28 WYSE thin clients at satellite locations in the San Antonio, San Marcos and South Austin Area.</li>
+<li>Supported Windows Active Directory and Windows Terminal Server for ~150 employees. Controlled access to business systems through Active Directory federated access.</li>
+<li>Generated and maintained employee user accounts and access for all IT systems resulting in secure, HIPPA compliant and up-to-date IT systems.</li>
+<li>Improved overall network stability by tracking down and resolving issues when they occurred, increasing overall up-time, as well as increasing licenses on necessary devices with company growth.</li>
+<li>Procured, set-up and managed 39 Android and iOS cell phones through Verizon Wireless.</li>
+<li>Purchased, deployed and managed a VoIP Phone System containing 46 phones across multiple locations through Ring Central resulting in a versatile cloud PBX.</li>
+<li>Wrote and implemented new processes for adding and removing employees into systems and applications that lead to a more streamlined and efficient procedure.</li>
+<li>Created video tutorials along with compatible PDF walkthroughs for staff, covering all necessary job tasks, producing a more available and efficient training system.</li>
+<li>Installed, managed and maintained real-time GPS Tracking for 32 company vehicles through Network Fleet resulting in better management of company time, funds and property.</li>
+<li>Charged with the research, appraisal and purchasing of new technology equipment with company growth and as equipment fails or becomes out-of-date.</li>
+<li>Provided 24x7x365 support for 200+ employees for all business technology needs.</li>
+</ul>
+<p>Researched, purchased and deployed new network cabling covering 2 suites during a remodel with a total of 81 data drops, 2 48-Port PoE Switches, 1 24-Port Switch and 3 WAP’s, while coordinating upgraded internet speeds with Time Warner from a single T1 line to fiber with resulting in exponential speed and stability of the network.</p>
+<p>Created an internal web-based system with FreeNAS and Owncloud for the management and broadcasting of current employee contact information and calendars permitting employees to access necessary information through a secure connection.</p>
+
+		</div>
+	</div>
+</div></div></div>
+</div></div>
+</div>
+</div></div></div></div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_message_box vc_message_box-standard vc_message_box-rounded vc_color-info">
+<div class="vc_message_box-icon"><i class="fas fa-info-circle"></i></div>
+<h5>Visit my blog at <a href="http://michaelgroff.info/" target="_blank" rel="noopener noreferrer"><span style="color: blue;">michaelgroff.info</span></a> to see some of the technology and other tutorials I have posted publicly</h5>
+</div></div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_message_box vc_message_box-standard vc_message_box-rounded vc_color-success">
+<div class="vc_message_box-icon"><i class="fa fa-check-square"></i></div>
+<h5>Letters of Recommendation and Contact information for all previous places of employment available upon request</h5>
+</div></div></div></div>
+</div>
+<div class="vc_empty_space" style="height: 20px"><span class="vc_empty_space_inner"></span></div>
+</div></div></div></div>
+<div id="education" data-anchor="#education" data-min-height="80%" class="vc_row wpb_row vc_row-fluid dt-default" style="margin-top: 0px;margin-bottom: 0px"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div id="ultimate-heading-2237673703acaa10a" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-2237673703acaa10a uvc-2506  uvc-heading-default-font-sizes" data-hspacer="no_spacer" data-halign="center" style="text-align:center">
+<div class="uvc-heading-spacer no_spacer" style="/top"></div>
+<div class="uvc-sub-heading ult-responsive" data-ultimate-target=".uvc-heading.ultimate-heading-2237673703acaa10a .uvc-sub-heading " data-responsive-json-new='{"font-size":"","line-height":""}' style="font-family:'Roboto';font-weight:bold;">
+<h1>Education</h1>
+<p></p>
+</div>
+</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+<div id="ultib3-1478145388673703acaa1e4" class=" ultb3-box ult-adjust-bottom-margin  "><div id="Info-banner-wrap5182" class="ultb3-info ib3-info-center" data-animation="" data-animation-delay="03">
+<div class="ultb3-title ult-responsive" data-ultimate-target="#Info-banner-wrap5182 .ultb3-title" data-responsive-json-new='{"font-size":"","line-height":""}' style="font-family:Muli;font-weight:bold;">Texas State University</div>
+<div class="ultb3-desc ult-responsive" data-ultimate-target="#Info-banner-wrap5182 .ultb3-desc" data-responsive-json-new='{"font-size":"","line-height":""}' style="font-weight:normal;">Bachelor of Arts in the School of Journalism &amp; Mass Communication - December 2013</div>
+</div></div>
+<style>#ultib3-1478145388673703acaa1e4 {
+						min-height:50px;
+					}
+					#ultib3-1478145388673703acaa1e4 img.ultb3-img {
+						height: px;
+					}
+					#ultib3-1478145388673703acaa1e4 .ultb3-btn {
+						border:2px solid #1e73be;border-radius:50px;color:#898989;
+					}
+					#ultib3-1478145388673703acaa1e4 .ultb3-btn:hover {
+						background:#1e73be;
+					}</style>
+<div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-3"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div class="flip-box-wrap">
+<div class="flip-box ifb-custom-height  horizontal_flip_left flip-box-custom-height flip-ifb-custom-height" data-min-height="165px">
+<div class="ifb-flip-box" id="flip-box-wrap-3980">
+<div class="ifb-face ifb-front " style="color:#333333;background:#efefef; border-width: 2px;border-style: solid; border-color:#a4a4a4; border-radius: 0px;">
+							<div class="ifb-flip-box-section ">
+							<div class="flip-box-icon"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon circle " style="color:#333333;background:#ffffff;font-size:32px;display:inline-block;">
+	<i class="Defaults-trophy"></i>
+</div>
+</div></div></div>
+<h3 class="ult-responsive flipbox_heading" data-ultimate-target="#flip-box-wrap-3980 .ult-responsive.flipbox_heading" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333; ">Dean's List</h3>
+</div>
+</div>
+<!-- END .front -->
+						<div class="ifb-face ifb-back" style="color:#333333;background:#efefef; border-width: 2px;border-style: solid; border-color:#a4a4a4; border-radius: 0px;">
+							<div class="ifb-flip-box-section ">
+<h3 class="ult-responsive flipbox_heading" data-ultimate-target="#flip-box-wrap-3980 .ult-responsive.flipbox_heading" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333; ">Dean's List</h3>
+<div class="ifb-flip-box-section-content ult-responsive" data-ultimate-target="#flip-box-wrap-3980 .ifb-flip-box-section-content.ult-responsive" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333;color:#333333;"><p>Received the Dean’s List Award in the Spring 2011 semester</p></div>
+</div>
+</div>
+<!-- END .back -->
+</div> <!-- ifb-flip-box -->
+</div> <!-- flip-box -->
+</div>
+<!-- End icon block -->
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-3"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div class="flip-box-wrap">
+<div class="flip-box ifb-custom-height  horizontal_flip_left flip-box-custom-height flip-ifb-custom-height" data-min-height="165px">
+<div class="ifb-flip-box" id="flip-box-wrap-6987">
+<div class="ifb-face ifb-front " style="color:#333333;background:#efefef; border-width: 2px;border-style: solid; border-color:#a4a4a4; border-radius: 0px;">
+							<div class="ifb-flip-box-section ">
+							<div class="flip-box-icon"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon circle " style="color:#333333;background:#ffffff;font-size:32px;display:inline-block;">
+	<i class="Defaults-child"></i>
+</div>
+</div></div></div>
+<h3 class="ult-responsive flipbox_heading" data-ultimate-target="#flip-box-wrap-6987 .ult-responsive.flipbox_heading" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333; ">Intramural Sports</h3>
+</div>
+</div>
+<!-- END .front -->
+						<div class="ifb-face ifb-back" style="color:#333333;background:#efefef; border-width: 2px;border-style: solid; border-color:#a4a4a4; border-radius: 0px;">
+							<div class="ifb-flip-box-section ">
+<h3 class="ult-responsive flipbox_heading" data-ultimate-target="#flip-box-wrap-6987 .ult-responsive.flipbox_heading" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333; ">Intramural Sports</h3>
+<div class="ifb-flip-box-section-content ult-responsive" data-ultimate-target="#flip-box-wrap-6987 .ifb-flip-box-section-content.ult-responsive" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333;color:#333333;"><p>Participated in intramural football and softball while attending the university</p></div>
+</div>
+</div>
+<!-- END .back -->
+</div> <!-- ifb-flip-box -->
+</div> <!-- flip-box -->
+</div>
+<!-- End icon block -->
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-3"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div class="flip-box-wrap">
+<div class="flip-box ifb-custom-height  horizontal_flip_left flip-box-custom-height flip-ifb-custom-height" data-min-height="165px">
+<div class="ifb-flip-box" id="flip-box-wrap-6549">
+<div class="ifb-face ifb-front " style="color:#333333;background:#efefef; border-width: 2px;border-style: solid; border-color:#a4a4a4; border-radius: 0px;">
+							<div class="ifb-flip-box-section ">
+							<div class="flip-box-icon"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon circle " style="color:#333333;background:#ffffff;font-size:32px;display:inline-block;">
+	<i class="Defaults-group users"></i>
+</div>
+</div></div></div>
+<h3 class="ult-responsive flipbox_heading" data-ultimate-target="#flip-box-wrap-6549 .ult-responsive.flipbox_heading" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333; ">Student Organizations</h3>
+</div>
+</div>
+<!-- END .front -->
+						<div class="ifb-face ifb-back" style="color:#333333;background:#efefef; border-width: 2px;border-style: solid; border-color:#a4a4a4; border-radius: 0px;">
+							<div class="ifb-flip-box-section ">
+<h3 class="ult-responsive flipbox_heading" data-ultimate-target="#flip-box-wrap-6549 .ult-responsive.flipbox_heading" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333; ">Student Organizations</h3>
+<div class="ifb-flip-box-section-content ult-responsive" data-ultimate-target="#flip-box-wrap-6549 .ifb-flip-box-section-content.ult-responsive" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333;color:#333333;"><p>Involved with Bobcat Build and the Student Volunteer Connection</p></div>
+</div>
+</div>
+<!-- END .back -->
+</div> <!-- ifb-flip-box -->
+</div> <!-- flip-box -->
+</div>
+<!-- End icon block -->
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-3"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div class="flip-box-wrap">
+<div class="flip-box ifb-custom-height  horizontal_flip_left flip-box-custom-height flip-ifb-custom-height" data-min-height="165px">
+<div class="ifb-flip-box" id="flip-box-wrap-2914">
+<div class="ifb-face ifb-front " style="color:#333333;background:#efefef; border-width: 2px;border-style: solid; border-color:#a4a4a4; border-radius: 0px;">
+							<div class="ifb-flip-box-section ">
+							<div class="flip-box-icon"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon circle " style="color:#333333;background:#ffffff;font-size:32px;display:inline-block;">
+	<i class="Defaults-pencil"></i>
+</div>
+</div></div></div>
+<h3 class="ult-responsive flipbox_heading" data-ultimate-target="#flip-box-wrap-2914 .ult-responsive.flipbox_heading" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333; "><i>The University Star</i></h3>
+</div>
+</div>
+<!-- END .front -->
+						<div class="ifb-face ifb-back" style="color:#333333;background:#efefef; border-width: 2px;border-style: solid; border-color:#a4a4a4; border-radius: 0px;">
+							<div class="ifb-flip-box-section ">
+<h3 class="ult-responsive flipbox_heading" data-ultimate-target="#flip-box-wrap-2914 .ult-responsive.flipbox_heading" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333; "><i>The University Star</i></h3>
+<div class="ifb-flip-box-section-content ult-responsive" data-ultimate-target="#flip-box-wrap-2914 .ifb-flip-box-section-content.ult-responsive" data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#333333;color:#333333;"><p>Student Journalist for the university newspaper, <i>The University Star</i></p></div>
+</div>
+</div>
+<!-- END .back -->
+</div> <!-- ifb-flip-box -->
+</div> <!-- flip-box -->
+</div>
+<!-- End icon block -->
+</div></div></div>
+</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid">
+<div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div id="ultimate-heading-1469673703acabbb9" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-1469673703acabbb9 uvc-2623  uvc-heading-default-font-sizes" data-hspacer="no_spacer" data-halign="center" style="text-align:center">
+<div class="uvc-heading-spacer no_spacer" style="/top"></div>
+<div class="uvc-main-heading ult-responsive" data-ultimate-target=".uvc-heading.ultimate-heading-1469673703acabbb9 h2" data-responsive-json-new='{"font-size":"","line-height":""}'><h2 style="--font-weight:theme;">Texas State University</h2></div>
+</div>
+<div class="vc_empty_space" style="height: 20px"><span class="vc_empty_space_inner"></span></div>
+<style type="text/css" data-type="the7_shortcodes-inline-css">.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div {
+  width: 36px;
+  height: 36px;
+  border-radius: 500px;
+}
+.dt-arrow-border-on.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div:not(:hover):before {
+  border-width: 0px;
+}
+.dt-arrow-hover-border-on.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div:hover:after {
+  border-width: 0px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div.owl-prev {
+  top: 50%;
+  transform: translateY(calc(-50% + 0px));
+  left: -43px;
+}
+@media all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div.owl-prev {
+    transform: translateY(-50%);
+    margin-top: 0px;
+  }
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div.owl-prev i {
+  padding: 0px 0px 0px 0px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div.owl-next {
+  top: 50%;
+  transform: translateY(calc(-50% + 0px));
+  right: -43px;
+}
+@media all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div.owl-next {
+    transform: translateY(-50%);
+    margin-top: 0px;
+  }
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div.owl-next i {
+  padding: 0px 0px 0px 0px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav i {
+  font-size: 18px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div:not(:hover) i,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div:not(:hover) i:before {
+  color: #ffffff;
+  background: none;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div:hover i,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.owl-carousel .owl-nav div:hover i:before {
+  color: rgba(255,255,255,0.75);
+  background: none;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691 .owl-dots {
+  top: calc(100% + 20px);
+  left: 50%;
+  transform: translateX(calc(-50% + 0px));
+}
+@media all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691 .owl-dots {
+    transform: translateX(-50%);
+    margin-left: 0px;
+  }
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691 .owl-dot {
+  width: 10px;
+  height: 10px;
+  margin: 0 8px;
+}
+@media screen and (max-width: 778px) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.hide-arrows .owl-nav a {
+    display: none;
+  }
+}
+@media screen and (max-width: 778px) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.reposition-arrows .owl-nav .owl-prev {
+    top: 50%;
+    transform: translateY(calc(-50% + 0px));
+    left: 10px;
+  }
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.reposition-arrows .owl-nav .owl-next {
+    top: 50%;
+    transform: translateY(calc(-50% + 0px));
+    right: 10px;
+  }
+}
+@media screen and (max-width: 778px) and all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.reposition-arrows .owl-nav .owl-prev {
+    transform: translateY(-50%);
+    margin-top: 0px;
+  }
+}
+@media screen and (max-width: 778px) and all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.reposition-arrows .owl-nav .owl-next {
+    transform: translateY(-50%);
+    margin-top: 0px;
+  }
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691 figure,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691 .rollover,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691 img,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691 .gallery-rollover {
+  border-radius: 0px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.enable-bg-rollover .gallery-rollover {
+  background: -webkit-linear-gradient();
+  background: linear-gradient();
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.enable-img-shadow figure {
+  box-shadow: 0px 4px 12px 3px rgba(0,0,0,0.25);
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.enable-img-shadow .owl-stage-outer {
+  padding: 14px 0;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.enable-bg-rollover.hover-scale figure .rollover:after {
+  background: -webkit-linear-gradient();
+  background: linear-gradient();
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.gallery-shortcode .gallery-zoom-ico {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  border-radius: 100px;
+  margin: -22px 0 0 -22px;
+  border-width: 0px;
+}
+.dt-icon-bg-on.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.gallery-shortcode .gallery-zoom-ico {
+  background: rgba(255,255,255,0.3);
+  box-shadow: none;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.gallery-shortcode .gallery-zoom-ico:before,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691.gallery-shortcode .gallery-zoom-ico span {
+  font-size: 32px;
+  line-height: 44px;
+  color: #ffffff;
+  background: none;
+}</style>
+<div class="owl-carousel gallery-carousel-shortcode gallery-shortcode  dt-gallery-container dt-owl-carousel-call gallery-carousel-shortcode-id-49ed7eae0b2d52002d7755a7da28d691 quick-scale-img enable-bg-rollover meta-info-off dt-arrow-border-on dt-arrow-hover-border-on enable-img-shadow bullets-small-dot-stroke reposition-arrows dt-icon-bg-off arrows-bg-on disable-arrows-hover-bg arrows-hover-bg-on  hover-fade " data-scroll-mode="1" data-col-num="1" data-wide-col-num="1" data-laptop-col="1" data-h-tablet-columns-num="1" data-v-tablet-columns-num="1" data-phone-columns-num="1" data-col-gap="10" data-stage-padding="0" data-speed="600" data-autoplay="true" data-autoplay_speed="3000" data-arrows="true" data-bullet="false" data-next-icon="icon-ar-017-r" data-prev-icon="icon-ar-017-l" data-img-shadow-size="12px" data-img-shadow-spread="3px">
+<div data-post-id="15012" data-date="2016-02-22T04:54:59-06:00" data-name="Texas-State-University-Bobcats-Stadium"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/Texas-State-University-Bobcats-Stadium.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1024" data-large_image_height="768" data-dt-img-description="" title="Texas-State-University-Bobcats-Stadium"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201024%20768&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/Texas-State-University-Bobcats-Stadium.jpg" data-srcset="/legacy/wp-content/uploads/2015/03/Texas-State-University-Bobcats-Stadium.jpg 1024w" loading="eager" style="--ratio: 1024 / 768" sizes="(max-width: 1024px) 100vw, 1024px" alt="" width="1024" height="768"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15010" data-date="2016-02-22T04:54:24-06:00" data-name="Old_Main_Txstate"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/Old_Main_Txstate.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1024" data-large_image_height="768" data-dt-img-description="" title="Old_Main_Txstate"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201024%20768&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/Old_Main_Txstate.jpg" data-srcset="/legacy/wp-content/uploads/2015/03/Old_Main_Txstate.jpg 1024w" loading="eager" style="--ratio: 1024 / 768" sizes="(max-width: 1024px) 100vw, 1024px" alt="" width="1024" height="768"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15013" data-date="2016-02-22T04:55:06-06:00" data-name="TexasState_1024x768"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/TexasState_1024x768.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1024" data-large_image_height="768" data-dt-img-description="" title="TexasState_1024x768"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201024%20768&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/TexasState_1024x768.jpg" data-srcset="/legacy/wp-content/uploads/2015/03/TexasState_1024x768.jpg 1024w" loading="eager" style="--ratio: 1024 / 768" sizes="(max-width: 1024px) 100vw, 1024px" alt="" width="1024" height="768"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15017" data-date="2016-02-22T04:56:54-06:00" data-name="aquarena springs"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/aquarena-springs.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1024" data-large_image_height="680" data-dt-img-description="" title="aquarena springs"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201024%20680&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/aquarena-springs.jpg" data-srcset="/legacy/wp-content/uploads/2015/03/aquarena-springs.jpg 1024w" loading="eager" style="--ratio: 1024 / 680" sizes="(max-width: 1024px) 100vw, 1024px" alt="" width="1024" height="680"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15015" data-date="2016-02-22T04:55:53-06:00" data-name="hero3"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/hero3.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1024" data-large_image_height="697" data-dt-img-description="" title="hero3"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201024%20697&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/hero3.jpg" data-srcset="/legacy/wp-content/uploads/2015/03/hero3.jpg 1024w" loading="eager" style="--ratio: 1024 / 697" sizes="(max-width: 1024px) 100vw, 1024px" alt="" width="1024" height="697"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15011" data-date="2016-02-22T04:54:55-06:00" data-name="texas_state_university_logo1"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/texas_state_university_logo1.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1024" data-large_image_height="291" data-dt-img-description="" title="texas_state_university_logo1"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201024%20291&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/texas_state_university_logo1.jpg" data-srcset="/legacy/wp-content/uploads/2015/03/texas_state_university_logo1.jpg 1024w" loading="eager" style="--ratio: 1024 / 291" sizes="(max-width: 1024px) 100vw, 1024px" alt="" width="1024" height="291"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15016" data-date="2016-02-22T04:56:17-06:00" data-name="txstate air"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/txstate-air.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1024" data-large_image_height="682" data-dt-img-description="" title="txstate air"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201024%20682&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/txstate-air.jpg" data-srcset="/legacy/wp-content/uploads/2015/03/txstate-air.jpg 1024w" loading="eager" style="--ratio: 1024 / 682" sizes="(max-width: 1024px) 100vw, 1024px" alt="" width="1024" height="682"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15014" data-date="2016-02-22T04:55:23-06:00" data-name="tubing"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/tubing.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1024" data-large_image_height="682" data-dt-img-description="" title="tubing"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201024%20682&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/tubing.jpg" data-srcset="/legacy/wp-content/uploads/2015/03/tubing.jpg 1024w" loading="eager" style="--ratio: 1024 / 682" sizes="(max-width: 1024px) 100vw, 1024px" alt="" width="1024" height="682"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15419" data-date="2020-08-25T16:09:24-05:00" data-name="texas-state-performaing-arts-center-01_0"><figure class="post"><a href="/legacy/wp-content/uploads/2020/08/texas-state-performaing-arts-center-01_0.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="960" data-large_image_height="576" data-dt-img-description="" title="texas-state-performaing-arts-center-01_0"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20960%20576&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2020/08/texas-state-performaing-arts-center-01_0.jpg" data-srcset="/legacy/wp-content/uploads/2020/08/texas-state-performaing-arts-center-01_0.jpg 960w" loading="eager" style="--ratio: 960 / 576" sizes="(max-width: 960px) 100vw, 960px" alt="" width="960" height="576"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15420" data-date="2020-08-25T16:09:30-05:00" data-name="36087364320_08f3117160-landscape"><figure class="post"><a href="/legacy/wp-content/uploads/2020/08/36087364320_08f3117160-landscape.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1920" data-large_image_height="794" data-dt-img-description="" title="36087364320_08f3117160-landscape"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201920%20794&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2020/08/36087364320_08f3117160-landscape.jpg" data-srcset="/legacy/wp-content/uploads/2020/08/36087364320_08f3117160-landscape.jpg 1920w" loading="eager" style="--ratio: 1920 / 794" sizes="(max-width: 1920px) 100vw, 1920px" alt="" width="1920" height="794"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15418" data-date="2020-08-25T16:09:18-05:00" data-name="dsc_8059"><figure class="post"><a href="/legacy/wp-content/uploads/2020/08/dsc_8059.jpg" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1920" data-large_image_height="1280" data-dt-img-description="" title="dsc_8059"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201920%201280&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2020/08/dsc_8059.jpg" data-srcset="/legacy/wp-content/uploads/2020/08/dsc_8059.jpg 1920w" loading="eager" style="--ratio: 1920 / 1280" sizes="(max-width: 1920px) 100vw, 1920px" alt="" width="1920" height="1280"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+</div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div>
+</div>
+<div class="vc_empty_space" style="height: 20px"><span class="vc_empty_space_inner"></span></div>
+</div></div></div></div>
+<div id="certs" data-anchor="#certs" class="vc_row wpb_row vc_row-fluid dt-default" style="margin-top: 0px;margin-bottom: 0px"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div id="ultimate-heading-2300673703acafc52" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-2300673703acafc52 uvc-9636  uvc-heading-default-font-sizes" data-hspacer="no_spacer" data-halign="center" style="text-align:center">
+<div class="uvc-heading-spacer no_spacer" style="/top"></div>
+<div class="uvc-sub-heading ult-responsive" data-ultimate-target=".uvc-heading.ultimate-heading-2300673703acafc52 .uvc-sub-heading " data-responsive-json-new='{"font-size":"","line-height":""}' style="font-family:'Roboto';font-weight:bold;">
+<h1>Certifications</h1>
+<p></p>
+</div>
+</div>
+<div class="vc_empty_space" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
+</div></div></div></div>
+<div class="vc_row wpb_row vc_row-fluid dt-default" style="margin-top: 0px;margin-bottom: 0px">
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div class="dt-fancy-separator h3-size style-disabled" style="width: 100%;"><div class="dt-fancy-title">
+<span class="separator-holder separator-left"></span>CompTIA<span class="separator-holder separator-right"></span>
+</div></div>
+<div class="vc_empty_space" style="height: 16px"><span class="vc_empty_space_inner"></span></div>
+<div class="vc_tta-container" data-vc-action="collapseAll"><div class="vc_general vc_tta vc_tta-accordion vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-o-shape-group vc_tta-controls-align-default vc_tta-o-all-clickable"><div class="vc_tta-panels-container"><div class="vc_tta-panels"><div class="vc_tta-panel vc_active" id="1712841149667-911e55a6-566b" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1712841149667-911e55a6-566b" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Proctored Certificates</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="standard-arrow list-divider bullet-top">
+<p><b>Proctored</b><strong> Certificates</strong></p>
+<ul>
+<li>
+<a href="https://www.credly.com/badges/fe6998a4-6ade-48b7-afd8-44e2e127e447">CompTIA Security+</a><a href="/legacy/wp-content/uploads/2024/04/CompTIA_Security_2Bce.png" target="_blank" rel="noopener noreferrer"><img loading="lazy" decoding="async" class="wp-image-15529 size-thumbnail aligncenter" src="/legacy/wp-content/uploads/2024/04/CompTIA_Security_2Bce-150x150.png" alt="" width="150" height="150" srcset="/legacy/wp-content/uploads/2024/04/CompTIA_Security_2Bce-150x150.png 150w, /legacy/wp-content/uploads/2024/04/CompTIA_Security_2Bce-300x300.png 300w, /legacy/wp-content/uploads/2024/04/CompTIA_Security_2Bce.png 340w" sizes="auto, (max-width: 150px) 100vw, 150px"></a>
+</li>
+</ul>
+</div></div>
+</div></div></div></div></div>
+<div class="dt-fancy-separator h3-size style-disabled" style="width: 100%;"><div class="dt-fancy-title">
+<span class="separator-holder separator-left"></span>Dell EMC<span class="separator-holder separator-right"></span>
+</div></div>
+<div class="vc_empty_space" style="height: 16px"><span class="vc_empty_space_inner"></span></div>
+<div class="vc_tta-container" data-vc-action="collapseAll"><div class="vc_general vc_tta vc_tta-accordion vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-o-shape-group vc_tta-controls-align-default vc_tta-o-all-clickable"><div class="vc_tta-panels-container"><div class="vc_tta-panels"><div class="vc_tta-panel vc_active" id="1712841565384-c2a173ec-738f" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1712841565384-c2a173ec-738f" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Proctored Certificates</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="standard-arrow list-divider bullet-top">
+<p><b>Proctored</b><strong> Certificates</strong></p>
+<ul>
+<li>
+<a href="https://www.credly.com/earner/earned/badge/d47d60c2-b59d-4711-9b9a-483e9ce95d87">Associate &#8211; PowerEdge Version 1.0</a><br>
+<a href="/legacy/wp-content/uploads/2018/08/DECA_PowerEdge_Associate.png" target="_blank" rel="noopener noreferrer"><img loading="lazy" decoding="async" class="wp-image-15271 size-thumbnail aligncenter" src="/legacy/wp-content/uploads/2018/08/DECA_PowerEdge_Associate-150x150.png" alt="" width="150" height="150" srcset="/legacy/wp-content/uploads/2018/08/DECA_PowerEdge_Associate-150x150.png 150w, /legacy/wp-content/uploads/2018/08/DECA_PowerEdge_Associate-300x300.png 300w, /legacy/wp-content/uploads/2018/08/DECA_PowerEdge_Associate.png 352w" sizes="auto, (max-width: 150px) 100vw, 150px"></a>
+</li>
+<li>
+<a href="https://www.credly.com/earner/earned/badge/371ac0f9-7124-4b62-b393-ddae42de6d05">Specialist &#8211; Implementation Engineer, PowerEdge Version 1.0</a><a href="/legacy/wp-content/uploads/2018/08/DECS-IEPowerEdge_Specialist.png" target="_blank" rel="noopener noreferrer"><img loading="lazy" decoding="async" class="wp-image-15272 size-thumbnail aligncenter" src="/legacy/wp-content/uploads/2018/08/DECS-IEPowerEdge_Specialist-150x150.png" alt="" width="150" height="150" srcset="/legacy/wp-content/uploads/2018/08/DECS-IEPowerEdge_Specialist-150x150.png 150w, /legacy/wp-content/uploads/2018/08/DECS-IEPowerEdge_Specialist-300x300.png 300w, /legacy/wp-content/uploads/2018/08/DECS-IEPowerEdge_Specialist.png 352w" sizes="auto, (max-width: 150px) 100vw, 150px"></a>
+</li>
+</ul>
+</div></div>
+</div></div></div></div></div>
+<div class="vc_empty_space" style="height: 16px"><span class="vc_empty_space_inner"></span></div>
+<div class="dt-fancy-separator h3-size style-disabled" style="width: 100%;"><div class="dt-fancy-title">
+<span class="separator-holder separator-left"></span>IGAgile<span class="separator-holder separator-right"></span>
+</div></div>
+<div class="vc_empty_space" style="height: 16px"><span class="vc_empty_space_inner"></span></div>
+<div class="vc_tta-container" data-vc-action="collapseAll"><div class="vc_general vc_tta vc_tta-accordion vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-o-shape-group vc_tta-controls-align-default vc_tta-o-all-clickable"><div class="vc_tta-panels-container"><div class="vc_tta-panels"><div class="vc_tta-panel vc_active" id="1598881940034-0aaf0e2e-dd39" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1598881940034-0aaf0e2e-dd39" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Certifications</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="standard-arrow list-divider bullet-top">
+<ul>
+<li><a href="/legacy/wp-content/uploads/2020/08/ICP-ICAgile-Certified-Professional.pdf" target="_blank" rel="noopener noreferrer">ICP &#8211; ICAgile Certified Professional</a></li>
+</ul>
+<div id="gtx-trans" style="position: absolute; left: 39px; top: 34px;">
+<div class="gtx-trans-icon"></div>
+</div>
+</div></div>
+</div></div></div></div></div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div class="dt-fancy-separator h3-size style-disabled" style="width: 100%;"><div class="dt-fancy-title">
+<span class="separator-holder separator-left"></span>Amazon Web Services (AWS)<span class="separator-holder separator-right"></span>
+</div></div>
+<div class="vc_empty_space" style="height: 16px"><span class="vc_empty_space_inner"></span></div>
+<div class="vc_tta-container" data-vc-action="collapseAll"><div class="vc_general vc_tta vc_tta-accordion vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-o-shape-group vc_tta-controls-align-default vc_tta-o-all-clickable"><div class="vc_tta-panels-container"><div class="vc_tta-panels">
+<div class="vc_tta-panel vc_active" id="1534780448590-e2eafc58-2ea2" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1534780448590-e2eafc58-2ea2" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Proctored Certificates</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body">
+<div class="standard-arrow list-divider bullet-top">
+<p><b>Proctored</b><strong> Certificates</strong></p>
+<ul>
+<li>
+<a href="https://www.credly.com/earner/earned/badge/256db1dd-b4e8-4a65-b2f8-125b36404850" target="_blank" rel="noopener">AWS Certified Solutions Architect – Professional</a><a class="dt-pswp-item" href="/legacy/wp-content/uploads/2023/04/AWS-Certified-Solutions-Architect-Professional_badge.69d82ff1b2861e1089539ebba906c70b011b928a.png" data-dt-img-description="" data-large_image_width="300" data-large_image_height="300"><img loading="lazy" decoding="async" class="size-thumbnail wp-image-15512 aligncenter" src="/legacy/wp-content/uploads/2023/04/AWS-Certified-Solutions-Architect-Professional_badge.69d82ff1b2861e1089539ebba906c70b011b928a-150x150.png" alt="" width="150" height="150" srcset="/legacy/wp-content/uploads/2023/04/AWS-Certified-Solutions-Architect-Professional_badge.69d82ff1b2861e1089539ebba906c70b011b928a-150x150.png 150w, /legacy/wp-content/uploads/2023/04/AWS-Certified-Solutions-Architect-Professional_badge.69d82ff1b2861e1089539ebba906c70b011b928a.png 300w" sizes="auto, (max-width: 150px) 100vw, 150px"></a>
+</li>
+</ul>
+</div>
+<div class="standard-arrow list-divider bullet-top">
+<ul>
+<li>
+<a href="https://www.credly.com/badges/688b2432-1e30-4798-9257-4bf724f75b46/public_url" target="_blank" rel="noopener">AWS Certified Solutions Architect – Associate</a><a class="dt-pswp-item" href="/legacy/wp-content/uploads/2023/04/AWS-Certified-Solutions-Architect-Associate_badge.3419559c682629072f1eb968d59dea0741772c0f.png" data-dt-img-description="" data-large_image_width="300" data-large_image_height="300"><img loading="lazy" decoding="async" class="size-thumbnail wp-image-15511 aligncenter" src="/legacy/wp-content/uploads/2023/04/AWS-Certified-Solutions-Architect-Associate_badge.3419559c682629072f1eb968d59dea0741772c0f-150x150.png" alt="" width="150" height="150" srcset="/legacy/wp-content/uploads/2023/04/AWS-Certified-Solutions-Architect-Associate_badge.3419559c682629072f1eb968d59dea0741772c0f-150x150.png 150w, /legacy/wp-content/uploads/2023/04/AWS-Certified-Solutions-Architect-Associate_badge.3419559c682629072f1eb968d59dea0741772c0f.png 300w" sizes="auto, (max-width: 150px) 100vw, 150px"></a>
+</li>
+</ul>
+</div>
+<div class="standard-arrow list-divider bullet-top">
+<ul>
+<li>
+<a href="https://www.credly.com/badges/b7202153-940c-4379-bbcd-a08fecec6c04/public_url">AWS Certified SysOps Administrator – Associate </a><br>
+<a class="dt-pswp-item" href="/legacy/wp-content/uploads/2023/04/AWS-Certified-SysOps-Administrator-Associate_badge.c3586b02748654fb588633314dd66a1d6841893b.png" data-dt-img-description="" data-large_image_width="300" data-large_image_height="300"><img loading="lazy" decoding="async" class="size-thumbnail wp-image-15510 aligncenter" src="/legacy/wp-content/uploads/2023/04/AWS-Certified-SysOps-Administrator-Associate_badge.c3586b02748654fb588633314dd66a1d6841893b-150x150.png" alt="" width="150" height="150" srcset="/legacy/wp-content/uploads/2023/04/AWS-Certified-SysOps-Administrator-Associate_badge.c3586b02748654fb588633314dd66a1d6841893b-150x150.png 150w, /legacy/wp-content/uploads/2023/04/AWS-Certified-SysOps-Administrator-Associate_badge.c3586b02748654fb588633314dd66a1d6841893b.png 300w" sizes="auto, (max-width: 150px) 100vw, 150px"></a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="vc_tta-panel" id="1663800598487-85ea5961-33cf" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1663800598487-85ea5961-33cf" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Game Day Certificates</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="standard-arrow list-divider bullet-top">
+<ul>
+<li>
+<a href="/legacy/wp-content/uploads/2022/09/Gameday-certs-Innovatives-Modern-Family_1.pdf">Unicorn Rentals GameDay &#8211; Microservices Magic Gameday 2nd Place</a><br>
+<a href="/legacy/wp-content/uploads/2022/09/Unicorn-Rentals-Logo.png" target="_blank" rel="noopener noreferrer"><img loading="lazy" decoding="async" class="wp-image-15492 size-medium aligncenter" src="/legacy/wp-content/uploads/2022/09/Unicorn-Rentals-Logo-300x267.png" alt="" width="300" height="267" srcset="/legacy/wp-content/uploads/2022/09/Unicorn-Rentals-Logo-300x267.png 300w, /legacy/wp-content/uploads/2022/09/Unicorn-Rentals-Logo.png 603w" sizes="auto, (max-width: 300px) 100vw, 300px"></a>
+</li>
+</ul>
+</div></div>
+</div>
+</div></div></div></div>
+<div class="vc_empty_space" style="height: 16px"><span class="vc_empty_space_inner"></span></div>
+<div class="dt-fancy-separator h3-size style-disabled" style="width: 100%;"><div class="dt-fancy-title">
+<span class="separator-holder separator-left"></span>Red Hat Enterprise Linux<span class="separator-holder separator-right"></span>
+</div></div>
+<div class="vc_empty_space" style="height: 16px"><span class="vc_empty_space_inner"></span></div>
+<div class="vc_tta-container" data-vc-action="collapseAll"><div class="vc_general vc_tta vc_tta-accordion vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-o-shape-group vc_tta-controls-align-default vc_tta-o-all-clickable"><div class="vc_tta-panels-container"><div class="vc_tta-panels"><div class="vc_tta-panel vc_active" id="1554404643815-de13f4c5-fe02" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1554404643815-de13f4c5-fe02" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Partner Certifications</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="standard-arrow list-divider bullet-top">
+<p><b>Partner Certificates </b></p>
+<ul>
+<li><a href="/legacy/wp-content/uploads/2019/04/RHEL-Ansible-Accredidation.pdf" target="_blank" rel="noopener noreferrer">Red Hat Sales Engineer Specialist &#8211; Automation</a></li>
+</ul>
+</div></div>
+</div></div></div></div></div>
+</div></div></div>
+<div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div class="dt-fancy-separator h3-size style-disabled" style="width: 100%;"><div class="dt-fancy-title">
+<span class="separator-holder separator-left"></span>Microsoft<span class="separator-holder separator-right"></span>
+</div></div>
+<div class="vc_empty_space" style="height: 16px"><span class="vc_empty_space_inner"></span></div>
+<div class="vc_tta-container" data-vc-action="collapseAll"><div class="vc_general vc_tta vc_tta-accordion vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-o-shape-group vc_tta-controls-align-default vc_tta-o-all-clickable"><div class="vc_tta-panels-container"><div class="vc_tta-panels"><div class="vc_tta-panel vc_active" id="1534780452578-85d50e88-ded9" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1534780452578-85d50e88-ded9" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Proctored Certifications</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="standard-arrow list-divider bullet-top">
+<p><b>Proctored</b><strong> Certificates</strong></p>
+<ul>
+<li><a href="https://www.youracclaim.com/badges/2e6dfa3c-d011-4903-9b6c-0b8a37228d8d" target="_blank" rel="noopener noreferrer">Microsoft Technology Associate &#8211; Networking Fundamentals (98-366)</a></li>
+</ul>
+<p><a href="https://www.youracclaim.com/badges/2e6dfa3c-d011-4903-9b6c-0b8a37228d8d" target="_blank" rel="noopener noreferrer"><img loading="lazy" decoding="async" class="wp-image-15261 size-thumbnail aligncenter" src="/legacy/wp-content/uploads/2018/08/MTANetworkingFundamentals-2016-150x150.png" alt="" width="150" height="150" srcset="/legacy/wp-content/uploads/2018/08/MTANetworkingFundamentals-2016-150x150.png 150w, /legacy/wp-content/uploads/2018/08/MTANetworkingFundamentals-2016-300x300.png 300w, /legacy/wp-content/uploads/2018/08/MTANetworkingFundamentals-2016.png 352w" sizes="auto, (max-width: 150px) 100vw, 150px"></a></p>
+<ul>
+<li>Microsoft Excel 2003</li>
+<li>Microsoft Word 2003</li>
+</ul>
+</div></div>
+</div></div></div></div></div>
+<div class="dt-fancy-separator h3-size style-disabled" style="width: 100%;"><div class="dt-fancy-title">
+<span class="separator-holder separator-left"></span>VMware<span class="separator-holder separator-right"></span>
+</div></div>
+<div class="vc_empty_space" style="height: 16px"><span class="vc_empty_space_inner"></span></div>
+<div class="vc_tta-container" data-vc-action="collapseAll"><div class="vc_general vc_tta vc_tta-accordion vc_tta-color-grey vc_tta-style-classic vc_tta-shape-rounded vc_tta-o-shape-group vc_tta-controls-align-default vc_tta-o-all-clickable"><div class="vc_tta-panels-container"><div class="vc_tta-panels"><div class="vc_tta-panel vc_active" id="1621608584502-b66eba39-2e5e" data-vc-content=".vc_tta-panel-body">
+<div class="vc_tta-panel-heading"><h4 class="vc_tta-panel-title vc_tta-controls-icon-position-left"><a href="#1621608584502-b66eba39-2e5e" data-vc-accordion data-vc-container=".vc_tta-container"><span class="vc_tta-title-text">Partner Certifications</span><i class="vc_tta-controls-icon vc_tta-controls-icon-plus"></i></a></h4></div>
+<div class="vc_tta-panel-body"><div class="standard-arrow list-divider bullet-top">
+<p><strong>Partner Certificates</strong></p>
+<ul>
+<li><a href="/legacy/wp-content/uploads/2018/08/VSP-BC-5.8.pdf" target="_blank" rel="noopener noreferrer">VSP &#8211; BC (Business Continuity) 5.8</a></li>
+<li><a href="/legacy/wp-content/uploads/2018/08/VSP-HCI-2017.pdf" target="_blank" rel="noopener noreferrer">VSP &#8211; HCI (Hyper-converged Infrastructure) 2017</a></li>
+<li><a href="/legacy/wp-content/uploads/2018/08/VSP-MA-2017.pdf" target="_blank" rel="noopener noreferrer">VSP &#8211; MA (Management Automation) 2017</a></li>
+<li><a href="/legacy/wp-content/uploads/2018/08/VSP-MO-2017.pdf" target="_blank" rel="noopener noreferrer">VSP &#8211; MO (Management Operations) 2017</a></li>
+<li><a href="/legacy/wp-content/uploads/2018/08/VSP-NV-2017.pdf" target="_blank" rel="noopener noreferrer">VSP &#8211; NV (Network Virtualization) 2017</a></li>
+<li><a href="/legacy/wp-content/uploads/2018/08/VSP-SV-2017.pdf" target="_blank" rel="noopener noreferrer">VSP &#8211; SV (Server Virtualization) 2017</a></li>
+<li><a href="/legacy/wp-content/uploads/2018/08/VTSP-BC-5.8.pdf" target="_blank" rel="noopener noreferrer">VTSP &#8211; BC(Business Continuity) 5.8</a></li>
+<li><a href="/legacy/wp-content/uploads/2018/08/VTSP-HCI-2017.pdf" target="_blank" rel="noopener noreferrer">VTSP &#8211; HCI (Hyper-converged Infrastructure) 2017</a></li>
+<li><a href="/legacy/wp-content/uploads/2018/08/VTSP-NV-2017.pdf" target="_blank" rel="noopener noreferrer">VTSP &#8211; NV (Network Virtualization) 2017</a></li>
+<li><a href="/legacy/wp-content/uploads/2018/08/VTSP-SV-2017.pdf" target="_blank" rel="noopener noreferrer">VTSP &#8211; SV (Server Virtualization) 2017</a></li>
+</ul>
+</div></div>
+</div></div></div></div></div>
+</div></div></div>
+</div>
+<div class="vc_row wpb_row vc_row-fluid dt-default" style="margin-top: 0px;margin-bottom: 0px"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div class="vc_empty_space" style="height: 20px"><span class="vc_empty_space_inner"></span></div>
+<div id="ultimate-heading-5991673703acb56ce" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-5991673703acb56ce uvc-5932  uvc-heading-default-font-sizes" data-hspacer="no_spacer" data-halign="center" style="text-align:center">
+<div class="uvc-heading-spacer no_spacer" style="/top"></div>
+<div class="uvc-sub-heading ult-responsive" data-ultimate-target=".uvc-heading.ultimate-heading-5991673703acb56ce .uvc-sub-heading " data-responsive-json-new='{"font-size":"","line-height":""}' style="font-family:'Roboto';font-weight:bold;">
+<h2>Supported Technologies</h2>
+<p></p>
+</div>
+</div>
+<div class="vc_empty_space" style="height: 12px"><span class="vc_empty_space_inner"></span></div>
+<style type="text/css" data-type="the7_shortcodes-inline-css">.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div {
+  width: 36px;
+  height: 36px;
+  border-radius: 500px;
+}
+.dt-arrow-border-on.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div:not(:hover):before {
+  border-width: 0px;
+}
+.dt-arrow-hover-border-on.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div:hover:after {
+  border-width: 0px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div.owl-prev {
+  top: 50%;
+  transform: translateY(calc(-50% + 0px));
+  left: -43px;
+}
+@media all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div.owl-prev {
+    transform: translateY(-50%);
+    margin-top: 0px;
+  }
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div.owl-prev i {
+  padding: 0px 0px 0px 0px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div.owl-next {
+  top: 50%;
+  transform: translateY(calc(-50% + 0px));
+  right: -43px;
+}
+@media all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div.owl-next {
+    transform: translateY(-50%);
+    margin-top: 0px;
+  }
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div.owl-next i {
+  padding: 0px 0px 0px 0px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav i {
+  font-size: 18px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div:not(:hover) i,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div:not(:hover) i:before {
+  color: #ffffff;
+  background: none;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div:hover i,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.owl-carousel .owl-nav div:hover i:before {
+  color: rgba(255,255,255,0.75);
+  background: none;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba .owl-dots {
+  top: calc(100% + 20px);
+  left: 50%;
+  transform: translateX(calc(-50% + 0px));
+}
+@media all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba .owl-dots {
+    transform: translateX(-50%);
+    margin-left: 0px;
+  }
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba .owl-dot {
+  width: 10px;
+  height: 10px;
+  margin: 0 8px;
+}
+@media screen and (max-width: 778px) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.hide-arrows .owl-nav a {
+    display: none;
+  }
+}
+@media screen and (max-width: 778px) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.reposition-arrows .owl-nav .owl-prev {
+    top: 50%;
+    transform: translateY(calc(-50% + 0px));
+    left: 10px;
+  }
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.reposition-arrows .owl-nav .owl-next {
+    top: 50%;
+    transform: translateY(calc(-50% + 0px));
+    right: 10px;
+  }
+}
+@media screen and (max-width: 778px) and all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.reposition-arrows .owl-nav .owl-prev {
+    transform: translateY(-50%);
+    margin-top: 0px;
+  }
+}
+@media screen and (max-width: 778px) and all and (-ms-high-contrast: none) {
+  .gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.reposition-arrows .owl-nav .owl-next {
+    transform: translateY(-50%);
+    margin-top: 0px;
+  }
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba figure,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba .rollover,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba img,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba .gallery-rollover {
+  border-radius: 0px;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.enable-bg-rollover .gallery-rollover {
+  background: -webkit-linear-gradient();
+  background: linear-gradient();
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.enable-img-shadow .owl-stage-outer {
+  padding: 20px 0;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.enable-bg-rollover.hover-scale figure .rollover:after {
+  background: -webkit-linear-gradient();
+  background: linear-gradient();
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.gallery-shortcode .gallery-zoom-ico {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  border-radius: 100px;
+  margin: -22px 0 0 -22px;
+  border-width: 0px;
+}
+.dt-icon-bg-on.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.gallery-shortcode .gallery-zoom-ico {
+  background: rgba(255,255,255,0.3);
+  box-shadow: none;
+}
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.gallery-shortcode .gallery-zoom-ico:before,
+.gallery-carousel-shortcode.gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba.gallery-shortcode .gallery-zoom-ico span {
+  font-size: 32px;
+  line-height: 44px;
+  color: #ffffff;
+  background: none;
+}</style>
+<div class="owl-carousel gallery-carousel-shortcode gallery-shortcode  dt-gallery-container dt-owl-carousel-call gallery-carousel-shortcode-id-a11916f5874fa5e1c12b9423996582ba quick-scale-img enable-bg-rollover meta-info-off dt-arrow-border-on dt-arrow-hover-border-on bullets-small-dot-stroke reposition-arrows dt-icon-bg-off arrows-bg-on disable-arrows-hover-bg arrows-hover-bg-on  hover-fade " data-scroll-mode="1" data-col-num="5" data-wide-col-num="5" data-laptop-col="5" data-h-tablet-columns-num="2" data-v-tablet-columns-num="1" data-phone-columns-num="1" data-col-gap="16" data-stage-padding="3" data-speed="600" data-autoplay="true" data-autoplay_speed="3000" data-arrows="true" data-bullet="false" data-next-icon="icon-ar-017-r" data-prev-icon="icon-ar-017-l" data-img-shadow-size="12px" data-img-shadow-spread="3px">
+<div data-post-id="15425" data-date="2020-08-25T16:16:56-05:00" data-name="1280px-Amazon_Web_Services_Logo.svg"><figure class="post"><a href="/legacy/wp-content/uploads/2020/08/1280px-Amazon_Web_Services_Logo.svg_.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1280" data-large_image_height="766" data-dt-img-description="" title="1280px-Amazon_Web_Services_Logo.svg"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201280%20766&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2020/08/1280px-Amazon_Web_Services_Logo.svg_.png" data-srcset="/legacy/wp-content/uploads/2020/08/1280px-Amazon_Web_Services_Logo.svg_.png 1280w" loading="eager" style="--ratio: 1280 / 766" sizes="(max-width: 1280px) 100vw, 1280px" alt="" width="1280" height="766"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15424" data-date="2020-08-25T16:16:54-05:00" data-name="microsoft-azure-logo"><figure class="post"><a href="/legacy/wp-content/uploads/2020/08/microsoft-azure-logo.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="800" data-large_image_height="514" data-dt-img-description="" title="microsoft-azure-logo"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20800%20514&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2020/08/microsoft-azure-logo.png" data-srcset="/legacy/wp-content/uploads/2020/08/microsoft-azure-logo.png 800w" loading="eager" style="--ratio: 800 / 514" sizes="(max-width: 800px) 100vw, 800px" alt="" width="800" height="514"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15423" data-date="2020-08-25T16:16:52-05:00" data-name="terraform"><figure class="post"><a href="/legacy/wp-content/uploads/2020/08/terraform.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="459" data-large_image_height="110" data-dt-img-description="" title="terraform"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20459%20110&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2020/08/terraform.png" data-srcset="/legacy/wp-content/uploads/2020/08/terraform.png 459w" loading="eager" style="--ratio: 459 / 110" sizes="(max-width: 459px) 100vw, 459px" alt="" width="459" height="110"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15426" data-date="2020-08-25T16:17:25-05:00" data-name="DellEMC_Logo_Prm_Blue_rgb"><figure class="post"><a href="/legacy/wp-content/uploads/2020/08/DellEMC_Logo_Prm_Blue_rgb.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="2565" data-large_image_height="451" data-dt-img-description="" title="DellEMC_Logo_Prm_Blue_rgb"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%202565%20451&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2020/08/DellEMC_Logo_Prm_Blue_rgb.png" data-srcset="/legacy/wp-content/uploads/2020/08/DellEMC_Logo_Prm_Blue_rgb.png 2565w" loading="eager" style="--ratio: 2565 / 451" sizes="(max-width: 2565px) 100vw, 2565px" alt="" width="2565" height="451"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15035" data-date="2016-02-22T08:51:32-06:00" data-name="iis"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/iis.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="528" data-large_image_height="240" data-dt-img-description="" title="iis"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20528%20240&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/iis.png" data-srcset="/legacy/wp-content/uploads/2015/03/iis.png 528w" loading="eager" style="--ratio: 528 / 240" sizes="(max-width: 528px) 100vw, 528px" alt="" width="528" height="240"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15037" data-date="2016-02-22T08:51:37-06:00" data-name="MicrosoftSQLServer"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/MicrosoftSQLServer.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="1284" data-large_image_height="327" data-dt-img-description="" title="MicrosoftSQLServer"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%201284%20327&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/MicrosoftSQLServer.png" data-srcset="/legacy/wp-content/uploads/2015/03/MicrosoftSQLServer.png 1284w" loading="eager" style="--ratio: 1284 / 327" sizes="(max-width: 1284px) 100vw, 1284px" alt="" width="1284" height="327"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15049" data-date="2016-02-22T17:52:50-06:00" data-name="better cms"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/better-cms.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="250" data-large_image_height="250" data-dt-img-description="" title="better cms"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20250%20250&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/better-cms.png" data-srcset="/legacy/wp-content/uploads/2015/03/better-cms.png 250w" loading="eager" style="--ratio: 250 / 250" sizes="(max-width: 250px) 100vw, 250px" alt="" width="250" height="250"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15048" data-date="2016-02-22T17:52:47-06:00" data-name=".net MS"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/net-MS.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="391" data-large_image_height="127" data-dt-img-description="" title=".net MS"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20391%20127&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/net-MS.png" data-srcset="/legacy/wp-content/uploads/2015/03/net-MS.png 391w" loading="eager" style="--ratio: 391 / 127" sizes="(max-width: 391px) 100vw, 391px" alt="" width="391" height="127"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15047" data-date="2016-02-22T17:52:43-06:00" data-name="magento"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/magento.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="312" data-large_image_height="322" data-dt-img-description="" title="magento"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20312%20322&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/magento.png" data-srcset="/legacy/wp-content/uploads/2015/03/magento.png 312w" loading="eager" style="--ratio: 312 / 322" sizes="(max-width: 312px) 100vw, 312px" alt="" width="312" height="322"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15042" data-date="2016-02-22T08:51:52-06:00" data-name="DNN Logo"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/DNN-Logo.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="600" data-large_image_height="237" data-dt-img-description="" title="DNN Logo"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20600%20237&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/DNN-Logo.png" data-srcset="/legacy/wp-content/uploads/2015/03/DNN-Logo.png 600w" loading="eager" style="--ratio: 600 / 237" sizes="(max-width: 600px) 100vw, 600px" alt="" width="600" height="237"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15041" data-date="2016-02-22T08:51:49-06:00" data-name="php"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/php.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="360" data-large_image_height="240" data-dt-img-description="" title="php"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20360%20240&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/php.png" data-srcset="/legacy/wp-content/uploads/2015/03/php.png 360w" loading="eager" style="--ratio: 360 / 240" sizes="(max-width: 360px) 100vw, 360px" alt="" width="360" height="240"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15040" data-date="2016-02-22T08:51:46-06:00" data-name="wordpresslogo"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/wordpresslogo.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="500" data-large_image_height="500" data-dt-img-description="" title="wordpresslogo"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20500%20500&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/wordpresslogo.png" data-srcset="/legacy/wp-content/uploads/2015/03/wordpresslogo.png 500w" loading="eager" style="--ratio: 500 / 500" sizes="(max-width: 500px) 100vw, 500px" alt="" width="500" height="500"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15039" data-date="2016-02-22T08:51:43-06:00" data-name="vsphere_logo"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/vsphere_logo.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="512" data-large_image_height="512" data-dt-img-description="" title="vsphere_logo"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20512%20512&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/vsphere_logo.png" data-srcset="/legacy/wp-content/uploads/2015/03/vsphere_logo.png 512w" loading="eager" style="--ratio: 512 / 512" sizes="(max-width: 512px) 100vw, 512px" alt="" width="512" height="512"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15038" data-date="2016-02-22T08:51:40-06:00" data-name="Mysql"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/Mysql.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="640" data-large_image_height="331" data-dt-img-description="" title="Mysql"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20640%20331&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/Mysql.png" data-srcset="/legacy/wp-content/uploads/2015/03/Mysql.png 640w" loading="eager" style="--ratio: 640 / 331" sizes="(max-width: 640px) 100vw, 640px" alt="" width="640" height="331"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+<div data-post-id="15036" data-date="2016-02-22T08:51:34-06:00" data-name="Joomla"><figure class="post"><a href="/legacy/wp-content/uploads/2015/03/Joomla.png" class="rollover dt-pswp-item layzr-bg" data-large_image_width="500" data-large_image_height="342" data-dt-img-description="" title="Joomla"><img decoding="async" class="preload-me owl-lazy-load aspect" src="data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20500%20342&#39;%2F%3E" data-src="/legacy/wp-content/uploads/2015/03/Joomla.png" data-srcset="/legacy/wp-content/uploads/2015/03/Joomla.png 500w" loading="eager" style="--ratio: 500 / 342" sizes="(max-width: 500px) 100vw, 500px" alt="" width="500" height="342"><span class="gallery-rollover"><span class="gallery-zoom-ico icomoon-the7-font-the7-zoom-06"><span></span></span></span></a></figure></div>
+</div>
+</div></div></div></div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div></div>
+<div id="wrap_map_673703acb9e01" class="ultimate-map-wrapper ult-adjust-bottom-margin " style="height:300px;"><div id="map_673703acb9e01" data-map_override="ex-full" class="ultimate_google_map wpb_content_element 0" style="width:100%;height:300px;"></div></div>
+<script type="text/javascript">(function($) {
+  			'use strict';
+			var map_map_673703acb9e01 = null;
+			var coordinate_map_673703acb9e01;
+			var isDraggable = $(document).width() > 641 ? 'true' : 'true';
+			try
+			{
+				var map_map_673703acb9e01 = null;
+				var coordinate_map_673703acb9e01;
+				coordinate_map_673703acb9e01 = new google.maps.LatLng(29.42602, -98.48615);
+				var mapOptions=
+				{
+					zoom: 6,
+					center: coordinate_map_673703acb9e01,
+					scaleControl: true,
+					streetViewControl: false,
+					mapTypeControl: false,
+					panControl: false,
+					zoomControl: true,
+					scrollwheel: false,
+					draggable: isDraggable,
+					zoomControlOptions: {
+						position: google.maps.ControlPosition.right_bottom
+					},mapTypeId: google.maps.MapTypeId.roadmap,};var map_map_673703acb9e01 = new google.maps.Map(document.getElementById('map_673703acb9e01'),mapOptions);
+						var x = 'off';
+						var marker_map_673703acb9e01 = new google.maps.Marker({
+						position: new google.maps.LatLng('29.42602', '-98.48615'),
+						animation:  google.maps.Animation.DROP,
+						map: map_map_673703acb9e01,
+						icon: ''
+					});	google.maps.event.addListener(marker_map_673703acb9e01, 'click', toggleBounce);}
+			catch(e){};
+			jQuery(document).ready(function($){
+				google.maps.event.trigger(map_map_673703acb9e01, 'resize');
+				$(window).on('resize', function(){
+					google.maps.event.trigger(map_map_673703acb9e01, 'resize');
+					if(map_map_673703acb9e01!=null)
+						map_map_673703acb9e01.setCenter(coordinate_map_673703acb9e01);
+				});
+				$('.ui-tabs').on('tabsactivate', function(event, ui) {
+				   if($(this).find('.ultimate-map-wrapper').length > 0)
+					{
+						setTimeout(function(){
+							$(window).trigger('resize');
+						},200);
+					}
+				});
+				$('.ui-accordion').on('accordionactivate', function(event, ui) {
+				   if($(this).find('.ultimate-map-wrapper').length > 0)
+					{
+						setTimeout(function(){
+							$(window).trigger('resize');
+						},200);
+					}
+				});
+				$(window).on('load',function(){
+					setTimeout(function(){
+						$(window).trigger('resize');
+					},200);
+				});
+				$('.ult_exp_section').on('select', function(){
+					if($(map_map_673703acb9e01).parents('.ult_exp_section'))
+					{
+						setTimeout(function(){
+							$(window).trigger('resize');
+						},200);
+					}
+				});
+				$(document).on('onUVCModalPopupOpen', function(){
+					if($(map_map_673703acb9e01).parents('.ult_modal-content'))
+					{
+						setTimeout(function(){
+							$(window).trigger('resize');
+						},200);
+					}
+				});
+				$(document).on('click','.ult_tab_li',function(){
+					$(window).trigger('resize');
+					setTimeout(function(){
+						$(window).trigger('resize');
+					},200);
+				});
+			});
+			function toggleBounce() {
+			  if (marker_map_673703acb9e01.getAnimation() != null) {
+				marker_map_673703acb9e01.setAnimation(null);
+			  } else {
+				marker_map_673703acb9e01.setAnimation(google.maps.Animation.BOUNCE);
+			  }
+			}
+			})(jQuery);</script><div class="vc_empty_space" style="height: 20px"><span class="vc_empty_space_inner"></span></div>
+</div></div></div></div>
+<div id="contact" data-anchor="#contact" data-min-height="40%" class="vc_row wpb_row vc_row-fluid dt-default" style="margin-top: 0px;margin-bottom: 0px"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+<div id="ultimate-heading-2686673703acba8e2" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-2686673703acba8e2 uvc-7574  uvc-heading-default-font-sizes" data-hspacer="no_spacer" data-halign="center" style="text-align:center">
+<div class="uvc-heading-spacer no_spacer" style="/top"></div>
+<div class="uvc-sub-heading ult-responsive" data-ultimate-target=".uvc-heading.ultimate-heading-2686673703acba8e2 .uvc-sub-heading " data-responsive-json-new='{"font-size":"","line-height":""}' style="font-family:'Roboto';font-weight:bold;">
+<h1>Contact Me</h1>
+<p></p>
+</div>
+</div>
+<div class="vc_empty_space" style="height: 20px"><span class="vc_empty_space_inner"></span></div>
+<div class="wpcf7 no-js" id="wpcf7-f15174-p14831-o1" lang="en-US" dir="ltr" data-wpcf7-id="15174">
+<div class="screen-reader-response">
+<p role="status" aria-live="polite" aria-atomic="true"></p> <ul></ul>
+</div>
+<form action="/legacy/?simply_static_page=264#wpcf7-f15174-p14831-o1" method="post" class="wpcf7-form init" aria-label="Contact form" novalidate="novalidate" data-status="init">
+<div style="display: none;">
+<input type="hidden" name="_wpcf7" value="15174">
+<input type="hidden" name="_wpcf7_version" value="6.0">
+<input type="hidden" name="_wpcf7_locale" value="en_US">
+<input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f15174-p14831-o1">
+<input type="hidden" name="_wpcf7_container_post" value="14831">
+<input type="hidden" name="_wpcf7_posted_data_hash" value="">
+<input type="hidden" name="_wpcf7_recaptcha_response" value="">
+</div>
+<p>Your Name<span style="color: red;">*</span>
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="your-name"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" value="" type="text" name="your-name"></span>
+</p>
+<p>Your Email<span style="color: red;">*</span>
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="your-email"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email" aria-required="true" aria-invalid="false" value="" type="email" name="your-email"></span>
+</p>
+<p>Telephone #
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="Telephone"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-tel wpcf7-text wpcf7-validates-as-tel" aria-invalid="false" value="" type="tel" name="Telephone"></span>
+</p>
+<p>Company
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="Company"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text" aria-invalid="false" value="" type="text" name="Company"></span>
+</p>
+<p>State
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="State"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text" aria-invalid="false" value="" type="text" name="State"></span>
+</p>
+<p>Address
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="Address"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text" aria-invalid="false" value="" type="text" name="Address"></span>
+</p>
+<p>Subject<span style="color: red;">*</span>
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="your-subject"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" value="" type="text" name="your-subject"></span>
+</p>
+<p>Your Message<span style="color: red;">*</span>
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="your-message"><textarea cols="40" rows="10" maxlength="2000" class="wpcf7-form-control wpcf7-textarea wpcf7-validates-as-required" aria-required="true" aria-invalid="false" name="your-message"></textarea></span>
+</p>
+
+<p><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="Send">
+</p>
+<div class="wpcf7-response-output" aria-hidden="true"></div>
+</form>
+</div>
+<div class="vc_empty_space" style="height: 100px"><span class="vc_empty_space_inner"></span></div>
+</div></div></div></div>
+<span class="cp-load-after-post"></span>
+</div>
+</div>
+<!-- #content -->
+
+
+			</div>
+<!-- .wf-container -->
+		</div>
+<!-- .wf-wrap -->
+
+	
+	</div>
+<!-- #main -->
+
+	
+
+
+	<!-- !Footer -->
+	<footer id="footer" class="footer solid-bg">
+
+		
+<!-- !Bottom-bar -->
+<div id="bottom-bar" class="logo-left" role="contentinfo">
+    <div class="wf-wrap">
+        <div class="wf-container-bottom">
+
+			<div id="branding-bottom"><a class="" href="/legacy/"><img class=" preload-me" src="/legacy/wp-content/uploads/2016/03/Favicon-High-Res.png" srcset="/legacy/wp-content/uploads/2016/03/Favicon-High-Res.png 32w, /legacy/wp-content/uploads/2016/03/Favicon-High-Res.png 32w" width="32" height="38" sizes="32px" alt="Michael Groff"></a></div>
+                <div class="wf-float-left">
+
+					© 2024 Michael Groff
+                </div>
+
+			
+            <div class="wf-float-right">
+
+				
+            </div>
+
+        </div>
+<!-- .wf-container-bottom -->
+    </div>
+<!-- .wf-wrap -->
+</div>
+<!-- #bottom-bar -->
+	</footer><!-- #footer -->
+
+<a href="#" class="scroll-top"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
+<path d="M11.7,6.3l-3-3C8.5,3.1,8.3,3,8,3c0,0,0,0,0,0C7.7,3,7.5,3.1,7.3,3.3l-3,3c-0.4,0.4-0.4,1,0,1.4c0.4,0.4,1,0.4,1.4,0L7,6.4
+	V12c0,0.6,0.4,1,1,1s1-0.4,1-1V6.4l1.3,1.3c0.4,0.4,1,0.4,1.4,0C11.9,7.5,12,7.3,12,7S11.9,6.5,11.7,6.3z"></path>
+</svg><span class="screen-reader-text">Go to Top</span></a>
+
+</div>
+<!-- #page -->
+
+
+		<script>window.RS_MODULES = window.RS_MODULES || {};
+			window.RS_MODULES.modules = window.RS_MODULES.modules || {};
+			window.RS_MODULES.waiting = window.RS_MODULES.waiting || [];
+			window.RS_MODULES.defered = false;
+			window.RS_MODULES.moduleWaiting = window.RS_MODULES.moduleWaiting || {};
+			window.RS_MODULES.type = 'compiled';</script>
+		<script type="text/html" id="wpb-modifications"> window.wpbCustomElement = 1; <link href="//fonts.googleapis.com/css?family=Advent+Pro:600%7COpen+Sans:400&display=swap" rel="stylesheet" property="stylesheet" media="all" type="text/css">
+
+<script>if(typeof revslider_showDoubleJqueryError === "undefined") {function revslider_showDoubleJqueryError(sliderID) {console.log("You have some jquery.js library include that comes after the Slider Revolution files js inclusion.");console.log("To fix this, you can:");console.log("1. Set 'Module General Options' -> 'Advanced' -> 'jQuery & OutPut Filters' -> 'Put JS to Body' to on");console.log("2. Find the double jQuery.js inclusion and remove it");return "Double Included jQuery Library";}}</script>
+			<link rel="preload" as="font" id="rs-icon-set-fa-icon-woff" type="font/woff2" crossorigin="anonymous" href="/legacy/wp-content/plugins/revslider/sr6/assets/fonts/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0" media="all">
+			<link rel="stylesheet" property="stylesheet" id="rs-icon-set-fa-icon-css" href="/legacy/wp-content/plugins/revslider/sr6/assets/fonts/font-awesome/css/font-awesome.css" type="text/css" media="all">
+<link rel="stylesheet" id="the7-stripes-css" href="/legacy/wp-content/uploads/the7-css/legacy/stripes.css?ver=034cbb40c7ab" media="all">
+<link rel="stylesheet" id="vc_animate-css-css" href="/legacy/wp-content/plugins/js_composer/assets/lib/vendor/node_modules/animate.css/animate.min.css?ver=7.9" media="all">
+<link rel="stylesheet" id="vc_tta_style-css" href="/legacy/wp-content/plugins/js_composer/assets/css/js_composer_tta.min.css?ver=7.9" media="all">
+<link rel="stylesheet" id="rs-plugin-settings-css" href="/legacy/wp-content/plugins/revslider/sr6/assets/css/rs6.css?ver=6.7.21" media="all">
+<style id="rs-plugin-settings-inline-css">#rs-demo-id {}</style>
+<script src="/legacy/wp-content/themes/dt-the7/js/main.min.js?ver=12.1.0" id="dt-main-js"></script>
+<script src="/legacy/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6" id="wp-hooks-js"></script>
+<script src="/legacy/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" id="wp-i18n-js"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text directionltr': [ 'ltr' ] } );
+</script>
+<script src="/legacy/wp-content/plugins/contact-form-7/includes/swv/js/index.js?ver=6.0" id="swv-js"></script>
+<script id="contact-form-7-js-before">var wpcf7 = {
+    "api": {
+        "root": "\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    }
+};</script>
+<script src="/legacy/wp-content/plugins/contact-form-7/includes/js/index.js?ver=6.0" id="contact-form-7-js"></script>
+<script src="/legacy/wp-content/themes/dt-the7/js/legacy.min.js?ver=12.1.0" id="dt-legacy-js"></script>
+<script src="/legacy/wp-content/themes/dt-the7/lib/jquery-mousewheel/jquery-mousewheel.min.js?ver=12.1.0" id="jquery-mousewheel-js"></script>
+<script src="/legacy/wp-content/themes/dt-the7/lib/custom-scrollbar/custom-scrollbar.min.js?ver=12.1.0" id="the7-custom-scrollbar-js"></script>
+<script src="/legacy/wp-content/plugins/dt-the7-core/assets/js/post-type.min.js?ver=2.7.10" id="the7-core-js"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LdJtoAUAAAAAFMlFyt0e3Xqt8dH7Zcw4OChk6XZ&amp;ver=3.0" id="google-recaptcha-js"></script>
+<script src="/legacy/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0" id="wp-polyfill-js"></script>
+<script id="wpcf7-recaptcha-js-before">var wpcf7_recaptcha = {
+    "sitekey": "6LdJtoAUAAAAAFMlFyt0e3Xqt8dH7Zcw4OChk6XZ",
+    "actions": {
+        "homepage": "homepage",
+        "contactform": "contactform"
+    }
+};</script>
+<script src="/legacy/wp-content/plugins/contact-form-7/modules/recaptcha/index.js?ver=6.0" id="wpcf7-recaptcha-js"></script>
+<script src="/legacy/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js?ver=7.9" id="wpb_composer_front_js-js"></script>
+<script src="/legacy/wp-content/plugins/js_composer/assets/lib/vc/vc_waypoints/vc-waypoints.min.js?ver=7.9" id="vc_waypoints-js"></script>
+<script src="/legacy/wp-content/plugins/js_composer/assets/lib/vc/vc_accordion/vc-accordion.min.js?ver=7.9" id="vc_accordion_script-js"></script>
+<script src="/legacy/wp-content/plugins/js_composer/assets/lib/vc/vc-tta-autoplay/vc-tta-autoplay.min.js?ver=7.9" id="vc_tta_autoplay_script-js"></script>
+<script></script><script id="rs-initialisation-scripts">var	tpj = jQuery;
+
+		var	revapi3;
+
+		if(window.RS_MODULES === undefined) window.RS_MODULES = {};
+		if(RS_MODULES.modules === undefined) RS_MODULES.modules = {};
+		RS_MODULES.modules["revslider31"] = {once: RS_MODULES.modules["revslider31"]!==undefined ? RS_MODULES.modules["revslider31"].once : undefined, init:function() {
+			window.revapi3 = window.revapi3===undefined || window.revapi3===null || window.revapi3.length===0  ? document.getElementById("rev_slider_3_1") : window.revapi3;
+			if(window.revapi3 === null || window.revapi3 === undefined || window.revapi3.length==0) { window.revapi3initTry = window.revapi3initTry ===undefined ? 0 : window.revapi3initTry+1; if (window.revapi3initTry<20) requestAnimationFrame(function() {RS_MODULES.modules["revslider31"].init()}); return;}
+			window.revapi3 = jQuery(window.revapi3);
+			if(window.revapi3.revolution==undefined){ revslider_showDoubleJqueryError("rev_slider_3_1"); return;}
+			revapi3.revolutionInit({
+					revapi:"revapi3",
+					sliderType:"hero",
+					sliderLayout:"fullscreen",
+					visibilityLevels:"1240,1024,778,480",
+					gridwidth:1240,
+					gridheight:868,
+					lazyType:"smart",
+					spinner:"spinner0",
+					perspectiveType:"local",
+					responsiveLevels:"1240,1024,778,480",
+					fullScreenOffsetContainer:".header",
+					progressBar:{disableProgressBar:true},
+					navigation: {
+						onHoverStop:false
+					},
+					viewPort: {
+						global:true,
+						globalDist:"-200px",
+						enable:false,
+						visible_area:"20%"
+					},
+					fallbacks: {
+						allowHTML5AutoPlayOnAndroid:true
+					},
+			});
+			
+		}} // End of RevInitScript
+
+		if (window.RS_MODULES.checkMinimal!==undefined) { window.RS_MODULES.checkMinimal();};</script>
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="pswp__bg"></div>
+	<div class="pswp__scroll-wrap">
+		<div class="pswp__container">
+			<div class="pswp__item"></div>
+			<div class="pswp__item"></div>
+			<div class="pswp__item"></div>
+		</div>
+		<div class="pswp__ui pswp__ui--hidden">
+			<div class="pswp__top-bar">
+				<div class="pswp__counter"></div>
+				<button class="pswp__button pswp__button--close" title="Close (Esc)" aria-label="Close (Esc)"></button>
+				<button class="pswp__button pswp__button--share" title="Share" aria-label="Share"></button>
+				<button class="pswp__button pswp__button--fs" title="Toggle fullscreen" aria-label="Toggle fullscreen"></button>
+				<button class="pswp__button pswp__button--zoom" title="Zoom in/out" aria-label="Zoom in/out"></button>
+				<div class="pswp__preloader">
+					<div class="pswp__preloader__icn">
+						<div class="pswp__preloader__cut">
+							<div class="pswp__preloader__donut"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+				<div class="pswp__share-tooltip"></div> 
+			</div>
+			<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)" aria-label="Previous (arrow left)">
+			</button>
+			<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)" aria-label="Next (arrow right)">
+			</button>
+			<div class="pswp__caption">
+				<div class="pswp__caption__center"></div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
