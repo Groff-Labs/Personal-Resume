@@ -85,8 +85,13 @@ jobs:
           echo "distribution=$DIST" >> $GITHUB_OUTPUT
           echo "Deploying to bucket=$BUCKET  distribution=$DIST"
 
+      # Every PutObject explicitly requests AES256 SSE. The bucket already
+      # applies S3-managed encryption by default, but the LZA
+      # InfrastructureProtection-SCP's DenyUnencryptedS3Uploads statement
+      # evaluates IAM/SCP before default-encryption is applied, so the
+      # request header must be on the wire or the call is denied.
       - name: Sync build to S3
-        run: aws s3 sync frontend/out "s3://${{ steps.stack.outputs.bucket }}" --delete
+        run: aws s3 sync frontend/out "s3://${{ steps.stack.outputs.bucket }}" --delete --sse AES256
 
       # Tag resume.pdf with Content-Disposition: inline so the browser opens
       # it in a tab instead of force-downloading, but also sets the default
@@ -99,6 +104,7 @@ jobs:
             "s3://${{ steps.stack.outputs.bucket }}/resume.pdf" \
             "s3://${{ steps.stack.outputs.bucket }}/resume.pdf" \
             --metadata-directive REPLACE \
+            --sse AES256 \
             --content-type application/pdf \
             --content-disposition "inline; filename=Michael_Groff_resume_${YEAR}.pdf"
 
@@ -112,6 +118,7 @@ jobs:
             "s3://${{ steps.stack.outputs.bucket }}/michael-groff.vcf" \
             "s3://${{ steps.stack.outputs.bucket }}/michael-groff.vcf" \
             --metadata-directive REPLACE \
+            --sse AES256 \
             --content-type text/vcard \
             --content-disposition "inline; filename=Michael_Groff.vcf"
 
