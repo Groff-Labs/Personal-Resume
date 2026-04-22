@@ -4,7 +4,12 @@ Personal CV / resume site for **Michael Groff**, AWS Sr. Solutions Architect.
 Migrated from a 2015-era WordPress install (The7 theme) to a static
 Next.js site on AWS.
 
-Live: **https://michaelgroff.info** (prod) · **https://dev.michaelgroff.info** (dev)
+Live: **https://michaelgroff.info** (prod, also serves `cv.michaelgroff.info` as a legacy alias) · **https://dev.michaelgroff.info** (dev)
+
+Plus two read-only archives parked alongside the site:
+
+- `/legacy/` — 2015-era WordPress CV (The7 theme), static export
+- `/blog/` — 2015–2020 WordPress blog (21 posts), mirrored static
 
 ## Stack
 
@@ -37,21 +42,33 @@ WordPress → Next.js on AWS**. Short version: zero servers, pennies per month,
 ## Repo layout
 
 ```
+resume.md         # Source-of-truth résumé; regenerated to PDF on each build
 frontend/         # Next.js static site (the CV itself)
   app/            # App Router pages
   components/     # React components (Hero, Experience, Skills, etc.)
   lib/data/       # Typed data: jobs, certifications, skills
+  scripts/
+    build-resume.mjs      # md-to-pdf → public/resume.pdf; runs as prebuild
   public/         # Static assets (images, favicon, OG, robots, sitemap)
+    blog/                 # WordPress blog archive (2015–2020, read-only)
+    legacy/               # WordPress CV archive (2015 The7 theme)
 infrastructure/   # AWS CDK (TypeScript)
   bin/            # CDK app entry point
   lib/
-    cv-website-stack.ts   # S3 + CloudFront + OAC + ACM per stage
+    cv-website-stack.ts   # S3 + CloudFront + OAC + ACM per stage;
+                          # prod stack also includes cv.* as a SAN/alias
     github-oidc-stack.ts  # One-time OIDC provider + deploy role
 .github/workflows/
   deploy-site.yml   # frontend/** changes → build + sync + invalidate
   deploy-infra.yml  # infrastructure/** changes → cdk deploy
-AI/               # Session notes (for future AI-assisted work)
 ```
+
+Stage → hostname mapping:
+
+| Stage | Hostname(s) | Bucket |
+|---|---|---|
+| `dev`  | `dev.michaelgroff.info` | `cv-michaelgroff-dev` |
+| `prod` | `michaelgroff.info` + `cv.michaelgroff.info` (legacy alias) | `cv-michaelgroff-prod` |
 
 ## Local development
 
@@ -60,6 +77,17 @@ cd frontend
 npm ci
 npm run dev      # http://localhost:3000
 ```
+
+Regenerate the résumé PDF after editing `resume.md`:
+
+```bash
+npm run resume   # writes public/resume.pdf from ../resume.md
+```
+
+(The `prebuild` hook runs this automatically, so `npm run build` always
+ships a fresh PDF. Next dev doesn't auto-resolve directory-index URLs —
+append `/index.html` locally, or trust that the CloudFront Function
+handles `/foo/` → `/foo/index.html` in prod.)
 
 Production build (matches what ships to S3):
 
@@ -91,8 +119,11 @@ npx cdk deploy CvWebsite-dev
 #        --query 'Certificate.DomainValidationOptions[0].ResourceRecord'
 #    → Paste that Name/Value into CloudFlare as a CNAME (DNS only, no proxy)
 
-# 5. After stack completes, add a CNAME in CloudFlare:
-#    dev.michaelgroff.info → <DistributionDomainName from outputs>
+# 5. After stack completes, add CNAME(s) in CloudFlare pointing at the
+#    distribution's DomainName output:
+#      - dev stack:  dev → <DistributionDomainName>
+#      - prod stack: @   → <DistributionDomainName>  (apex; CloudFlare flattens)
+#                    cv  → <DistributionDomainName>  (legacy alias)
 
 # 6. Build and ship the site
 cd ../frontend && npm ci && npm run build
