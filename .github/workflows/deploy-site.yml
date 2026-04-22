@@ -97,5 +97,5 @@ jobs:
 
       - name: Summary
         run: |
-          URL="${{ env.STAGE == 'prod' && 'https://cv.michaelgroff.info' || 'https://dev.cv.michaelgroff.info' }}"
+          URL="${{ env.STAGE == 'prod' && 'https://michaelgroff.info' || 'https://dev.michaelgroff.info' }}"
           echo "::notice::✅ Deployed to $URL"
