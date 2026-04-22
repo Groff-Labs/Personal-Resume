@@ -26,7 +26,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Harden customer environments against AWS Well-Architected pillars (IAM boundaries, VPC segmentation, GuardDuty / WAF).
 
 ### Solutions Architect — Vivsoft Technologies
-*September 2022 – December 2024 · Herndon, VA*
+*September 2022 – December 2024 · Remote (San Antonio, TX)*
 
 - Led cloud architecture for DoD and federal programs, designing secure, multi-tenant systems against IL4 / IL5 accreditation requirements and DISA SRG controls.
 - Drove end-to-end migrations for mission-critical applications, including blue/green deployments that preserved uptime across cutover windows.
@@ -34,7 +34,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Translated cloud-adoption ROI for customer executives — security posture, operational cost, scalability headroom — driving buy-in on modernization roadmaps.
 
 ### Sr. Solutions Architect / Cloud Architect — Innovative Solutions
-*May 2021 – September 2022 · West Henrietta, NY*
+*May 2021 – September 2022 · Remote (San Antonio, TX)*
 
 - Led customer discovery and migration strategy across SMB and mid-market AWS accounts, owning the technical narrative from first call through post-deploy handoff.
 - Designed repeatable migration patterns (assessment → landing zone → 6R application move → operational handoff) that the delivery team reused across engagements.
@@ -42,7 +42,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Stood up customer CI/CD on CodePipeline, CodeBuild, and CodeDeploy, replacing manual release processes with repeatable pipelines.
 
 ### Cloud Tech Architect Delivery Specialist — Accenture Federal Services
-*December 2019 – May 2021 · San Antonio, TX*
+*December 2019 – May 2021 · Remote (San Antonio, TX)*
 
 - Designed cross-cloud architectures for federal customers on Azure and AWS, spanning IaaS, PaaS, and SaaS layers.
 - Built network and application topology: VPC / VNet, subnets, load balancers, EC2 / VMs, RDS, Azure SQL, Elastic Beanstalk, and App Service Environment.
