@@ -4,7 +4,9 @@ Personal CV / resume site for **Michael Groff**, AWS Sr. Solutions Architect.
 Migrated from a 2015-era WordPress install (The7 theme) to a static
 Next.js site on AWS.
 
-Live: **https://michaelgroff.info** (prod, also serves `cv.michaelgroff.info` as a legacy alias) · **https://dev.michaelgroff.info** (dev)
+Live: **https://michaelgroff.info** (prod) · **https://dev.michaelgroff.info** (dev)
+
+`cv.michaelgroff.info` (the legacy subdomain the site lived on for 10+ years) 301-redirects to the apex via a CloudFlare Redirect Rule, so old links still land on the right place.
 
 Plus two read-only archives parked alongside the site:
 
@@ -49,8 +51,7 @@ frontend/         # Next.js static site (the CV itself)
 infrastructure/   # AWS CDK (TypeScript)
   bin/            # CDK app entry point
   lib/
-    cv-website-stack.ts   # S3 + CloudFront + OAC + ACM per stage;
-                          # prod stack also includes cv.* as a SAN/alias
+    cv-website-stack.ts   # S3 + CloudFront + OAC + ACM per stage
     github-oidc-stack.ts  # One-time OIDC provider + deploy role
 .github/workflows/
   deploy-site.yml   # frontend/** changes → build + sync + invalidate
@@ -62,7 +63,7 @@ Stage → hostname mapping:
 | Stage | Hostname(s) | Bucket |
 |---|---|---|
 | `dev`  | `dev.michaelgroff.info` | `cv-michaelgroff-dev` |
-| `prod` | `michaelgroff.info` + `cv.michaelgroff.info` (legacy alias) | `cv-michaelgroff-prod` |
+| `prod` | `michaelgroff.info` (cv.* is a 301 redirect in CloudFlare) | `cv-michaelgroff-prod` |
 
 ## Local development
 
@@ -117,7 +118,6 @@ npx cdk deploy CvWebsite-dev
 #    distribution's DomainName output:
 #      - dev stack:  dev → <DistributionDomainName>
 #      - prod stack: @   → <DistributionDomainName>  (apex; CloudFlare flattens)
-#                    cv  → <DistributionDomainName>  (legacy alias)
 
 # 6. Build and ship the site
 cd ../frontend && npm ci && npm run build
