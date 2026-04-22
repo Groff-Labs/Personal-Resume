@@ -88,6 +88,20 @@ jobs:
       - name: Sync build to S3
         run: aws s3 sync frontend/out "s3://${{ steps.stack.outputs.bucket }}" --delete
 
+      # Tag resume.pdf with Content-Disposition: inline so the browser opens
+      # it in a tab instead of force-downloading, but also sets the default
+      # save filename to a year-stamped Michael_Groff_resume_YYYY.pdf. The
+      # URL (/resume.pdf) stays canonical and stable for external links.
+      - name: Brand resume.pdf save filename
+        run: |
+          YEAR=$(date +%Y)
+          aws s3 cp \
+            "s3://${{ steps.stack.outputs.bucket }}/resume.pdf" \
+            "s3://${{ steps.stack.outputs.bucket }}/resume.pdf" \
+            --metadata-directive REPLACE \
+            --content-type application/pdf \
+            --content-disposition "inline; filename=Michael_Groff_resume_${YEAR}.pdf"
+
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \

@@ -4,10 +4,6 @@ import { useState, useEffect } from "react";
 import { Menu, X, Download } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
-// Bake the build year into the download filename, e.g. Michael_Groff_resume_2026.pdf.
-// Static export evaluates this once at build time; rebuilds refresh the year.
-const RESUME_FILENAME = `Michael_Groff_resume_${new Date().getFullYear()}.pdf`;
-
 const navLinks = [
   { href: "#home", label: "Home", sectionId: "home" },
   { href: "#about", label: "About", sectionId: "about" },
@@ -96,7 +92,6 @@ export default function Navigation() {
             })}
             <a
               href="/resume.pdf"
-              download={RESUME_FILENAME}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-ink-muted border border-line rounded-md hover:border-accent hover:text-accent transition-colors"
@@ -112,7 +107,6 @@ export default function Navigation() {
           <div className="md:hidden flex items-center gap-2">
             <a
               href="/resume.pdf"
-              download={RESUME_FILENAME}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Download resume"
