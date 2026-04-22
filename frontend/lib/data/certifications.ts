@@ -22,7 +22,7 @@ export const certifications: Certification[] = [
     type: "proctored",
     issueDate: "2022-01-07",
     credlyUrl: "https://www.credly.com/badges/256db1dd-b4e8-4a65-b2f8-125b36404850/public_url",
-    badgeImage: "/images/certifications/aws-sa-pro.png",
+    badgeImage: "/images/certifications/aws-sa-pro.webp",
   },
   {
     id: "aws-sa-associate",
@@ -31,7 +31,7 @@ export const certifications: Certification[] = [
     type: "proctored",
     issueDate: "2021-04-09",
     credlyUrl: "https://www.credly.com/badges/b8718d03-4596-4d8d-9b78-a5ae71a41be8/public_url",
-    badgeImage: "/images/certifications/aws-sa-associate.png",
+    badgeImage: "/images/certifications/aws-sa-associate.webp",
   },
   {
     id: "aws-sysops",
@@ -40,7 +40,7 @@ export const certifications: Certification[] = [
     type: "proctored",
     issueDate: "2023-04-28",
     credlyUrl: "https://www.credly.com/badges/b7202153-940c-4379-bbcd-a08fecec6c04/public_url",
-    badgeImage: "/images/certifications/aws-sysops.png",
+    badgeImage: "/images/certifications/aws-sysops.webp",
   },
 
   // CompTIA
@@ -51,7 +51,7 @@ export const certifications: Certification[] = [
     type: "proctored",
     issueDate: "2024-03-28",
     credlyUrl: "https://www.credly.com/badges/c04094f2-3033-4713-9fe2-2933009cff21/public_url",
-    badgeImage: "/images/certifications/comptia-security.png",
+    badgeImage: "/images/certifications/comptia-security.webp",
   },
 
   // Dell EMC
@@ -208,7 +208,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2026-01-06",
     credlyUrl: "https://www.credly.com/badges/f6e87b66-8c7e-4f65-a4b8-e332968f1d71/public_url",
-    badgeImage: "/images/certifications/training/aws-partner-agentic-ai-sales.png",
+    badgeImage: "/images/certifications/training/aws-partner-agentic-ai-sales.webp",
   },
   {
     id: "aws-knowledge-serverless",
@@ -217,7 +217,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-07-19",
     credlyUrl: "https://www.credly.com/badges/0853d8b9-9a07-467d-a539-f7442db0913d/public_url",
-    badgeImage: "/images/certifications/training/aws-knowledge-serverless.png",
+    badgeImage: "/images/certifications/training/aws-knowledge-serverless.webp",
   },
   {
     id: "aws-partner-genai-essentials",
@@ -226,7 +226,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-07-19",
     credlyUrl: "https://www.credly.com/badges/c59e8f39-8a58-4b74-9133-aa51a0ecdc14/public_url",
-    badgeImage: "/images/certifications/training/aws-partner-genai-essentials.png",
+    badgeImage: "/images/certifications/training/aws-partner-genai-essentials.webp",
   },
   {
     id: "aws-knowledge-storage-core",
@@ -235,7 +235,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-16",
     credlyUrl: "https://www.credly.com/badges/2734254c-94a6-4d81-9451-6906506b8aa4/public_url",
-    badgeImage: "/images/certifications/training/aws-knowledge-storage-core.png",
+    badgeImage: "/images/certifications/training/aws-knowledge-storage-core.webp",
   },
   {
     id: "aws-knowledge-storage-technologist",
@@ -244,7 +244,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-16",
     credlyUrl: "https://www.credly.com/badges/3988608b-40f3-43ca-9021-57da7f34af8b/public_url",
-    badgeImage: "/images/certifications/training/aws-knowledge-storage-technologist.png",
+    badgeImage: "/images/certifications/training/aws-knowledge-storage-technologist.webp",
   },
   {
     id: "aws-partner-govcloud-essentials",
@@ -253,7 +253,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-16",
     credlyUrl: "https://www.credly.com/badges/13670aa9-af28-4486-a061-6ae7c3243746/public_url",
-    badgeImage: "/images/certifications/training/aws-partner-govcloud-essentials.png",
+    badgeImage: "/images/certifications/training/aws-partner-govcloud-essentials.webp",
   },
   {
     id: "aws-partner-cloud-economics",
@@ -262,7 +262,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-16",
     credlyUrl: "https://www.credly.com/badges/eb7708c6-558e-4ef7-87c8-966098ef6eaa/public_url",
-    badgeImage: "/images/certifications/training/aws-partner-cloud-economics.png",
+    badgeImage: "/images/certifications/training/aws-partner-cloud-economics.webp",
   },
   {
     id: "aws-partner-migration-sales",
@@ -271,7 +271,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-16",
     credlyUrl: "https://www.credly.com/badges/df60367c-ad55-48d0-9471-fe19df45b584/public_url",
-    badgeImage: "/images/certifications/training/aws-partner-migration-sales.png",
+    badgeImage: "/images/certifications/training/aws-partner-migration-sales.webp",
   },
   {
     id: "aws-partner-sales-accreditation",
@@ -280,7 +280,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-16",
     credlyUrl: "https://www.credly.com/badges/f5cbb91e-3915-453e-8b40-e9670b58c75a/public_url",
-    badgeImage: "/images/certifications/training/aws-partner-sales-accreditation.png",
+    badgeImage: "/images/certifications/training/aws-partner-sales-accreditation.webp",
   },
   {
     id: "aws-partner-technical-accredited",
@@ -289,7 +289,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-16",
     credlyUrl: "https://www.credly.com/badges/dacb5b02-a91e-480c-9b80-cfbf7b1b3530/public_url",
-    badgeImage: "/images/certifications/training/aws-partner-technical-accredited.png",
+    badgeImage: "/images/certifications/training/aws-partner-technical-accredited.webp",
   },
   {
     id: "aws-knowledge-architecting-retired",
@@ -298,7 +298,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-14",
     credlyUrl: "https://www.credly.com/badges/12192076-f38e-4d0c-874a-aa9af48fdd9c/public_url",
-    badgeImage: "/images/certifications/training/aws-knowledge-architecting-retired.png",
+    badgeImage: "/images/certifications/training/aws-knowledge-architecting-retired.webp",
   },
   {
     id: "aws-knowledge-block-storage",
@@ -307,7 +307,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-14",
     credlyUrl: "https://www.credly.com/badges/5e101138-08b1-400a-87af-ce92f19b0fab/public_url",
-    badgeImage: "/images/certifications/training/aws-knowledge-block-storage.png",
+    badgeImage: "/images/certifications/training/aws-knowledge-block-storage.webp",
   },
   {
     id: "aws-knowledge-data-protection-dr",
@@ -316,7 +316,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-14",
     credlyUrl: "https://www.credly.com/badges/c506d517-008b-4355-aa3b-009e50ef91c6/public_url",
-    badgeImage: "/images/certifications/training/aws-knowledge-data-protection-dr.png",
+    badgeImage: "/images/certifications/training/aws-knowledge-data-protection-dr.webp",
   },
   {
     id: "aws-knowledge-file-storage",
@@ -325,7 +325,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-14",
     credlyUrl: "https://www.credly.com/badges/3f7dbcfa-5f05-4f9e-bbdb-aa19f16c4ac7/public_url",
-    badgeImage: "/images/certifications/training/aws-knowledge-file-storage.png",
+    badgeImage: "/images/certifications/training/aws-knowledge-file-storage.webp",
   },
   {
     id: "aws-knowledge-object-storage",
@@ -334,7 +334,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-14",
     credlyUrl: "https://www.credly.com/badges/95abf37a-0af1-4f71-9ef2-9357b126e2b7/public_url",
-    badgeImage: "/images/certifications/training/aws-knowledge-object-storage.png",
+    badgeImage: "/images/certifications/training/aws-knowledge-object-storage.webp",
   },
   {
     id: "aws-knowledge-data-migration",
@@ -343,7 +343,7 @@ export const certifications: Certification[] = [
     type: "training",
     issueDate: "2023-02-13",
     credlyUrl: "https://www.credly.com/badges/57488f8b-4bd6-4e45-abf4-a1a72a0efb7d/public_url",
-    badgeImage: "/images/certifications/training/aws-knowledge-data-migration.png",
+    badgeImage: "/images/certifications/training/aws-knowledge-data-migration.webp",
   },
 ];
 

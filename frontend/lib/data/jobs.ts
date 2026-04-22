@@ -25,7 +25,7 @@ export const jobs: Job[] = [
     startDate: "May 2024",
     endDate: "Present",
     website: "https://allcloud.io",
-    logo: "/images/companies/allcloud.png",
+    logo: "/images/companies/allcloud.webp",
     responsibilities: [
       "Architect AWS platforms for customers ranging from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allows.",
       "Lead pre-sales discovery, reference-architecture design, and executive presentations that translate business outcomes into buildable cloud systems and help close the engagement.",
@@ -61,7 +61,7 @@ export const jobs: Job[] = [
     startDate: "May 2021",
     endDate: "September 2022",
     website: "https://innovativesol.com/",
-    logo: "/images/companies/innovative-solutions.png",
+    logo: "/images/companies/innovative-solutions.webp",
     responsibilities: [
       "Led customer discovery and migration strategy across SMB and mid-market AWS accounts, owning the technical narrative from first call through post-deploy handoff.",
       "Designed repeatable migration patterns (assessment → landing zone → 6R application move → operational handoff) that the delivery team reused across engagements.",
@@ -96,7 +96,7 @@ export const jobs: Job[] = [
     startDate: "May 2019",
     endDate: "December 2019",
     website: "https://aws.amazon.com",
-    logo: "/images/companies/aws.png",
+    logo: "/images/companies/aws.webp",
     responsibilities: [
       "Supported Windows-focused AWS workloads across 15+ services — EC2, VPC, ASG, SSM, Directory Services, CloudEndure, WorkSpaces, ECS, ELB, EBS, S3, RDS, AWS Backup.",
       "Resolved customer incidents spanning Windows systems, Active Directory, MSSQL, Exchange, IIS, Terminal Server, and remote-access issues.",
@@ -113,7 +113,7 @@ export const jobs: Job[] = [
     startDate: "April 2017",
     endDate: "May 2019",
     website: "http://www.uniquedigital.com/",
-    logo: "/images/companies/unique-digital.png",
+    logo: "/images/companies/unique-digital.webp",
     responsibilities: [
       "Architected on-prem and hybrid IT solutions built on Dell EMC and partner technologies, sized against customers' 3 / 5 / 7-year capacity and budget plans.",
       "Served as pre-sales technical lead supporting outside sales across customers in multiple verticals.",
@@ -129,7 +129,7 @@ export const jobs: Job[] = [
     startDate: "January 2015",
     endDate: "April 2017",
     website: "https://www.rackspace.com",
-    logo: "/images/companies/rackspace.jpg",
+    logo: "/images/companies/rackspace.webp",
     responsibilities: [
       "Owned Windows Server workload lifecycle — bare-metal and Hyper-V / VMware ESXi VM deployment, configuration, and remediation — as a 24×7 managed-hosting engineer.",
       "Ran patching, MSSQL updates, and Windows service-pack cycles across the managed fleet against Rackspace and customer SLAs.",
@@ -147,7 +147,7 @@ export const jobs: Job[] = [
     startDate: "July 2013",
     endDate: "January 2015",
     website: "http://www.rkhomes.net/",
-    logo: "/images/companies/rk-homes.jpg",
+    logo: "/images/companies/rk-homes.webp",
     responsibilities: [
       "Owned IT for 200+ employees across main office, satellite sites, and remote staff — Windows Active Directory, Terminal Server, FreeNAS storage, a 46-handset RingCentral VoIP rollout, and MDM for 39 company Android / iOS phones.",
       "Designed and deployed a full network refresh during a two-suite office remodel: 81 new data drops, two 48-port PoE switches, one 24-port switch, three WAPs, and a T1-to-fiber upgrade with Time Warner.",

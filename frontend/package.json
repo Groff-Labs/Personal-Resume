@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "resume": "node scripts/build-resume.mjs",
-    "prebuild": "npm run resume",
+    "images": "node scripts/optimize-images.mjs",
+    "prebuild": "npm run images && npm run resume",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -26,6 +27,7 @@
     "eslint-config-next": "^15.1.4",
     "md-to-pdf": "^5.2.5",
     "postcss": "^8.4.49",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2"
   }

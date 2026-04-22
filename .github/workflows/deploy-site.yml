@@ -90,8 +90,24 @@ jobs:
       # InfrastructureProtection-SCP's DenyUnencryptedS3Uploads statement
       # evaluates IAM/SCP before default-encryption is applied, so the
       # request header must be on the wire or the call is denied.
-      - name: Sync build to S3
-        run: aws s3 sync frontend/out "s3://${{ steps.stack.outputs.bucket }}" --delete --sse AES256
+      #
+      # Two-pass sync: non-hashed files get short cache so HTML / image
+      # edits propagate on the next CloudFront invalidation; hashed Next
+      # chunks under /_next/static/* get a 1-year immutable Cache-Control
+      # header since their URL changes whenever their bytes change.
+      - name: Sync build to S3 (non-hashed files, short cache)
+        run: |
+          aws s3 sync frontend/out "s3://${{ steps.stack.outputs.bucket }}" \
+            --delete --sse AES256 \
+            --exclude "_next/static/*" \
+            --cache-control "public, max-age=0, must-revalidate"
+
+      - name: Sync hashed Next.js chunks (immutable long cache)
+        run: |
+          aws s3 sync frontend/out "s3://${{ steps.stack.outputs.bucket }}" \
+            --sse AES256 \
+            --exclude "*" --include "_next/static/*" \
+            --cache-control "public, max-age=31536000, immutable"
 
       # Tag resume.pdf with Content-Disposition: inline so the browser opens
       # it in a tab instead of force-downloading, but also sets the default
