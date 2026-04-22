@@ -15,7 +15,7 @@ import {
   Sun,
 } from "lucide-react";
 
-const SHOW_FAMILY_PHOTO = false; // flip to true once /images/profile/family.jpg exists
+const SHOW_FAMILY_PHOTO = true;
 
 const stats = [
   { icon: User, label: "Native Texan from Bandera, TX" },

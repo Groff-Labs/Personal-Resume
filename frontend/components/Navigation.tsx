@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Download } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
@@ -90,12 +90,30 @@ export default function Navigation() {
                 </a>
               );
             })}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-ink-muted border border-line rounded-md hover:border-accent hover:text-accent transition-colors"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Resume
+            </a>
             <span aria-hidden className="w-px h-5 bg-line mx-2" />
             <ThemeToggle />
           </div>
 
           {/* Mobile */}
           <div className="md:hidden flex items-center gap-2">
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Download resume"
+              className="p-2 rounded-md text-ink-muted hover:text-accent hover:bg-surface-1 transition-colors"
+            >
+              <Download className="w-5 h-5" />
+            </a>
             <ThemeToggle />
             <button
               className="p-2 rounded-md text-ink-muted hover:text-ink hover:bg-surface-1 transition-colors"

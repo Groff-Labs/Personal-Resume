@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { certifications } from "@/lib/data/certifications";
 import CertTimeline from "./CertTimeline";
+import CertTrainingGrid from "./CertTrainingGrid";
 
 const FEATURED = [
   {
@@ -88,9 +89,14 @@ export default function Certifications() {
             <CertTimeline />
           </div>
 
+          {/* Training & micro-credentials */}
+          <div className="mt-14">
+            <CertTrainingGrid />
+          </div>
+
           <p className="text-sm text-ink-subtle italic text-center mt-10 max-w-2xl mx-auto">
             Spans Dell/VMware partner enablement in 2017 through current AWS
-            proctored exams. Click any dot or chip to verify on Credly.
+            proctored exams. Click any dot, chip, or tile to verify on Credly.
           </p>
         </div>
       </motion.div>

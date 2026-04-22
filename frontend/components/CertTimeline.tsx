@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { certifications, vendors, type Certification } from "@/lib/data/certifications";
 
@@ -10,10 +10,17 @@ const YEAR_SPAN = END_YEAR - START_YEAR;
 
 // width/height in SVG viewBox units; scales responsively via CSS
 const W = 1000;
-const H = 220;
-const AXIS_Y = 170;
-const DOT_R = 7;
-const STACK_STEP = 18;
+const H = 260;
+const AXIS_Y = 200;
+const DOT_R = 8;
+// Invisible hit target radius. Bigger = easier to click, but consecutive dots
+// in a dense stack (e.g. 2017 VMware, 8 certs) share hit territory. 14 gives
+// each dot ~28 px diameter and only ~6 px overlap with its stack neighbor.
+const HIT_R = 14;
+const STACK_STEP = 22;
+// Grace period before the tooltip dismisses, so moving cursor dot → tooltip
+// doesn't flicker the state away.
+const HOVER_DISMISS_MS = 120;
 
 const VENDOR_COLOR: Record<string, string> = {
   "Amazon Web Services (AWS)": "#0891b2", // cyan-600
@@ -48,7 +55,10 @@ interface PositionedCert extends Certification {
 function position(certs: Certification[]): PositionedCert[] {
   // Only show certs within the visible window; older ones remain in the data
   // (and in the featured row / counts) but don't clutter the timeline.
+  // Training badges (AWS Partner / AWS Knowledge completions) are rendered
+  // separately in CertTrainingGrid to keep the timeline about real exams.
   const visible = certs.filter((c) => {
+    if (c.type === "training") return false;
     const y = Number(c.issueDate.split("-")[0]);
     return y >= START_YEAR;
   });
@@ -85,6 +95,19 @@ function statusLabel(cert: Certification): string {
 export default function CertTimeline() {
   const [activeVendor, setActiveVendor] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showHover = (id: string) => {
+    if (dismissTimer.current) {
+      clearTimeout(dismissTimer.current);
+      dismissTimer.current = null;
+    }
+    setHoveredId(id);
+  };
+  const scheduleDismiss = () => {
+    if (dismissTimer.current) clearTimeout(dismissTimer.current);
+    dismissTimer.current = setTimeout(() => setHoveredId(null), HOVER_DISMISS_MS);
+  };
 
   const positioned = useMemo(() => position(certifications), []);
   const yearTicks = useMemo(() => {
@@ -214,10 +237,10 @@ export default function CertTimeline() {
                   href={cert.credlyUrl || cert.pdfUrl || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onMouseEnter={() => setHoveredId(cert.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  onFocus={() => setHoveredId(cert.id)}
-                  onBlur={() => setHoveredId(null)}
+                  onMouseEnter={() => showHover(cert.id)}
+                  onMouseLeave={scheduleDismiss}
+                  onFocus={() => showHover(cert.id)}
+                  onBlur={scheduleDismiss}
                   aria-label={`${cert.name}, ${cert.issueDate}`}
                 >
                   <circle
@@ -230,20 +253,35 @@ export default function CertTimeline() {
                     stroke="rgb(var(--surface-0))"
                     strokeWidth={2}
                   />
+                  {/* Invisible hit target — makes the dot easy to click even
+                      when three certs are stacked on the same x-column. */}
+                  <circle
+                    cx={cert.x}
+                    cy={cert.y}
+                    r={HIT_R}
+                    fill="transparent"
+                    className="cursor-pointer"
+                  />
                 </a>
               </g>
             );
           })}
         </svg>
 
-        {/* Tooltip */}
+        {/* Tooltip — itself an anchor so the whole card is clickable, and
+            keeps the hover state alive while the cursor is over it. */}
         {hovered && (
-          <div
-            className="absolute pointer-events-none bg-surface-1 border border-line rounded-md shadow-lg px-3 py-2 text-sm z-10"
+          <a
+            href={hovered.credlyUrl || hovered.pdfUrl || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={() => showHover(hovered.id)}
+            onMouseLeave={scheduleDismiss}
+            className="absolute block bg-surface-1 border border-line rounded-md shadow-lg px-3 py-2 text-sm z-10 hover:border-accent transition-colors"
             style={{
               left: `${(hovered.x / W) * 100}%`,
               top: `${(hovered.y / H) * 100}%`,
-              transform: "translate(-50%, -110%)",
+              transform: "translate(-50%, calc(-100% - 14px))",
               maxWidth: "280px",
             }}
           >
@@ -263,7 +301,7 @@ export default function CertTimeline() {
                 </>
               )}
             </div>
-          </div>
+          </a>
         )}
       </div>
 

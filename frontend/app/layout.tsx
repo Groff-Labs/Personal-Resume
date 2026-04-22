@@ -142,11 +142,12 @@ const personJsonLd = {
 // Runs before React hydrates; avoids a flash of wrong theme.
 const themeInitScript = `(function(){try{var s=localStorage.getItem('theme');var sys=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';var resolved=(s==='light'||s==='dark')?s:sys;if(resolved==='dark')document.documentElement.classList.add('dark');}catch(e){}})();`;
 
-// CloudFlare Web Analytics token. Register at
-// https://dash.cloudflare.com → Web Analytics → Add Site, then paste the
-// token from the auto-generated <script> snippet below. Empty string
-// disables the analytics tag entirely.
-const CLOUDFLARE_ANALYTICS_TOKEN = "";
+// CloudFlare Web Analytics beacon token. Set via the
+// NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN env var at build time (populated in
+// CI from a GitHub Actions repo variable). Safe to emit in HTML — this is a
+// public site identifier, not a secret. Empty value disables the tag.
+const CLOUDFLARE_ANALYTICS_TOKEN =
+  process.env.NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN ?? "";
 
 export default function RootLayout({
   children,
