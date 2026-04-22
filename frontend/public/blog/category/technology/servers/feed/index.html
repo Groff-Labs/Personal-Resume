@@ -1,0 +1,2029 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Servers &#8211; Michael Groff</title>
+	<atom:link href="/blog/category/technology/servers/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 04 Dec 2019 16:59:20 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Home Lab 2.0</title>
+		<link>/blog/home-lab-2-0/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Fri, 01 Mar 2019 00:22:12 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Cabling]]></category>
+		<category><![CDATA[Cat6]]></category>
+		<category><![CDATA[CS24-SC]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[Home Lab]]></category>
+		<category><![CDATA[Lab]]></category>
+		<category><![CDATA[Storage]]></category>
+		<category><![CDATA[Switches]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<guid isPermaLink="false">/blog/?p=927</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This post will serve as the 10,000 ft overview of my environment and what it all consists of. I plan to follow up this post with a series of smaller posts breaking down my Home Lab into the following sections:</p>
+<h5>(as I update these blog posts, links will appear and become active)</h5>
+<ul>
+<li><strong>Home Lab Servers &amp; Storage</strong></li>
+<li><strong>Home Lab Routing &amp; Switching</strong></li>
+<li><strong>Home Lab Access Points</strong></li>
+<li><strong>Home Lab Surveillance</strong></li>
+<li><strong>Home Cat6 Cable Wiring</strong></li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div><div class="vc_empty_space"   style="height: 15px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-201269e854ddd7616" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-201269e854ddd7616 uvc-5010  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-201269e854ddd7616 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Servers &amp; Storage</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I go into details about the server and storage that I use in my Home Lab environment.</p>
+<p>The current hardware I use is:</p>
+<ul>
+<li>Dell PowerEdge R710 SFF &amp; LFF</li>
+<li>Dell PowerEdge C2100</li>
+<li>Dell PowerEdge CS24-SC (Essentially a 2950)</li>
+<li>Dell PowerEdge R510 LFF</li>
+</ul>
+<p>The operating systems that I use are:</p>
+<ul>
+<li>VMware esxi 6.5</li>
+<li>VMware esxi 6.7</li>
+<li>Windows Server 2012 R2</li>
+<li>Windows Server 2016</li>
+<li>Windows Server 2019</li>
+<li>FreeNAS 11.1 (U7 if you care)</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I have purchased or otherwise acquired some Gen10 and Gen11 Dell PowerEdge Servers throughout my years in IT. I enjoy having a Home Lab to work in and learn new things without repercussions of really messing something up. In my environment, nuke and pave is not frowned upon at all. I do my best to say up-to-date and using the latest and greatest trial software, but due to the hardware I am running, that goal comes with some limitations.For instance, my C2100 servers simply cannot be upgraded beyond esxi 6.5. The processors are not compatible with esxi 6.7. However, I was able to upgrade my vCenter Server to 6.7 and still have it manage my 6.5 hosts.</p>
+<p>Most of my servers are running Windows Server 2019, but some are still running 2016 as I havent had the time or need to update them. (Such as DC&#8217;s and DB&#8217;s)</p>
+<p>My Storage devices are all PowerEdge Servers running FreeNAS. I set them up with FreeNAS and configure the iSCSI service for MPIO to my esxi hosts. I find it is a set-it and forget-it type of thing. I am subscribed to some FreeNAS emails and RSS feeds, so I look out for OS updates and install them accordingly.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-342769e854ddd7bae" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-342769e854ddd7bae uvc-3044  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-342769e854ddd7bae h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Routing &amp; Switching</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover all the networking equipment that I use in my home lab and how I use it.</p>
+<p>The networking hardware that I use is:</p>
+<ul>
+<li>Unifi USG-PRO-4 (Gateway)</li>
+<li>Unifi US-24 (Switch)</li>
+<li>Unifi US-8-150 (Switch)</li>
+<li>3 x Dell PowerConnect 7048P (Switch)</li>
+<li>Netgear ProSAFE GS108Ev3 8-Port</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>For most of my networking equipment, I run Ubiquiti Unifi equipment. This is marketed as &#8220;Enterprise&#8221; networking equipment, but imho, it is far from &#8220;Enterprise&#8221;. I would place it solidly in the &#8220;prosumer&#8221; line of networking equipment. Dont get me wrong, their WAP&#8217;s are pretty awesome. But their switching and routing devices leave much to be desired. Their GUI is quite pretty and you can do enough to get by through it, but for really advanced setups, you are required to edit a json file. Often the editing of the json file is unsupported and a PITA the figure out.</p>
+<p>For the rest of my networking equipment, I run some classic Dell PowerConnect switches. I run the 7048P&#8217;s. For the most part, I dont need the PoE feature, but for under $150 per switch, I couldnt not get the PoE feature. I just disable it on the ports where it is not needed. The language is pretty similar to Cisco so getting by in command line is my preferred way to manage these.</p>
+<p>Oh, and I have a Netgear managed 8-port switch. This little guy has kept up with the other two brands of switches afaic. I like the little guy and it works great as an under the desk switch.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-102969e854ddd7f0f" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-102969e854ddd7f0f uvc-6780  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-102969e854ddd7f0f h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Access Points</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover the Access point that I use in my home, discussing wiring, port and physical placement.</p>
+<p>The hardware access points I currently use are:</p>
+<ul>
+<li>Unifi UAP-AC-PRO</li>
+<li>Unifi UAP-AC-M-PRO</li>
+<li>Unifi UAP-IW-PRO</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>For all my Wireless, I trust in the Ubiquiti Unifi line. They are a great &#8220;prosumer&#8221; product at a price that I can afford. And they definitely do their job for my home needs. I have even installed these at a few businesses with very solid results.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-40369e854ddd8247" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-40369e854ddd8247 uvc-9108  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-40369e854ddd8247 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Surveillance</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover my Home Surveillance Solution using my Home Lab equipment.</p>
+<p>Some of the equipment I use is as follows:</p>
+<ul>
+<li>Home Server (Sometimes virtualized, sometimes standalone)</li>
+<li><a href="http://blueirissoftware.com/">BlueIris</a> NVR Software</li>
+<li>Reolink IP Cams
+<ul>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-410</li>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-411</li>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-420</li>
+<li class="pro-name active" data-id="50" data-parent-id="50">RLC-423</li>
+</ul>
+</li>
+<li>HikVision IP Cams
+<ul>
+<li>DS-2CD2142FWD-IS 4MP</li>
+</ul>
+</li>
+<li>Ring Pro Doorbell</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>When I first got into the surveillance game, I was purchasing Hikvision IP Cameras from a specific re-seller in my area. Since then, Reolink has become quite a mainstream prosumer product and I can get them from Amazon. So as of late, all of my Reolink cams have been purchased from random amazon sales.</p>
+<p>Overall I enjoy both cams, but prefer the Reolink branded cams over Hikvision.</p>
+<p>As for the Ring Pro Doorbell. I got it because it&#8217;s easy for the wife to use and not answer the door if she doesn&#8217;t want to. I have it on a &#8220;security device&#8221; vlan, so it is segmented off. I actually do enjoy the device. It is nice having something in the cloud separate from Blue Iris.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-896369e854ddd8577" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-896369e854ddd8577 uvc-6412  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-896369e854ddd8577 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Cat6 Cable Wiring</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will go through what it takes to wire up your home with Cat6 cabling. This is currently an ongoing process for me and may be for some time yet to come.<br />
+The materials you will need to complete wiring in your house are as follows:</p>
+<ul>
+<li>Cat6 cabling</li>
+<li>RJ45 Cat6 Jacks</li>
+<li>RJ45 Boots</li>
+<li>RJ45 Crimping tool</li>
+<li>RJ45 Punch Down tool</li>
+<li>Cat6 Wall Plates with Jacks</li>
+<li>Pull String</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Wiring your house is a process. If you have unlimited amounts of money, then hire a company to do it and they will charge you a few grand to go in there and get it done. They will most likely run the cables in a manner that works, but is not tech approved bc they are dudes who just know how to run cables, not why they are run or consequences of how they are run. If you are like me where money is not an endless pit of fun and you like having control over things, then you will want to take on wiring yourself. Overall you can do this for a fraction of the cost compared to contracting it out, but it will be a lot of work and sometimes, a complete, PITA. If you live in Texas like me, only plan on doing this kind of work from late October through late April&#8230; It gets hot in there.</p>
+<p>Overall, I have found wiring my house to be quite rewarding, both financially and emotionally. I am able to &#8220;put a stamp&#8221; on my work and be proud of what I have done.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>WordPress Permissions for Windows</title>
+		<link>/blog/wordpress-permissions-for-windows/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 26 Feb 2019 03:08:00 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<category><![CDATA[WP]]></category>
+		<guid isPermaLink="false">/blog/?p=662</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>So I have had this post sitting in the &#8220;Draft&#8221; stage for years now. Probably 3 or 4. I thought I was going to tackle this and set something definitively out there for some people to follow. And today I will finally do just that.</p>
+<p>Here are the suggested WordPress file permissions for Windows:</p>
+
+		</div>
+	</div>
+</div></div></div></div><div id="ultimate-heading-34069e854ddd90cc" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-34069e854ddd90cc uvc-8684  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-34069e854ddd90cc h1'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h1 style="font-weight:bold;">RUN LINUX!</h1></div></div><div id="ultimate-heading-397169e854ddd90e1" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-397169e854ddd90e1 uvc-6023  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-397169e854ddd90e1 h1'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h1 style="font-weight:bold;">RUN LINUX!</h1></div></div><div id="ultimate-heading-405269e854ddd90fb" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-405269e854ddd90fb uvc-9673  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-405269e854ddd90fb h1'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h1 style="font-weight:bold;">RUN LINUX!</h1></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img fetchpriority="high" decoding="async" width="869" height="1024" src="/blog/wp-content/uploads/linux_PNG13-869x1024.png" class="vc_single_image-img attachment-large" alt="" title="linux_PNG13" srcset="/blog/wp-content/uploads/linux_PNG13-869x1024.png 869w, /blog/wp-content/uploads/linux_PNG13-255x300.png 255w, /blog/wp-content/uploads/linux_PNG13-768x905.png 768w, /blog/wp-content/uploads/linux_PNG13-600x707.png 600w, /blog/wp-content/uploads/linux_PNG13.png 1738w" sizes="(max-width: 869px) 100vw, 869px"  data-dt-location="/blog/wordpress-permissions-for-windows/linux_png13/" /></div>
+		</figure>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Identify Failed Port and Replace NIC</title>
+		<link>/blog/identify-failed-port-and-replace-nic/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 26 Feb 2019 02:03:15 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[esxi]]></category>
+		<guid isPermaLink="false">/blog/?p=958</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This past week, I had a failed port one one of my C2100&#8217;s. The specific part was a <strong>Intel PRO/1000 VT Quad Port Gigabit PCI-E Ethernet Network Adapter (HM9JY)</strong>. Now just one single port failed and I was using all 4 ports for iSCSI from my FreeNAS C2100 to my esxi cluster. Luckily I have 4 ports so naturally MPIO is configured and I didnt notice the failure immediately. I first noticed this in my cluster and also saw the port was failed in FreeNAS. Since there is no OMSA for BSD, I was unable to gather more information about the status of the port.</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-261869e854ddd9f16" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-261869e854ddd9f16 uvc-6820  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-261869e854ddd9f16 h4'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h4 style="--font-weight:theme;">This is how I noticed the failed port on an esxi host</h4></div></div>
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/83749551137044.jpg" target="_self" data-large_image_width="1976" data-large_image_height="385"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img decoding="async" width="1024" height="200" src="/blog/wp-content/uploads/83749551137044-1024x200.jpg" class="vc_single_image-img attachment-large" alt="" title="" srcset="/blog/wp-content/uploads/83749551137044-1024x200.jpg 1024w, /blog/wp-content/uploads/83749551137044-300x58.jpg 300w, /blog/wp-content/uploads/83749551137044-768x150.jpg 768w, /blog/wp-content/uploads/83749551137044-600x117.jpg 600w, /blog/wp-content/uploads/83749551137044.jpg 1976w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/attachment/83749551137044/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I went onto ebay and ordered the new part for $20 with free shipping. It came in today and I took some time to replace it this evening. It is a pretty simple process, I will walk you through it below.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>The first things I am going to do is power off my server and then remove all the cabling from it. Some people choose to not remove networking when doing this, but I am running PoE switches, and even though PoE has been disable on the ports, I dont trust it. I remove all potential of electricity running through the system other than the CMOS and RAID batteries.</p>
+<p>So, Power off your server, remove all the cabling, pull it out of the rack and remove the cover.</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_left">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img decoding="async" width="1024" height="768" src="/blog/wp-content/uploads/s-l1600-1024x768.jpg" class="vc_single_image-img attachment-large" alt="" title="s-l1600" srcset="/blog/wp-content/uploads/s-l1600-1024x768.jpg 1024w, /blog/wp-content/uploads/s-l1600-300x225.jpg 300w, /blog/wp-content/uploads/s-l1600-768x576.jpg 768w, /blog/wp-content/uploads/s-l1600-600x450.jpg 600w, /blog/wp-content/uploads/s-l1600.jpg 1600w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/s-l1600/" /></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">The new part looks like this. It will just slide right into a PCIe slot and I will screw it in.</p>
+
+		</div>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Here we are with the top open.</h3>
+<p style="text-align: center;">I am going to pull out that part in the upper left hand corner to replace.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/IMG_195212.jpg" target="_self" data-large_image_width="1536" data-large_image_height="2048"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="768" height="1024" src="/blog/wp-content/uploads/IMG_195212-768x1024.jpg" class="vc_single_image-img attachment-large" alt="" title="IMG_195212" srcset="/blog/wp-content/uploads/IMG_195212-768x1024.jpg 768w, /blog/wp-content/uploads/IMG_195212-225x300.jpg 225w, /blog/wp-content/uploads/IMG_195212-600x800.jpg 600w, /blog/wp-content/uploads/IMG_195212.jpg 1536w" sizes="(max-width: 768px) 100vw, 768px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/img_195212/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Here is the empty slot that we will plug back into.</h3>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/IMG_195301.jpg" target="_self" data-large_image_width="1536" data-large_image_height="2048"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="768" height="1024" src="/blog/wp-content/uploads/IMG_195301-768x1024.jpg" class="vc_single_image-img attachment-large" alt="" title="IMG_195301" srcset="/blog/wp-content/uploads/IMG_195301-768x1024.jpg 768w, /blog/wp-content/uploads/IMG_195301-225x300.jpg 225w, /blog/wp-content/uploads/IMG_195301-600x800.jpg 600w, /blog/wp-content/uploads/IMG_195301.jpg 1536w" sizes="(max-width: 768px) 100vw, 768px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/img_195301/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">The top device  is the one I pulled out and replace.</h3>
+<p style="text-align: center;">It is the top device due to the photo orientation and the fact that I pulled it out of the server. When I put it back in the server, it will &#8220;on the bottom&#8221;. I find placing NIC card below RAID card make it easier to unplug booted cables from the server.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/IMG_195243.jpg" target="_self" data-large_image_width="2048" data-large_image_height="1536"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="1024" height="768" src="/blog/wp-content/uploads/IMG_195243-1024x768.jpg" class="vc_single_image-img attachment-large" alt="" title="IMG_195243" srcset="/blog/wp-content/uploads/IMG_195243-1024x768.jpg 1024w, /blog/wp-content/uploads/IMG_195243-300x225.jpg 300w, /blog/wp-content/uploads/IMG_195243-768x576.jpg 768w, /blog/wp-content/uploads/IMG_195243-600x450.jpg 600w, /blog/wp-content/uploads/IMG_195243.jpg 2048w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/img_195243/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Now that the NIC has been replaced, all iSCSI paths are available!</h3>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/901672379598.jpg" target="_self" data-large_image_width="1982" data-large_image_height="344"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="1024" height="178" src="/blog/wp-content/uploads/901672379598-1024x178.jpg" class="vc_single_image-img attachment-large" alt="" title="901672379598" srcset="/blog/wp-content/uploads/901672379598-1024x178.jpg 1024w, /blog/wp-content/uploads/901672379598-300x52.jpg 300w, /blog/wp-content/uploads/901672379598-768x133.jpg 768w, /blog/wp-content/uploads/901672379598-600x104.jpg 600w, /blog/wp-content/uploads/901672379598.jpg 1982w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/attachment/901672379598/" /></a>
+		</figure>
+	</div>
+
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/90145779598.jpg" target="_self" data-large_image_width="1194" data-large_image_height="255"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="1024" height="219" src="/blog/wp-content/uploads/90145779598-1024x219.jpg" class="vc_single_image-img attachment-large" alt="" title="90145779598" srcset="/blog/wp-content/uploads/90145779598-1024x219.jpg 1024w, /blog/wp-content/uploads/90145779598-300x64.jpg 300w, /blog/wp-content/uploads/90145779598-768x164.jpg 768w, /blog/wp-content/uploads/90145779598-600x128.jpg 600w, /blog/wp-content/uploads/90145779598.jpg 1194w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/attachment/90145779598/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Configure and Run vCheck</title>
+		<link>/blog/configure-and-run-vcheck/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2017 20:16:50 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[ESX]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[vCheck]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<guid isPermaLink="false">/blog/?p=844</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>vCheck is a <em><strong>PowerShell HTML framework script</strong> </em>that started with one guy, but is now a community driven and from what I have seen, it’s pretty neat.</p>
+<p>vCheck can be configured to just run once, or as a scheduled task on a Windows box. It also offers the option of sending the report via email. With those two features coupled together, you can set up a daily environment scan to run an hour or two before you get to work each morning and have a nice HTML report in your inbox of what changed and/or broke since you left the night before.This tutorial covers the installation and configuration of the vCheck tool.</p>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Programs Needed:</h3>
+<ul>
+<li><a href="https://my.vmware.com/web/vmware/details?downloadGroup=PCLI650R1&amp;productId=614">PowerCLI</a> &#8211; Latest Version is best but will work with 5.0+</li>
+<li><a href="https://msdn.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell">PowerShell </a>&#8211; minimum Version 3</li>
+<li><a href="https://github.com/alanrenouf/vCheck-vSphere">vCheck</a> &#8211; (Download the zip and extract)
+<ul>
+<li><a href="https://github.com/alanrenouf/vCheck-vSphere/tree/dev">vCheck Dev Version</a> (use at your own risk)</li>
+</ul>
+</li>
+</ul>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Download and Extract vCheck with Powershell:</p>
+<pre class="lang:ps decode:true ">$ZipPath = "C:\vCheck\vCheck-vSphere-master.zip"
+$Destination = "C:\vCheck\"
+
+IF (-not (Test-Path -Path "$Destination"))
+{
+    New-Item -Path $Destination -ItemType Directory -ErrorAction SilentlyContinue
+}
+
+iwr https://github.com/alanrenouf/vCheck-vSphere/archive/master.zip -OutFile "$ZipPath"
+Add-Type -assembly "system.io.compression.filesystem"
+[io.compression.zipfile]::ExtractToDirectory($ZipPath, $Destination)</pre>
+<p>Load PowerCLI (open the Program)<br />
+Login to vCenter Server</p>
+<pre class="lang:ps decode:true ">Connect-VIServer</pre>
+<p>&#8211; or &#8211;</p>
+<pre class="lang:ps decode:true ">Connect-VIServer VCENTER.DOMAIN.COM -User DOMAIN\Administrator -Password -SaveCredentials</pre>
+<p>Run vCheck ps1 file</p>
+<pre class="lang:ps decode:true ">&amp; "C:\vCheck\vCheck-vSphere-master\vCheck.ps1"
+
+- or - 
+
+. "C:\vCheck\vCheck-vSphere-master\vCheck.ps1"</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>You will then be asked to respond to the following prompts:</p>
+<pre class="lang:shell decode:true "># Report header [vCheck]:
+# Would you like the report displayed in the local browser once completed ? [$true]:
+# Display the report even if it is empty? [$true]:
+# Use the following item to define if an email report should be sent once completed [$false]:
+# Please Specify the SMTP server address (and optional port) [servername(:port)] [mysmtpserver.mydomain.local]:
+# Would you like to use SSL to send email? [$false]:
+# Please specify the email address who will send the vCheck report [me@mydomain.local]:
+# Please specify the email address(es) who will receive the vCheck report (separate multiple addresses with comma) [me@mydomain.local]:
+# Please specify the email address(es) who will be CCd to receive the vCheck report (separate multiple addresses with comma) []:
+# Please specify an email subject [$Server vCheck Report]:
+# Send the report by e-mail even if it is empty? [$true]:
+# If you would prefer the HTML file as an attachment then enable the following: [$false]:
+# Set the style template to use. [VMware]:
+# Do you want to include plugin details in the report? [$true]:
+# List Enabled plugins first in Plugin Report? [$true]:
+# Set the following setting to $true to see how long each Plugin takes to run as part of the report [$true]:
+# Report on plugins that take longer than the following amount of seconds [30]:
+
+Connection settings for vCenter
+# Please Specify the address (and optional port) of the vCenter server to connect to [servername(:port)] [192.168.0.0]:
+# Maximum number of samples to gather for events [100000]:
+
+General Information
+# Set the number of days of DRS Migrations to report and count on [1]:
+# Set the number of days of Storage DRS Migrations to report and count on [1]:
+
+Windows vCenter Error Event Logs
+# Set the number of days of VC Events to check for errors [1]:
+# Set the number of days of VC Event Logs to check for warnings and errors [1]:
+
+vCenter Sessions Age
+# Enter maximum vCenter session length in hours [48]:
+# Enter minimum vCenter session length in minutes (IdleMinutes) [10]:
+# Do not report on usernames that are defined here (regex) [DOMAIN\\user1|DOMAIN\\user2]:
+
+vCenter License Report
+# Enable License Reporting? [$true]:
+
+HA configuration issues
+# HA Configuration Issues, do not report on any Clusters that are defined here [Example_Cluster_*|Test_Cluster_*]:
+# HA should be set to ... [$true]:
+# HA host monitoring should be set to ... [$true]:
+# HA Admission Control should be set to ... [$true]:
+
+HA VMs restarted
+# HA VM restart day(s) number [5]:
+
+DRS &amp; SDRS Migrations
+# Set the number of days of DRS Migrations to report and count on [1]:
+# Set the number of days of Storage DRS Migrations to report and count on [1]:
+
+Cluster Slot Sizes
+# Number of slots available in a cluster [10]:
+
+Datastore Consistency
+# Do not report on any Datastores that are defined here (Datastore Consistency Plugin) [local*|datastore*]:
+
+Clusters with DRS disabled
+# Clusters with DRS Disabled, do not report on any Clusters that are defined here [VM1_*|VM2_*]:
+
+QuickStats Capacity Planning
+# Max CPU usage for non HA cluster [0.6]:
+# Max MEM usage for non HA cluster [0.6]:
+
+s/vMotion Information
+# Set the number of days to go back and check for s/vMotions [5]:
+# Include vMotions in report [$true;]:
+# Include Storage vMotions in report [$true;]:
+
+DRS Rules
+# Display VM affinity rules? [$true]:
+# Display VM anti-affinity rules? [$true]:
+# Display HOSTaffinity rules? [$true]:
+# Set DRS Rule name exception (regex) [ExcludeMe]:
+
+Hosts Overcommit state
+# Return results in GB or MB? [GB]:
+
+NTP Name and Service
+# The NTP server which should be set on your hosts [pool.ntp.org|pool2.ntp.org]:
+
+VMKernel Warnings
+# Disabling displaying Google/KB links in order to have wider message column [$true]:
+
+Syslog Name
+# The Syslog server which should be set on your hosts [syslogserver]:
+
+Disk Max Total Latency
+# Disk Max Total Latency Settings in Milliseconds [50]:
+# Disk Max Total Latency range to inspect (1-24) [24]:
+
+Lost Access to Volume
+# Set the number of days of Lost Action Volume to report and count on [1]:
+
+Check LUNS have the recommended number of paths
+# Set the Recommended number of paths per LUN [2]:
+
+ESXi Inode Exhaustion
+# Set the ESXi filesystem free Inode threshold in percent [40]:
+
+Host Profile Compliance
+# Show detailed information in report [$true]:
+# Show compliant servers [$false]:
+
+Hosts with Upcoming Certificate Expiration
+# How many days to warn before cert expiration (Default 60) [60]:
+
+Datastore Information
+# Set the warning threshold for Datastore % Free Space [25]:
+# Do not report on any Datastores that are defined here (Datastore Free Space Plugin) [local]:
+
+Number of VMs per Datastore
+# Max number of VMs per Datastore [5]:
+# Exclude these datastores from report [ExcludeMe]:
+
+Datastore OverAllocation
+# Datastore OverAllocation % [50]:
+# Exclude these datastores from report [ExcludeMe]:
+
+Datastores with Storage IO Control Disabled
+# Do not report on any Datastores that are defined here (Storage IO Control disabled Plugin) [local]:
+
+VSAN Datastore Capacity
+# Set the warning threshold for VSAN Datastore % Free Space [85]:
+
+VSAN Configuration Maximum Disk Group Per Host Report
+# Enable VSAN Config Max Disk Group Per Host Reporting? [$true]:
+# Percentage threshold to warn? [80]:
+
+VSAN Configuration Maximum Magnetic Disks Per Disk Group Report
+# Enable VSAN Config Max Magnetic Disks Per Disk Group Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum Total Magnetic Disks In All Disk Groups Per Host Report
+# Enable VSAN Config Max Total Magnetic Disks In All Disk Groups Per Host Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum Components Per Host Report
+# Enable VSAN Config Max Components Per Host Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum Hosts Per VSAN Cluster Report
+# Enable VSAN Config Max Hosts Per VSAN Cluster Reporting? [$true]:
+# Percentage threshold to warn? [45]:
+
+VSAN Configuration Maximum VMs Per Host Report
+# Enable VSAN Config Max VMs Per Host Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum VMs Per VSAN Cluster Report
+# Enable VSAN Config Max VMs Per VSAN Cluster Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+Checking Standard vSwitch Ports Free
+# vSwitch Port Left [5]:
+
+Checking Distributed vSwitch Port Groups for Ports Free
+# Distributed vSwitch PortGroup Ports Left [10]:
+
+vSwitch Security
+# Enable Checking of vSwitch security settings? [$true]:
+# Warn for AllowPromiscuous enabled? [$true]:
+# Warn for ForgedTransmits enabled? [$true]:
+# Warn for MacChanges enabled? [$true]:
+
+Snapshot Information
+# Set the warning threshold for snapshots in days old [14]:
+# Set snapshot name exception (regex) [ExcludeMe]:
+# Set snapshot description exception (regex) [ExcludeMe]:
+# Set snapshot creator exception (regex) [ExcludeMe]:
+
+Created or cloned VMs
+# Set the number of days to show VMs created for [5]:
+
+Removed VMs
+# Set the number of days to show VMs removed for [5]:
+
+VMs with over $vCPU vCPUs
+# Define the maximum amount of vCPUs your VMs are allowed [2]:
+
+VMs restarted due to Guest OS Error
+# HA VM reset day(s) number due to Guest OS error [5]:
+
+Guests with less than $MBFree MB
+# VM Disk space left, set the amount you would like to report on MBFree [1024]:
+# VM Disk space left, set the amount you would like to report on MBDiskMinSize [1024]:
+
+Checking VM Hardware Version
+# Hardware Version to check for at least [8]:
+#Adding filter for dsvas, vShield appliances or any other vms that will remain on a lower HW version [vShield*|dsva*]:
+
+VMs in inconsistent folders
+# Specify which Datastore(s) to filter from report [local]:
+
+No VM Tools
+# Do not report on any VMs who are defined here (regex) [VM1_*|VM2_*]:
+
+VM Tools Issues
+# VM Tools Issues, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+Removable Media Connected
+# VMs with removable media not to report on [APP*|ETC*]:
+
+Single Storage VMs
+# Local Stored VMs, do not report on any VMs who are defined here [Template_*|VDI*]:
+
+VM CPU %RDY
+# CPU ready on VMs should not exceed [10.0]:
+
+VM CPU Usage
+# VM Not to go over the following amount of CPU [75]:
+# VM CPU not allowed to go over the previous amount for how many days? [1]:
+
+Find VMs with thick or thin provisioned vmdk
+# Report on disk formats that are not "thin" or "thick", which format is not allowed? [thick]:
+# Specify Datastores to filter from report [local]:
+
+Virtual machines with incorrect OS configuration
+# VMs with incorrect OS Configuration, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+Powered Off VMs
+# VMs not to report on [Windows7*]:
+
+Unwanted virtual hardware found
+# Find unwanted virtual hardware [VirtualUSBController|VirtualParallelPort|VirtualSerialPort]:
+
+Mis-named virtual machines
+# Misnamed VMs, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+VM - is my network connected?
+# Only show NICs that are set to Connect at Startup [$true]:
+
+Reset VMs
+# Set the number of days to show reset VMs [1]:
+
+Snapshot activity
+# Set the number of days to show Snapshots for [5]:
+# User exception for Snapshot removed [s-veeam]:
+
+VMs with CPU or Memory Reservations Configured
+# VMs with CPU or Memory Reservations, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+VM Logging
+# The number of logs to keep for each VM [10]:
+# The size logs can reach before rotating to a new log (bytes) [1000000]:
+
+VM Tools Not Up to Date
+# Do not report on any VMs who are defined here (regex) [VM1_*|VM2_*]:
+# Maximum number of VMs shown [30]:
+
+NonPersistent Disks
+# Exclude all desktop virtual machines [^DV-|^MLB-]:
+
+VMs Memory/CPU Hot Add configuration
+# Should CPU hot plug be enabled [$true]:
+# Should Memory hot add be enabled [$true]:
+
+Site Recovery Manager - RPO Violation Report
+# SRM RPO Violations: Set the number of minutes an RPO has exceeded to report on [240]:
+# SRM RPO Violations: Only look for RPO events on VMs with these names: (regex) []:
+# SRM RPO Violations: Report on unresolved RPO violations only? [$true]:</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Once you have completed the prompts, the scan will run and a report will be generated.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<pre class="lang:ps decode:true "></pre>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Cmdlet for PowerCLI to load vCenter &#038; esxi Hosts</title>
+		<link>/blog/cmdlet-for-powecli-to-load-vcenter-esxi-hosts/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Wed, 24 May 2017 20:46:53 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[cmdlet]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[Powershell]]></category>
+		<category><![CDATA[PS]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<guid isPermaLink="false">/blog/?p=822</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Powershell &amp; PowerCLI Prep</h3>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>#Set Execution Policy</p>
+<pre class="lang:ps decode:true ">Set-ExecutionPolicy RemoteSigned</pre>
+<p>#Ignore SSL Certificates warnings</p>
+<pre class="lang:ps decode:true ">Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -WarningAction SilentlyContinue</pre>
+<p>#Connecting to server &amp; save creds:</p>
+<pre class="lang:ps decode:true ">Connect-VIServer vCenter.DOMAIN.com -User DOMAIN\Administrator -Password -SaveCredentials</pre>
+<p>#Location to open up PowerCLI normally:</p>
+<pre class="lang:ps decode:true ">. "C:\Program Files (x86)\VMware\Infrastructure\vSphere PowerCLI\Scripts\Initialize-PowerCLIEnvironment.ps1"</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>CMDLET</h4>
+<pre class="lang:ps decode:true ">function Load-PowerCLI
+{
+Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
+Add-PSSnapin VMware.VumAutomation -ErrorAction SilentlyContinue
+Add-PSSnapin VMware.DeployAutomation -ErrorAction SilentlyContinue
+Add-PSSnapin VMware.DeployAutomation -ErrorAction SilentlyContinue
+&amp; "C:\Program Files (x86)\VMware\Infrastructure\vSphere PowerCLI\Scripts\Initialize-PowerCLIEnvironment.ps1"
+Write-Host "================================================" -ForegroundColor White
+Write-Host "
+...connecting to vCenter servers
+"
+Connect-VIServer vCenter0.groffbox.com
+}</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>BONUS:</h3>
+<h4>Set the VMConsole to open correctly with Open-VMConsole Window</h4>
+<p>#Download and Install 32-bit Firefox, you NEED 32-bit<br />
+#Run:</p>
+<pre class="lang:ps decode:true ">Set-PowerCLIConfiguration –VMConsoleWindowBrowser “C:\Program Files (x86)\Mozilla Firefox\firefox.exe”</pre>
+<p>Now you can run Open-VMConsoleWindow</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Powershell On Linux</title>
+		<link>/blog/powershell-on-linux/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Fri, 19 Aug 2016 16:38:59 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<guid isPermaLink="false">/blog/?p=635</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="color: white; text-align: center;">You can now use Powershell with Linux Operating Systems!</h4>
+<h4 style="color: white; text-align: center;">See instructions below on how to set up your Linux distro with Powershell</h4>
+<h4 style="text-align: center;"><a href="https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md">Source</a></h4>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>CentOS / RHEL</h3>
+<p>Install wget (if not already installed):</p>
+<pre class="lang:sh decode:true">sudo yum install wget -y</pre>
+<p>Download PS to the temp folder:</p>
+<pre class="lang:sh decode:true">wget -i /tmp/ https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell-6.0.0_alpha.9-1.el7.centos.x86_64.rpm</pre>
+<p>Install PS:</p>
+<pre class="lang:sh decode:true">sudo yum install powershell-6.0.0_alpha.9-1.el7.centos.x86_64.rpm -y</pre>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Ubuntu 14.04</h3>
+<p>Install necessary packages:</p>
+<pre class="lang:sh decode:true">sudo apt-get install libunwind8 libicu55</pre>
+<p>Download PS to the temp folder:</p>
+<pre class="lang:sh decode:true">wget -i /tmp/ https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell_6.0.0-alpha.9-1ubuntu1.14.04.1_amd64.deb</pre>
+<p>Install PS:</p>
+<pre class="lang:sh decode:true">sudo dpkg -i powershell_6.0.0-alpha.9-1ubuntu1.14.04.1_amd64.deb</pre>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Ubuntu 16.04</h3>
+<p>Install necessary packages:</p>
+<pre class="lang:sh decode:true">sudo apt-get install libunwind8 libicu55</pre>
+<p>Download PS to the temp folder:</p>
+<pre class="lang:sh decode:true">wget -i /tmp/ https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell_6.0.0-alpha.9-1ubuntu1.16.04.1_amd64.deb</pre>
+<p>Install PS:</p>
+<pre class="lang:sh decode:true">sudo dpkg -i powershell_6.0.0-alpha.9-1ubuntu1.16.04.1_amd64.deb</pre>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>OS X 10.11</h3>
+<p>Download and run this with the GUI:</p>
+<p><a href="https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell-6.0.0-alpha.9.pkg" target="_blank">Powershell OS X Download</a></p>
+<p>If you wish to use the terminal, first download the .pkg and run:</p>
+<pre class="lang:sh decode:true">sudo installer -pkg powershell-6.0.0-alpha.9.pkg -target /</pre>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Running Powershell in Linux</h3>
+<p>Run &#8220;<span style="color: orange;">powershell</span>&#8221; from the terminal.</p>
+<p>Get-Command to list available commands</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>PS Script install WP manually on Server 2012 R2</title>
+		<link>/blog/ps-script-install-wp-manually-server-2012-r2/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 14 Jul 2016 22:23:07 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[2012]]></category>
+		<category><![CDATA[2012R2]]></category>
+		<category><![CDATA[IIS]]></category>
+		<category><![CDATA[IIS 8.5]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Powershell]]></category>
+		<category><![CDATA[PS]]></category>
+		<category><![CDATA[Script]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<category><![CDATA[WP]]></category>
+		<guid isPermaLink="false">/blog/?p=548</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This post does basically the same thing that I have already covered in my &#8220;<a href="/blog/wordpress-iis-8-5-windows-2012-r2/">WordPress on IIS 8.5 (Windows 2012 R2)</a>&#8221; post, but it is a script that does literally everything for you. You will just need to add in a few of your own settings into the script, run it, and you will have a functional WP site.</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 18px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>First lets start of with the Features that I already have installed:</h4>
+<p>You will most likely have all of these but Telnet&#8230; <strong>INSTALL TELNET!</strong></p>
+<p>&nbsp;</p>
+<pre class="lang:xhtml decode:true ">DisplayName                                   Name                      InstallState
+-----------                                   ----                      ------------
+File and Storage Services                     FileAndStorage-Services      Installed
+Storage Services                              Storage-Services             Installed
+.NET Framework 4.5 Features                   NET-Framework-45-Features    Installed
+.NET Framework 4.5                            NET-Framework-45-Core        Installed
+WCF Services                                  NET-WCF-Services45           Installed
+TCP Port Sharing                              NET-WCF-TCP-PortSharing45    Installed
+SMB 1.0/CIFS File Sharing Support             FS-SMB1                      Installed
+Telnet Client                                 Telnet-Client                Installed
+User Interfaces and Infrastructure            User-Interfaces-Infra        Installed
+Graphical Management Tools and Infrastructure Server-Gui-Mgmt-Infra        Installed
+Server Graphical Shell                        Server-Gui-Shell             Installed
+Windows PowerShell                            PowerShellRoot               Installed
+Windows PowerShell 4.0                        PowerShell                   Installed
+Windows PowerShell ISE                        PowerShell-ISE               Installed
+WoW64 Support                                 WoW64-Support                Installed</pre>
+<p>&nbsp;</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 18px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>NOTES:</h3>
+<ul>
+<li>Use <a href="https://api.wordpress.org/secret-key/1.1/salt/">https://api.wordpress.org/secret-key/1.1/salt/</a> to generate your Salt Keys&#8230; After they have been generated, you must replace any &#8220;$&#8221; character with any other character. Not just this script, but WordPress will not work if there is a &#8220;$&#8221; character in the salt keys.</li>
+<li>You will be asked for some variables, they are as follows:</li>
+</ul>
+<table style="width: 50%;" border="1">
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IIS Site Name</td>
+<td>MyWordpressSite.com</td>
+</tr>
+<tr>
+<td>IIS App Pool Name</td>
+<td>MyWordpressSite.com</td>
+</tr>
+<tr>
+<td>Directory Path for website</td>
+<td>C:\inetpub\wwwroot\MyWordpressSite</td>
+</tr>
+<tr>
+<td>Database Name</td>
+<td>wordpress612</td>
+</tr>
+<tr>
+<td>Database Username</td>
+<td>wordpressuser612</td>
+</tr>
+<tr>
+<td>Database Password</td>
+<td>mysecretpassword612</td>
+</tr>
+<tr>
+<td>MySQL root Password</td>
+<td>v9gvBhTG@*b6n#^!v</td>
+</tr>
+<tr>
+<td>FTP Username</td>
+<td>FTPUser</td>
+</tr>
+<tr>
+<td>FTP Password</td>
+<td>FTPPass123!</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>You can download check out the progress of the script on my <a href="https://github.com/mgroff2/Powershell/tree/master/WP_Installer" target="_blank">Github</a> and you can download it with the following icon:</li>
+</ul>
+<p><a href="/blog/wp-content/uploads/Wordpress-setup.zip"><img loading="lazy" decoding="async" class="aligncenter wp-image-587 size-full" src="/blog/wp-content/uploads/ps1_Icon.png" alt="ps1_Icon" width="128" height="128" /></a></p>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Now for the Script</h3>
+<pre class="lang:ps decode:true">
+<# 
+
+    .SYNOPSIS
+    Install a new WP site with all pre-reqs using pre-set variables. Can be used for additional sites.
+    
+    .DESCRIPTION
+    This script will create a WordPress site with known-working configurations.
+    Script can also be used to add additional sites as checks are in place. 
+    To customize site, update custom variables as desired. 
+    CAUTION - this script will overwrite a current site
+        
+    .OUTPUTS  
+    A new wp site ready for your configuration! ;-)
+     
+    .NOTES
+    Author: Michael Groff
+    Minimum OS: 2012, 2012 R2
+    PS Version: 4.0
+    Date:  1/12/17
+    
+#>
+
+#Checking Powershell Version
+
+$LocalPSVers = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\PowerShell\3\PowerShellEngine\").PowerShellVersion | Where-Object {$_ -gt "4"}
+
+IF (-not$LocalPSVers)
+{
+    Write-Host "
+You need to upgrade to atleast PS Verion 5 before running this script!
+" -ForegroundColor Red
+    Read-Host "Press enter to exit"
+    BREAK
+}
+ELSE
+{
+    Write-Host "
+Correct Powershell Version found, you are good to go!
+    " -ForegroundColor Green
+}
+
+###
+###Variables Start: 
+###
+#Site Name, must inclue the TLD (.com, .info, .net, etc.)
+Write-Host "
+The website name, must inclue the TLD (.com, .info, .net, etc.)
+" -ForegroundColor Yellow
+$iisAppName = Read-host -prompt "Enter the website name"
+#IIS App Pool Name: 
+Write-Host "
+The iis app pool name, can be same as website
+" -ForegroundColor Yellow
+$iisAppPoolName = Read-host -prompt "Enter the iis app pool name, can be same as website"
+#Site Path
+Write-Host "
+The suggested website root directory path is 'C:\inetpub\wwwroot\MyWordpressSite'
+" -ForegroundColor Yellow
+$directoryPath = Read-host -prompt "Enter the Website root directory path"
+#Database Name
+Write-Host "
+The WordPress Database is a MySQL Database
+" -ForegroundColor Yellow
+$dbn = Read-host -prompt "Enter the WordPress Database Name"
+#Database Username
+Write-Host "
+The WordPress Database User is a MySQL User
+" -ForegroundColor Yellow
+$dbun = Read-host -prompt "Enter the WordPress Database Username"
+#Database User Password
+Write-Host "
+The WordPress Database Password should be a strong password, minimum 12 characters
+" -ForegroundColor Yellow
+$dbpw = Read-host -prompt "Enter the WordPress Database User Password"
+#MySQL root password
+Write-Host "
+The  MySQL root password, this will create one if it doesnt exist
+" -ForegroundColor Yellow
+$MySQL = Read-host -prompt "Enter the MySQL root password"
+#Salt Keys - https://api.wordpress.org/secret-key/1.1/salt/ (NOTE: Replace any $ that you see with another character!)
+#Authentication Key
+$AuthKey = "ry=,b*Gp,+1-voDYM`zq#:S_^ODN Lp9:_:&D5o6C%0SXsyi<k`Q .Z&#093;NK3144ay"
+#Secure Authentication Key
+$SecAuthKey = "f5h-Ss+}97fG%m+yS5X,zh3)>B/_/^C0x:sJv7Cta0+Cy=X_{E>[RN+A=-(*%Z+t"
+#Logged In Key
+$LogInKey = "N-< +&#091;doN4gwtyk?PZK>=~iU8]-oS)wPt6l~.qMES}<vr v.Px`d#4MxOb`e.&#038;7-"
+#Nonce Key
+$NKey = ":!!Pu0e5a?ux,+P)C&#091;|T~,:IN,+m0H.6.JT%Ov_;_.J9;<@dCNpu|+@;L{G)W%|3"
+#Authentication Salt
+$AuthSalt = "SlHw{qnL#.kN--|u+Rw|kTe#(QR=Ak`_MUO8!#&#093;`3L7.L=X<nX3><w/}MuRu9w`J"
+#Secure Authentication Salt
+$SecAuthSalt = "a}4L-qvxEx~x(f_&#093;YiBgP(18%r)IerB+e4-I6m+ZkzgW4//V?x:P&#038;:IvjIxguJIX"
+#Logged In Salt
+$LogInSalt = "d-O >T]uyh:9?Pu`i8|222S|eY5lW8,`lPwG-b|^-|8z5]j(P+-T6c[^PO;4ZM2q"
+#Nonce Salt
+$NSalt = "pT[la{_E,yMHhMu|F1F|k7*q+PQ]u[e zdUjj5(%&gZnsxUGJgYsi?:h[d|o`5I)"
+#FTPUsername
+Write-Host "
+The FTP Username is a Windows User
+" -ForegroundColor Yellow
+$FTPSiteUser = Read-host -prompt "Enter the FTP Username"
+#FTP Password - NOTE: Must be UNDER 14 characters, also must have a capital letter and special character
+Write-Host "
+The FTP User Pasword must be UNDER 14 characters & must have a capital letter and special character
+" -ForegroundColor Yellow
+$FTPSiteUserPW = Read-host -prompt "Enter the FTP User Pasword"
+#FTP Group
+$FTPGroup = "FTP_User_Group"
+###
+###Variables End: 
+###
+
+###Variables to leave alone: 
+$iisAppPoolDotNetVersion = "v4.0"
+$sitelocation = "IIS:\sites\$iisAppName"
+
+Write-Host "
+Installing Windows Roles & Features if necessary... be patient
+" -ForegroundColor Cyan
+
+#Windows Roles & Features if they are not already installed
+Function Install-WP-Web-Features {
+IF ( Get-WindowsFeature -Name Web-Server, Web-Log-Libraries, Web-Request-Monitor, Web-App-Dev, Web-Net-Ext45, Web-CGI, Web-Ftp-Server, NET-Framework-Features | Where {$_.InstallState -eq "Available"} )
+        {
+            Install-WindowsFeature -Name Web-Server, Web-Log-Libraries, Web-Request-Monitor, Web-App-Dev, Web-Net-Ext45, Web-CGI, Web-Ftp-Server, NET-Framework-Features -IncludeManagementTools
+        }
+        ELSE
+        {
+            Return  Write-Host "
+Necessary Windows Features are already installed!
+            " -ForegroundColor Green
+        }
+}
+
+Install-WP-Web-Features
+
+#Create a new Website and AppPool for WP to live in
+
+Import-Module WebAdministration
+
+Write-Host "
+Creating site and App Pool in IIS
+" -ForegroundColor Cyan 
+
+#navigate to the app pools root
+cd IIS:\AppPools\
+
+#check if the app pool exists
+if (!(Test-Path $iisAppPoolName -pathType container))
+{
+    #create the app pool
+    $appPool = New-Item $iisAppPoolName
+    $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value $iisAppPoolDotNetVersion
+}
+
+#navigate to the sites root
+cd IIS:\Sites\
+
+#check if the site exists
+if (!(Test-Path $iisAppName -pathType container))
+{
+    #create the site
+    $iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisAppName} -physicalPath $directoryPath
+    $iisApp | Set-ItemProperty -Name "applicationPool" -Value $iisAppPoolName
+}
+
+Write-Host "
+Adding in hosts file entry
+" -ForegroundColor Cyan 
+
+#Adds in hosts file entry for your new site: 
+function add-hostfilecontent {            
+ [CmdletBinding(SupportsShouldProcess=$true)]            
+ param (            
+  [parameter(Mandatory=$true)]            
+  [ValidatePattern("\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")]            
+  [string]$IPAddress,            
+              
+  [parameter(Mandatory=$true)]            
+  [string]$computer            
+ )            
+ $file = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"            
+ if (-not (Test-Path -Path $file)){            
+   Throw "Hosts file not found"            
+ }            
+ $data = Get-Content -Path $file             
+ $data += "$IPAddress  $computer"            
+ Set-Content -Value $data -Path $file -Force -Encoding ASCII             
+}
+
+#add host file entries
+add-hostfilecontent -IPAddress 127.0.0.1 -computer $iisAppName
+
+Write-Host "
+Installing Web Platform Installer
+" -ForegroundColor Cyan
+
+#Install Web Platform Installer if its not already installed
+$WPIPath = Test-Path "C:\Program Files\Microsoft\Web Platform Installer\WebPlatformInstaller.exe"
+Function Install-WPI {
+        IF (-not$WPIPath)
+        {
+            msiexec.exe /package http://download.microsoft.com/download/C/F/F/CFF3A0B8-99D4-41A2-AE1A-496C08BEB904/WebPlatformInstaller_amd64_en-US.msi /quiet /passive | Out-Null
+        }
+        ELSE
+        {
+            Return Write-Host "
+Web Plaform Installer 5.0 is already installed!
+            " -ForegroundColor Green
+            break
+        }
+} 
+
+Install-WPI
+
+#The .app info
+Write-Host "
+If the script stopped here..." -ForegroundColor Red
+Write-Host "you did not fill out the variable information above... correctly
+" -ForegroundColor Yellow
+
+New-Item $env:USERPROFILE\Desktop\wp.app -ItemType file -value "AppPath[@]$iisAppName
+
+DbServer[@]localhost
+
+DbName[@]$dbn
+
+DbUsername[@]$dbun
+
+DbPassword[@]$dbpw
+
+DbAdminUsername[@]root
+
+DbAdminPassword[@]$MySQL
+
+Authentication Key[@]$AuthKey
+
+Secure Authentication Key[@]$SecAuthKey
+
+Logged In Key[@]$LogInKey 
+
+Nonce Key[@]$NKey
+
+Authentication Salt[@]$AuthSalt
+
+Secure Authentication Salt[@]$SecAuthSalt
+
+Logged In Salt[@]$LogInSalt
+
+Nonce Salt[@]$NSalt
+
+"
+
+#Reload Paths to understand WebPICMD.exe
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
+Write-Host "
+Starting the WP install" -ForegroundColor Cyan 
+
+#Install WP & all necessary modules
+cd $env:USERPROFILE\Desktop
+WebPICMD.exe /Install /Products:PHPManager /AcceptEULA
+WebPICMD.exe /Install /Application:Wordpress@wp.app /Products:PHP54 /AcceptEULA /MySQLPassword:$MySQL /Log:$env:HOMEDRIVE\WPIntsalllog.txt
+
+#Configure URL Rewrite Rule 
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules" -name "." -value @{name='Wordpress';patternSyntax='Wildcard'}
+Set-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/match" -name "url" -value "*"
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/conditions" -name "." -value @{input='{REQUEST_FILENAME}';matchType='IsFile';negate='True'}
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/conditions" -name "." -value @{input='{REQUEST_FILENAME}';matchType='IsDirectory';negate='True'}
+Set-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/action" -name "url" -value "index.php"
+
+#Remove unnecessary Default Docs: 
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='Default.htm'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='Default.asp'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='index.htm'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='index.html'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='iisstart.htm'}
+
+#Remove PHP 5.5 as WP only works with 5.4 afaik: 
+$TestPHP55 =  Get-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST'  -filter "system.webServer/handlers/add[@name='PHP55_via_FastCGI']"  -Name "type"
+
+IF ($TestPHP55)
+{     
+    Remove-WebConfigurationProperty  -pspath 'MACHINE/WEBROOT/APPHOST'  -filter "system.webServer/handlers" -name "." -AtElement @{name='PHP55_via_FastCGI'}           
+}
+ELSE
+{
+    Write-Host "
+PHP 5.5 has already been removed!
+    " -ForegroundColor Green
+}
+
+#Create FTP Group & User - Uses preset variables 
+#Group Creation
+
+IF (-not (Get-WmiObject -Class Win32_Group | Where-Object {$_.Name -eq "$FTPGroup"}))
+{
+    Write-Host "
+Creating FTP User Group
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net localgroup /add $FTPGroup}
+}
+ELSE
+{
+    Write-Host "
+Local Group already exists
+    " -ForegroundColor Yellow
+}
+
+#Users Creation
+
+IF (-not (Get-WmiObject -Class Win32_UserAccount | Where-Object {$_.Name -eq "$FTPSiteUser"}))
+{
+    Write-Host "
+Creating FTP User
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net user /add $FTPSiteUser $FTPSiteUserPW} -ErrorAction SilentlyContinue
+    Write-Host "
+Adding user to FTP User Group
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net localgroup $FTPGroup $FTPSiteUser /add }
+}
+ELSE
+{
+    Write-Host "
+Local User already exists
+    " -ForegroundColor Red
+}
+
+#Create FTP Site (To update WordPress and Plugins)
+$FTPSiteName = "Main FTP"
+$FTPSitePath = "C:\inetpub\ftproot"
+$FTPSitePathLocUsr = "C:\inetpub\ftproot\LocalUser"
+
+IF (-not (Test-Path -Path "$FTPSitePathLocUsr"))
+{
+    New-Item -Path $FTPSitePathLocUsr -ItemType Directory -ErrorAction SilentlyContinue
+    New-Item -Path $FTPSitePath -ItemType Directory -ErrorAction SilentlyContinue
+    New-WebFtpSite -Name $FTPSiteName -PhysicalPath $FTPSitePath -IPAddress * -Port 21
+}
+ELSE
+{
+    Write-Host "
+FTP Site already exists in location: 'C:\inetpub\ftproot\LocalUser'
+Updating your WordPress site may not work as designed with FTP
+    " -ForegroundColor Yellow
+    Write-Host "
+Attempting to create virtual direcotry in FTP Site. 
+    " -ForegroundColor Yellow
+} 
+
+IF (-not (Get-WebVirtualDirectory -Name "*$FTPSiteUser*") )
+{
+    New-WebVirtualDirectory -Site "$FTPSiteName\LocalUser" -Name $FTPSiteUser -PhysicalPath $directoryPath -ErrorAction SilentlyContinue
+    Write-Host "
+FTP virtual direcotry has been created!
+    " -ForegroundColor Green
+}
+ELSE
+{
+    Write-Host "
+Virtual Directory for FTP Site already exists
+    " -ForegroundColor Red 
+}
+
+#Setting User/Group Permissions for FTP User Group in IIS - Adding Authorization in IIS
+
+#Giving Windows Group permissions to site for FTP
+IF (-not((Get-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -location "$FTPSiteName" -filter "system.ftpServer/security/authorization/add" -name ".").roles))
+{
+Add-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -location "$FTPSiteName" -filter "system.ftpServer/security/authorization" -name "." -value @{accessType='Allow';roles="$FTPGroup";permissions='Read,Write'}
+}
+ELSE
+{
+    Write-Host " 
+FTP User Group has already been given proper permissions in IIS. 
+    " -ForegroundColor Green 
+}
+
+#Enable Basic Auth for the FTP Site
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.authentication.basicAuthentication.enabled -Value $true
+
+#Setup User Isolation
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.userisolation.mode -Value IsolateAllDirectories
+
+#Disable Require SSL on FTP Site
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.ssl.controlChannelPolicy -Value SslAllow
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.ssl.dataChannelPolicy -Value SslAllow
+
+#Permission for FTP user to WP Directory
+$FTPAcl = Get-Acl -Path "$directoryPath"
+$FTPAclUser = New-Object system.security.accesscontrol.filesystemaccessrule("$FTPGroup","FullControl","ContainerInherit, ObjectInherit","None","Allow")
+$FTPAcl.SetAccessRule($FTPAclUser)
+Set-Acl -Path "$directoryPath" -AclObject $FTPAcl
+
+#Finishing up and loading your site
+#Cleanup
+Remove-Item $env:USERPROFILE\Desktop\wp.app -Force
+
+#Disable IE Enhanced Security & UAC
+function Disable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 0
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been disabled." -ForegroundColor Green
+}
+function Enable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 1
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 1
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been enabled." -ForegroundColor Green
+}
+function Disable-UserAccessControl {
+    Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 00000000
+    Write-Host "User Access Control (UAC) has been disabled." -ForegroundColor Green    
+}
+
+#Disable IE Enhanced Security if its not already
+IF (
+((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}").IsInstalled | Where-Object {$_ -gt "0"}) + 
+((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}").IsInstalled | Where-Object {$_ -gt "0"})
+)
+{
+    Disable-InternetExplorerESC
+}
+ELSE
+{
+    Write-Host "
+IE Enhanced Security Configuration (ESC) has already been disabled.
+    " -ForegroundColor Green
+}
+
+#Disable User Access Control
+IF (((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System").ConsentPromptBehaviorAdmin | Where-Object {$_ -gt "0"}))
+{
+    Disable-UserAccessControl
+}
+ELSE
+{
+    Write-Host "
+User Access Control (UAC) has already been disabled. 
+    " -ForegroundColor Green
+}
+
+Write-Host "
+Done! Now go configure your site" -ForegroundColor Green 
+#Opening IE to your WP site
+$url = "http://$iisAppName/"
+
+$IEwp = New-Object -com internetexplorer.application;
+$IEwp.visible = $true; 
+$IEwp.navigate($url);
+
+#Opening your new WP folder with File Explorer
+Start-Process $directoryPath
+
+#Openeing WP Install Log file for review
+Start-Process $env:HOMEDRIVE\WPIntsalllog.txt
+
+#Open IIS
+Start-Process C:\Windows\system32\inetsrv\inetmgr.exe
+
+Write-Host ""
+Read-Host -Prompt "Press Enter to exit" 
+</pre>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>WordPress on IIS 8.5  (Windows 2012 R2)</title>
+		<link>/blog/wordpress-iis-8-5-windows-2012-r2/</link>
+					<comments>/blog/wordpress-iis-8-5-windows-2012-r2/#comments</comments>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Sun, 24 Jan 2016 05:11:12 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[2012]]></category>
+		<category><![CDATA[2012R2]]></category>
+		<category><![CDATA[IIS]]></category>
+		<category><![CDATA[IIS 8.5]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<category><![CDATA[WP]]></category>
+		<guid isPermaLink="false">/blog/?p=43</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3><span style="color: orange;">The Manual Installation and Configuration of WordPress and all accompanying components on Windows Server 2012 R2</span></h3>
+
+		</div>
+	</div>
+<div class="ult-spacer spacer-69e854dde0b79" data-id="69e854dde0b79" data-height="5" data-height-mobile="5" data-height-tab="5" data-height-tab-portrait="" data-height-mobile-landscape="" style="clear:both;display:block;"></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="ult-spacer spacer-69e854dde0b89" data-id="69e854dde0b89" data-height="2" data-height-mobile="2" data-height-tab="2" data-height-tab-portrait="" data-height-mobile-landscape="" style="clear:both;display:block;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>WordPress &#8220;Requirements&#8221;</h3>
+<ul>
+<li>PHP 5.6 or greater</li>
+<li>MySQL 5.5 or greater</li>
+<li>The mod_rewrite Apache module</li>
+</ul>
+<p>&#8211; You can find the requirements more depth directly from the WordpPress page: <a href="https://wordpress.org/about/requirements/">WordPress Requirements</a></p>
+<p>We are going to use:</p>
+<ul>
+<li>WordPress Version 4.3.1</li>
+<li>PHP 5.4</li>
+<li>MySQL 5.5</li>
+<li>IIS URL Rewrite</li>
+</ul>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: This tutorial assumes you have turned off IE Enhanced Security and Enabled downloads in IE</span></h6>
+<h6 style="text-align: center;"><span style="color: #6699ff;">And that you have set up DNS correctly or modified your hosts file with your domain name</span></h6>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Prep</h3>
+<h4><span style="color: orange;">Windows Roles and Services</span></h4>
+<h6 style="text-align: center;"><span style="color: orange;">First we need to install the proper Windows Roles and Services, some IIS add-ons and MySQL</span></h6>
+<p><strong>Roles</strong>:</p>
+<ul>
+<li>Web Server (IIS) &#8211; Add features that are required and Include management tools (if applicable)</li>
+</ul>
+<p><strong>Features</strong>:</p>
+<ul>
+<li>.NET Framework 3.5 Features &#8211; Add features that are required and Include management tools (if applicable) &#8211; Note: this includes .net 2.0 for PHP Manager that we will install later</li>
+</ul>
+<ul>
+<li>SMTP Server &#8211; Add features that are required and Include management tools (if applicable) *This will not be covered</li>
+</ul>
+<ul>
+<li>Telnet Client (you dont need it for wordpress, but you should always have this installed for testing)</li>
+</ul>
+<p><strong>Role Services for IIS</strong>: (leave the default and add the following)</p>
+<ul>
+<li>Health and Diagnostics:
+<ul>
+<li>Logging Tools</li>
+<li>Request Monitor</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-1.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-full wp-image-419 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-1.png" alt="Wordpress Installation 1" width="295" height="151" /></a></p>
+<p>&nbsp;</p>
+<ul>
+<li>Application Development:
+<ul>
+<li>ASP.NET 4.5 &#8211; Add features that are required and Include management tools (if applicable)</li>
+<li>CGI</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-2.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-full wp-image-420 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-2.png" alt="Wordpress Installation 2" width="294" height="255" /></a></p>
+<h4><span style="color: orange;">IIS add-ons (PHP, URL Rewrite, </span></h4>
+<p>Open IIS, click on your server, and a pop-up box will ask you if <span style="color: orange;">&#8220;&#8230;you want to get started with Microsoft Web Platform&#8230;&#8221;</span> Click <span style="color: orange;">Yes</span>, then proceed to download and install the Web Platform Installer.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-3.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-424 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-3-300x184.png" alt="Wordpress Installation 3" width="300" height="184" srcset="/blog/wp-content/uploads/Wordpress-Installation-3-300x184.png 300w, /blog/wp-content/uploads/Wordpress-Installation-3-600x369.png 600w, /blog/wp-content/uploads/Wordpress-Installation-3-1024x630.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-3.png 1244w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Close IIS and the re-open it, now you will see the <span style="color: orange;">Web Platform Installer</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-4.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-423 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-4-300x227.png" alt="Wordpress Installation 4" width="300" height="227" srcset="/blog/wp-content/uploads/Wordpress-Installation-4-300x227.png 300w, /blog/wp-content/uploads/Wordpress-Installation-4-600x454.png 600w, /blog/wp-content/uploads/Wordpress-Installation-4.png 811w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Open the <span style="color: orange;">Web Platform Installer</span> and Install the following:</p>
+<ul>
+<li>PHP 5.4.24, this will install:
+<ul>
+<li>Microsoft Drivers 3.2 for PHP v5.4 for SQL Server in IIS</li>
+<li>IIS Manager</li>
+</ul>
+</li>
+<li>URL Rewrite</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-5.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-425 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-5-300x198.png" alt="Wordpress Installation 5" width="300" height="198" srcset="/blog/wp-content/uploads/Wordpress-Installation-5-300x198.png 300w, /blog/wp-content/uploads/Wordpress-Installation-5-600x396.png 600w, /blog/wp-content/uploads/Wordpress-Installation-5.png 804w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click <span style="color: orange;">Finish</span> and close IIS as we are done with that for now.</p>
+<h4><span style="color: orange;">MySQL</span></h4>
+<p>Now we are going to Download &amp; Install MySQL 5.5.45 and MySQL Workbench.</p>
+<h6><span style="color: #6699ff;">NOTE: If you know how to run mysql from the command line, the more power to you, this is for Windows. </span><span style="color: #6699ff;">We are going to use a feature of my sql that incorporates a windowed GUI, hence the name</span></h6>
+<p>Links to Downloads: <a href="https://dev.mysql.com/downloads/mysql/">MySQL Server</a> &amp; <a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></p>
+<p>First install MySQL 5.5.45 and at the end of the installation, leave the box checked and you will enter the Instance Configuration.</p>
+<p>Choose the <span style="color: orange;">Standard Configuration</span> option, click <span style="color: orange;">Next</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-6.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-428 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-6-300x230.png" alt="Wordpress Installation 6" width="300" height="230" srcset="/blog/wp-content/uploads/Wordpress-Installation-6-300x230.png 300w, /blog/wp-content/uploads/Wordpress-Installation-6.png 511w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Choose the <span style="color: orange;">Install As Windows Service</span> option, name it, and then click <span style="color: orange;">Next</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-7.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-429 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-7-300x229.png" alt="Wordpress Installation 7" width="300" height="229" srcset="/blog/wp-content/uploads/Wordpress-Installation-7-300x229.png 300w, /blog/wp-content/uploads/Wordpress-Installation-7.png 512w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Set your root password and click <span style="color: orange;">Next</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-8.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-430 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-8-300x229.png" alt="Wordpress Installation 8" width="300" height="229" srcset="/blog/wp-content/uploads/Wordpress-Installation-8-300x229.png 300w, /blog/wp-content/uploads/Wordpress-Installation-8.png 512w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Last click <span style="color: orange;">Execute</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-9.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-431 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-9-300x229.png" alt="Wordpress Installation 9" width="300" height="229" srcset="/blog/wp-content/uploads/Wordpress-Installation-9-300x229.png 300w, /blog/wp-content/uploads/Wordpress-Installation-9.png 510w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now to install <span style="color: orange;">MySQL Workbench</span>. I will let you figure this one out. Hint: Download the prerequisites.<br />
+At the end of the install, make sure you launch MySQL Workbench before you click <span style="color: orange;">Finish</span></p>
+<h4><span style="color: orange;">WordPress</span></h4>
+<p>Download <a href="https://wordpress.org/download/">WordPress</a> and unzip it to C:\inetpub\wwwroot, so you should see the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-10.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-435 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-10-300x198.png" alt="Wordpress Installation 10" width="300" height="198" srcset="/blog/wp-content/uploads/Wordpress-Installation-10-300x198.png 300w, /blog/wp-content/uploads/Wordpress-Installation-10-600x396.png 600w, /blog/wp-content/uploads/Wordpress-Installation-10.png 847w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>That concludes the prep for a WordPress site to be built, now we need to start the actual configurations.</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Configuration</h3>
+<h4><span style="color: orange;">IIS Configuration</span></h4>
+<p>Create a new website in IIS, and fill out the fields appropriately:</p>
+<ul>
+<li>Site Name: MyDomain WP Site (arbitrary, just make it identifiable)</li>
+<li>Physical path: C:\inetpub\wwwroot\wordpress (the folder we extracted earlier)</li>
+<li>IP address: Depends on the IP&#8217;s on your server, I have one so all unassigned is fine.</li>
+<li>Host name: www.mydomain.com</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-11.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-440 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-11-300x289.png" alt="Wordpress Installation 11" width="300" height="289" srcset="/blog/wp-content/uploads/Wordpress-Installation-11-300x289.png 300w, /blog/wp-content/uploads/Wordpress-Installation-11.png 596w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Add in an additional binding for non-www: <span style="color: orange;">http</span>, <span style="color: orange;">All Unassigned</span>, <span style="color: orange;">Port 80</span>, and <span style="color: orange;">mydomain.com</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-24.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-472 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-24-300x129.png" alt="Wordpress Installation 24" width="300" height="129" srcset="/blog/wp-content/uploads/Wordpress-Installation-24-300x129.png 300w, /blog/wp-content/uploads/Wordpress-Installation-24-600x258.png 600w, /blog/wp-content/uploads/Wordpress-Installation-24.png 917w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Move the Default Document for <span style="color: orange;">index.php</span> to the to of the list:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-12.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-441 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-12-300x184.png" alt="Wordpress Installation 12" width="300" height="184" srcset="/blog/wp-content/uploads/Wordpress-Installation-12-300x184.png 300w, /blog/wp-content/uploads/Wordpress-Installation-12-600x369.png 600w, /blog/wp-content/uploads/Wordpress-Installation-12-1024x629.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-12.png 1239w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Create a <span style="color: orange;">URL Rewrite</span> rule as follows:</p>
+<ul>
+<li>Rule Name: WordPress (or whatever you want, this is arbitrary)</li>
+<li>Match URL:
+<ul>
+<li>Requested URL: Matches the Pattern</li>
+<li>Using: Wildcards</li>
+<li>Pattern: *</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-13.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-442 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-13-300x102.png" alt="Wordpress Installation 13" width="300" height="102" srcset="/blog/wp-content/uploads/Wordpress-Installation-13-300x102.png 300w, /blog/wp-content/uploads/Wordpress-Installation-13-600x205.png 600w, /blog/wp-content/uploads/Wordpress-Installation-13.png 677w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<ul>
+<li>Conditions:
+<ul>
+<li>Is Not a File</li>
+<li>Is Not a Directory</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-14.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-443 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-14-300x144.png" alt="Wordpress Installation 14" width="300" height="144" srcset="/blog/wp-content/uploads/Wordpress-Installation-14-300x144.png 300w, /blog/wp-content/uploads/Wordpress-Installation-14-600x287.png 600w, /blog/wp-content/uploads/Wordpress-Installation-14.png 677w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<ul>
+<li>Action:
+<ul>
+<li>Action type: Rewrite</li>
+<li>Rewrite URL: index.php</li>
+<li>Append Query String: Check</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-15.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-444 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-15-300x129.png" alt="Wordpress Installation 15" width="300" height="129" srcset="/blog/wp-content/uploads/Wordpress-Installation-15-300x129.png 300w, /blog/wp-content/uploads/Wordpress-Installation-15-600x257.png 600w, /blog/wp-content/uploads/Wordpress-Installation-15.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Create another <span style="color: orange;">URL Rewrite</span> rule as follows:</p>
+<ul>
+<li>Type: Canonical domain name</li>
+<li>Select the primary host name: www.mydomain.com</li>
+</ul>
+<p>After both rules have been entered, your URL Rewrites should look similar to the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-16.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-446 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-16-300x87.png" alt="Wordpress Installation 16" width="300" height="87" srcset="/blog/wp-content/uploads/Wordpress-Installation-16-300x87.png 300w, /blog/wp-content/uploads/Wordpress-Installation-16-600x174.png 600w, /blog/wp-content/uploads/Wordpress-Installation-16-1024x297.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-16.png 1501w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Additional, recommended configutations:</p>
+<ul>
+<li>Stop your site, there is no reason to have it running.</li>
+<li>Set up Recycling for App Pool:
+<ul>
+<li>Time: 4:00 AM (or whenever your site is least active, and remove the check for Regular Time Intervals)</li>
+</ul>
+</li>
+<li>Edit PHP.ini file (C:\Program Files (x86)\PHP\v5.4\php.ini):
+<ul>
+<li>Old Line: post_max_size = 8M
+<ul>
+<li>New Line: <span style="color: orange;">post_max_size = 1024M</span></li>
+</ul>
+</li>
+<li>Old Line: ;upload_tmp_dir =
+<ul>
+<li>New Line: <span style="color: orange;">upload_tmp_dir = C:\inetpub\temp</span></li>
+</ul>
+</li>
+<li>Old Line: upload_max_filesize = 2M
+<ul>
+<li>New Line: <span style="color: orange;">upload_max_filesize = 1000M</span></li>
+</ul>
+</li>
+<li>Old Line: max_file_uploads = 20
+<ul>
+<li>New Line: <span style="color: orange;">max_file_uploads = 200</span></li>
+</ul>
+</li>
+<li>Add Modify Permission the C:\inetpub\temp</li>
+</ul>
+</li>
+</ul>
+<p>&nbsp;</p>
+<h4><span style="color: orange;">MySQL Configuration</span></h4>
+<p>Open MySQL and log into the instance we created previously.</p>
+<p>First thing you will want to do is change the default character-set-server variable to UTF8 as UTF-8 supports any language.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-17.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-453 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-17-300x225.png" alt="Wordpress Installation 17" width="300" height="225" srcset="/blog/wp-content/uploads/Wordpress-Installation-17-300x225.png 300w, /blog/wp-content/uploads/Wordpress-Installation-17-600x450.png 600w, /blog/wp-content/uploads/Wordpress-Installation-17-1024x768.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-17.png 1196w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Restart MySQL for the settings to take, or just make sure you manually set the collation of you DB to UTF8 in the next step. (Powershell command: <span style="color: orange;">Restart-Service MySQL</span>)</p>
+<p>Next we are going to create your WordPress Database.</p>
+<p>Right-click on the blank space under the test DB and choose <span style="color: orange;">Create Schema&#8230;</span></p>
+<p style="text-align: center;"><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-18.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="alignnone size-medium wp-image-454" src="/blog/wp-content/uploads/Wordpress-Installation-18-300x226.png" alt="Wordpress Installation 18" width="300" height="226" srcset="/blog/wp-content/uploads/Wordpress-Installation-18-300x226.png 300w, /blog/wp-content/uploads/Wordpress-Installation-18-600x451.png 600w, /blog/wp-content/uploads/Wordpress-Installation-18-1024x770.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-18.png 1195w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;">Give your Schema/DB an appropriate name, I will use <span style="color: orange;">mydomainwpdatabase</span></p>
+<p style="text-align: left;"><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-19.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-455 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-19-300x285.png" alt="Wordpress Installation 19" width="300" height="285" srcset="/blog/wp-content/uploads/Wordpress-Installation-19-300x285.png 300w, /blog/wp-content/uploads/Wordpress-Installation-19-600x570.png 600w, /blog/wp-content/uploads/Wordpress-Installation-19.png 608w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;">Next, create a user for that database. I will use <span style="color: orange;">mydomainwpdbuser</span>, and give that user full permissions to the Schema/DB that you just created. It will look similar to the following:</p>
+<p style="text-align: left;"><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-20.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-458 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-20-300x225.png" alt="Wordpress Installation 20" width="300" height="225" srcset="/blog/wp-content/uploads/Wordpress-Installation-20-300x225.png 300w, /blog/wp-content/uploads/Wordpress-Installation-20-600x450.png 600w, /blog/wp-content/uploads/Wordpress-Installation-20-1024x767.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-20.png 1197w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;"><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-21.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-459 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-21-300x225.png" alt="Wordpress Installation 21" width="300" height="225" srcset="/blog/wp-content/uploads/Wordpress-Installation-21-300x225.png 300w, /blog/wp-content/uploads/Wordpress-Installation-21-600x449.png 600w, /blog/wp-content/uploads/Wordpress-Installation-21-1024x767.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-21.png 1198w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;">And that concludes the database configuration, we are almost done, just a couple more steps.</p>
+<h4><span style="color: orange;">WordPress Connection Configuration</span></h4>
+<p>Navigate to <span style="color: orange;">C:\inetpub\wwwroot\wordpress</span> and copy your <span style="color: orange;">wp-config-sample.php</span> in the same folder, then rename it <span style="color: orange;">wp-config.php</span></p>
+<p>Then you will need to make the following changes to that file to allow your WP site to connect to the database.</p>
+<p style="text-align: left; padding-left: 90px;">========================================</p>
+<p style="text-align: left; padding-left: 90px;">// ** MySQL settings &#8211; You can get this info from your web host ** //<br />
+/** The name of the database for WordPress */<br />
+define(&#8216;DB_NAME&#8217;, &#8216;<span style="color: orange;">mydomainwpdatabase</span>&#8216;);</p>
+<p style="text-align: left; padding-left: 90px;">/** MySQL database username */<br />
+define(&#8216;DB_USER&#8217;, &#8216;<span style="color: orange;">mydomainwpdatabaseuser</span>&#8216;);</p>
+<p style="text-align: left; padding-left: 90px;">/** MySQL database password */<br />
+define(&#8216;DB_PASSWORD&#8217;, &#8216;<span style="color: orange;">mydomainwpdatabaseuerpsswd</span>&#8216;);</p>
+<p style="text-align: left; padding-left: 90px;">/** MySQL hostname */<br />
+define(&#8216;DB_HOST&#8217;, &#8216;localhost&#8217;);</p>
+<p style="text-align: left; padding-left: 90px;">/** Database Charset to use in creating database tables. */<br />
+define(&#8216;DB_CHARSET&#8217;, &#8216;utf8&#8217;);</p>
+<p style="text-align: left; padding-left: 90px;">/** The Database Collate type. Don&#8217;t change this if in doubt. */<br />
+define(&#8216;DB_COLLATE&#8217;, &#8221;);</p>
+<p style="text-align: left; padding-left: 90px;">========================================</p>
+<p style="padding-left: 90px;">
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>WordPress Login</h3>
+<p>You are ready to start your site, navigate to IIS and start it up (or restart it, if it has been up this whole time). Then browse to the site in IE and set up the admin creds as you see fit.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-22.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-463 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-22-300x142.png" alt="Wordpress Installation 22" width="300" height="142" srcset="/blog/wp-content/uploads/Wordpress-Installation-22-300x142.png 300w, /blog/wp-content/uploads/Wordpress-Installation-22-600x285.png 600w, /blog/wp-content/uploads/Wordpress-Installation-22-1024x486.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-22.png 1910w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: center;"><span style="color: orange; font-size: 15pt;">You are done!</span>    <span style="color: white; font-size: 13pt;">Just log into your site and start configuring your new WordPress Site.</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-23.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-466 size-large" src="/blog/wp-content/uploads/Wordpress-Installation-23-1024x630.png" alt="Wordpress Installation 23" width="1024" height="630" srcset="/blog/wp-content/uploads/Wordpress-Installation-23-1024x630.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-23-600x369.png 600w, /blog/wp-content/uploads/Wordpress-Installation-23-300x184.png 300w, /blog/wp-content/uploads/Wordpress-Installation-23.png 1166w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="ult-spacer spacer-69e854dde15c4" data-id="69e854dde15c4" data-height="20" data-height-mobile="20" data-height-tab="20" data-height-tab-portrait="" data-height-mobile-landscape="" style="clear:both;display:block;"></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Additional Setup for WP</h3>
+<h4><span style="color: orange;">Suggested WP Plugins</span></h4>
+<ul>
+<li><a href="https://wordpress.org/plugins/easy-wp-smtp/">Easy WP SMTP</a></li>
+<li><a href="https://wordpress.org/plugins/imsanity/">Imsanity</a></li>
+<li><a href="https://wordpress.org/plugins/limit-login-attempts/">Limit Login Attempts</a></li>
+<li><a href="http://vc.wpbakery.com/">WPBakery Visual Composer</a></li>
+</ul>
+<h4><span style="color: orange;">Suggested WP Settings Changes</span></h4>
+<p>Settings &gt; General Settings</p>
+<ul>
+<li>Site Title</li>
+<li>Tagline</li>
+<li>Membership</li>
+<li>Timezone</li>
+</ul>
+<p>Settings &gt; Discussion</p>
+<ul>
+<li>Deselect &#8211; <label for="default_comment_status">Allow people to post comments on new articles</label></li>
+</ul>
+<p>Settings &gt; Permalinks</p>
+<ul>
+<li>Common Settings &gt; Post name (or whatever makes the most sense for your site)</li>
+</ul>
+<p>&nbsp;</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+					<wfw:commentRss>/blog/wordpress-iis-8-5-windows-2012-r2/feed/</wfw:commentRss>
+			<slash:comments>1</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Set a Static IP on your ESXi Host</title>
+		<link>/blog/set-a-static-ip-on-your-esxi-host/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 17 Sep 2015 07:09:19 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[ESXi 5.5.0]]></category>
+		<category><![CDATA[IP]]></category>
+		<category><![CDATA[Static]]></category>
+		<category><![CDATA[Static IP]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<category><![CDATA[VMware ESXi 5.5.0]]></category>
+		<guid isPermaLink="false">/blog/?p=384</guid>
+
+					<description><![CDATA[Set a Static IP on your ESXi Host V5.5 Assigning a static IP to your ESXi host is extremely easy to do, and is highly recommended as you will always want your host to have the same IP. Notes: If your network is set up without DHCP, then you will have to do this from&#8230;]]></description>
+										<content:encoded><![CDATA[<p><span style="color: orange;">Set a Static IP on your ESXi Host V5.5</span></p>
+<h4>Assigning a static IP to your ESXi host is extremely easy to do, and is highly recommended as you will always want your host to have the same IP.</h4>
+<ul>
+<li><strong>Notes:</strong>
+<ul>
+<li>If your network is set up without DHCP, then you will have to do this from the physical server itself, or the KVM.</li>
+<li>When assigning a static IP to the host, make sure that you do not assign an IP that has already been used if your network does have DHCP enabled.</li>
+<li>If you do not set up a static IP, you will likely have issues when you reboot the host or your router reboots.</li>
+</ul>
+</li>
+</ul>
+<p>&nbsp;</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">For this tutorial, I am making the changes from the host&#8217;s console itself, as setting a Static IP is one of the first things to do in the configuration of a new host </span><span style="color: #6699ff;"> </span></h6>
+<p>First Click on <span style="color: orange;">F2</span> Customize System/View Logs:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-386 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01-300x240.png" alt="Set a Static IP on your ESX Host_01" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Enter the password for the root user when prompted and hit <span style="color: orange;">Enter</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-387 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02-300x240.png" alt="Set a Static IP on your ESX Host_02" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Choose the third option, <span style="color: orange;">Configure Management Network</span>, and hit <span style="color: orange;">Enter</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-388 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03-300x240.png" alt="Set a Static IP on your ESX Host_03" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Again, choose the third option, <span style="color: orange;">IP Configuration</span>, and hit <span style="color: orange;">Enter</span>.<br />
+Here you will change the option to <span style="color: orange;">Set static IP address and network configuration:</span> and hit the <span style="color: orange;">Spacebar</span> to apply that option. Then enter the fields for the IP address appropriately and hit <span style="color: orange;">Enter</span> to apply those settings:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-389 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04-300x240.png" alt="Set a Static IP on your ESX Host_04" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next scroll down to the <span style="color: orange;">DNS Configuration</span> option and hit <span style="color: orange;">Enter</span>.<br />
+Here enter the appropriate DNS information for your server:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-390 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05-300x240.png" alt="Set a Static IP on your ESX Host_05" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Hit <span style="color: orange;">Escape</span> to exit this screen and then hit <span style="color: orange;">Y</span> to apply the changes and restart the management network:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-391 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06-300x240.png" alt="Set a Static IP on your ESX Host_06" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Now hit <span style="color: orange;">Escape</span> again and you will be back at the main screen and you will now see the Static IP and some of the DNS information that you just configured:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-392 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07-300x240.png" alt="Set a Static IP on your ESX Host_07" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>You&#8217;re done, now you can go back to your computer, and access your ESXi host from the newly assigned IP.</p>
+]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>VMware ESXi 5.5.0 on Dell C2100 FS12-TY</title>
+		<link>/blog/vmware-esxi-5-5-0-on-dell-c2100-fs12-ty/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 17 Sep 2015 06:18:09 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[C2100]]></category>
+		<category><![CDATA[C2100 FS12-TY]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[dell server]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[ESXi 5.5.0]]></category>
+		<category><![CDATA[server]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<category><![CDATA[VMware ESXi 5.5.0]]></category>
+		<guid isPermaLink="false">/blog/?p=41</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3><span style="color: orange;">The Installation and Basic Configuration of VMware ESXi 5.5.0 on Dell C2100 FS12-TY</span></h3>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Server Specs:</p>
+<ul>
+<li>Dell PowerEdge C2100 FS12-TY</li>
+<li>2 x 2.13GHz Intel(R) Xeon(R) CPU E5506</li>
+<li>6 x 4GB RAM &#8211; Total 24GB&#8217;s of RAM</li>
+<li>RAID Controller &#8211; SAS 6iR
+<ul>
+<li>4 x 250GB WD RE 4 HDD&#8217;s</li>
+</ul>
+</li>
+</ul>
+<p>I have already set up my RAID Array as follows:</p>
+<ul>
+<li>2 x RAID-1 (mirror) Virtual Disks setup</li>
+</ul>
+<p>For this install I am using the <span style="color: orange;">Dell Customized Image</span> of ESX as it fixes known issues and loads drivers for Dell PowerEdge systems. Google if you don&#8217;t have the customized Image.</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>First you need to install the <span style="color: orange;">Dell Customized Image</span> onto a USB. I use Rufus on a Windows PC to do so. See the settings I chose for Rufus below:</p>
+<p style="text-align: center;">(Download <a href="https://rufus.akeo.ie/">Rufus</a>)</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_1.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-343 size-medium" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_1-211x300.png" alt="ESX_Install_Dell_C2100_1" width="211" height="300" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_1-211x300.png 211w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_1.png 365w" sizes="(max-width: 211px) 100vw, 211px" /></a></p>
+<p>&nbsp;</p>
+<p>Eject the USB from your OS and go plug it into your C2100 and boot it up.</p>
+<p>The first thing you will see when your USB is finally booting, after the BIOS and RAID controller info, is the following image:</p>
+<p>Hit <span style="color: orange;">(Enter)</span> on the Installer:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_2.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-344 size-medium" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_2-300x190.png" alt="ESX_Install_Dell_C2100_2" width="300" height="190" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_2-300x190.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_2-600x379.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_2.png 725w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next ESX will proceed to boot into the installer, you will see the following two screens load all the way through and disappear:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_3.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-345 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_3-300x241.png" alt="ESX_Install_Dell_C2100_3" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_3-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_3-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_3-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_3.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_4.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-346 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_4-300x241.png" alt="ESX_Install_Dell_C2100_4" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_4-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_4-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_4-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_4.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Once those two screens finish loading we will begin the installation.</p>
+<p>On the following screen hit <span style="color: orange;">(Enter)</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_5.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-347 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_5-300x241.png" alt="ESX_Install_Dell_C2100_5" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_5-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_5-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_5-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_5.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Then you will need to read through and agree to the EULA by hitting <span style="color: orange;">(F11)</span> to proceed with the installation:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_6.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-348 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_6-300x241.png" alt="ESX_Install_Dell_C2100_6" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_6-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_6-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_6-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_6.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>ESX will then scan attached devices that it can install on:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_7.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-349 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_7-300x241.png" alt="ESX_Install_Dell_C2100_7" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_7-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_7-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_7-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_7.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Select the USB drive that you inserted, not your Virtual Disks, and hit <span style="color: orange;">(Enter)</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_8.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-350 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_8-300x241.png" alt="ESX_Install_Dell_C2100_8" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_8-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_8-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_8-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_8.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>ESX will scan the drive again and then hit <span style="color: orange;">(Enter)</span> to confirm the USB drive will be overwritten:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_9.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-351 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_9-300x241.png" alt="ESX_Install_Dell_C2100_9" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_9-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_9-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_9-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_9.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_10.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-352 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_10-300x241.png" alt="ESX_Install_Dell_C2100_10" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_10-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_10-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_10-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_10.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next select your keyboard layout and hit <span style="color: orange;">(Enter)</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_11.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-353 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_11-300x241.png" alt="ESX_Install_Dell_C2100_11" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_11-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_11-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_11-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_11.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Type in the password for the root user twice and hit <span style="color: orange;">(Enter)</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_12.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-354 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_12-300x241.png" alt="ESX_Install_Dell_C2100_12" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_12-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_12-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_12-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_12.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>ESX will scan yet again, and when that is finished hit <span style="color: orange;">(F11)</span> to initiate the installation of ESX onto the USB:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_13.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-355 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_13-300x241.png" alt="ESX_Install_Dell_C2100_13" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_13-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_13-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_13-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_13.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_14.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-356 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_14-300x241.png" alt="ESX_Install_Dell_C2100_14" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_14-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_14-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_14-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_14.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>ESX will begin to install and once it is finished hit <span style="color: orange;">(Enter)</span> to reboot the server and complete the installation:</p>
+<p>This may take a couple minutes.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_15.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-357 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_15-300x241.png" alt="ESX_Install_Dell_C2100_15" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_15-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_15-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_15-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_15.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_16.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-358 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_16-300x241.png" alt="ESX_Install_Dell_C2100_16" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_16-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_16-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_16-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_16.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_17.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-359 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_17-300x241.png" alt="ESX_Install_Dell_C2100_17" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_17-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_17-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_17-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_17.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>After the reboot, ESX will boot into the following screen:</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: For this tutorial I have DHCP enabled so ESX already has an IP issued to it, but you will want to set this to a static IP for many reasons, so I have covered this in my post: <a href="/blog/set-a-static-ip-on-your-esx-host/">Set a Static IP on your ESX Host</a></span></h6>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_18.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-360 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_18-300x241.png" alt="ESX_Install_Dell_C2100_18" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_18-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_18-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_18-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_18.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now go back to your computer, open a web browser, and browse to the IP that we saw in the previous step and you will see the following page:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_19.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-361 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_19-300x163.png" alt="ESX_Install_Dell_C2100_19" width="300" height="163" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_19-300x163.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_19-600x325.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_19-1024x555.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_19.png 1920w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Click on the &#8220;<span style="color: #6699ff;">Download vSphere Client</span>&#8221; link and Install that on your local computer.</p>
+<p>Once <span style="color: orange;">VMware vSphere Client </span>is installed, open it, and fill in the fields appropriately.</p>
+<ul>
+<li style="text-align: left;">IP address / Name: <span style="color: orange;">IP of ESX Host</span></li>
+<li style="text-align: left;">User name: <span style="color: orange;">root</span></li>
+<li style="text-align: left;">Password: <span style="color: orange;">Password you created</span></li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_20.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-362 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_20-240x300.png" alt="ESX_Install_Dell_C2100_20" width="240" height="300" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_20-240x300.png 240w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_20.png 416w" sizes="(max-width: 240px) 100vw, 240px" /></a></p>
+<p>&nbsp;</p>
+<p>You will be prompted by a Security Warning, check the check-box for <span style="color: orange;">Install this certificate and do not display security warnings for &#8220;Your IP&#8221;.</span> Then click <span style="color: orange;">Ignore</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_21.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-363 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_21-300x159.png" alt="ESX_Install_Dell_C2100_21" width="300" height="159" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_21-300x159.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_21.png 506w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next you will come to a screen like the following:</p>
+<p>First thing you will need to do, is create a datastore. To do so, click on the blue link, <span style="color: orange;">click here to create a datastore&#8230;</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_22.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-364 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_22-300x163.png" alt="ESX_Install_Dell_C2100_22" width="300" height="163" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_22-300x163.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_22-600x325.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_22-1024x555.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_22.png 1920w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>This will bring up the following window, where you will choose the <span style="color: orange;">Disk/LUN</span> option and click <span style="color: orange;">Next</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_23.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-365 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_23-300x236.png" alt="ESX_Install_Dell_C2100_23" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_23-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_23-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_23.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Select one of the disks that you would like to create a datastore out of and click <span style="color: orange;">Next</span>:</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: I selected one of the two RAID-1 Arrays I set up prior to this tutorial</span></h6>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_24.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-366 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_24-300x236.png" alt="ESX_Install_Dell_C2100_24" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_24-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_24-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_24.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>On the next screen leave the <span style="color: orange;">VMFS-5</span> option selected and then click <span style="color: orange;">Next</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_25.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-338 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_25-300x236.png" alt="ESX_Install_Dell_C2100_25" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_25-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_25-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_25.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Confirm the disk layout settings by clicking <span style="color: orange;">Next</span>:</p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_26.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-339 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_26-300x236.png" alt="ESX_Install_Dell_C2100_26" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_26-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_26-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_26.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Name your datastore with a naming scheme that you see fit. I have named mine <span style="color: orange;">VM1-RAID1</span>. Then click <span style="color: orange;">Next</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_27.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-340 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_27-300x236.png" alt="ESX_Install_Dell_C2100_27" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_27-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_27-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_27.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Leave <span style="color: orange;">Maximum available space</span> selected, unless for some reason you are not applying all the RAID-1 to this host, and click <span style="color: orange;">Next</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_28.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-341 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_28-300x236.png" alt="ESX_Install_Dell_C2100_28" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_28-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_28-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_28.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click <span style="color: orange;">Finish</span> to create the datastore:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_29.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-342 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_29-300x236.png" alt="ESX_Install_Dell_C2100_29" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_29-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_29-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_29.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next we are going to add an image to the datastore so we can create Virtual Machines off of that image.</p>
+<p>In the <span style="color: orange;">VMware vSphere Client</span> click on the <span style="color: orange;">Configuration</span> tab and then click on <span style="color: orange;">Storage</span> under the Hardware Section.<br />
+Here you will right click on your new datastore and click <span style="color: orange;">Browse Datastore&#8230;</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_30.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-377 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_30-300x122.png" alt="ESX_Install_Dell_C2100_30" width="300" height="122" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_30-300x122.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_30-600x244.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_30-1024x416.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_30.png 1081w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Create a folder in the root of that drive named <span style="color: orange;">Images</span> and then click the <span style="color: orange;">Upload Icon</span> and choose <span style="color: orange;">Upload File&#8230;</span>:</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: You can also choose to set up an NFS datastore to store your .iso and other bootable files. If you choos to go that route you can skip this step. I have already covered how to accomplish this in my tutorial: <a href="/blog/how-to-create-and-esx-datastore-from-a-windows-nfs-share/">How to create and ESX Datastore from a Windows NFS Share</a></span></h6>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_31.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-379 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_31-300x137.png" alt="ESX_Install_Dell_C2100_31" width="300" height="137" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_31-300x137.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_31-600x274.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_31.png 888w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Once the .iso, for whatever OS you have chosen, has finished uploading, you will simply right-click on your host and select <span style="color: orange;">New Virtual Machine&#8230;</span>, and proceed to set up your VM according the the specs that you need.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_32.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-380 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_32-297x300.png" alt="ESX_Install_Dell_C2100_32" width="297" height="300" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_32-297x300.png 297w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_32.png 443w" sizes="(max-width: 297px) 100vw, 297px" /></a></p>
+<p>&nbsp;</p>
+<p>In the last step of creating the VM, where the tab on the left reads <span style="color: orange;">Ready To Complete</span> and you have a <span style="color: orange;">Finish</span> option, check the check box for <span style="color: orange;">&#8220;Edit the virtual machine settings before completion&#8221; </span>and then click <span style="color: orange;">Continue</span>.</p>
+<p>In the popup window you will need to browse to the <span style="color: orange;">New CD/DVD (Adding)</span> section and then select <span style="color: orange;">Datastore ISO File</span> to <span style="color: orange;">Connect at power on</span>. You are going to want to click <span style="color: orange;">Browse&#8230;</span> and browse to the .iso that you previously uploaded, then click <span style="color: orange;">Finish</span>.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_33.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-381 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_33-300x268.png" alt="ESX_Install_Dell_C2100_33" width="300" height="268" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_33-300x268.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_33-600x536.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_33.png 708w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>That is it, wait for your VM to create and then power it on.</p>
+<p>Once you power it on, you can open the console and set up network connectivity to the server as it meets your needs.</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: After you complete the installation of whatever OS you chose, you will want to go back into setting, and set either set this setting to &#8220;Client Device&#8221; or remove the check next to &#8220;Connect at power on&#8221;.</span></h6>
+<p>&nbsp;</p>
+<p>If you have any questions, please contact me through the site.</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

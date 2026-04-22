@@ -29,7 +29,7 @@ export default function NotFound() {
             <div className="flex items-start gap-2 mb-2">
               <Terminal className="w-4 h-4 text-accent shrink-0 mt-0.5" />
               <span className="text-ink-subtle break-all">
-                $ curl -I https://cv.michaelgroff.info{path}
+                $ curl -I https://michaelgroff.info{path}
               </span>
             </div>
             <p className="text-red-500/90 mb-1">HTTP/2 404 Not Found</p>

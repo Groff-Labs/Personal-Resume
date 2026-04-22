@@ -1,10 +1,10 @@
-# cv.michaelgroff.info
+# michaelgroff.info
 
 Personal CV / resume site for **Michael Groff**, AWS Sr. Solutions Architect.
 Migrated from a 2015-era WordPress install (The7 theme) to a static
 Next.js site on AWS.
 
-Live: **https://cv.michaelgroff.info** (prod) · **https://dev.cv.michaelgroff.info** (dev)
+Live: **https://michaelgroff.info** (prod) · **https://dev.michaelgroff.info** (dev)
 
 ## Stack
 
@@ -92,7 +92,7 @@ npx cdk deploy CvWebsite-dev
 #    → Paste that Name/Value into CloudFlare as a CNAME (DNS only, no proxy)
 
 # 5. After stack completes, add a CNAME in CloudFlare:
-#    dev.cv.michaelgroff.info → <DistributionDomainName from outputs>
+#    dev.michaelgroff.info → <DistributionDomainName from outputs>
 
 # 6. Build and ship the site
 cd ../frontend && npm ci && npm run build

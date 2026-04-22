@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Uncategorized &#8211; Michael Groff</title>
+	<atom:link href="/blog/category/uncategorized/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:02 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Redirect everything but robots.txt in IIS</title>
+		<link>/blog/redirect-everything-robots-txt-iis/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Sat, 30 Apr 2016 20:46:13 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<guid isPermaLink="false">/blog/?p=513</guid>
+
+					<description><![CDATA[You can use the following URL Rewrite rules to redirect everything but a robots.txt file from one domain to another.  Requirements IIS 7.0 or greater URL Rewrite 2.0 Explanation: There are actually three rules here and they are listed as follows: Robots.txt file rewrite &#8211; this rule says to do nothing when a request come&#8230;]]></description>
+										<content:encoded><![CDATA[<p><span style="color: orange;">You can use the following URL Rewrite rules to redirect everything but a robots.txt file from one domain to another. </span></p>
+<p>Requirements</p>
+<ul>
+<li>IIS 7.0 or greater</li>
+<li>URL Rewrite 2.0</li>
+</ul>
+<p>Explanation: There are actually three rules here and they are listed as follows:</p>
+<ul>
+<li>Robots.txt file rewrite &#8211; this rule says to do nothing when a request come through for domain.com/robots.txt</li>
+<li>Non-www &#8211; this rule redirects anything non-www.groffskiii.com to groffbox.com</li>
+<li>www &#8211; this rule redirects anything www.groffskiii.com to groffbox.com</li>
+</ul>
+<h3>Screenshot of Rules</h3>
+<p><img fetchpriority="high" decoding="async" class="aligncenter wp-image-543 size-full" src="/blog/wp-content/uploads/URL_rewrite_robots.txt.png" alt="URL_rewrite_robots.txt" width="1267" height="408" srcset="/blog/wp-content/uploads/URL_rewrite_robots.txt.png 1267w, /blog/wp-content/uploads/URL_rewrite_robots.txt-600x193.png 600w, /blog/wp-content/uploads/URL_rewrite_robots.txt-300x97.png 300w, /blog/wp-content/uploads/URL_rewrite_robots.txt-768x247.png 768w, /blog/wp-content/uploads/URL_rewrite_robots.txt-1024x330.png 1024w" sizes="(max-width: 1267px) 100vw, 1267px" /></p>
+<h3>Rules in text format</h3>
+<pre class="lang:vbnet decode:true">
+        <rewrite>
+            <rules>
+                <clear />
+                <rule name="Robots.txt file rewrite" stopProcessing="true">
+                    <match url="(.*)" />
+                    <conditions logicalGrouping="MatchAll" trackAllCaptures="false">
+                        <add input="{REQUEST_FILENAME}" pattern="robots\.txt$" />
+                    </conditions>
+                    <action type="None" />
+                </rule>
+                <rule name="Non-www" stopProcessing="true">
+                    <match url="(.*)" />
+                    <conditions logicalGrouping="MatchAll" trackAllCaptures="false">
+                        <add input="{HTTP_HOST}" pattern="^groffskiii\.com$" />
+                    </conditions>
+                    <action type="Redirect" url="http://groffbox.com/{R:1}" redirectType="Temporary" />
+                </rule>
+                <rule name="www" stopProcessing="true">
+                    <match url="(.*)" />
+                    <conditions logicalGrouping="MatchAll" trackAllCaptures="false">
+                        <add input="{HTTP_HOST}" pattern="^www\.groffskiii\.com$" />
+                    </conditions>
+                    <action type="Redirect" url="https://groffbox.com/{R:1}" redirectType="Temporary" />
+                </rule>
+            </rules>
+        </rewrite>
+</pre>
+]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Games &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/games/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:01 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Retro Gaming on Raspberry Pi</title>
+		<link>/blog/retro-gaming-raspberry-pi/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Mon, 06 Feb 2017 23:16:19 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Gaming]]></category>
+		<category><![CDATA[Raspberry Pi]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Games]]></category>
+		<category><![CDATA[N64]]></category>
+		<category><![CDATA[NES]]></category>
+		<category><![CDATA[Retro]]></category>
+		<category><![CDATA[Retro Pie]]></category>
+		<category><![CDATA[ROM]]></category>
+		<category><![CDATA[Sega]]></category>
+		<category><![CDATA[SNES]]></category>
+		<guid isPermaLink="false">/blog/?p=222</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I was recently asked to help someone build a &#8220;Retro Gaming System&#8221;. While thinking of the best way to do this, I figured that I would like to give them something that they can come back to and do this on their own; at anytime. There are plenty of other tutorials and ways to go about this, but this one is mine. Please leave any feedback through the site should you have any.</p>
+<h4>Parts List</h4>
+<ul>
+<li><a href="https://www.amazon.com/gp/product/B01C6EQNNK/ref=oh_aui_search_detailpage?ie=UTF8&amp;psc=1" target="_blank">Raspberry Pi 3</a> (Power supply and case are a given)</li>
+<li><a href="https://www.amazon.com/gp/product/B010Q57T02/ref=oh_aui_search_detailpage?ie=UTF8&amp;psc=1" target="_blank">Micro SD Card</a> (32GB or 64GB to fit all the roms)</li>
+<li>Controllers
+<ul>
+<li><a href="https://www.amazon.com/gp/product/B002YVD3KM/" target="_blank">NES</a> (dont buy these, just get 4 SNES controllers)</li>
+<li><a href="https://www.amazon.com/gp/product/B0034ZOAO0/ref=od_aui_detailpages00?ie=UTF8&amp;psc=1" target="_blank">SNES</a></li>
+<li><a href="https://www.amazon.com/dp/B008L3UUPS" target="_blank">N64</a></li>
+<li><a href="https://www.amazon.com/Hyperkin-Inc-Genesis-GN6-USB-Controller/dp/B00KX75UT6/ref=sr_1_1?ie=UTF8&amp;qid=1486422545&amp;sr=8-1&amp;keywords=sega+genesis+controller+USB" target="_blank">Sega Genesis</a></li>
+</ul>
+</li>
+</ul>
+<h4>Programs List</h4>
+<h5>Both</h5>
+<ul>
+<li>Latest Version of <a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank">Raspbian</a></li>
+</ul>
+<h5>Windows</h5>
+<ul>
+<li><a href="https://sourceforge.net/projects/win32diskimager/" target="_blank">Win32DiskImager</a></li>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">Putty</a> or <a href="https://puttytray.goeswhere.com/" target="_blank">PuttyTray</a></li>
+<li><a href="https://winscp.net/eng/docs/guide_install#downloading" target="_blank">WinSCP</a></li>
+</ul>
+<h5>Mac</h5>
+<ul>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">Putty</a></li>
+</ul>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>SD Card Configuration</h3>
+<p>Download the latest version of Raspbian, you can use torrent or HTTP to download this. Torrent will be quicker, but will require another program.</p>
+<p>The version at the time of this writing is <strong><em>Jesse</em></strong>. For this setup we will use the <strong>LITE</strong> version of Jesse as we do not need a Desktop GUI. This will help to save space on the SD Card among other things.</p>
+<p>You can find the latest version on <a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank">Raspberry Pi&#8217;s site</a>.</p>
+<p><img decoding="async" class="aligncenter wp-image-684 size-medium" src="/blog/wp-content/uploads/RetroPie1-300x165.png" width="300" height="165" srcset="/blog/wp-content/uploads/RetroPie1-300x165.png 300w, /blog/wp-content/uploads/RetroPie1.png 457w" sizes="(max-width: 300px) 100vw, 300px" /></p>
+<h4>Windows</h4>
+<p>Extract the zip that we just downloaded.</p>
+<p>Install Win32DiskImager utility if you don&#8217;t have it installed already. (You can download it on the utility from the <a href="http://sourceforge.net/projects/win32diskimager/" target="_blank">Sourceforge Project page</a>)</p>
+<p>Insert the SD Card into the PC.</p>
+<p>Run Win32DiskImager and select:</p>
+<ul>
+<li>Rapberry pi image we just extracted</li>
+<li>SD Card&#8217;s Drive Letter</li>
+</ul>
+<p>Select <strong>Write</strong>!</p>
+<p><img decoding="async" class="aligncenter wp-image-685 size-medium" src="/blog/wp-content/uploads/RetroPie2-300x153.png" width="300" height="153" srcset="/blog/wp-content/uploads/RetroPie2-300x153.png 300w, /blog/wp-content/uploads/RetroPie2.png 407w" sizes="(max-width: 300px) 100vw, 300px" /></p>
+<p>Safely Eject the USB Drive and remove it from the PC</p>
+<p>Insert the SD Card into the Raspberry Pi.</p>
+<h4>Mac</h4>
+<p>Extract the zip that we just downloaded.</p>
+<p>Insert the SD Card into the PC.</p>
+<p>Follow this artcle provided by <a href="https://www.raspberrypi.org/documentation/installation/installing-images/mac.md" target="_blank">Raspberry Pi</a></p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Raspbian Initial Installation &amp; Configuration</h3>
+<p>Plug a Keyboard into one of the USB slots, a Monitor/TV into the HDMI slot and an Ethernet Cable into your Raspberry Pi. We will be downloading packages from the internet and using SSH for some of this, so Ethernet is required. (Note: You can use WiFi if you want, but that will not be covered in this tutorial, more info <a href="https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md" target="_blank">here</a>)</p>
+<p>Power on your Pi by plugging the Micro USB Power Cable in.</p>
+<p>You will see your Pi boot into a notification that the File System is being resized. This is an automated feature that expands the filesystem to take up your entire SD Card upon the first boot. The server will then reboot.</p>
+<p>After the reboot completes, you can now login with the following credentials:</p>
+<ul>
+<li><strong>Username</strong>: pi</li>
+<li><strong>Password</strong>: raspberry</li>
+</ul>
+<p>First things first, lets update that password, you can do so by entering the following:</p>
+<pre class="lang:sh decode:true">sudo passwd pi</pre>
+<p>Here you will enter your new password twice to confirm it has been entered correctly.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie3.png"><img decoding="async" class="aligncenter wp-image-693 size-full" src="/blog/wp-content/uploads/RetroPie3.png" width="268" height="63" /></a></p>
+<p>Run</p>
+<pre class="lang:sh decode:true">sudo raspi-config</pre>
+<p>Select &#8211; <strong>1 &#8211; Expand Filesystem</strong>, Hit [Enter] and proceed through the steps to get back to the selection screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie4.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-694 size-medium" src="/blog/wp-content/uploads/RetroPie4-300x108.png" width="300" height="108" srcset="/blog/wp-content/uploads/RetroPie4-300x108.png 300w, /blog/wp-content/uploads/RetroPie4-600x216.png 600w, /blog/wp-content/uploads/RetroPie4-768x277.png 768w, /blog/wp-content/uploads/RetroPie4.png 893w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Generate proper locales. (This step is for persons with ANSI/USA Keyboards)</p>
+<p>Select &#8211; <strong>4 &#8211; </strong><strong>Localisation Options </strong>&gt;<strong> I1 &#8211; Change Locale </strong>&gt; Deselect <strong>en_GB.UTF-8 UTF-8 </strong>and select <strong>en_US.UTF-8 UTF-8</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie23.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-757 size-medium" src="/blog/wp-content/uploads/RetroPie23-300x190.png" width="300" height="190" srcset="/blog/wp-content/uploads/RetroPie23-300x190.png 300w, /blog/wp-content/uploads/RetroPie23-600x381.png 600w, /blog/wp-content/uploads/RetroPie23-768x487.png 768w, /blog/wp-content/uploads/RetroPie23-1024x650.png 1024w, /blog/wp-content/uploads/RetroPie23.png 1565w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie24.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-756 size-medium" src="/blog/wp-content/uploads/RetroPie24-300x55.png" width="300" height="55" srcset="/blog/wp-content/uploads/RetroPie24-300x55.png 300w, /blog/wp-content/uploads/RetroPie24-600x110.png 600w, /blog/wp-content/uploads/RetroPie24-768x141.png 768w, /blog/wp-content/uploads/RetroPie24-1024x188.png 1024w, /blog/wp-content/uploads/RetroPie24.png 1415w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Change the keyboard layout</p>
+<p>Select &#8211; <strong>4 &#8211; </strong><strong>Localisation Options </strong>&gt;<strong> I1 &#8211; Change Keyboard Layout </strong>&gt; <strong>Generic 101-Key PC</strong> &gt; <strong>Other </strong>&gt; <strong>English (US) </strong>&gt;<strong> Enter </strong>&gt;<strong> Enter</strong></p>
+<p>Select &#8211; <strong>7 &#8211; Advanced Options </strong>&gt;<strong>  A2 &#8211; Hostname</strong> Enter a new hostname for this Pi:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie5.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-696 size-medium" src="/blog/wp-content/uploads/RetroPie5-300x226.png" width="300" height="226" srcset="/blog/wp-content/uploads/RetroPie5-300x226.png 300w, /blog/wp-content/uploads/RetroPie5.png 447w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Select &#8211; <strong>7 &#8211; Advanced Options &gt;  A3 &#8211; Memory Split</strong> Change the value to 128 if you have a Pi 3:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie6.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-698 size-medium" src="/blog/wp-content/uploads/RetroPie6-300x194.png" width="300" height="194" srcset="/blog/wp-content/uploads/RetroPie6-300x194.png 300w, /blog/wp-content/uploads/RetroPie6.png 514w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Select &#8211; <strong>5 &#8211; Interfacing Options &gt;  P2 &#8211; SSH &gt; Yes </strong>Enable SSH so we can access the Pi remotely:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie7.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-701 size-medium" src="/blog/wp-content/uploads/RetroPie7-300x224.png" width="300" height="224" srcset="/blog/wp-content/uploads/RetroPie7-300x224.png 300w, /blog/wp-content/uploads/RetroPie7.png 444w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Change anything else you see fit, select <strong>Finish</strong> and reboot your Pi:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie8.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-702 size-medium" src="/blog/wp-content/uploads/RetroPie8-300x223.png" width="300" height="223" srcset="/blog/wp-content/uploads/RetroPie8-300x223.png 300w, /blog/wp-content/uploads/RetroPie8.png 443w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>After the reboot completes, log back in at the console one more time,</p>
+<p>run</p>
+<pre class="lang:sh decode:true">ip a</pre>
+<p>and get the IP from the Ethernet connection labeled <strong>eth0</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie9.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-703 size-medium" src="/blog/wp-content/uploads/RetroPie9-300x102.png" width="300" height="102" srcset="/blog/wp-content/uploads/RetroPie9-300x102.png 300w, /blog/wp-content/uploads/RetroPie9-600x204.png 600w, /blog/wp-content/uploads/RetroPie9.png 760w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Remember or write down that IP, then type in</p>
+<pre class="lang:sh decode:true">logout</pre>
+<p>to logout.</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Install RetroPie</h3>
+<p>From your computer, open Putty and enter the IP you got from the last step and click <strong>Open</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie10.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-709 size-medium" src="/blog/wp-content/uploads/RetroPie10-300x300.png" width="300" height="300" srcset="/blog/wp-content/uploads/RetroPie10-300x300.png 300w, /blog/wp-content/uploads/RetroPie10-200x200.png 200w, /blog/wp-content/uploads/RetroPie10-150x150.png 150w, /blog/wp-content/uploads/RetroPie10.png 452w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>If you receive a certificate warning, ignore it and proceed.</p>
+<p>Enter your username and password to login. You will then see a nice blank screen as follows:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie11.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-710 size-medium" src="/blog/wp-content/uploads/RetroPie11-300x201.png" width="300" height="201" srcset="/blog/wp-content/uploads/RetroPie11-300x201.png 300w, /blog/wp-content/uploads/RetroPie11-600x403.png 600w, /blog/wp-content/uploads/RetroPie11.png 609w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Time to update your Pi!</p>
+<p>Run</p>
+<pre class="lang:sh decode:true">sudo apt-get update &amp;&amp; sudo apt-get upgrade -y</pre>
+<p>This may take take some time, so feel free to walk away for 5 minutes or so and come back.</p>
+<p>Install the prerequisites for RetroPie:</p>
+<pre class="lang:sh decode:true">sudo apt-get install -y git dialog lsb-release</pre>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie12.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-713 size-thumbnail" src="/blog/wp-content/uploads/RetroPie12-150x150.png" width="150" height="150" srcset="/blog/wp-content/uploads/RetroPie12-150x150.png 150w, /blog/wp-content/uploads/RetroPie12-300x300.png 300w, /blog/wp-content/uploads/RetroPie12-200x200.png 200w" sizes="(max-width: 150px) 100vw, 150px" /></a><br />
+Download the latest version RetroPie and begin the installation:</p>
+<pre class="lang:sh decode:true">cd
+git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+cd RetroPie-Setup
+chmod +x retropie_setup.sh
+sudo ./retropie_setup.sh</pre>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie13.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-715 size-medium" src="/blog/wp-content/uploads/RetroPie13-300x103.png" width="300" height="103" srcset="/blog/wp-content/uploads/RetroPie13-300x103.png 300w, /blog/wp-content/uploads/RetroPie13.png 580w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>After this runs, a GUI portion of this install will begin.</p>
+<p>When it comes to the following screen, Select <strong>OK. </strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie14.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-716 size-medium" src="/blog/wp-content/uploads/RetroPie14-300x222.png" width="300" height="222" srcset="/blog/wp-content/uploads/RetroPie14-300x222.png 300w, /blog/wp-content/uploads/RetroPie14.png 462w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Select <strong>Basic Install </strong>&gt; <strong>Yes</strong></p>
+<p>This will run through an install, it will take some time.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie15.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-719 size-medium" src="/blog/wp-content/uploads/RetroPie15-300x193.png" width="300" height="193" srcset="/blog/wp-content/uploads/RetroPie15-300x193.png 300w, /blog/wp-content/uploads/RetroPie15.png 569w" sizes="(max-width: 300px) 100vw, 300px" /><img loading="lazy" decoding="async" class="aligncenter wp-image-720 size-medium" src="/blog/wp-content/uploads/RetroPie16-300x191.png" width="300" height="191" srcset="/blog/wp-content/uploads/RetroPie16-300x191.png 300w, /blog/wp-content/uploads/RetroPie16.png 566w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Once that completes, select <strong>Configuration / Tools </strong>&gt;<strong> 802 &#8211; autostart </strong>&gt;<strong> 1 &#8211; Start Emulation Station at boot</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie17.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-728 size-medium" src="/blog/wp-content/uploads/RetroPie17-300x192.png" width="300" height="192" srcset="/blog/wp-content/uploads/RetroPie17-300x192.png 300w, /blog/wp-content/uploads/RetroPie17.png 564w" sizes="(max-width: 300px) 100vw, 300px" /></a> <a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie18.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-727 size-medium" src="/blog/wp-content/uploads/RetroPie18-300x192.png" width="300" height="192" srcset="/blog/wp-content/uploads/RetroPie18-300x192.png 300w, /blog/wp-content/uploads/RetroPie18.png 565w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Install drivers by selecting: <strong>Manage Packages </strong>&gt; <strong>Manage Driver Packages </strong>&gt; <strong>Install/Update all driver packages from binary</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie19.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-729 size-medium" src="/blog/wp-content/uploads/RetroPie19-300x191.png" width="300" height="191" srcset="/blog/wp-content/uploads/RetroPie19-300x191.png 300w, /blog/wp-content/uploads/RetroPie19.png 569w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Finally, reboot the Pi!</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie20.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-731 size-medium" src="/blog/wp-content/uploads/RetroPie20-300x193.png" width="300" height="193" srcset="/blog/wp-content/uploads/RetroPie20-300x193.png 300w, /blog/wp-content/uploads/RetroPie20.png 564w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>ROM Installation</h3>
+<h4>Windows</h4>
+<p>Now it&#8217;s time to move ROM&#8217;s you own, to the Pi. You don&#8217;t own any ROMs? Don&#8217;t worry, you&#8217;re resourceful and I have a link for you to <a href="http://lmgtfy.com/?q=Free+Roms+for+emulators" target="_blank">Follow</a>.</p>
+<p>Install <a href="https://winscp.net/eng/docs/guide_install" target="_blank">WinSCP</a> if it is not installed already.</p>
+<p>Run WINSCP.</p>
+<p>Connect to your Pi with the IP from earlier and the password you configured as such:</p>
+<h4><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie21.png" target="_blank"><img loading="lazy" decoding="async" class="aligncenter wp-image-737 size-medium" src="/blog/wp-content/uploads/RetroPie21-280x300.png" width="280" height="300" srcset="/blog/wp-content/uploads/RetroPie21-280x300.png 280w, /blog/wp-content/uploads/RetroPie21.png 361w" sizes="(max-width: 280px) 100vw, 280px" /></a></h4>
+<p>Navigate to <strong>RetroPie</strong> &gt; <strong>roms </strong>and you will find a list of all the available systems that you can play.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie22.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-755 size-medium" src="/blog/wp-content/uploads/RetroPie22-226x300.png" width="226" height="300" srcset="/blog/wp-content/uploads/RetroPie22-226x300.png 226w, /blog/wp-content/uploads/RetroPie22.png 529w" sizes="(max-width: 226px) 100vw, 226px" /></a></p>
+<p>For this tutorial, we will be dropping roms in:</p>
+<ul>
+<li>megadrive (Sega Genesis)</li>
+<li>n64 (Nintendo 64)</li>
+<li>nes (Nintendo Entertainment System)</li>
+<li>snes (Super Nintendo Entertainment System)</li>
+</ul>
+<p>Now you will simply drag and drop your ROMs into the desired destination.</p>
+<p>Once all the ROMs have finished moving, reboot your Pi and go back to it.</p>
+<h4>Mac</h4>
+<p>(to come at a later date&#8230;)</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Time to Play!</h3>
+<p>If you have not rebooted since adding the ROMs, do so now.</p>
+<pre class="lang:sh decode:true">sudo reboot</pre>
+<p>Now that your Pi has been configured and has ROMs on it, you are ready to configure your controller and start playing.</p>
+<p>When your Pi reboots, if you set it up to auto-run as described, it should be up and running after the reboot.</p>
+<p>&nbsp;</p>
+<h4>Controller Configurations are as follows:</h4>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>NES</h4>
+<p>Hold a Random Button to start.</p>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>D-PAD UP</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>D-PAD DOWN</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>D-PAD LEFT</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>D-PAD RIGHT</td>
+</tr>
+<tr>
+<td>START</td>
+<td>START</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>SELECT</td>
+</tr>
+<tr>
+<td>A</td>
+<td>A</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+</tr>
+<tr>
+<td>X</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+<h4></h4>
+<h4>SNES</h4>
+<p>Hold a Random Button to start.</p>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>D-PAD UP</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>D-PAD DOWN</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>D-PAD LEFT</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>D-PAD RIGHT</td>
+</tr>
+<tr>
+<td>START</td>
+<td>START</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>SELECT</td>
+</tr>
+<tr>
+<td>A</td>
+<td>A</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+</tr>
+<tr>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>LEFT SHOULDER</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>RIGHT SHOULDER</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>N64 &#8211; (Mupen64plus)</h4>
+<p>Hold a Random Button to start.</p>
+<h6>NOTE: On this controller, I sacrifice the LEFT TRIGGER for SELECT so it can be used to exit the emulator in conjunction with the start button.</h6>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>D-PAD UP</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>D-PAD DOWN</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>D-PAD LEFT</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>D-PAD RIGHT</td>
+</tr>
+<tr>
+<td>START</td>
+<td>START</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>A</td>
+<td>C-DOWN</td>
+</tr>
+<tr>
+<td>B</td>
+<td>A</td>
+</tr>
+<tr>
+<td>X</td>
+<td>C-LEFT</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>B</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>Z</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>RIGHT SHOULDER</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>LEFT SHOULDER</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>ANALOG STICK UP</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>ANALOG STICK DOWN</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>ANALOG STICK LEFT</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>ANALOG STICK RIGHT</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>C-UP</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>C-RIGHT</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+<h5>Sega Genesis</h5>
+<p>Hold a Random Button to start.</p>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>START</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>A</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>B</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>X</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>NOT TESTED</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>Hotkeys and special buttons of Note</h4>
+<table style="width: 50%;" border="1">
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT + START</td>
+<td>Exit emulator.</td>
+</tr>
+<tr>
+<td>SELECT + L1</td>
+<td>Load state.</td>
+</tr>
+<tr>
+<td>SELECT + R1</td>
+<td>Save state.</td>
+</tr>
+<tr>
+<td>THUMB LEFT</td>
+<td>Enable memory expansion pak.</td>
+</tr>
+<tr>
+<td>THUMB RIGHT</td>
+<td>Enable rumble expansion pak.</td>
+</tr>
+</tbody>
+</table>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Further RetroPie Configurations</h3>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h1 style="text-align: center;">ENJOY!</h1>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>References:</h3>
+<p><a href="https://github.com/retropie/retropie-setup/wiki/manual-installation" target="_blank">RetroPie Github Manual Installation Page</a></p>
+<p><a href="https://www.raspberrypi.org/documentation/installation/installing-images/README.md" target="_blank">Raspberry Pi Installation Guide</a></p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Datastore &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/datastore/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:02 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>How to create an ESX Datastore from a Windows NFS Share</title>
+		<link>/blog/how-to-create-an-esx-datastore-from-a-windows-nfs-share/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Sun, 16 Aug 2015 00:21:07 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[2012]]></category>
+		<category><![CDATA[2012R2]]></category>
+		<category><![CDATA[Datastore]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[dell server]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[ESXi 5.5.0]]></category>
+		<category><![CDATA[NFS]]></category>
+		<category><![CDATA[Server 2012]]></category>
+		<category><![CDATA[VMware ESXi 5.5.0]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[Windows Share]]></category>
+		<guid isPermaLink="false">/blog/?p=259</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Would you like to be able to have a Datastore full of all your .iso&#8217;s and other bootable files?</h3>
+
+		</div>
+	</div>
+<div class="hr-thin style-line accent-border-color" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4><span style="color: orange;">Well we can accomplish that by setting up an NFS Share in Windows!</span></h4>
+<p>First off we are going to need to set up an NFS Share on your Windows Server. To do this you need to make sure that you have the <span style="color: orange;">Server for NFS Role</span> Installed, it is listed under the <span style="color: orange;">File and Storage Services &gt; File and iSCSI Services</span> Role. If you do not already have this installed. Install it now, it will not need a reboot.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/NFShowto1.png" data-dt-img-description=""><img fetchpriority="high" decoding="async" class=" size-medium wp-image-280 aligncenter" src="/blog/wp-content/uploads/NFShowto1-300x175.png" alt="NFShowto1" width="300" height="175" srcset="/blog/wp-content/uploads/NFShowto1-300x175.png 300w, /blog/wp-content/uploads/NFShowto1-600x350.png 600w, /blog/wp-content/uploads/NFShowto1-1024x598.png 1024w, /blog/wp-content/uploads/NFShowto1.png 1382w" sizes="(max-width: 300px) 100vw, 300px" /></a>Now to set up the NFS Share.</p>
+<p>I created a new folder on the C:\ Drive labeled: <span style="color: orange;">NFS-VMstorage</span>. Right click on the Folder and choose<span style="color: orange;">NFS Sharing</span> tab &gt; <span style="color: orange;">Manage NFS Sharing</span>. Here you just simply need to check the <span style="color: orange;">Share this folder</span> check box and click <span style="color: orange;">Apply</span>.</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: Do not use SPACES in your NFS Directories Name, you will get an error and it will not share.</span></h6>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/NFShowto2.png" data-dt-img-description=""><img decoding="async" class=" size-medium wp-image-281 aligncenter" src="/blog/wp-content/uploads/NFShowto2-300x175.png" alt="NFShowto2" width="300" height="175" srcset="/blog/wp-content/uploads/NFShowto2-300x175.png 300w, /blog/wp-content/uploads/NFShowto2-600x350.png 600w, /blog/wp-content/uploads/NFShowto2-1024x598.png 1024w, /blog/wp-content/uploads/NFShowto2.png 1382w" sizes="(max-width: 300px) 100vw, 300px" /></a><br />
+*<sup>1</sup> And then I created a Text File in that Directory for testing, you will see this at the end.</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line accent-border-color" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4><span style="color: orange;">Now get into yor vSphere Client and navigate to the Host&#8217;s Configuration tab</span></h4>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/NFShowto8.png" data-dt-img-description=""><img decoding="async" class=" size-medium wp-image-288 aligncenter" src="/blog/wp-content/uploads/NFShowto8-300x94.png" alt="NFShowto8" width="300" height="94" srcset="/blog/wp-content/uploads/NFShowto8-300x94.png 300w, /blog/wp-content/uploads/NFShowto8-600x188.png 600w, /blog/wp-content/uploads/NFShowto8-1024x321.png 1024w, /blog/wp-content/uploads/NFShowto8.png 1698w" sizes="(max-width: 300px) 100vw, 300px" /></a><br />
+You are going to want to choose <span style="color: orange;">Network File System</span> and click <span style="color: orange;">Next</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/NFShowto3.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-282 aligncenter" src="/blog/wp-content/uploads/NFShowto3-300x235.png" alt="NFShowto3" width="300" height="235" srcset="/blog/wp-content/uploads/NFShowto3-300x235.png 300w, /blog/wp-content/uploads/NFShowto3-600x469.png 600w, /blog/wp-content/uploads/NFShowto3.png 752w" sizes="(max-width: 300px) 100vw, 300px" /></a><br />
+And here you will put in the servers IP for the <span style="color: orange;">Server:</span> field and the folder name that you created on your C:\ Drive in the <span style="color: orange;">Folder:</span> field. <span style="color: orange;">Datastore Name</span> is totally up to you, I use the same as the folder name for easy identification.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/NFShowto4.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-283 aligncenter" src="/blog/wp-content/uploads/NFShowto4-300x235.png" alt="NFShowto4" width="300" height="235" srcset="/blog/wp-content/uploads/NFShowto4-300x235.png 300w, /blog/wp-content/uploads/NFShowto4-600x469.png 600w, /blog/wp-content/uploads/NFShowto4.png 752w" sizes="(max-width: 300px) 100vw, 300px" /></a>Verify all your settings and click <span style="color: orange;">Finish</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/NFShowto5.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-284 aligncenter" src="/blog/wp-content/uploads/NFShowto5-300x235.png" alt="NFShowto5" width="300" height="235" srcset="/blog/wp-content/uploads/NFShowto5-300x235.png 300w, /blog/wp-content/uploads/NFShowto5-600x469.png 600w, /blog/wp-content/uploads/NFShowto5.png 752w" sizes="(max-width: 300px) 100vw, 300px" /></a>Now browse the Datastore from your vSphere Client and you will be able to <span style="color: orange;">READ</span> anything from that share, so your VM&#8217;s will be able to use this files to boot from, etc.</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: If you want to be able to write to this folder from esx, you will need to go back and change the permissions in the <span style="color: orange;">NFS Sharing</span> tab</span></h6>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/NFShowto7.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-286 aligncenter" src="/blog/wp-content/uploads/NFShowto7-300x175.png" alt="NFShowto7" width="300" height="175" srcset="/blog/wp-content/uploads/NFShowto7-300x175.png 300w, /blog/wp-content/uploads/NFShowto7-600x350.png 600w, /blog/wp-content/uploads/NFShowto7-1024x598.png 1024w, /blog/wp-content/uploads/NFShowto7.png 1382w" sizes="(max-width: 300px) 100vw, 300px" /></a> <a class="dt-single-image" href="/blog/wp-content/uploads/NFShowto6.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-285 aligncenter" src="/blog/wp-content/uploads/NFShowto6-300x120.png" alt="NFShowto6" width="300" height="120" srcset="/blog/wp-content/uploads/NFShowto6-300x120.png 300w, /blog/wp-content/uploads/NFShowto6-600x241.png 600w, /blog/wp-content/uploads/NFShowto6-1024x411.png 1024w, /blog/wp-content/uploads/NFShowto6.png 1171w" sizes="(max-width: 300px) 100vw, 300px" /></a><br />
+*<sup>1</sup> And now you can see the test text file that I created previously. <span style="color: orange;">Baaaaaaaaaaaaaaaaaaaaaammmm!.txt</span></p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line accent-border-color" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Or you could just avoid all of this GUI stuff, SSH in and run the following command:</p>
+<p>Generic: <span style="color: orange;">esxcli storage nfs add -H <em>NFS_IP|NFS_HOSTNAME</em> -s <em>Share_mount_point_on_the_NFS</em> -v <em>DatastoreName</em></span></p>
+<p>My Command: <span style="color: orange;">esxcli storage nfs add -H 192.168.0.168 -s NFS-VMstorage -v NFS-VMstorage</span></p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line accent-border-color" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3><span style="color: orange;">EXTRA: Set up NFS with Read-WRITE Permission for ESXi Host</span></h3>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: I have only tested sharing with restrictive permissions (to a single box) while both the ESXi Host and the Windows 2012 Server are joined to the same Domain. I&#8217;m sure if you can get DNS to resolve, you should be fine. </span></h6>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE II: This part did require a reboot for me.</span></h6>
+<p>After you have followed the steps above, log back into the server that your NFS share is on and browse to the share directory and select <span style="color: orange;">Properties &gt; NFS Sharings &gt; Manage NFS Sharing &gt;Permissions &gt; Add</span> then add the esxi host with Read-Write Permissions.<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/NFShowto-Bonus.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-318 aligncenter" src="/blog/wp-content/uploads/NFShowto-Bonus-297x300.png" alt="NFShowto-Bonus" width="297" height="300" srcset="/blog/wp-content/uploads/NFShowto-Bonus-297x300.png 297w, /blog/wp-content/uploads/NFShowto-Bonus-600x606.png 600w, /blog/wp-content/uploads/NFShowto-Bonus.png 647w" sizes="(max-width: 297px) 100vw, 297px" /></a></p>
+<p>After doing this I was able to move data to this datastore from other datastores.  I mainly used this to house my Template VM&#8217;s for labs, but there are plenty of scenarios in which it can be useful.</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

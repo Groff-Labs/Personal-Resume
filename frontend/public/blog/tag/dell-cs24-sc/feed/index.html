@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Dell CS24-SC &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/dell-cs24-sc/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:03 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Fix Java Auth Error for KVM for Dell CS24-SC and other servers&#8230;</title>
+		<link>/blog/fix-java-auth-error-for-kvm-for-dell-cs24-sc-and-other-servers/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Sat, 15 Aug 2015 14:19:33 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Windows PC]]></category>
+		<category><![CDATA[Authentication Failure]]></category>
+		<category><![CDATA[BMC]]></category>
+		<category><![CDATA[Console]]></category>
+		<category><![CDATA[Dell CS24-SC]]></category>
+		<category><![CDATA[dell server]]></category>
+		<category><![CDATA[IOException]]></category>
+		<category><![CDATA[Java]]></category>
+		<category><![CDATA[KVM]]></category>
+		<guid isPermaLink="false">/blog/?p=257</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Is the KVM Console not working cause of damn Java?</h3>
+<p style="text-align: center;">Do you get the following <span style="color: orange;">&#8220;IOException &#8211; Authentication Failure!&#8221;</span> error when you are just simply trying to connect to your server (CS24-SC) via the built in KVM/Console in BMC? &#8211; Turns out this is a <span style="color: green; font-weight: bold;"><span style="font-size: large;">really easy</span></span> fix</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/JavaFix2.jpg" data-dt-img-description=""><img fetchpriority="high" decoding="async" class=" size-medium wp-image-270 alignleft" src="/blog/wp-content/uploads/JavaFix2-300x211.jpg" alt="JavaFix2" width="300" height="211" srcset="/blog/wp-content/uploads/JavaFix2-300x211.jpg 300w, /blog/wp-content/uploads/JavaFix2-600x421.jpg 600w, /blog/wp-content/uploads/JavaFix2.jpg 872w" sizes="(max-width: 300px) 100vw, 300px" /></a> <a class="dt-single-image" href="/blog/wp-content/uploads/JavaFix1.jpg" data-dt-img-description=""><img decoding="async" class=" size-medium wp-image-269 alignright" src="/blog/wp-content/uploads/JavaFix1-300x225.jpg" alt="JavaFix1" width="300" height="225" srcset="/blog/wp-content/uploads/JavaFix1-300x225.jpg 300w, /blog/wp-content/uploads/JavaFix1-600x450.jpg 600w, /blog/wp-content/uploads/JavaFix1.jpg 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 42px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4><span style="color: orange;">It turns out you&#8217;re just using the wrong version of Java&#8230;</span></h4>
+<p style="text-align: left;">You will need to install the 32 bit version of Java. Since the CS24-SC is older hardware, Java updates will likely break your remote access. In the case that you have updated Java or for some reasons the KVM just stopped working, you should roll back your Java version. I have found success with Java 7 Version 55 and 51, I have seen others have success with most other versions of 7, but this is working for me, so why change it. I&#8217;ve put a link to the java archive below:</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE:Also make sure you are opening your .jnlp file with javaws.exe if you continue to see this error after installing the 32bit version. This may happen if you have both 64bit and 32bit versions installed.</span></h6>
+<p style="text-align: center;"><a href="http://www.oracle.com/technetwork/java/archive-139210.html" class="btn-shortcode dt-btn-m dt-btn default-btn-color default-btn-hover-color default-btn-bg-color default-btn-bg-hover-color" target="_blank" id="dt-btn-1" rel="noopener"><span>Java Archive</span></a></p>
+<p style="text-align: center;"><a class="dt-single-image" href="/blog/wp-content/uploads/JavaFix4.png" data-dt-img-description=""><img decoding="async" class="alignnone wp-image-316 size-large" src="/blog/wp-content/uploads/JavaFix4-1024x768.png" alt="JavaFix4" width="1024" height="768" srcset="/blog/wp-content/uploads/JavaFix4.png 1024w, /blog/wp-content/uploads/JavaFix4-600x450.png 600w, /blog/wp-content/uploads/JavaFix4-300x225.png 300w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Install and Setup Plex on FreeNAS</title>
+		<link>/blog/install-and-setup-plex-on-freenas/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 30 Jun 2015 08:11:41 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[CS24-SC]]></category>
+		<category><![CDATA[Dell CS24-SC]]></category>
+		<category><![CDATA[FreeNAS]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Movie Server]]></category>
+		<category><![CDATA[Movies]]></category>
+		<category><![CDATA[Plex Media Server]]></category>
+		<category><![CDATA[Plex Server]]></category>
+		<guid isPermaLink="false">/blog/?p=227</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="text-align: center;"><span style="color: orange;">NOTE: This how-to assumes that you have set up you FreeNAS installation according to the instructions shown in my tutorial: <span style="text-decoration: underline;"><a href="/blog/install-and-setup-freenas-on-dell-cs24-sc/">Install and Setup FreeNAS on Dell CS24-SC</a></span></span></h4>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Setting up a Share</h3>
+<p>First we are going to need to set up a share(I did cover this in my Install and Setup FreeNAS on Dell CS24-SC tutorial, so you can skip if you already followed that).</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: I have chosen to use CIFS, as I am going this from a Windows Machine.</span></h6>
+<p>Navigate to your FreeNAS IP and login, then expand &#8220;<strong>Services</strong>&#8221; on the side and click on &#8220;<strong>CIFS&#8221; </strong>and it will bring up the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install16.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-147 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install16-300x169.png" alt="FreeNas Install16" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install16-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install16-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install16-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install16.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>You can choose what to put in all these fields, just make sure you check and IP to bind it to at the bottom. Next go back to the left side of the screen and click on &#8220;<strong>Control Services</strong>&#8221; under the &#8220;<strong>Services</strong>&#8221; section.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install17.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-148 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install17-300x169.png" alt="FreeNas Install17" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install17-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install17-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install17-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install17.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you will need to turn &#8220;<strong>CIFS</strong>&#8221; on. Now we will need to add a CIFS share onto FreeNAS, first expand &#8220;<strong>Sharing</strong>&#8221; then expand &#8220;<strong>Windows (CIFS) Shares</strong>&#8221; and click on &#8220;<strong>Add Windows (CIFS) Share</strong>&#8221;<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install18.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-149 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install18-300x169.png" alt="FreeNas Install18" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install18-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install18-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install18-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install18.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>I am choosing to share the root of my &#8220;<strong>Volume0</strong>&#8221; and I decided to name the share &#8220;<strong>FreeNASROOT</strong>&#8221;</p>
+<p>After this is done bring up Windows Explorer and verify that you can access the share. For me I had to type in \\FreeNAS or \\192.168.0.91 in my explorer bar. Once it connected I saw the share &#8220;<strong>FreeNASROOT</strong>&#8221; and when i selected that I was asked for creds to access the share, enter the root creds you use to log into the WebGUI as we have not created any users at this time.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install24.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-206 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install24-300x227.png" alt="FreeNas Install24" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install24-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install24-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install24.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: center;"><span style="color: orange;">**I am not covering users and user permissions in this how-to, but it is pretty simple and you should always create a user so you are not doing everything as the root user**</span></p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Installing Plex</h3>
+<p>FreeNAS makes this pretty damn easy. Simply click on the &#8220;<strong>Plugins</strong>&#8221; tab and wait for it to load.</p>
+<p>Once its loaded you will see something along the lines of the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install19.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-158 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install19-300x169.png" alt="FreeNas Install19" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install19-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install19-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install19-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install19.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you need to scroll down to &#8220;<strong>PlexMediaServer</strong>&#8221; select it, then click &#8220;<strong>Install</strong>&#8221; at the bottom of the page. You will get a popup notification that reads &#8220;Are you sure you want to install &#8220;PlexMediaServer&#8221; plugin?&#8221; Click &#8220;<strong>OK</strong>&#8221; and it will proceed with the install and configurations.<br />
+Now we need to configure what IP Plex will listen on. You can do this by expanding the &#8220;<strong>Jails</strong>&#8221; tab and then expand &#8220;<strong>plexmediaserver_1</strong>&#8221; and now click &#8220;<strong>edit</strong>&#8221;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install21.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-161 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install21-300x169.png" alt="FreeNas Install21" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install21-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install21-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install21-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install21.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Go ahead and give it an IP that will work for you. And now click on the &#8220;<b>Installed</b>&#8221; tab on the Plugins page and you will see the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install20.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-160 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install20-300x169.png" alt="FreeNas Install20" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install20-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install20-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install20-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install20.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>The only difference between what you see and the image above is that your Plex will be powered off (<span style="color: red;">red</span>). Go ahead and turn it on (<span style="color: blue;">blue</span>). Note that you may get &#8220;some error occurred&#8221; when you try to do this. That is bc we just changed the Jail IP. Go ahead and reboot the box if that is the case. After it powers back up, navigate back to the page above and power Plex on. Once it is on you can go to the following address: <span style="font-size: xx-small;"><i>(change the IP with the IP of your Plex Jail)</i></span><br />
+<span style="color: orange;">http://192.168.0.93:32400/web/index.html</span><br />
+You can also get here by refreshing your page, then expand the plugins tab and select Plex Media Server as seen in the following screenshot:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install22.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-165 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install22-300x169.png" alt="FreeNas Install22" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install22-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install22-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install22-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install22.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>In the popup window click on the &#8220;<strong>here</strong>&#8221; link and that will bring up Plex! You did it, you installed Plex successfully!</p>
+<p>Now we just have to configure it so you can see your movies on there.</p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Configuring Movies with Plex</h3>
+<p>Once you browse to <span style="color: orange;">http://192.168.0.93:32400/web/index.html</span> your screen should look like this:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install23.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-168 size-medium" src="/blog/wp-content/uploads/FreeNas-Install23-300x169.png" alt="FreeNas Install23" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install23-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install23-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install23-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install23.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a><br />
+Before we can tell what movies Plex to look at, we first have to add a movie, or movies, to our FreeNAS Share we set up. So, go ahead and navigate back to your Share in explorer and add a folder called &#8220;<strong>Movies</strong>&#8220;, then add a Movie into that Folder as shown below:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install25.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-207 alignnone" src="/blog/wp-content/uploads/FreeNas-Install25-300x227.png" alt="FreeNas Install25" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install25-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install25-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install25.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a>                           <a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install26.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-208 alignnone" src="/blog/wp-content/uploads/FreeNas-Install26-300x258.png" alt="FreeNas Install26" width="300" height="258" srcset="/blog/wp-content/uploads/FreeNas-Install26-300x258.png 300w, /blog/wp-content/uploads/FreeNas-Install26.png 515w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>We also need to add in a corresponding folder in our freenas jail, to do this, navigate to: <em>\\freenas\FreeNASROOT\jails\plexmediaserver_1\media</em> (if you have named everything as i have here) and add a folder called &#8220;<strong>Movies</strong>&#8220;.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install26.1.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-212 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install26.1-300x182.png" alt="FreeNas Install26.1" width="300" height="182" srcset="/blog/wp-content/uploads/FreeNas-Install26.1-300x182.png 300w, /blog/wp-content/uploads/FreeNas-Install26.1-600x365.png 600w, /blog/wp-content/uploads/FreeNas-Install26.1.png 913w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>This is going to act as an alias in the FreeNAS Jail&#8217;s storage we are about to configure. So go ahead and open back up your web browser, open up FreeNAS and navigate to <strong>Jails</strong> on the left hand side, expand everything you can.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install28.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-213 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install28-300x169.png" alt="FreeNas Install28" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install28-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install28-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install28-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install28.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&#8230;and you should be in the &#8220;<b>Add Storage</b>&#8221; section of your Plex jail. Go ahead and click on Add Storage. For <strong>Source</strong> put <em>/mnt/Volume0/Movies</em> or navigate to wherever your movies actually live. And for <strong>Destination</strong> put <em>/media/Movies</em></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install29.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-215 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install29-300x169.png" alt="FreeNas Install29" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install29-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install29-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install29-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install29.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now go back to Plex and Click on the <strong>+ (plus) </strong>in the upper left, next to the name of your Media Server and you will get something that looks like this:<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install27.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-210 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install27-300x169.png" alt="FreeNas Install27" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install27-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install27-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install27-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install27.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>From here you will choose &#8220;<strong>Movies</strong>&#8221; and click <span style="color: orange;"><strong>Next</strong></span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install30.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-216 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install30-300x169.png" alt="FreeNas Install30" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install30-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install30-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install30-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install30.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click on &#8220;<strong>Add folders</strong>&#8221; on the left hand side and choose the alias that we created <em>/media/Movies.</em> Now Plex should auto-update and find the new movie(s), but in case it doesn&#8217;t, just click on the gear on the upper left and select &#8220;<strong>Update Libraries</strong>&#8221; and there you have it, you can now see your new movie(s) on Plex!</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install31.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-218 size-full" src="/blog/wp-content/uploads/FreeNas-Install31.png" alt="FreeNas Install31" width="1366" height="768" srcset="/blog/wp-content/uploads/FreeNas-Install31.png 1366w, /blog/wp-content/uploads/FreeNas-Install31-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install31-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install31-1024x576.png 1024w" sizes="(max-width: 1366px) 100vw, 1366px" /></a></p>
+<p>Now that I have gotten you up and running you just have to go look through the Plex settings by clicking on the Wrench and Screw Driver in the upper right hand corner. It&#8217;s all pretty straight forward and simple but if you can&#8217;t figure it out then google that shit, then if that doesnt work comment and message me and i will see how I can help.</p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="text-align: center;">So that&#8217;s it, pretty simple install. If I left anything out that you notice or are having any trouble, leave a comment or send me and email on the right hand toolbar</h4>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Install and Setup FreeNAS on Dell CS24-SC</title>
+		<link>/blog/install-and-setup-freenas-on-dell-cs24-sc/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Mon, 15 Jun 2015 06:30:40 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[CS24-SC]]></category>
+		<category><![CDATA[Dell CS24-SC]]></category>
+		<category><![CDATA[FreeNAS]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Media Server]]></category>
+		<guid isPermaLink="false">/blog/?p=61</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p style="text-align: center;"><span style="color: white;"><a href="http://www.freenas.org/">FreeNAS</a> is offered in two ways: Install and support it yourself, as it is a Free/OpenSource Operating System, or invest in a turnkey solution from <a href="http://www.ixsystems.com/">iXsystems Inc.</a> Their support is great as they built the OS and know how it works best, I would strongly recommend contacting them if you are running FreeNAS as a business solution.</span></p>
+<p style="text-align: center;"><span style="color: white; font-size: 13pt;">This how-to will cover the basic install and very basic set-up of FreeNAS. FreeNAS has a lot of options and you will set it up pretty uniquely with each option. So for this tutorial I have covered a basic setup and a CIFS/SMB Share. This will allow you to use your FreeNAS server as a Data/File Store.</span></p>
+<h3>What you will need</h3>
+<ul>
+<li>1 &#8211; Dell CS24-SC</li>
+<li>2 &#8211; 8GB Flash Drives</li>
+<li>LAN Connectivity</li>
+<li>Keyboard and Monitor &#8211; (if you are not going to use BMC)</li>
+<li>1 &#8211; Windows Computer &#8211; (I am using Win7)</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>FreeNAS USB Stick</h3>
+<p>Obtain a copy of the <a href="http://www.freenas.org/download/">FreeNAS ISO</a>.<br />
+NOTE: <i>This Guide is using the Build FreeNAS 9.3 Stable</i></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Downloads-Page.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="alignnone size-medium wp-image-73" src="/blog/wp-content/uploads/FreeNas-Downloads-Page-300x132.png" alt="FreeNas Downloads Page" width="300" height="132" srcset="/blog/wp-content/uploads/FreeNas-Downloads-Page-300x132.png 300w, /blog/wp-content/uploads/FreeNas-Downloads-Page-600x264.png 600w, /blog/wp-content/uploads/FreeNas-Downloads-Page.png 750w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Write the ISO to a USB drive (Use a USB Drive of at least 8GB&#8217;s)<br />
+&#8211; You can do this using <a href="http://sourceforge.net/projects/win32diskimager/">Win32 Disk Imager</a> or <a href="https://rufus.akeo.ie/">Rufus</a></p>
+<p style="text-align: center;"><a class="dt-single-image" href="/blog/wp-content/uploads/Win32-Disk-Imager.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-78 alignnone" src="/blog/wp-content/uploads/Win32-Disk-Imager-300x152.png" alt="Win32 Disk Imager" width="300" height="152" /></a>                        <a class="dt-single-image" href="/blog/wp-content/uploads/Rufus.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-95 alignnone" src="/blog/wp-content/uploads/Rufus-213x300.png" alt="Rufus" width="213" height="300" srcset="/blog/wp-content/uploads/Rufus-213x300.png 213w, /blog/wp-content/uploads/Rufus.png 369w" sizes="(max-width: 213px) 100vw, 213px" /></a></p>
+<p><span style="font-size: x-small;"><i>**Use the settings you see above in Rufus</i></span></p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Installing FreeNAS</h3>
+<p><span style="font-size: x-small;"><i>You can also refer to the FreeNAS installation instructions from the developers website found <a href="http://doc.freenas.org/9.3/freenas_install.html">here</a></i></span><br />
+I am using 2 separate USB&#8217;s for the install, I have found this to be easier as i keep quite a few OS&#8217;s on USB sticks at any given time. One is set up as shown above with the ISO mounted to it, and the other one is currently formatted as FAT32, FreeNAS will work fine with this. Attach the ISO drive to the back and the blank drive to one of the front slots.<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install6.png" data-dt-img-description=""><br />
+</a></p>
+<h4>Boot your CS-24</h4>
+<p>You can do this from the BMC console which is where I will get the following screenshots come from. You will get the exact some thing when hooking up a monitor and keyboard to your CS-24.</p>
+<p>When FreeNAS boots you will see the following screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install1.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-101 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install1-300x276.png" alt="FreeNas Install1" width="300" height="276" srcset="/blog/wp-content/uploads/FreeNas-Install1-300x276.png 300w, /blog/wp-content/uploads/FreeNas-Install1-600x551.png 600w, /blog/wp-content/uploads/FreeNas-Install1.png 725w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click &#8220;<strong>enter</strong>&#8221; on the one and only option, if you fail to do so FreeNAS will proceed with executing the FreeNAS installation anyway.</p>
+<p>Next You will see this screen with four options:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install2.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-102 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install2-300x240.png" alt="FreeNas Install2" width="300" height="240" srcset="/blog/wp-content/uploads/FreeNas-Install2-300x240.png 300w, /blog/wp-content/uploads/FreeNas-Install2-600x480.png 600w, /blog/wp-content/uploads/FreeNas-Install2.png 722w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click &#8220;<strong>enter</strong>&#8221; on the first option, <strong>Install/Upgrade</strong>, and you will get the following screen:<br />
+<span style="font-size: small;"><i>(Note &#8211; I used 2 different brand flash drives that were different sizes so it was easy to identify the two)</i></span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install3.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-108 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install3-300x227.png" alt="FreeNas Install3" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install3-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install3-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install3.png 779w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you will select the flash drive that is plugged into the front, by scrolling to it and hitting &#8220;<strong>space</strong>&#8221; and then &#8220;<strong>enter</strong>&#8221; and you will get the following screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install4.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-110 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install4-300x227.png" alt="FreeNas Install4" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install4-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install4-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install4.png 779w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click &#8220;<strong>enter</strong>&#8221; on <b>YES </b>here, this is just formatting the drive with the correct permissions for FreeNAS, and you will get the following screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install5.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-111 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install5-300x227.png" alt="FreeNas Install5" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install5-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install5-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install5.png 779w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here, enter your password into both fields and click &#8220;<strong>enter</strong>&#8221; on <strong>OK</strong>, then you will see some script run and after a while you will finally get this screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install6.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-112 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install6-300x227.png" alt="FreeNas Install6" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install6-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install6-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install6.png 779w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click &#8220;<strong>enter</strong>&#8221; to acknowledge that you understand the notification. And this will bring you back to the original screen where you will now choose option 4 <strong>Shutdown System</strong></p>
+<h6><span style="color: orange;">Once the server is off, remove the flash drive from the back of the machine, and move the one from the front to the slot in the back and you are ready to roll. Power that baby on and wait for the install to complete&#8230;</span></h6>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Configuring FreeNAS</h3>
+<p>When your server does finally get done booting for the first time you will see the following screen that will have an IP address on it if your network has DHCP enabled, if not you will have to configure the network settings , which will be covered in the next step:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install7.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-117 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install7-300x230.png" alt="FreeNas Install7" width="300" height="230" srcset="/blog/wp-content/uploads/FreeNas-Install7-300x230.png 300w, /blog/wp-content/uploads/FreeNas-Install7-600x461.png 600w, /blog/wp-content/uploads/FreeNas-Install7.png 766w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now to configure the network chose option <strong>1 </strong>and click &#8220;<strong>enter</strong>&#8221;<br />
+<span style="color: orange;"><span style="font-size: small;"><i>Now I am going to be using both NIC&#8217;s, you can choose to use just one or the other if you wish, but i have chosen to use both for redundancy reasons, both NIC&#8217;s are not necessary.</i></span></span><br />
+Now you can set up your network as follows, since I am on the 192.168.0.0/24 Network I will be setting my FreeNAS box accordingly.<br />
+You can see my configurations here:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install8.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-118 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install8-300x230.png" alt="FreeNas Install8" width="300" height="230" srcset="/blog/wp-content/uploads/FreeNas-Install8-300x230.png 300w, /blog/wp-content/uploads/FreeNas-Install8-600x461.png 600w, /blog/wp-content/uploads/FreeNas-Install8.png 766w" sizes="(max-width: 300px) 100vw, 300px" /></a>                                          <a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install9.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-119 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install9-300x230.png" alt="FreeNas Install9" width="300" height="230" srcset="/blog/wp-content/uploads/FreeNas-Install9-300x230.png 300w, /blog/wp-content/uploads/FreeNas-Install9-600x461.png 600w, /blog/wp-content/uploads/FreeNas-Install9.png 766w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Once you have done the steps above, you will come back to the main screen and it will look like the screen below:<br />
+<span style="color: orange;"><span style="font-size: small;"><i>(but the IP'(s) listed will be static IP'(s) on your network)</i></span></span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install10.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-127 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install10-300x231.png" alt="FreeNas Install10" width="300" height="231" srcset="/blog/wp-content/uploads/FreeNas-Install10-300x231.png 300w, /blog/wp-content/uploads/FreeNas-Install10-600x462.png 600w, /blog/wp-content/uploads/FreeNas-Install10.png 755w" sizes="(max-width: 300px) 100vw, 300px" /></a><br />
+Now you just need to change the root password, do so by selecting option <strong>7</strong> and following the reset password prompts.</p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>FreeNAS GUI Configuration</h3>
+<p>Now that we have done all the steps for the console configuration we will choose one of the two IP&#8217;s above, open a browser from a computer on your local network and navigate to one of those IP&#8217;s. When you navigate to either of those IP&#8217;s you will see the following login screen:<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install11.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-128 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install11-300x169.png" alt="FreeNas Install11" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install11-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install11-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install11-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install11.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Type in the username &#8220;<strong>root</strong>&#8221; and enter the password that you set up in the previous step. Once logged in you will get the following screen:<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install12.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-129 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install12-300x169.png" alt="FreeNas Install12" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install12-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install12-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install12-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install12.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p><span style="color: orange;"><span style="font-size: small;"><i>*It may not come up directly to this screen, you will likely get a pop-up for the language and time zone, set these accordingly, and you will get another pop-up asking to create volumes, just click exit on this.</i></span></span><br />
+Start off by clicking on the &#8220;<strong>General</strong>&#8221; tab and you will get this screen:<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install131.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-140 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install131-300x169.png" alt="FreeNas Install13" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install131-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install131-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install131-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install131.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>I chose to bind the WebGUI to my .91 address and I verified my Time Zone was correct here. Now you will want to click on the &#8220;<strong>Network</strong>&#8221; tab</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install13.1.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-153 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install13.1-300x169.png" alt="FreeNas Install13.1" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install13.1-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install13.1-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install13.1-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install13.1.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you will want to change your <em>Hostname</em>, add in the <em>Defualt</em> <em>IPv4</em> <em>Gateway</em>, and the <em>DNS</em> <em>servers</em>. After saving these settings navigate to the &#8220;<strong>Storage</strong>&#8221; tab and choose &#8220;<strong>Volume Manager</strong>&#8221; and you will see something like this:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install14.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-141 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install14-300x169.png" alt="FreeNas Install14" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install14-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install14-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install14-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install14.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;">Since I am running hardware RAID 10 with 4x120GB&#8217;s Hard Drives. You will see Volume settings as above. Your volumes will most likely be different from this, so you have some freedom here to choose what best fits you.</p>
+<p style="text-align: center;"><span style="color: orange;"><span style="font-size: small;"><i>You may have to run the following commands from the shell if your Add Volume fails the first time, there is some trash in the partition table area:</i></span></span><br />
+<span style="color: red;">sysctl kern.geom.debugflags=0x10</span><br />
+<span style="color: red;">dd if=/dev/zero of=/dev/ada0 </span><br />
+<span style="color: orange;">after this runs for about a minute, hit ctrl+C and then go ahead and proceed with setting up the volume.</span></p>
+<p>Once you have configured these settings to your liking click on &#8220;<strong>Add Volume</strong>&#8220;. After your volume finishes writing you will see something along the lines of the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install15.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-142 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install15-300x169.png" alt="FreeNas Install15" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install15-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install15-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install15-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install15.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now that we have our storage set up, we need to setup access for it. I have chosen to use CIFS, as I am going this from a Windows Machine. Expand &#8220;<strong>Services</strong>&#8221; on the left hand side and select the &#8220;<strong>CIFS</strong>&#8221; tab. and it will bring up the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install16.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-147 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install16-300x169.png" alt="FreeNas Install16" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install16-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install16-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install16-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install16.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>You can choose what to put in all these fields, just make sure you check and IP to bind it to at the bottom. Next go back to the left side of the screen and click on &#8220;<strong>Control Services</strong>&#8221; under the &#8220;<strong>Services</strong>&#8221; section.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install17.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-148 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install17-300x169.png" alt="FreeNas Install17" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install17-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install17-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install17-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install17.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you will need to turn &#8220;<strong>CIFS</strong>&#8221; on. Now we will need to add a CIFS share onto FreeNAS, first expand &#8220;<strong>Sharing</strong>&#8221; then expand &#8220;<strong>Windows (CIFS) Shares</strong>&#8221; and click on &#8220;<strong>Add Windows (CIFS) Share</strong>&#8221;<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install18.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-149 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install18-300x169.png" alt="FreeNas Install18" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install18-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install18-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install18-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install18.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>I am choosing to share the root of my &#8220;<strong>Volume0</strong>&#8221; and I decided to name the share &#8220;<strong>FreeNASROOT</strong>&#8221;</p>
+<p>After this is done bring up Windows Explorer and verify that you can access the share. For me I had to type in \\FreeNAS or \\192.168.0.91 in my explorer bar. Once it connected I saw the share &#8220;<strong>FreeNASROOT</strong>&#8221; and when i selected that I was asked for creds to access the share, enter the root creds you use to log into the WebGUI as we have not created any users at this time.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install24.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-206 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install24-300x227.png" alt="FreeNas Install24" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install24-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install24-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install24.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: center;"><span style="color: orange;">**I am not covering users and user permissions in this how-to, but it is pretty simple and you should always create a user so you are not doing everything as the root user**</span></p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

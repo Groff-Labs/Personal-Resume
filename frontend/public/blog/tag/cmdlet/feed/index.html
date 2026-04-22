@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>cmdlet &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/cmdlet/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 04 Dec 2019 16:59:20 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Cmdlet for PowerCLI to load vCenter &#038; esxi Hosts</title>
+		<link>/blog/cmdlet-for-powecli-to-load-vcenter-esxi-hosts/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Wed, 24 May 2017 20:46:53 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[cmdlet]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[Powershell]]></category>
+		<category><![CDATA[PS]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<guid isPermaLink="false">/blog/?p=822</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Powershell &amp; PowerCLI Prep</h3>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>#Set Execution Policy</p>
+<pre class="lang:ps decode:true ">Set-ExecutionPolicy RemoteSigned</pre>
+<p>#Ignore SSL Certificates warnings</p>
+<pre class="lang:ps decode:true ">Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -WarningAction SilentlyContinue</pre>
+<p>#Connecting to server &amp; save creds:</p>
+<pre class="lang:ps decode:true ">Connect-VIServer vCenter.DOMAIN.com -User DOMAIN\Administrator -Password -SaveCredentials</pre>
+<p>#Location to open up PowerCLI normally:</p>
+<pre class="lang:ps decode:true ">. "C:\Program Files (x86)\VMware\Infrastructure\vSphere PowerCLI\Scripts\Initialize-PowerCLIEnvironment.ps1"</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>CMDLET</h4>
+<pre class="lang:ps decode:true ">function Load-PowerCLI
+{
+Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
+Add-PSSnapin VMware.VumAutomation -ErrorAction SilentlyContinue
+Add-PSSnapin VMware.DeployAutomation -ErrorAction SilentlyContinue
+Add-PSSnapin VMware.DeployAutomation -ErrorAction SilentlyContinue
+&amp; "C:\Program Files (x86)\VMware\Infrastructure\vSphere PowerCLI\Scripts\Initialize-PowerCLIEnvironment.ps1"
+Write-Host "================================================" -ForegroundColor White
+Write-Host "
+...connecting to vCenter servers
+"
+Connect-VIServer vCenter0.groffbox.com
+}</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>BONUS:</h3>
+<h4>Set the VMConsole to open correctly with Open-VMConsole Window</h4>
+<p>#Download and Install 32-bit Firefox, you NEED 32-bit<br />
+#Run:</p>
+<pre class="lang:ps decode:true ">Set-PowerCLIConfiguration –VMConsoleWindowBrowser “C:\Program Files (x86)\Mozilla Firefox\firefox.exe”</pre>
+<p>Now you can run Open-VMConsoleWindow</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

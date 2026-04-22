@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Static &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/static/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:02 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Set a Static IP on your ESXi Host</title>
+		<link>/blog/set-a-static-ip-on-your-esxi-host/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 17 Sep 2015 07:09:19 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[ESXi 5.5.0]]></category>
+		<category><![CDATA[IP]]></category>
+		<category><![CDATA[Static]]></category>
+		<category><![CDATA[Static IP]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<category><![CDATA[VMware ESXi 5.5.0]]></category>
+		<guid isPermaLink="false">/blog/?p=384</guid>
+
+					<description><![CDATA[Set a Static IP on your ESXi Host V5.5 Assigning a static IP to your ESXi host is extremely easy to do, and is highly recommended as you will always want your host to have the same IP. Notes: If your network is set up without DHCP, then you will have to do this from&#8230;]]></description>
+										<content:encoded><![CDATA[<p><span style="color: orange;">Set a Static IP on your ESXi Host V5.5</span></p>
+<h4>Assigning a static IP to your ESXi host is extremely easy to do, and is highly recommended as you will always want your host to have the same IP.</h4>
+<ul>
+<li><strong>Notes:</strong>
+<ul>
+<li>If your network is set up without DHCP, then you will have to do this from the physical server itself, or the KVM.</li>
+<li>When assigning a static IP to the host, make sure that you do not assign an IP that has already been used if your network does have DHCP enabled.</li>
+<li>If you do not set up a static IP, you will likely have issues when you reboot the host or your router reboots.</li>
+</ul>
+</li>
+</ul>
+<p>&nbsp;</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">For this tutorial, I am making the changes from the host&#8217;s console itself, as setting a Static IP is one of the first things to do in the configuration of a new host </span><span style="color: #6699ff;"> </span></h6>
+<p>First Click on <span style="color: orange;">F2</span> Customize System/View Logs:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01.png" data-dt-img-description=""><img fetchpriority="high" decoding="async" class="size-medium wp-image-386 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01-300x240.png" alt="Set a Static IP on your ESX Host_01" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_01.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Enter the password for the root user when prompted and hit <span style="color: orange;">Enter</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02.png" data-dt-img-description=""><img decoding="async" class="size-medium wp-image-387 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02-300x240.png" alt="Set a Static IP on your ESX Host_02" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_02.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Choose the third option, <span style="color: orange;">Configure Management Network</span>, and hit <span style="color: orange;">Enter</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03.png" data-dt-img-description=""><img decoding="async" class="size-medium wp-image-388 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03-300x240.png" alt="Set a Static IP on your ESX Host_03" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_03.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Again, choose the third option, <span style="color: orange;">IP Configuration</span>, and hit <span style="color: orange;">Enter</span>.<br />
+Here you will change the option to <span style="color: orange;">Set static IP address and network configuration:</span> and hit the <span style="color: orange;">Spacebar</span> to apply that option. Then enter the fields for the IP address appropriately and hit <span style="color: orange;">Enter</span> to apply those settings:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-389 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04-300x240.png" alt="Set a Static IP on your ESX Host_04" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_04.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next scroll down to the <span style="color: orange;">DNS Configuration</span> option and hit <span style="color: orange;">Enter</span>.<br />
+Here enter the appropriate DNS information for your server:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-390 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05-300x240.png" alt="Set a Static IP on your ESX Host_05" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_05.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Hit <span style="color: orange;">Escape</span> to exit this screen and then hit <span style="color: orange;">Y</span> to apply the changes and restart the management network:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-391 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06-300x240.png" alt="Set a Static IP on your ESX Host_06" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_06.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Now hit <span style="color: orange;">Escape</span> again and you will be back at the main screen and you will now see the Static IP and some of the DNS information that you just configured:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-392 aligncenter" src="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07-300x240.png" alt="Set a Static IP on your ESX Host_07" width="300" height="240" srcset="/blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07-300x240.png 300w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07-600x479.png 600w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07-1024x818.png 1024w, /blog/wp-content/uploads/Set-a-Static-IP-on-your-ESX-Host_07.png 1043w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>You&#8217;re done, now you can go back to your computer, and access your ESXi host from the newly assigned IP.</p>
+]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

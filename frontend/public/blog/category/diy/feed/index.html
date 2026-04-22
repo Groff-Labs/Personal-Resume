@@ -1,0 +1,1663 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>DIY &#8211; Michael Groff</title>
+	<atom:link href="/blog/category/diy/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Mon, 11 Mar 2019 05:08:19 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Home Lab 2.0</title>
+		<link>/blog/home-lab-2-0/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Fri, 01 Mar 2019 00:22:12 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Cabling]]></category>
+		<category><![CDATA[Cat6]]></category>
+		<category><![CDATA[CS24-SC]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[Home Lab]]></category>
+		<category><![CDATA[Lab]]></category>
+		<category><![CDATA[Storage]]></category>
+		<category><![CDATA[Switches]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<guid isPermaLink="false">/blog/?p=927</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This post will serve as the 10,000 ft overview of my environment and what it all consists of. I plan to follow up this post with a series of smaller posts breaking down my Home Lab into the following sections:</p>
+<h5>(as I update these blog posts, links will appear and become active)</h5>
+<ul>
+<li><strong>Home Lab Servers &amp; Storage</strong></li>
+<li><strong>Home Lab Routing &amp; Switching</strong></li>
+<li><strong>Home Lab Access Points</strong></li>
+<li><strong>Home Lab Surveillance</strong></li>
+<li><strong>Home Cat6 Cable Wiring</strong></li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div><div class="vc_empty_space"   style="height: 15px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-851469e855029b1c7" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-851469e855029b1c7 uvc-3003  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-851469e855029b1c7 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Servers &amp; Storage</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I go into details about the server and storage that I use in my Home Lab environment.</p>
+<p>The current hardware I use is:</p>
+<ul>
+<li>Dell PowerEdge R710 SFF &amp; LFF</li>
+<li>Dell PowerEdge C2100</li>
+<li>Dell PowerEdge CS24-SC (Essentially a 2950)</li>
+<li>Dell PowerEdge R510 LFF</li>
+</ul>
+<p>The operating systems that I use are:</p>
+<ul>
+<li>VMware esxi 6.5</li>
+<li>VMware esxi 6.7</li>
+<li>Windows Server 2012 R2</li>
+<li>Windows Server 2016</li>
+<li>Windows Server 2019</li>
+<li>FreeNAS 11.1 (U7 if you care)</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I have purchased or otherwise acquired some Gen10 and Gen11 Dell PowerEdge Servers throughout my years in IT. I enjoy having a Home Lab to work in and learn new things without repercussions of really messing something up. In my environment, nuke and pave is not frowned upon at all. I do my best to say up-to-date and using the latest and greatest trial software, but due to the hardware I am running, that goal comes with some limitations.For instance, my C2100 servers simply cannot be upgraded beyond esxi 6.5. The processors are not compatible with esxi 6.7. However, I was able to upgrade my vCenter Server to 6.7 and still have it manage my 6.5 hosts.</p>
+<p>Most of my servers are running Windows Server 2019, but some are still running 2016 as I havent had the time or need to update them. (Such as DC&#8217;s and DB&#8217;s)</p>
+<p>My Storage devices are all PowerEdge Servers running FreeNAS. I set them up with FreeNAS and configure the iSCSI service for MPIO to my esxi hosts. I find it is a set-it and forget-it type of thing. I am subscribed to some FreeNAS emails and RSS feeds, so I look out for OS updates and install them accordingly.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-992069e855029b676" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-992069e855029b676 uvc-152  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-992069e855029b676 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Routing &amp; Switching</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover all the networking equipment that I use in my home lab and how I use it.</p>
+<p>The networking hardware that I use is:</p>
+<ul>
+<li>Unifi USG-PRO-4 (Gateway)</li>
+<li>Unifi US-24 (Switch)</li>
+<li>Unifi US-8-150 (Switch)</li>
+<li>3 x Dell PowerConnect 7048P (Switch)</li>
+<li>Netgear ProSAFE GS108Ev3 8-Port</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>For most of my networking equipment, I run Ubiquiti Unifi equipment. This is marketed as &#8220;Enterprise&#8221; networking equipment, but imho, it is far from &#8220;Enterprise&#8221;. I would place it solidly in the &#8220;prosumer&#8221; line of networking equipment. Dont get me wrong, their WAP&#8217;s are pretty awesome. But their switching and routing devices leave much to be desired. Their GUI is quite pretty and you can do enough to get by through it, but for really advanced setups, you are required to edit a json file. Often the editing of the json file is unsupported and a PITA the figure out.</p>
+<p>For the rest of my networking equipment, I run some classic Dell PowerConnect switches. I run the 7048P&#8217;s. For the most part, I dont need the PoE feature, but for under $150 per switch, I couldnt not get the PoE feature. I just disable it on the ports where it is not needed. The language is pretty similar to Cisco so getting by in command line is my preferred way to manage these.</p>
+<p>Oh, and I have a Netgear managed 8-port switch. This little guy has kept up with the other two brands of switches afaic. I like the little guy and it works great as an under the desk switch.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-360169e855029b9c4" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-360169e855029b9c4 uvc-4162  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-360169e855029b9c4 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Access Points</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover the Access point that I use in my home, discussing wiring, port and physical placement.</p>
+<p>The hardware access points I currently use are:</p>
+<ul>
+<li>Unifi UAP-AC-PRO</li>
+<li>Unifi UAP-AC-M-PRO</li>
+<li>Unifi UAP-IW-PRO</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>For all my Wireless, I trust in the Ubiquiti Unifi line. They are a great &#8220;prosumer&#8221; product at a price that I can afford. And they definitely do their job for my home needs. I have even installed these at a few businesses with very solid results.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-484169e855029bcd5" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-484169e855029bcd5 uvc-8497  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-484169e855029bcd5 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Surveillance</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover my Home Surveillance Solution using my Home Lab equipment.</p>
+<p>Some of the equipment I use is as follows:</p>
+<ul>
+<li>Home Server (Sometimes virtualized, sometimes standalone)</li>
+<li><a href="http://blueirissoftware.com/">BlueIris</a> NVR Software</li>
+<li>Reolink IP Cams
+<ul>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-410</li>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-411</li>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-420</li>
+<li class="pro-name active" data-id="50" data-parent-id="50">RLC-423</li>
+</ul>
+</li>
+<li>HikVision IP Cams
+<ul>
+<li>DS-2CD2142FWD-IS 4MP</li>
+</ul>
+</li>
+<li>Ring Pro Doorbell</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>When I first got into the surveillance game, I was purchasing Hikvision IP Cameras from a specific re-seller in my area. Since then, Reolink has become quite a mainstream prosumer product and I can get them from Amazon. So as of late, all of my Reolink cams have been purchased from random amazon sales.</p>
+<p>Overall I enjoy both cams, but prefer the Reolink branded cams over Hikvision.</p>
+<p>As for the Ring Pro Doorbell. I got it because it&#8217;s easy for the wife to use and not answer the door if she doesn&#8217;t want to. I have it on a &#8220;security device&#8221; vlan, so it is segmented off. I actually do enjoy the device. It is nice having something in the cloud separate from Blue Iris.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-390569e855029bfe5" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-390569e855029bfe5 uvc-8535  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-390569e855029bfe5 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Cat6 Cable Wiring</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will go through what it takes to wire up your home with Cat6 cabling. This is currently an ongoing process for me and may be for some time yet to come.<br />
+The materials you will need to complete wiring in your house are as follows:</p>
+<ul>
+<li>Cat6 cabling</li>
+<li>RJ45 Cat6 Jacks</li>
+<li>RJ45 Boots</li>
+<li>RJ45 Crimping tool</li>
+<li>RJ45 Punch Down tool</li>
+<li>Cat6 Wall Plates with Jacks</li>
+<li>Pull String</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Wiring your house is a process. If you have unlimited amounts of money, then hire a company to do it and they will charge you a few grand to go in there and get it done. They will most likely run the cables in a manner that works, but is not tech approved bc they are dudes who just know how to run cables, not why they are run or consequences of how they are run. If you are like me where money is not an endless pit of fun and you like having control over things, then you will want to take on wiring yourself. Overall you can do this for a fraction of the cost compared to contracting it out, but it will be a lot of work and sometimes, a complete, PITA. If you live in Texas like me, only plan on doing this kind of work from late October through late April&#8230; It gets hot in there.</p>
+<p>Overall, I have found wiring my house to be quite rewarding, both financially and emotionally. I am able to &#8220;put a stamp&#8221; on my work and be proud of what I have done.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Identify Failed Port and Replace NIC</title>
+		<link>/blog/identify-failed-port-and-replace-nic/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 26 Feb 2019 02:03:15 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[esxi]]></category>
+		<guid isPermaLink="false">/blog/?p=958</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This past week, I had a failed port one one of my C2100&#8217;s. The specific part was a <strong>Intel PRO/1000 VT Quad Port Gigabit PCI-E Ethernet Network Adapter (HM9JY)</strong>. Now just one single port failed and I was using all 4 ports for iSCSI from my FreeNAS C2100 to my esxi cluster. Luckily I have 4 ports so naturally MPIO is configured and I didnt notice the failure immediately. I first noticed this in my cluster and also saw the port was failed in FreeNAS. Since there is no OMSA for BSD, I was unable to gather more information about the status of the port.</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-965169e855029cb82" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-965169e855029cb82 uvc-8324  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-965169e855029cb82 h4'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h4 style="--font-weight:theme;">This is how I noticed the failed port on an esxi host</h4></div></div>
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/83749551137044.jpg" target="_self" data-large_image_width="1976" data-large_image_height="385"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img fetchpriority="high" decoding="async" width="1024" height="200" src="/blog/wp-content/uploads/83749551137044-1024x200.jpg" class="vc_single_image-img attachment-large" alt="" title="" srcset="/blog/wp-content/uploads/83749551137044-1024x200.jpg 1024w, /blog/wp-content/uploads/83749551137044-300x58.jpg 300w, /blog/wp-content/uploads/83749551137044-768x150.jpg 768w, /blog/wp-content/uploads/83749551137044-600x117.jpg 600w, /blog/wp-content/uploads/83749551137044.jpg 1976w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/attachment/83749551137044/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I went onto ebay and ordered the new part for $20 with free shipping. It came in today and I took some time to replace it this evening. It is a pretty simple process, I will walk you through it below.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>The first things I am going to do is power off my server and then remove all the cabling from it. Some people choose to not remove networking when doing this, but I am running PoE switches, and even though PoE has been disable on the ports, I dont trust it. I remove all potential of electricity running through the system other than the CMOS and RAID batteries.</p>
+<p>So, Power off your server, remove all the cabling, pull it out of the rack and remove the cover.</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_left">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img decoding="async" width="1024" height="768" src="/blog/wp-content/uploads/s-l1600-1024x768.jpg" class="vc_single_image-img attachment-large" alt="" title="s-l1600" srcset="/blog/wp-content/uploads/s-l1600-1024x768.jpg 1024w, /blog/wp-content/uploads/s-l1600-300x225.jpg 300w, /blog/wp-content/uploads/s-l1600-768x576.jpg 768w, /blog/wp-content/uploads/s-l1600-600x450.jpg 600w, /blog/wp-content/uploads/s-l1600.jpg 1600w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/s-l1600/" /></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">The new part looks like this. It will just slide right into a PCIe slot and I will screw it in.</p>
+
+		</div>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Here we are with the top open.</h3>
+<p style="text-align: center;">I am going to pull out that part in the upper left hand corner to replace.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/IMG_195212.jpg" target="_self" data-large_image_width="1536" data-large_image_height="2048"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img decoding="async" width="768" height="1024" src="/blog/wp-content/uploads/IMG_195212-768x1024.jpg" class="vc_single_image-img attachment-large" alt="" title="IMG_195212" srcset="/blog/wp-content/uploads/IMG_195212-768x1024.jpg 768w, /blog/wp-content/uploads/IMG_195212-225x300.jpg 225w, /blog/wp-content/uploads/IMG_195212-600x800.jpg 600w, /blog/wp-content/uploads/IMG_195212.jpg 1536w" sizes="(max-width: 768px) 100vw, 768px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/img_195212/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Here is the empty slot that we will plug back into.</h3>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/IMG_195301.jpg" target="_self" data-large_image_width="1536" data-large_image_height="2048"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="768" height="1024" src="/blog/wp-content/uploads/IMG_195301-768x1024.jpg" class="vc_single_image-img attachment-large" alt="" title="IMG_195301" srcset="/blog/wp-content/uploads/IMG_195301-768x1024.jpg 768w, /blog/wp-content/uploads/IMG_195301-225x300.jpg 225w, /blog/wp-content/uploads/IMG_195301-600x800.jpg 600w, /blog/wp-content/uploads/IMG_195301.jpg 1536w" sizes="(max-width: 768px) 100vw, 768px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/img_195301/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">The top device  is the one I pulled out and replace.</h3>
+<p style="text-align: center;">It is the top device due to the photo orientation and the fact that I pulled it out of the server. When I put it back in the server, it will &#8220;on the bottom&#8221;. I find placing NIC card below RAID card make it easier to unplug booted cables from the server.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/IMG_195243.jpg" target="_self" data-large_image_width="2048" data-large_image_height="1536"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="1024" height="768" src="/blog/wp-content/uploads/IMG_195243-1024x768.jpg" class="vc_single_image-img attachment-large" alt="" title="IMG_195243" srcset="/blog/wp-content/uploads/IMG_195243-1024x768.jpg 1024w, /blog/wp-content/uploads/IMG_195243-300x225.jpg 300w, /blog/wp-content/uploads/IMG_195243-768x576.jpg 768w, /blog/wp-content/uploads/IMG_195243-600x450.jpg 600w, /blog/wp-content/uploads/IMG_195243.jpg 2048w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/img_195243/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Now that the NIC has been replaced, all iSCSI paths are available!</h3>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/901672379598.jpg" target="_self" data-large_image_width="1982" data-large_image_height="344"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="1024" height="178" src="/blog/wp-content/uploads/901672379598-1024x178.jpg" class="vc_single_image-img attachment-large" alt="" title="901672379598" srcset="/blog/wp-content/uploads/901672379598-1024x178.jpg 1024w, /blog/wp-content/uploads/901672379598-300x52.jpg 300w, /blog/wp-content/uploads/901672379598-768x133.jpg 768w, /blog/wp-content/uploads/901672379598-600x104.jpg 600w, /blog/wp-content/uploads/901672379598.jpg 1982w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/attachment/901672379598/" /></a>
+		</figure>
+	</div>
+
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/90145779598.jpg" target="_self" data-large_image_width="1194" data-large_image_height="255"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="1024" height="219" src="/blog/wp-content/uploads/90145779598-1024x219.jpg" class="vc_single_image-img attachment-large" alt="" title="90145779598" srcset="/blog/wp-content/uploads/90145779598-1024x219.jpg 1024w, /blog/wp-content/uploads/90145779598-300x64.jpg 300w, /blog/wp-content/uploads/90145779598-768x164.jpg 768w, /blog/wp-content/uploads/90145779598-600x128.jpg 600w, /blog/wp-content/uploads/90145779598.jpg 1194w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/attachment/90145779598/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Retro Gaming on Raspberry Pi</title>
+		<link>/blog/retro-gaming-raspberry-pi/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Mon, 06 Feb 2017 23:16:19 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Gaming]]></category>
+		<category><![CDATA[Raspberry Pi]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Games]]></category>
+		<category><![CDATA[N64]]></category>
+		<category><![CDATA[NES]]></category>
+		<category><![CDATA[Retro]]></category>
+		<category><![CDATA[Retro Pie]]></category>
+		<category><![CDATA[ROM]]></category>
+		<category><![CDATA[Sega]]></category>
+		<category><![CDATA[SNES]]></category>
+		<guid isPermaLink="false">/blog/?p=222</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I was recently asked to help someone build a &#8220;Retro Gaming System&#8221;. While thinking of the best way to do this, I figured that I would like to give them something that they can come back to and do this on their own; at anytime. There are plenty of other tutorials and ways to go about this, but this one is mine. Please leave any feedback through the site should you have any.</p>
+<h4>Parts List</h4>
+<ul>
+<li><a href="https://www.amazon.com/gp/product/B01C6EQNNK/ref=oh_aui_search_detailpage?ie=UTF8&amp;psc=1" target="_blank">Raspberry Pi 3</a> (Power supply and case are a given)</li>
+<li><a href="https://www.amazon.com/gp/product/B010Q57T02/ref=oh_aui_search_detailpage?ie=UTF8&amp;psc=1" target="_blank">Micro SD Card</a> (32GB or 64GB to fit all the roms)</li>
+<li>Controllers
+<ul>
+<li><a href="https://www.amazon.com/gp/product/B002YVD3KM/" target="_blank">NES</a> (dont buy these, just get 4 SNES controllers)</li>
+<li><a href="https://www.amazon.com/gp/product/B0034ZOAO0/ref=od_aui_detailpages00?ie=UTF8&amp;psc=1" target="_blank">SNES</a></li>
+<li><a href="https://www.amazon.com/dp/B008L3UUPS" target="_blank">N64</a></li>
+<li><a href="https://www.amazon.com/Hyperkin-Inc-Genesis-GN6-USB-Controller/dp/B00KX75UT6/ref=sr_1_1?ie=UTF8&amp;qid=1486422545&amp;sr=8-1&amp;keywords=sega+genesis+controller+USB" target="_blank">Sega Genesis</a></li>
+</ul>
+</li>
+</ul>
+<h4>Programs List</h4>
+<h5>Both</h5>
+<ul>
+<li>Latest Version of <a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank">Raspbian</a></li>
+</ul>
+<h5>Windows</h5>
+<ul>
+<li><a href="https://sourceforge.net/projects/win32diskimager/" target="_blank">Win32DiskImager</a></li>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">Putty</a> or <a href="https://puttytray.goeswhere.com/" target="_blank">PuttyTray</a></li>
+<li><a href="https://winscp.net/eng/docs/guide_install#downloading" target="_blank">WinSCP</a></li>
+</ul>
+<h5>Mac</h5>
+<ul>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">Putty</a></li>
+</ul>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>SD Card Configuration</h3>
+<p>Download the latest version of Raspbian, you can use torrent or HTTP to download this. Torrent will be quicker, but will require another program.</p>
+<p>The version at the time of this writing is <strong><em>Jesse</em></strong>. For this setup we will use the <strong>LITE</strong> version of Jesse as we do not need a Desktop GUI. This will help to save space on the SD Card among other things.</p>
+<p>You can find the latest version on <a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank">Raspberry Pi&#8217;s site</a>.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter wp-image-684 size-medium" src="/blog/wp-content/uploads/RetroPie1-300x165.png" width="300" height="165" srcset="/blog/wp-content/uploads/RetroPie1-300x165.png 300w, /blog/wp-content/uploads/RetroPie1.png 457w" sizes="(max-width: 300px) 100vw, 300px" /></p>
+<h4>Windows</h4>
+<p>Extract the zip that we just downloaded.</p>
+<p>Install Win32DiskImager utility if you don&#8217;t have it installed already. (You can download it on the utility from the <a href="http://sourceforge.net/projects/win32diskimager/" target="_blank">Sourceforge Project page</a>)</p>
+<p>Insert the SD Card into the PC.</p>
+<p>Run Win32DiskImager and select:</p>
+<ul>
+<li>Rapberry pi image we just extracted</li>
+<li>SD Card&#8217;s Drive Letter</li>
+</ul>
+<p>Select <strong>Write</strong>!</p>
+<p><img loading="lazy" decoding="async" class="aligncenter wp-image-685 size-medium" src="/blog/wp-content/uploads/RetroPie2-300x153.png" width="300" height="153" srcset="/blog/wp-content/uploads/RetroPie2-300x153.png 300w, /blog/wp-content/uploads/RetroPie2.png 407w" sizes="(max-width: 300px) 100vw, 300px" /></p>
+<p>Safely Eject the USB Drive and remove it from the PC</p>
+<p>Insert the SD Card into the Raspberry Pi.</p>
+<h4>Mac</h4>
+<p>Extract the zip that we just downloaded.</p>
+<p>Insert the SD Card into the PC.</p>
+<p>Follow this artcle provided by <a href="https://www.raspberrypi.org/documentation/installation/installing-images/mac.md" target="_blank">Raspberry Pi</a></p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Raspbian Initial Installation &amp; Configuration</h3>
+<p>Plug a Keyboard into one of the USB slots, a Monitor/TV into the HDMI slot and an Ethernet Cable into your Raspberry Pi. We will be downloading packages from the internet and using SSH for some of this, so Ethernet is required. (Note: You can use WiFi if you want, but that will not be covered in this tutorial, more info <a href="https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md" target="_blank">here</a>)</p>
+<p>Power on your Pi by plugging the Micro USB Power Cable in.</p>
+<p>You will see your Pi boot into a notification that the File System is being resized. This is an automated feature that expands the filesystem to take up your entire SD Card upon the first boot. The server will then reboot.</p>
+<p>After the reboot completes, you can now login with the following credentials:</p>
+<ul>
+<li><strong>Username</strong>: pi</li>
+<li><strong>Password</strong>: raspberry</li>
+</ul>
+<p>First things first, lets update that password, you can do so by entering the following:</p>
+<pre class="lang:sh decode:true">sudo passwd pi</pre>
+<p>Here you will enter your new password twice to confirm it has been entered correctly.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie3.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-693 size-full" src="/blog/wp-content/uploads/RetroPie3.png" width="268" height="63" /></a></p>
+<p>Run</p>
+<pre class="lang:sh decode:true">sudo raspi-config</pre>
+<p>Select &#8211; <strong>1 &#8211; Expand Filesystem</strong>, Hit [Enter] and proceed through the steps to get back to the selection screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie4.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-694 size-medium" src="/blog/wp-content/uploads/RetroPie4-300x108.png" width="300" height="108" srcset="/blog/wp-content/uploads/RetroPie4-300x108.png 300w, /blog/wp-content/uploads/RetroPie4-600x216.png 600w, /blog/wp-content/uploads/RetroPie4-768x277.png 768w, /blog/wp-content/uploads/RetroPie4.png 893w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Generate proper locales. (This step is for persons with ANSI/USA Keyboards)</p>
+<p>Select &#8211; <strong>4 &#8211; </strong><strong>Localisation Options </strong>&gt;<strong> I1 &#8211; Change Locale </strong>&gt; Deselect <strong>en_GB.UTF-8 UTF-8 </strong>and select <strong>en_US.UTF-8 UTF-8</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie23.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-757 size-medium" src="/blog/wp-content/uploads/RetroPie23-300x190.png" width="300" height="190" srcset="/blog/wp-content/uploads/RetroPie23-300x190.png 300w, /blog/wp-content/uploads/RetroPie23-600x381.png 600w, /blog/wp-content/uploads/RetroPie23-768x487.png 768w, /blog/wp-content/uploads/RetroPie23-1024x650.png 1024w, /blog/wp-content/uploads/RetroPie23.png 1565w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie24.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-756 size-medium" src="/blog/wp-content/uploads/RetroPie24-300x55.png" width="300" height="55" srcset="/blog/wp-content/uploads/RetroPie24-300x55.png 300w, /blog/wp-content/uploads/RetroPie24-600x110.png 600w, /blog/wp-content/uploads/RetroPie24-768x141.png 768w, /blog/wp-content/uploads/RetroPie24-1024x188.png 1024w, /blog/wp-content/uploads/RetroPie24.png 1415w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Change the keyboard layout</p>
+<p>Select &#8211; <strong>4 &#8211; </strong><strong>Localisation Options </strong>&gt;<strong> I1 &#8211; Change Keyboard Layout </strong>&gt; <strong>Generic 101-Key PC</strong> &gt; <strong>Other </strong>&gt; <strong>English (US) </strong>&gt;<strong> Enter </strong>&gt;<strong> Enter</strong></p>
+<p>Select &#8211; <strong>7 &#8211; Advanced Options </strong>&gt;<strong>  A2 &#8211; Hostname</strong> Enter a new hostname for this Pi:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie5.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-696 size-medium" src="/blog/wp-content/uploads/RetroPie5-300x226.png" width="300" height="226" srcset="/blog/wp-content/uploads/RetroPie5-300x226.png 300w, /blog/wp-content/uploads/RetroPie5.png 447w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Select &#8211; <strong>7 &#8211; Advanced Options &gt;  A3 &#8211; Memory Split</strong> Change the value to 128 if you have a Pi 3:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie6.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-698 size-medium" src="/blog/wp-content/uploads/RetroPie6-300x194.png" width="300" height="194" srcset="/blog/wp-content/uploads/RetroPie6-300x194.png 300w, /blog/wp-content/uploads/RetroPie6.png 514w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Select &#8211; <strong>5 &#8211; Interfacing Options &gt;  P2 &#8211; SSH &gt; Yes </strong>Enable SSH so we can access the Pi remotely:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie7.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-701 size-medium" src="/blog/wp-content/uploads/RetroPie7-300x224.png" width="300" height="224" srcset="/blog/wp-content/uploads/RetroPie7-300x224.png 300w, /blog/wp-content/uploads/RetroPie7.png 444w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Change anything else you see fit, select <strong>Finish</strong> and reboot your Pi:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie8.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-702 size-medium" src="/blog/wp-content/uploads/RetroPie8-300x223.png" width="300" height="223" srcset="/blog/wp-content/uploads/RetroPie8-300x223.png 300w, /blog/wp-content/uploads/RetroPie8.png 443w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>After the reboot completes, log back in at the console one more time,</p>
+<p>run</p>
+<pre class="lang:sh decode:true">ip a</pre>
+<p>and get the IP from the Ethernet connection labeled <strong>eth0</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie9.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-703 size-medium" src="/blog/wp-content/uploads/RetroPie9-300x102.png" width="300" height="102" srcset="/blog/wp-content/uploads/RetroPie9-300x102.png 300w, /blog/wp-content/uploads/RetroPie9-600x204.png 600w, /blog/wp-content/uploads/RetroPie9.png 760w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Remember or write down that IP, then type in</p>
+<pre class="lang:sh decode:true">logout</pre>
+<p>to logout.</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Install RetroPie</h3>
+<p>From your computer, open Putty and enter the IP you got from the last step and click <strong>Open</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie10.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-709 size-medium" src="/blog/wp-content/uploads/RetroPie10-300x300.png" width="300" height="300" srcset="/blog/wp-content/uploads/RetroPie10-300x300.png 300w, /blog/wp-content/uploads/RetroPie10-200x200.png 200w, /blog/wp-content/uploads/RetroPie10-150x150.png 150w, /blog/wp-content/uploads/RetroPie10.png 452w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>If you receive a certificate warning, ignore it and proceed.</p>
+<p>Enter your username and password to login. You will then see a nice blank screen as follows:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie11.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-710 size-medium" src="/blog/wp-content/uploads/RetroPie11-300x201.png" width="300" height="201" srcset="/blog/wp-content/uploads/RetroPie11-300x201.png 300w, /blog/wp-content/uploads/RetroPie11-600x403.png 600w, /blog/wp-content/uploads/RetroPie11.png 609w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Time to update your Pi!</p>
+<p>Run</p>
+<pre class="lang:sh decode:true">sudo apt-get update &amp;&amp; sudo apt-get upgrade -y</pre>
+<p>This may take take some time, so feel free to walk away for 5 minutes or so and come back.</p>
+<p>Install the prerequisites for RetroPie:</p>
+<pre class="lang:sh decode:true">sudo apt-get install -y git dialog lsb-release</pre>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie12.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-713 size-thumbnail" src="/blog/wp-content/uploads/RetroPie12-150x150.png" width="150" height="150" srcset="/blog/wp-content/uploads/RetroPie12-150x150.png 150w, /blog/wp-content/uploads/RetroPie12-300x300.png 300w, /blog/wp-content/uploads/RetroPie12-200x200.png 200w" sizes="(max-width: 150px) 100vw, 150px" /></a><br />
+Download the latest version RetroPie and begin the installation:</p>
+<pre class="lang:sh decode:true">cd
+git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+cd RetroPie-Setup
+chmod +x retropie_setup.sh
+sudo ./retropie_setup.sh</pre>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie13.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-715 size-medium" src="/blog/wp-content/uploads/RetroPie13-300x103.png" width="300" height="103" srcset="/blog/wp-content/uploads/RetroPie13-300x103.png 300w, /blog/wp-content/uploads/RetroPie13.png 580w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>After this runs, a GUI portion of this install will begin.</p>
+<p>When it comes to the following screen, Select <strong>OK. </strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie14.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-716 size-medium" src="/blog/wp-content/uploads/RetroPie14-300x222.png" width="300" height="222" srcset="/blog/wp-content/uploads/RetroPie14-300x222.png 300w, /blog/wp-content/uploads/RetroPie14.png 462w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Select <strong>Basic Install </strong>&gt; <strong>Yes</strong></p>
+<p>This will run through an install, it will take some time.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie15.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-719 size-medium" src="/blog/wp-content/uploads/RetroPie15-300x193.png" width="300" height="193" srcset="/blog/wp-content/uploads/RetroPie15-300x193.png 300w, /blog/wp-content/uploads/RetroPie15.png 569w" sizes="(max-width: 300px) 100vw, 300px" /><img loading="lazy" decoding="async" class="aligncenter wp-image-720 size-medium" src="/blog/wp-content/uploads/RetroPie16-300x191.png" width="300" height="191" srcset="/blog/wp-content/uploads/RetroPie16-300x191.png 300w, /blog/wp-content/uploads/RetroPie16.png 566w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Once that completes, select <strong>Configuration / Tools </strong>&gt;<strong> 802 &#8211; autostart </strong>&gt;<strong> 1 &#8211; Start Emulation Station at boot</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie17.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-728 size-medium" src="/blog/wp-content/uploads/RetroPie17-300x192.png" width="300" height="192" srcset="/blog/wp-content/uploads/RetroPie17-300x192.png 300w, /blog/wp-content/uploads/RetroPie17.png 564w" sizes="(max-width: 300px) 100vw, 300px" /></a> <a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie18.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-727 size-medium" src="/blog/wp-content/uploads/RetroPie18-300x192.png" width="300" height="192" srcset="/blog/wp-content/uploads/RetroPie18-300x192.png 300w, /blog/wp-content/uploads/RetroPie18.png 565w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Install drivers by selecting: <strong>Manage Packages </strong>&gt; <strong>Manage Driver Packages </strong>&gt; <strong>Install/Update all driver packages from binary</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie19.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-729 size-medium" src="/blog/wp-content/uploads/RetroPie19-300x191.png" width="300" height="191" srcset="/blog/wp-content/uploads/RetroPie19-300x191.png 300w, /blog/wp-content/uploads/RetroPie19.png 569w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Finally, reboot the Pi!</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie20.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-731 size-medium" src="/blog/wp-content/uploads/RetroPie20-300x193.png" width="300" height="193" srcset="/blog/wp-content/uploads/RetroPie20-300x193.png 300w, /blog/wp-content/uploads/RetroPie20.png 564w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>ROM Installation</h3>
+<h4>Windows</h4>
+<p>Now it&#8217;s time to move ROM&#8217;s you own, to the Pi. You don&#8217;t own any ROMs? Don&#8217;t worry, you&#8217;re resourceful and I have a link for you to <a href="http://lmgtfy.com/?q=Free+Roms+for+emulators" target="_blank">Follow</a>.</p>
+<p>Install <a href="https://winscp.net/eng/docs/guide_install" target="_blank">WinSCP</a> if it is not installed already.</p>
+<p>Run WINSCP.</p>
+<p>Connect to your Pi with the IP from earlier and the password you configured as such:</p>
+<h4><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie21.png" target="_blank"><img loading="lazy" decoding="async" class="aligncenter wp-image-737 size-medium" src="/blog/wp-content/uploads/RetroPie21-280x300.png" width="280" height="300" srcset="/blog/wp-content/uploads/RetroPie21-280x300.png 280w, /blog/wp-content/uploads/RetroPie21.png 361w" sizes="(max-width: 280px) 100vw, 280px" /></a></h4>
+<p>Navigate to <strong>RetroPie</strong> &gt; <strong>roms </strong>and you will find a list of all the available systems that you can play.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie22.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-755 size-medium" src="/blog/wp-content/uploads/RetroPie22-226x300.png" width="226" height="300" srcset="/blog/wp-content/uploads/RetroPie22-226x300.png 226w, /blog/wp-content/uploads/RetroPie22.png 529w" sizes="(max-width: 226px) 100vw, 226px" /></a></p>
+<p>For this tutorial, we will be dropping roms in:</p>
+<ul>
+<li>megadrive (Sega Genesis)</li>
+<li>n64 (Nintendo 64)</li>
+<li>nes (Nintendo Entertainment System)</li>
+<li>snes (Super Nintendo Entertainment System)</li>
+</ul>
+<p>Now you will simply drag and drop your ROMs into the desired destination.</p>
+<p>Once all the ROMs have finished moving, reboot your Pi and go back to it.</p>
+<h4>Mac</h4>
+<p>(to come at a later date&#8230;)</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Time to Play!</h3>
+<p>If you have not rebooted since adding the ROMs, do so now.</p>
+<pre class="lang:sh decode:true">sudo reboot</pre>
+<p>Now that your Pi has been configured and has ROMs on it, you are ready to configure your controller and start playing.</p>
+<p>When your Pi reboots, if you set it up to auto-run as described, it should be up and running after the reboot.</p>
+<p>&nbsp;</p>
+<h4>Controller Configurations are as follows:</h4>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>NES</h4>
+<p>Hold a Random Button to start.</p>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>D-PAD UP</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>D-PAD DOWN</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>D-PAD LEFT</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>D-PAD RIGHT</td>
+</tr>
+<tr>
+<td>START</td>
+<td>START</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>SELECT</td>
+</tr>
+<tr>
+<td>A</td>
+<td>A</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+</tr>
+<tr>
+<td>X</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+<h4></h4>
+<h4>SNES</h4>
+<p>Hold a Random Button to start.</p>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>D-PAD UP</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>D-PAD DOWN</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>D-PAD LEFT</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>D-PAD RIGHT</td>
+</tr>
+<tr>
+<td>START</td>
+<td>START</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>SELECT</td>
+</tr>
+<tr>
+<td>A</td>
+<td>A</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+</tr>
+<tr>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>LEFT SHOULDER</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>RIGHT SHOULDER</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>N64 &#8211; (Mupen64plus)</h4>
+<p>Hold a Random Button to start.</p>
+<h6>NOTE: On this controller, I sacrifice the LEFT TRIGGER for SELECT so it can be used to exit the emulator in conjunction with the start button.</h6>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>D-PAD UP</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>D-PAD DOWN</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>D-PAD LEFT</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>D-PAD RIGHT</td>
+</tr>
+<tr>
+<td>START</td>
+<td>START</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>A</td>
+<td>C-DOWN</td>
+</tr>
+<tr>
+<td>B</td>
+<td>A</td>
+</tr>
+<tr>
+<td>X</td>
+<td>C-LEFT</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>B</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>Z</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>RIGHT SHOULDER</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>LEFT SHOULDER</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>ANALOG STICK UP</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>ANALOG STICK DOWN</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>ANALOG STICK LEFT</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>ANALOG STICK RIGHT</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>C-UP</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>C-RIGHT</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+<h5>Sega Genesis</h5>
+<p>Hold a Random Button to start.</p>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>START</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>A</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>B</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>X</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>NOT TESTED</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>Hotkeys and special buttons of Note</h4>
+<table style="width: 50%;" border="1">
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT + START</td>
+<td>Exit emulator.</td>
+</tr>
+<tr>
+<td>SELECT + L1</td>
+<td>Load state.</td>
+</tr>
+<tr>
+<td>SELECT + R1</td>
+<td>Save state.</td>
+</tr>
+<tr>
+<td>THUMB LEFT</td>
+<td>Enable memory expansion pak.</td>
+</tr>
+<tr>
+<td>THUMB RIGHT</td>
+<td>Enable rumble expansion pak.</td>
+</tr>
+</tbody>
+</table>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Further RetroPie Configurations</h3>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h1 style="text-align: center;">ENJOY!</h1>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>References:</h3>
+<p><a href="https://github.com/retropie/retropie-setup/wiki/manual-installation" target="_blank">RetroPie Github Manual Installation Page</a></p>
+<p><a href="https://www.raspberrypi.org/documentation/installation/installing-images/README.md" target="_blank">Raspberry Pi Installation Guide</a></p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>PS Script install WP manually on Server 2012 R2</title>
+		<link>/blog/ps-script-install-wp-manually-server-2012-r2/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 14 Jul 2016 22:23:07 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[2012]]></category>
+		<category><![CDATA[2012R2]]></category>
+		<category><![CDATA[IIS]]></category>
+		<category><![CDATA[IIS 8.5]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Powershell]]></category>
+		<category><![CDATA[PS]]></category>
+		<category><![CDATA[Script]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<category><![CDATA[WP]]></category>
+		<guid isPermaLink="false">/blog/?p=548</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This post does basically the same thing that I have already covered in my &#8220;<a href="/blog/wordpress-iis-8-5-windows-2012-r2/">WordPress on IIS 8.5 (Windows 2012 R2)</a>&#8221; post, but it is a script that does literally everything for you. You will just need to add in a few of your own settings into the script, run it, and you will have a functional WP site.</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 18px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>First lets start of with the Features that I already have installed:</h4>
+<p>You will most likely have all of these but Telnet&#8230; <strong>INSTALL TELNET!</strong></p>
+<p>&nbsp;</p>
+<pre class="lang:xhtml decode:true ">DisplayName                                   Name                      InstallState
+-----------                                   ----                      ------------
+File and Storage Services                     FileAndStorage-Services      Installed
+Storage Services                              Storage-Services             Installed
+.NET Framework 4.5 Features                   NET-Framework-45-Features    Installed
+.NET Framework 4.5                            NET-Framework-45-Core        Installed
+WCF Services                                  NET-WCF-Services45           Installed
+TCP Port Sharing                              NET-WCF-TCP-PortSharing45    Installed
+SMB 1.0/CIFS File Sharing Support             FS-SMB1                      Installed
+Telnet Client                                 Telnet-Client                Installed
+User Interfaces and Infrastructure            User-Interfaces-Infra        Installed
+Graphical Management Tools and Infrastructure Server-Gui-Mgmt-Infra        Installed
+Server Graphical Shell                        Server-Gui-Shell             Installed
+Windows PowerShell                            PowerShellRoot               Installed
+Windows PowerShell 4.0                        PowerShell                   Installed
+Windows PowerShell ISE                        PowerShell-ISE               Installed
+WoW64 Support                                 WoW64-Support                Installed</pre>
+<p>&nbsp;</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 18px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>NOTES:</h3>
+<ul>
+<li>Use <a href="https://api.wordpress.org/secret-key/1.1/salt/">https://api.wordpress.org/secret-key/1.1/salt/</a> to generate your Salt Keys&#8230; After they have been generated, you must replace any &#8220;$&#8221; character with any other character. Not just this script, but WordPress will not work if there is a &#8220;$&#8221; character in the salt keys.</li>
+<li>You will be asked for some variables, they are as follows:</li>
+</ul>
+<table style="width: 50%;" border="1">
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IIS Site Name</td>
+<td>MyWordpressSite.com</td>
+</tr>
+<tr>
+<td>IIS App Pool Name</td>
+<td>MyWordpressSite.com</td>
+</tr>
+<tr>
+<td>Directory Path for website</td>
+<td>C:\inetpub\wwwroot\MyWordpressSite</td>
+</tr>
+<tr>
+<td>Database Name</td>
+<td>wordpress612</td>
+</tr>
+<tr>
+<td>Database Username</td>
+<td>wordpressuser612</td>
+</tr>
+<tr>
+<td>Database Password</td>
+<td>mysecretpassword612</td>
+</tr>
+<tr>
+<td>MySQL root Password</td>
+<td>v9gvBhTG@*b6n#^!v</td>
+</tr>
+<tr>
+<td>FTP Username</td>
+<td>FTPUser</td>
+</tr>
+<tr>
+<td>FTP Password</td>
+<td>FTPPass123!</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>You can download check out the progress of the script on my <a href="https://github.com/mgroff2/Powershell/tree/master/WP_Installer" target="_blank">Github</a> and you can download it with the following icon:</li>
+</ul>
+<p><a href="/blog/wp-content/uploads/Wordpress-setup.zip"><img loading="lazy" decoding="async" class="aligncenter wp-image-587 size-full" src="/blog/wp-content/uploads/ps1_Icon.png" alt="ps1_Icon" width="128" height="128" /></a></p>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Now for the Script</h3>
+<pre class="lang:ps decode:true">
+<# 
+
+    .SYNOPSIS
+    Install a new WP site with all pre-reqs using pre-set variables. Can be used for additional sites.
+    
+    .DESCRIPTION
+    This script will create a WordPress site with known-working configurations.
+    Script can also be used to add additional sites as checks are in place. 
+    To customize site, update custom variables as desired. 
+    CAUTION - this script will overwrite a current site
+        
+    .OUTPUTS  
+    A new wp site ready for your configuration! ;-)
+     
+    .NOTES
+    Author: Michael Groff
+    Minimum OS: 2012, 2012 R2
+    PS Version: 4.0
+    Date:  1/12/17
+    
+#>
+
+#Checking Powershell Version
+
+$LocalPSVers = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\PowerShell\3\PowerShellEngine\").PowerShellVersion | Where-Object {$_ -gt "4"}
+
+IF (-not$LocalPSVers)
+{
+    Write-Host "
+You need to upgrade to atleast PS Verion 5 before running this script!
+" -ForegroundColor Red
+    Read-Host "Press enter to exit"
+    BREAK
+}
+ELSE
+{
+    Write-Host "
+Correct Powershell Version found, you are good to go!
+    " -ForegroundColor Green
+}
+
+###
+###Variables Start: 
+###
+#Site Name, must inclue the TLD (.com, .info, .net, etc.)
+Write-Host "
+The website name, must inclue the TLD (.com, .info, .net, etc.)
+" -ForegroundColor Yellow
+$iisAppName = Read-host -prompt "Enter the website name"
+#IIS App Pool Name: 
+Write-Host "
+The iis app pool name, can be same as website
+" -ForegroundColor Yellow
+$iisAppPoolName = Read-host -prompt "Enter the iis app pool name, can be same as website"
+#Site Path
+Write-Host "
+The suggested website root directory path is 'C:\inetpub\wwwroot\MyWordpressSite'
+" -ForegroundColor Yellow
+$directoryPath = Read-host -prompt "Enter the Website root directory path"
+#Database Name
+Write-Host "
+The WordPress Database is a MySQL Database
+" -ForegroundColor Yellow
+$dbn = Read-host -prompt "Enter the WordPress Database Name"
+#Database Username
+Write-Host "
+The WordPress Database User is a MySQL User
+" -ForegroundColor Yellow
+$dbun = Read-host -prompt "Enter the WordPress Database Username"
+#Database User Password
+Write-Host "
+The WordPress Database Password should be a strong password, minimum 12 characters
+" -ForegroundColor Yellow
+$dbpw = Read-host -prompt "Enter the WordPress Database User Password"
+#MySQL root password
+Write-Host "
+The  MySQL root password, this will create one if it doesnt exist
+" -ForegroundColor Yellow
+$MySQL = Read-host -prompt "Enter the MySQL root password"
+#Salt Keys - https://api.wordpress.org/secret-key/1.1/salt/ (NOTE: Replace any $ that you see with another character!)
+#Authentication Key
+$AuthKey = "ry=,b*Gp,+1-voDYM`zq#:S_^ODN Lp9:_:&D5o6C%0SXsyi<k`Q .Z&#093;NK3144ay"
+#Secure Authentication Key
+$SecAuthKey = "f5h-Ss+}97fG%m+yS5X,zh3)>B/_/^C0x:sJv7Cta0+Cy=X_{E>[RN+A=-(*%Z+t"
+#Logged In Key
+$LogInKey = "N-< +&#091;doN4gwtyk?PZK>=~iU8]-oS)wPt6l~.qMES}<vr v.Px`d#4MxOb`e.&#038;7-"
+#Nonce Key
+$NKey = ":!!Pu0e5a?ux,+P)C&#091;|T~,:IN,+m0H.6.JT%Ov_;_.J9;<@dCNpu|+@;L{G)W%|3"
+#Authentication Salt
+$AuthSalt = "SlHw{qnL#.kN--|u+Rw|kTe#(QR=Ak`_MUO8!#&#093;`3L7.L=X<nX3><w/}MuRu9w`J"
+#Secure Authentication Salt
+$SecAuthSalt = "a}4L-qvxEx~x(f_&#093;YiBgP(18%r)IerB+e4-I6m+ZkzgW4//V?x:P&#038;:IvjIxguJIX"
+#Logged In Salt
+$LogInSalt = "d-O >T]uyh:9?Pu`i8|222S|eY5lW8,`lPwG-b|^-|8z5]j(P+-T6c[^PO;4ZM2q"
+#Nonce Salt
+$NSalt = "pT[la{_E,yMHhMu|F1F|k7*q+PQ]u[e zdUjj5(%&gZnsxUGJgYsi?:h[d|o`5I)"
+#FTPUsername
+Write-Host "
+The FTP Username is a Windows User
+" -ForegroundColor Yellow
+$FTPSiteUser = Read-host -prompt "Enter the FTP Username"
+#FTP Password - NOTE: Must be UNDER 14 characters, also must have a capital letter and special character
+Write-Host "
+The FTP User Pasword must be UNDER 14 characters & must have a capital letter and special character
+" -ForegroundColor Yellow
+$FTPSiteUserPW = Read-host -prompt "Enter the FTP User Pasword"
+#FTP Group
+$FTPGroup = "FTP_User_Group"
+###
+###Variables End: 
+###
+
+###Variables to leave alone: 
+$iisAppPoolDotNetVersion = "v4.0"
+$sitelocation = "IIS:\sites\$iisAppName"
+
+Write-Host "
+Installing Windows Roles & Features if necessary... be patient
+" -ForegroundColor Cyan
+
+#Windows Roles & Features if they are not already installed
+Function Install-WP-Web-Features {
+IF ( Get-WindowsFeature -Name Web-Server, Web-Log-Libraries, Web-Request-Monitor, Web-App-Dev, Web-Net-Ext45, Web-CGI, Web-Ftp-Server, NET-Framework-Features | Where {$_.InstallState -eq "Available"} )
+        {
+            Install-WindowsFeature -Name Web-Server, Web-Log-Libraries, Web-Request-Monitor, Web-App-Dev, Web-Net-Ext45, Web-CGI, Web-Ftp-Server, NET-Framework-Features -IncludeManagementTools
+        }
+        ELSE
+        {
+            Return  Write-Host "
+Necessary Windows Features are already installed!
+            " -ForegroundColor Green
+        }
+}
+
+Install-WP-Web-Features
+
+#Create a new Website and AppPool for WP to live in
+
+Import-Module WebAdministration
+
+Write-Host "
+Creating site and App Pool in IIS
+" -ForegroundColor Cyan 
+
+#navigate to the app pools root
+cd IIS:\AppPools\
+
+#check if the app pool exists
+if (!(Test-Path $iisAppPoolName -pathType container))
+{
+    #create the app pool
+    $appPool = New-Item $iisAppPoolName
+    $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value $iisAppPoolDotNetVersion
+}
+
+#navigate to the sites root
+cd IIS:\Sites\
+
+#check if the site exists
+if (!(Test-Path $iisAppName -pathType container))
+{
+    #create the site
+    $iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisAppName} -physicalPath $directoryPath
+    $iisApp | Set-ItemProperty -Name "applicationPool" -Value $iisAppPoolName
+}
+
+Write-Host "
+Adding in hosts file entry
+" -ForegroundColor Cyan 
+
+#Adds in hosts file entry for your new site: 
+function add-hostfilecontent {            
+ [CmdletBinding(SupportsShouldProcess=$true)]            
+ param (            
+  [parameter(Mandatory=$true)]            
+  [ValidatePattern("\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")]            
+  [string]$IPAddress,            
+              
+  [parameter(Mandatory=$true)]            
+  [string]$computer            
+ )            
+ $file = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"            
+ if (-not (Test-Path -Path $file)){            
+   Throw "Hosts file not found"            
+ }            
+ $data = Get-Content -Path $file             
+ $data += "$IPAddress  $computer"            
+ Set-Content -Value $data -Path $file -Force -Encoding ASCII             
+}
+
+#add host file entries
+add-hostfilecontent -IPAddress 127.0.0.1 -computer $iisAppName
+
+Write-Host "
+Installing Web Platform Installer
+" -ForegroundColor Cyan
+
+#Install Web Platform Installer if its not already installed
+$WPIPath = Test-Path "C:\Program Files\Microsoft\Web Platform Installer\WebPlatformInstaller.exe"
+Function Install-WPI {
+        IF (-not$WPIPath)
+        {
+            msiexec.exe /package http://download.microsoft.com/download/C/F/F/CFF3A0B8-99D4-41A2-AE1A-496C08BEB904/WebPlatformInstaller_amd64_en-US.msi /quiet /passive | Out-Null
+        }
+        ELSE
+        {
+            Return Write-Host "
+Web Plaform Installer 5.0 is already installed!
+            " -ForegroundColor Green
+            break
+        }
+} 
+
+Install-WPI
+
+#The .app info
+Write-Host "
+If the script stopped here..." -ForegroundColor Red
+Write-Host "you did not fill out the variable information above... correctly
+" -ForegroundColor Yellow
+
+New-Item $env:USERPROFILE\Desktop\wp.app -ItemType file -value "AppPath[@]$iisAppName
+
+DbServer[@]localhost
+
+DbName[@]$dbn
+
+DbUsername[@]$dbun
+
+DbPassword[@]$dbpw
+
+DbAdminUsername[@]root
+
+DbAdminPassword[@]$MySQL
+
+Authentication Key[@]$AuthKey
+
+Secure Authentication Key[@]$SecAuthKey
+
+Logged In Key[@]$LogInKey 
+
+Nonce Key[@]$NKey
+
+Authentication Salt[@]$AuthSalt
+
+Secure Authentication Salt[@]$SecAuthSalt
+
+Logged In Salt[@]$LogInSalt
+
+Nonce Salt[@]$NSalt
+
+"
+
+#Reload Paths to understand WebPICMD.exe
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
+Write-Host "
+Starting the WP install" -ForegroundColor Cyan 
+
+#Install WP & all necessary modules
+cd $env:USERPROFILE\Desktop
+WebPICMD.exe /Install /Products:PHPManager /AcceptEULA
+WebPICMD.exe /Install /Application:Wordpress@wp.app /Products:PHP54 /AcceptEULA /MySQLPassword:$MySQL /Log:$env:HOMEDRIVE\WPIntsalllog.txt
+
+#Configure URL Rewrite Rule 
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules" -name "." -value @{name='Wordpress';patternSyntax='Wildcard'}
+Set-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/match" -name "url" -value "*"
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/conditions" -name "." -value @{input='{REQUEST_FILENAME}';matchType='IsFile';negate='True'}
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/conditions" -name "." -value @{input='{REQUEST_FILENAME}';matchType='IsDirectory';negate='True'}
+Set-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/action" -name "url" -value "index.php"
+
+#Remove unnecessary Default Docs: 
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='Default.htm'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='Default.asp'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='index.htm'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='index.html'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='iisstart.htm'}
+
+#Remove PHP 5.5 as WP only works with 5.4 afaik: 
+$TestPHP55 =  Get-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST'  -filter "system.webServer/handlers/add[@name='PHP55_via_FastCGI']"  -Name "type"
+
+IF ($TestPHP55)
+{     
+    Remove-WebConfigurationProperty  -pspath 'MACHINE/WEBROOT/APPHOST'  -filter "system.webServer/handlers" -name "." -AtElement @{name='PHP55_via_FastCGI'}           
+}
+ELSE
+{
+    Write-Host "
+PHP 5.5 has already been removed!
+    " -ForegroundColor Green
+}
+
+#Create FTP Group & User - Uses preset variables 
+#Group Creation
+
+IF (-not (Get-WmiObject -Class Win32_Group | Where-Object {$_.Name -eq "$FTPGroup"}))
+{
+    Write-Host "
+Creating FTP User Group
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net localgroup /add $FTPGroup}
+}
+ELSE
+{
+    Write-Host "
+Local Group already exists
+    " -ForegroundColor Yellow
+}
+
+#Users Creation
+
+IF (-not (Get-WmiObject -Class Win32_UserAccount | Where-Object {$_.Name -eq "$FTPSiteUser"}))
+{
+    Write-Host "
+Creating FTP User
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net user /add $FTPSiteUser $FTPSiteUserPW} -ErrorAction SilentlyContinue
+    Write-Host "
+Adding user to FTP User Group
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net localgroup $FTPGroup $FTPSiteUser /add }
+}
+ELSE
+{
+    Write-Host "
+Local User already exists
+    " -ForegroundColor Red
+}
+
+#Create FTP Site (To update WordPress and Plugins)
+$FTPSiteName = "Main FTP"
+$FTPSitePath = "C:\inetpub\ftproot"
+$FTPSitePathLocUsr = "C:\inetpub\ftproot\LocalUser"
+
+IF (-not (Test-Path -Path "$FTPSitePathLocUsr"))
+{
+    New-Item -Path $FTPSitePathLocUsr -ItemType Directory -ErrorAction SilentlyContinue
+    New-Item -Path $FTPSitePath -ItemType Directory -ErrorAction SilentlyContinue
+    New-WebFtpSite -Name $FTPSiteName -PhysicalPath $FTPSitePath -IPAddress * -Port 21
+}
+ELSE
+{
+    Write-Host "
+FTP Site already exists in location: 'C:\inetpub\ftproot\LocalUser'
+Updating your WordPress site may not work as designed with FTP
+    " -ForegroundColor Yellow
+    Write-Host "
+Attempting to create virtual direcotry in FTP Site. 
+    " -ForegroundColor Yellow
+} 
+
+IF (-not (Get-WebVirtualDirectory -Name "*$FTPSiteUser*") )
+{
+    New-WebVirtualDirectory -Site "$FTPSiteName\LocalUser" -Name $FTPSiteUser -PhysicalPath $directoryPath -ErrorAction SilentlyContinue
+    Write-Host "
+FTP virtual direcotry has been created!
+    " -ForegroundColor Green
+}
+ELSE
+{
+    Write-Host "
+Virtual Directory for FTP Site already exists
+    " -ForegroundColor Red 
+}
+
+#Setting User/Group Permissions for FTP User Group in IIS - Adding Authorization in IIS
+
+#Giving Windows Group permissions to site for FTP
+IF (-not((Get-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -location "$FTPSiteName" -filter "system.ftpServer/security/authorization/add" -name ".").roles))
+{
+Add-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -location "$FTPSiteName" -filter "system.ftpServer/security/authorization" -name "." -value @{accessType='Allow';roles="$FTPGroup";permissions='Read,Write'}
+}
+ELSE
+{
+    Write-Host " 
+FTP User Group has already been given proper permissions in IIS. 
+    " -ForegroundColor Green 
+}
+
+#Enable Basic Auth for the FTP Site
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.authentication.basicAuthentication.enabled -Value $true
+
+#Setup User Isolation
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.userisolation.mode -Value IsolateAllDirectories
+
+#Disable Require SSL on FTP Site
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.ssl.controlChannelPolicy -Value SslAllow
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.ssl.dataChannelPolicy -Value SslAllow
+
+#Permission for FTP user to WP Directory
+$FTPAcl = Get-Acl -Path "$directoryPath"
+$FTPAclUser = New-Object system.security.accesscontrol.filesystemaccessrule("$FTPGroup","FullControl","ContainerInherit, ObjectInherit","None","Allow")
+$FTPAcl.SetAccessRule($FTPAclUser)
+Set-Acl -Path "$directoryPath" -AclObject $FTPAcl
+
+#Finishing up and loading your site
+#Cleanup
+Remove-Item $env:USERPROFILE\Desktop\wp.app -Force
+
+#Disable IE Enhanced Security & UAC
+function Disable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 0
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been disabled." -ForegroundColor Green
+}
+function Enable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 1
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 1
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been enabled." -ForegroundColor Green
+}
+function Disable-UserAccessControl {
+    Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 00000000
+    Write-Host "User Access Control (UAC) has been disabled." -ForegroundColor Green    
+}
+
+#Disable IE Enhanced Security if its not already
+IF (
+((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}").IsInstalled | Where-Object {$_ -gt "0"}) + 
+((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}").IsInstalled | Where-Object {$_ -gt "0"})
+)
+{
+    Disable-InternetExplorerESC
+}
+ELSE
+{
+    Write-Host "
+IE Enhanced Security Configuration (ESC) has already been disabled.
+    " -ForegroundColor Green
+}
+
+#Disable User Access Control
+IF (((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System").ConsentPromptBehaviorAdmin | Where-Object {$_ -gt "0"}))
+{
+    Disable-UserAccessControl
+}
+ELSE
+{
+    Write-Host "
+User Access Control (UAC) has already been disabled. 
+    " -ForegroundColor Green
+}
+
+Write-Host "
+Done! Now go configure your site" -ForegroundColor Green 
+#Opening IE to your WP site
+$url = "http://$iisAppName/"
+
+$IEwp = New-Object -com internetexplorer.application;
+$IEwp.visible = $true; 
+$IEwp.navigate($url);
+
+#Opening your new WP folder with File Explorer
+Start-Process $directoryPath
+
+#Openeing WP Install Log file for review
+Start-Process $env:HOMEDRIVE\WPIntsalllog.txt
+
+#Open IIS
+Start-Process C:\Windows\system32\inetsrv\inetmgr.exe
+
+Write-Host ""
+Read-Host -Prompt "Press Enter to exit" 
+</pre>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

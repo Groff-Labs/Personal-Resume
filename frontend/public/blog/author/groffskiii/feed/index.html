@@ -1,0 +1,1807 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Michael &#8211; Michael Groff</title>
+	<atom:link href="/blog/author/groffskiii/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 27 Dec 2023 16:25:07 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Install Visio 2016 alongside Office 365</title>
+		<link>/blog/install-visio-2016-alongside-office-365/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 25 Feb 2020 04:40:24 +0000</pubDate>
+				<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Windows PC]]></category>
+		<category><![CDATA[Office 365]]></category>
+		<category><![CDATA[Office365]]></category>
+		<category><![CDATA[Visio]]></category>
+		<category><![CDATA[WIndows 10]]></category>
+		<guid isPermaLink="false">/blog/?p=1015</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="text-align: center;">Have you ever tried to install Visio 2016 on a computer that you already have Office 365 installed already and it gave you a &#8220;Click-to-Run&#8221; error? This error is fairly easy to get around and in this post I will teach you how.</h4>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>First thing you will want to do is download the &#8220;<a href="https://www.microsoft.com/en-gb/download/details.aspx?id=36778">Office Deployment Tool</a>&#8221; and extract it somewhere. I prefer to do this on my Desktop or in my Downloads directory.</p>
+<p>EDIT: I recently did this again and had to use this &#8220;<a href="https://www.microsoft.com/en-us/download/details.aspx?id=49117">Office Deployment Tool</a>&#8221;</p>
+<p>Next, you will want to create the following &#8220;downloadconfig.xml&#8221; in the directory that you extracted the Office Deployment tool into. Inside that document, put in the following information (please edit for <a href="https://docs.microsoft.com/en-us/DeployOffice/use-the-office-deployment-tool-to-install-volume-licensed-editions-of-visio-2016?redirectSourcePath=%252fen-us%252farticle%252f82691bd7-a3d5-47ca-8d8a-0ee43ec2c01f">your version of Visio</a>). For this install, I am installing Visio Professional 2016.</p>
+<pre class="lang:xhtml decode:true ">&lt;Configuration&gt;
+  &lt;Add OfficeClientEdition="64" &gt;
+    &lt;Product ID="VisioProXVolume" PIDKEY="69WXN-MBYV6-22PQG-3WGHK-RM6XC"&gt;
+        &lt;Language ID="en-us" /&gt;
+     &lt;/Product&gt;
+   &lt;/Add&gt;  
+&lt;/Configuration&gt;</pre>
+<p>Once you have that done, you will want to run the following two commands from the root of the Office Deployment Tool Directory. One to download the needed files and the other to perform the installation.<br />
+Download:</p>
+<pre class="lang:ps decode:true ">.\setup.exe /download .\downloadconfig.xml</pre>
+<p>Install:</p>
+<pre class="lang:ps decode:true ">.\setup.exe /configure .\downloadconfig.xml</pre>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Home Lab 2.0</title>
+		<link>/blog/home-lab-2-0/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Fri, 01 Mar 2019 00:22:12 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Cabling]]></category>
+		<category><![CDATA[Cat6]]></category>
+		<category><![CDATA[CS24-SC]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[Home Lab]]></category>
+		<category><![CDATA[Lab]]></category>
+		<category><![CDATA[Storage]]></category>
+		<category><![CDATA[Switches]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<guid isPermaLink="false">/blog/?p=927</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This post will serve as the 10,000 ft overview of my environment and what it all consists of. I plan to follow up this post with a series of smaller posts breaking down my Home Lab into the following sections:</p>
+<h5>(as I update these blog posts, links will appear and become active)</h5>
+<ul>
+<li><strong>Home Lab Servers &amp; Storage</strong></li>
+<li><strong>Home Lab Routing &amp; Switching</strong></li>
+<li><strong>Home Lab Access Points</strong></li>
+<li><strong>Home Lab Surveillance</strong></li>
+<li><strong>Home Cat6 Cable Wiring</strong></li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div><div class="vc_empty_space"   style="height: 15px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-660369e855355d887" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-660369e855355d887 uvc-3034  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-660369e855355d887 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Servers &amp; Storage</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I go into details about the server and storage that I use in my Home Lab environment.</p>
+<p>The current hardware I use is:</p>
+<ul>
+<li>Dell PowerEdge R710 SFF &amp; LFF</li>
+<li>Dell PowerEdge C2100</li>
+<li>Dell PowerEdge CS24-SC (Essentially a 2950)</li>
+<li>Dell PowerEdge R510 LFF</li>
+</ul>
+<p>The operating systems that I use are:</p>
+<ul>
+<li>VMware esxi 6.5</li>
+<li>VMware esxi 6.7</li>
+<li>Windows Server 2012 R2</li>
+<li>Windows Server 2016</li>
+<li>Windows Server 2019</li>
+<li>FreeNAS 11.1 (U7 if you care)</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I have purchased or otherwise acquired some Gen10 and Gen11 Dell PowerEdge Servers throughout my years in IT. I enjoy having a Home Lab to work in and learn new things without repercussions of really messing something up. In my environment, nuke and pave is not frowned upon at all. I do my best to say up-to-date and using the latest and greatest trial software, but due to the hardware I am running, that goal comes with some limitations.For instance, my C2100 servers simply cannot be upgraded beyond esxi 6.5. The processors are not compatible with esxi 6.7. However, I was able to upgrade my vCenter Server to 6.7 and still have it manage my 6.5 hosts.</p>
+<p>Most of my servers are running Windows Server 2019, but some are still running 2016 as I havent had the time or need to update them. (Such as DC&#8217;s and DB&#8217;s)</p>
+<p>My Storage devices are all PowerEdge Servers running FreeNAS. I set them up with FreeNAS and configure the iSCSI service for MPIO to my esxi hosts. I find it is a set-it and forget-it type of thing. I am subscribed to some FreeNAS emails and RSS feeds, so I look out for OS updates and install them accordingly.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-271069e855355dccd" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-271069e855355dccd uvc-2697  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-271069e855355dccd h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Routing &amp; Switching</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover all the networking equipment that I use in my home lab and how I use it.</p>
+<p>The networking hardware that I use is:</p>
+<ul>
+<li>Unifi USG-PRO-4 (Gateway)</li>
+<li>Unifi US-24 (Switch)</li>
+<li>Unifi US-8-150 (Switch)</li>
+<li>3 x Dell PowerConnect 7048P (Switch)</li>
+<li>Netgear ProSAFE GS108Ev3 8-Port</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>For most of my networking equipment, I run Ubiquiti Unifi equipment. This is marketed as &#8220;Enterprise&#8221; networking equipment, but imho, it is far from &#8220;Enterprise&#8221;. I would place it solidly in the &#8220;prosumer&#8221; line of networking equipment. Dont get me wrong, their WAP&#8217;s are pretty awesome. But their switching and routing devices leave much to be desired. Their GUI is quite pretty and you can do enough to get by through it, but for really advanced setups, you are required to edit a json file. Often the editing of the json file is unsupported and a PITA the figure out.</p>
+<p>For the rest of my networking equipment, I run some classic Dell PowerConnect switches. I run the 7048P&#8217;s. For the most part, I dont need the PoE feature, but for under $150 per switch, I couldnt not get the PoE feature. I just disable it on the ports where it is not needed. The language is pretty similar to Cisco so getting by in command line is my preferred way to manage these.</p>
+<p>Oh, and I have a Netgear managed 8-port switch. This little guy has kept up with the other two brands of switches afaic. I like the little guy and it works great as an under the desk switch.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-779769e855355dfdf" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-779769e855355dfdf uvc-6275  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-779769e855355dfdf h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Access Points</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover the Access point that I use in my home, discussing wiring, port and physical placement.</p>
+<p>The hardware access points I currently use are:</p>
+<ul>
+<li>Unifi UAP-AC-PRO</li>
+<li>Unifi UAP-AC-M-PRO</li>
+<li>Unifi UAP-IW-PRO</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>For all my Wireless, I trust in the Ubiquiti Unifi line. They are a great &#8220;prosumer&#8221; product at a price that I can afford. And they definitely do their job for my home needs. I have even installed these at a few businesses with very solid results.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-136569e855355e2d9" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-136569e855355e2d9 uvc-8234  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-136569e855355e2d9 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Surveillance</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover my Home Surveillance Solution using my Home Lab equipment.</p>
+<p>Some of the equipment I use is as follows:</p>
+<ul>
+<li>Home Server (Sometimes virtualized, sometimes standalone)</li>
+<li><a href="http://blueirissoftware.com/">BlueIris</a> NVR Software</li>
+<li>Reolink IP Cams
+<ul>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-410</li>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-411</li>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-420</li>
+<li class="pro-name active" data-id="50" data-parent-id="50">RLC-423</li>
+</ul>
+</li>
+<li>HikVision IP Cams
+<ul>
+<li>DS-2CD2142FWD-IS 4MP</li>
+</ul>
+</li>
+<li>Ring Pro Doorbell</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>When I first got into the surveillance game, I was purchasing Hikvision IP Cameras from a specific re-seller in my area. Since then, Reolink has become quite a mainstream prosumer product and I can get them from Amazon. So as of late, all of my Reolink cams have been purchased from random amazon sales.</p>
+<p>Overall I enjoy both cams, but prefer the Reolink branded cams over Hikvision.</p>
+<p>As for the Ring Pro Doorbell. I got it because it&#8217;s easy for the wife to use and not answer the door if she doesn&#8217;t want to. I have it on a &#8220;security device&#8221; vlan, so it is segmented off. I actually do enjoy the device. It is nice having something in the cloud separate from Blue Iris.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-863769e855355e5db" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-863769e855355e5db uvc-636  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-863769e855355e5db h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Cat6 Cable Wiring</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will go through what it takes to wire up your home with Cat6 cabling. This is currently an ongoing process for me and may be for some time yet to come.<br />
+The materials you will need to complete wiring in your house are as follows:</p>
+<ul>
+<li>Cat6 cabling</li>
+<li>RJ45 Cat6 Jacks</li>
+<li>RJ45 Boots</li>
+<li>RJ45 Crimping tool</li>
+<li>RJ45 Punch Down tool</li>
+<li>Cat6 Wall Plates with Jacks</li>
+<li>Pull String</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Wiring your house is a process. If you have unlimited amounts of money, then hire a company to do it and they will charge you a few grand to go in there and get it done. They will most likely run the cables in a manner that works, but is not tech approved bc they are dudes who just know how to run cables, not why they are run or consequences of how they are run. If you are like me where money is not an endless pit of fun and you like having control over things, then you will want to take on wiring yourself. Overall you can do this for a fraction of the cost compared to contracting it out, but it will be a lot of work and sometimes, a complete, PITA. If you live in Texas like me, only plan on doing this kind of work from late October through late April&#8230; It gets hot in there.</p>
+<p>Overall, I have found wiring my house to be quite rewarding, both financially and emotionally. I am able to &#8220;put a stamp&#8221; on my work and be proud of what I have done.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>WordPress Permissions for Windows</title>
+		<link>/blog/wordpress-permissions-for-windows/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 26 Feb 2019 03:08:00 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<category><![CDATA[WP]]></category>
+		<guid isPermaLink="false">/blog/?p=662</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>So I have had this post sitting in the &#8220;Draft&#8221; stage for years now. Probably 3 or 4. I thought I was going to tackle this and set something definitively out there for some people to follow. And today I will finally do just that.</p>
+<p>Here are the suggested WordPress file permissions for Windows:</p>
+
+		</div>
+	</div>
+</div></div></div></div><div id="ultimate-heading-692969e855355ef23" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-692969e855355ef23 uvc-9669  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-692969e855355ef23 h1'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h1 style="font-weight:bold;">RUN LINUX!</h1></div></div><div id="ultimate-heading-778569e855355ef36" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-778569e855355ef36 uvc-189  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-778569e855355ef36 h1'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h1 style="font-weight:bold;">RUN LINUX!</h1></div></div><div id="ultimate-heading-541269e855355ef43" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-541269e855355ef43 uvc-4622  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-541269e855355ef43 h1'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h1 style="font-weight:bold;">RUN LINUX!</h1></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img fetchpriority="high" decoding="async" width="869" height="1024" src="/blog/wp-content/uploads/linux_PNG13-869x1024.png" class="vc_single_image-img attachment-large" alt="" title="linux_PNG13" srcset="/blog/wp-content/uploads/linux_PNG13-869x1024.png 869w, /blog/wp-content/uploads/linux_PNG13-255x300.png 255w, /blog/wp-content/uploads/linux_PNG13-768x905.png 768w, /blog/wp-content/uploads/linux_PNG13-600x707.png 600w, /blog/wp-content/uploads/linux_PNG13.png 1738w" sizes="(max-width: 869px) 100vw, 869px"  data-dt-location="/blog/wordpress-permissions-for-windows/linux_png13/" /></div>
+		</figure>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Identify Failed Port and Replace NIC</title>
+		<link>/blog/identify-failed-port-and-replace-nic/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 26 Feb 2019 02:03:15 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[esxi]]></category>
+		<guid isPermaLink="false">/blog/?p=958</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This past week, I had a failed port one one of my C2100&#8217;s. The specific part was a <strong>Intel PRO/1000 VT Quad Port Gigabit PCI-E Ethernet Network Adapter (HM9JY)</strong>. Now just one single port failed and I was using all 4 ports for iSCSI from my FreeNAS C2100 to my esxi cluster. Luckily I have 4 ports so naturally MPIO is configured and I didnt notice the failure immediately. I first noticed this in my cluster and also saw the port was failed in FreeNAS. Since there is no OMSA for BSD, I was unable to gather more information about the status of the port.</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-995669e855355fb21" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-995669e855355fb21 uvc-7892  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-995669e855355fb21 h4'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h4 style="--font-weight:theme;">This is how I noticed the failed port on an esxi host</h4></div></div>
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/83749551137044.jpg" target="_self" data-large_image_width="1976" data-large_image_height="385"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img decoding="async" width="1024" height="200" src="/blog/wp-content/uploads/83749551137044-1024x200.jpg" class="vc_single_image-img attachment-large" alt="" title="" srcset="/blog/wp-content/uploads/83749551137044-1024x200.jpg 1024w, /blog/wp-content/uploads/83749551137044-300x58.jpg 300w, /blog/wp-content/uploads/83749551137044-768x150.jpg 768w, /blog/wp-content/uploads/83749551137044-600x117.jpg 600w, /blog/wp-content/uploads/83749551137044.jpg 1976w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/attachment/83749551137044/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I went onto ebay and ordered the new part for $20 with free shipping. It came in today and I took some time to replace it this evening. It is a pretty simple process, I will walk you through it below.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>The first things I am going to do is power off my server and then remove all the cabling from it. Some people choose to not remove networking when doing this, but I am running PoE switches, and even though PoE has been disable on the ports, I dont trust it. I remove all potential of electricity running through the system other than the CMOS and RAID batteries.</p>
+<p>So, Power off your server, remove all the cabling, pull it out of the rack and remove the cover.</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_left">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div class="vc_single_image-wrapper   vc_box_border_grey"><img decoding="async" width="1024" height="768" src="/blog/wp-content/uploads/s-l1600-1024x768.jpg" class="vc_single_image-img attachment-large" alt="" title="s-l1600" srcset="/blog/wp-content/uploads/s-l1600-1024x768.jpg 1024w, /blog/wp-content/uploads/s-l1600-300x225.jpg 300w, /blog/wp-content/uploads/s-l1600-768x576.jpg 768w, /blog/wp-content/uploads/s-l1600-600x450.jpg 600w, /blog/wp-content/uploads/s-l1600.jpg 1600w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/s-l1600/" /></div>
+		</figure>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">The new part looks like this. It will just slide right into a PCIe slot and I will screw it in.</p>
+
+		</div>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Here we are with the top open.</h3>
+<p style="text-align: center;">I am going to pull out that part in the upper left hand corner to replace.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/IMG_195212.jpg" target="_self" data-large_image_width="1536" data-large_image_height="2048"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="768" height="1024" src="/blog/wp-content/uploads/IMG_195212-768x1024.jpg" class="vc_single_image-img attachment-large" alt="" title="IMG_195212" srcset="/blog/wp-content/uploads/IMG_195212-768x1024.jpg 768w, /blog/wp-content/uploads/IMG_195212-225x300.jpg 225w, /blog/wp-content/uploads/IMG_195212-600x800.jpg 600w, /blog/wp-content/uploads/IMG_195212.jpg 1536w" sizes="(max-width: 768px) 100vw, 768px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/img_195212/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Here is the empty slot that we will plug back into.</h3>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/IMG_195301.jpg" target="_self" data-large_image_width="1536" data-large_image_height="2048"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="768" height="1024" src="/blog/wp-content/uploads/IMG_195301-768x1024.jpg" class="vc_single_image-img attachment-large" alt="" title="IMG_195301" srcset="/blog/wp-content/uploads/IMG_195301-768x1024.jpg 768w, /blog/wp-content/uploads/IMG_195301-225x300.jpg 225w, /blog/wp-content/uploads/IMG_195301-600x800.jpg 600w, /blog/wp-content/uploads/IMG_195301.jpg 1536w" sizes="(max-width: 768px) 100vw, 768px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/img_195301/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">The top device  is the one I pulled out and replace.</h3>
+<p style="text-align: center;">It is the top device due to the photo orientation and the fact that I pulled it out of the server. When I put it back in the server, it will &#8220;on the bottom&#8221;. I find placing NIC card below RAID card make it easier to unplug booted cables from the server.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/IMG_195243.jpg" target="_self" data-large_image_width="2048" data-large_image_height="1536"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="1024" height="768" src="/blog/wp-content/uploads/IMG_195243-1024x768.jpg" class="vc_single_image-img attachment-large" alt="" title="IMG_195243" srcset="/blog/wp-content/uploads/IMG_195243-1024x768.jpg 1024w, /blog/wp-content/uploads/IMG_195243-300x225.jpg 300w, /blog/wp-content/uploads/IMG_195243-768x576.jpg 768w, /blog/wp-content/uploads/IMG_195243-600x450.jpg 600w, /blog/wp-content/uploads/IMG_195243.jpg 2048w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/img_195243/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3 style="text-align: center;">Now that the NIC has been replaced, all iSCSI paths are available!</h3>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/901672379598.jpg" target="_self" data-large_image_width="1982" data-large_image_height="344"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="1024" height="178" src="/blog/wp-content/uploads/901672379598-1024x178.jpg" class="vc_single_image-img attachment-large" alt="" title="901672379598" srcset="/blog/wp-content/uploads/901672379598-1024x178.jpg 1024w, /blog/wp-content/uploads/901672379598-300x52.jpg 300w, /blog/wp-content/uploads/901672379598-768x133.jpg 768w, /blog/wp-content/uploads/901672379598-600x104.jpg 600w, /blog/wp-content/uploads/901672379598.jpg 1982w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/attachment/901672379598/" /></a>
+		</figure>
+	</div>
+
+	<div  class="wpb_single_image wpb_content_element vc_align_center">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<a href="/blog/wp-content/uploads/90145779598.jpg" target="_self" data-large_image_width="1194" data-large_image_height="255"  class="vc_single_image-wrapper   vc_box_border_grey dt-pswp-item rollover rollover-zoom"   ><img loading="lazy" decoding="async" width="1024" height="219" src="/blog/wp-content/uploads/90145779598-1024x219.jpg" class="vc_single_image-img attachment-large" alt="" title="90145779598" srcset="/blog/wp-content/uploads/90145779598-1024x219.jpg 1024w, /blog/wp-content/uploads/90145779598-300x64.jpg 300w, /blog/wp-content/uploads/90145779598-768x164.jpg 768w, /blog/wp-content/uploads/90145779598-600x128.jpg 600w, /blog/wp-content/uploads/90145779598.jpg 1194w" sizes="(max-width: 1024px) 100vw, 1024px"  data-dt-location="/blog/identify-failed-port-and-replace-nic/attachment/90145779598/" /></a>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Populate list of all Steam Games</title>
+		<link>/blog/populate-list-of-all-steam-games/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 17 Oct 2017 02:04:51 +0000</pubDate>
+				<category><![CDATA[Gaming]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Steam]]></category>
+		<guid isPermaLink="false">/blog/?p=875</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I have updated this as of 12/27/2023 as a user came across this page and informed me the script I wrote is not long working. I have updated the script to work again.</p>
+<p>Log into your steam account, navigate to your profile page and then the &#8220;Games&#8221; page and Select &#8220;All Games&#8221;. Open up the console (F12) and run the following bit of code:</p>
+<div class="shortcode-code">
+<p>// Open the console on the desired Steam profile page and run this script:</p>
+<p>// Select all elements with the game name class<br />
+var gameNameElements = document.getElementsByClassName(&#039;gameslistitems_GameName_22awl&#039;);<br />
+var gameNames = &#039;&#039;;</p>
+<p>// Iterate over all selected elements and concatenate their text content<br />
+for (var i = 0; i &lt; gameNameElements.length; i++) {<br />
+gameNames += (gameNameElements&#091;i&#093;.innerText + &#039;\n&#039;);<br />
+}</p>
+<p>// Output the result<br />
+console.log(gameNames);<br />
+</p></div>
+<p class="lang:java decode:true ">The above console script will generate the list same as before.</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-198469e8553562f1d" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-198469e8553562f1d uvc-6555  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-198469e8553562f1d h2'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h2 style="--font-weight:theme;">Deprecated - 2017 Version</h2></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I wanted to populate a list of all my Steam games for export into a txt file or csv. I came across this bit of code out on the net somewhere and can&#8217;t seem to find where I grabbed it from. I did not write this snippet, but i can verify that is does work.</p>
+<p>Log into your steam account, navigate to your profile page and then the &#8220;Games&#8221; page. Open up the console (F12) and run the following bit of code:</p>
+<pre class="lang:java decode:true ">var names = document.body.getElementsByClassName('gameListRowItemName');
+var namesString = '';
+for (var i = 0; i &lt; names.length; i++) namesString += (names[i].innerText + '\n')</pre>
+<p>You will get a result similar to as follows:</p>
+<h6>3DMark<br />
+3DMark API Overhead feature test<br />
+3DMark Cloud Gate benchmark<br />
+3DMark Fire Strike benchmark<br />
+3DMark Ice Storm benchmark<br />
+3DMark Sky Diver benchmark<br />
+&#8230;</h6>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Configure and Run vCheck</title>
+		<link>/blog/configure-and-run-vcheck/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2017 20:16:50 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[ESX]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[vCheck]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<guid isPermaLink="false">/blog/?p=844</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>vCheck is a <em><strong>PowerShell HTML framework script</strong> </em>that started with one guy, but is now a community driven and from what I have seen, it’s pretty neat.</p>
+<p>vCheck can be configured to just run once, or as a scheduled task on a Windows box. It also offers the option of sending the report via email. With those two features coupled together, you can set up a daily environment scan to run an hour or two before you get to work each morning and have a nice HTML report in your inbox of what changed and/or broke since you left the night before.This tutorial covers the installation and configuration of the vCheck tool.</p>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Programs Needed:</h3>
+<ul>
+<li><a href="https://my.vmware.com/web/vmware/details?downloadGroup=PCLI650R1&amp;productId=614">PowerCLI</a> &#8211; Latest Version is best but will work with 5.0+</li>
+<li><a href="https://msdn.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell">PowerShell </a>&#8211; minimum Version 3</li>
+<li><a href="https://github.com/alanrenouf/vCheck-vSphere">vCheck</a> &#8211; (Download the zip and extract)
+<ul>
+<li><a href="https://github.com/alanrenouf/vCheck-vSphere/tree/dev">vCheck Dev Version</a> (use at your own risk)</li>
+</ul>
+</li>
+</ul>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Download and Extract vCheck with Powershell:</p>
+<pre class="lang:ps decode:true ">$ZipPath = "C:\vCheck\vCheck-vSphere-master.zip"
+$Destination = "C:\vCheck\"
+
+IF (-not (Test-Path -Path "$Destination"))
+{
+    New-Item -Path $Destination -ItemType Directory -ErrorAction SilentlyContinue
+}
+
+iwr https://github.com/alanrenouf/vCheck-vSphere/archive/master.zip -OutFile "$ZipPath"
+Add-Type -assembly "system.io.compression.filesystem"
+[io.compression.zipfile]::ExtractToDirectory($ZipPath, $Destination)</pre>
+<p>Load PowerCLI (open the Program)<br />
+Login to vCenter Server</p>
+<pre class="lang:ps decode:true ">Connect-VIServer</pre>
+<p>&#8211; or &#8211;</p>
+<pre class="lang:ps decode:true ">Connect-VIServer VCENTER.DOMAIN.COM -User DOMAIN\Administrator -Password -SaveCredentials</pre>
+<p>Run vCheck ps1 file</p>
+<pre class="lang:ps decode:true ">&amp; "C:\vCheck\vCheck-vSphere-master\vCheck.ps1"
+
+- or - 
+
+. "C:\vCheck\vCheck-vSphere-master\vCheck.ps1"</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>You will then be asked to respond to the following prompts:</p>
+<pre class="lang:shell decode:true "># Report header [vCheck]:
+# Would you like the report displayed in the local browser once completed ? [$true]:
+# Display the report even if it is empty? [$true]:
+# Use the following item to define if an email report should be sent once completed [$false]:
+# Please Specify the SMTP server address (and optional port) [servername(:port)] [mysmtpserver.mydomain.local]:
+# Would you like to use SSL to send email? [$false]:
+# Please specify the email address who will send the vCheck report [me@mydomain.local]:
+# Please specify the email address(es) who will receive the vCheck report (separate multiple addresses with comma) [me@mydomain.local]:
+# Please specify the email address(es) who will be CCd to receive the vCheck report (separate multiple addresses with comma) []:
+# Please specify an email subject [$Server vCheck Report]:
+# Send the report by e-mail even if it is empty? [$true]:
+# If you would prefer the HTML file as an attachment then enable the following: [$false]:
+# Set the style template to use. [VMware]:
+# Do you want to include plugin details in the report? [$true]:
+# List Enabled plugins first in Plugin Report? [$true]:
+# Set the following setting to $true to see how long each Plugin takes to run as part of the report [$true]:
+# Report on plugins that take longer than the following amount of seconds [30]:
+
+Connection settings for vCenter
+# Please Specify the address (and optional port) of the vCenter server to connect to [servername(:port)] [192.168.0.0]:
+# Maximum number of samples to gather for events [100000]:
+
+General Information
+# Set the number of days of DRS Migrations to report and count on [1]:
+# Set the number of days of Storage DRS Migrations to report and count on [1]:
+
+Windows vCenter Error Event Logs
+# Set the number of days of VC Events to check for errors [1]:
+# Set the number of days of VC Event Logs to check for warnings and errors [1]:
+
+vCenter Sessions Age
+# Enter maximum vCenter session length in hours [48]:
+# Enter minimum vCenter session length in minutes (IdleMinutes) [10]:
+# Do not report on usernames that are defined here (regex) [DOMAIN\\user1|DOMAIN\\user2]:
+
+vCenter License Report
+# Enable License Reporting? [$true]:
+
+HA configuration issues
+# HA Configuration Issues, do not report on any Clusters that are defined here [Example_Cluster_*|Test_Cluster_*]:
+# HA should be set to ... [$true]:
+# HA host monitoring should be set to ... [$true]:
+# HA Admission Control should be set to ... [$true]:
+
+HA VMs restarted
+# HA VM restart day(s) number [5]:
+
+DRS &amp; SDRS Migrations
+# Set the number of days of DRS Migrations to report and count on [1]:
+# Set the number of days of Storage DRS Migrations to report and count on [1]:
+
+Cluster Slot Sizes
+# Number of slots available in a cluster [10]:
+
+Datastore Consistency
+# Do not report on any Datastores that are defined here (Datastore Consistency Plugin) [local*|datastore*]:
+
+Clusters with DRS disabled
+# Clusters with DRS Disabled, do not report on any Clusters that are defined here [VM1_*|VM2_*]:
+
+QuickStats Capacity Planning
+# Max CPU usage for non HA cluster [0.6]:
+# Max MEM usage for non HA cluster [0.6]:
+
+s/vMotion Information
+# Set the number of days to go back and check for s/vMotions [5]:
+# Include vMotions in report [$true;]:
+# Include Storage vMotions in report [$true;]:
+
+DRS Rules
+# Display VM affinity rules? [$true]:
+# Display VM anti-affinity rules? [$true]:
+# Display HOSTaffinity rules? [$true]:
+# Set DRS Rule name exception (regex) [ExcludeMe]:
+
+Hosts Overcommit state
+# Return results in GB or MB? [GB]:
+
+NTP Name and Service
+# The NTP server which should be set on your hosts [pool.ntp.org|pool2.ntp.org]:
+
+VMKernel Warnings
+# Disabling displaying Google/KB links in order to have wider message column [$true]:
+
+Syslog Name
+# The Syslog server which should be set on your hosts [syslogserver]:
+
+Disk Max Total Latency
+# Disk Max Total Latency Settings in Milliseconds [50]:
+# Disk Max Total Latency range to inspect (1-24) [24]:
+
+Lost Access to Volume
+# Set the number of days of Lost Action Volume to report and count on [1]:
+
+Check LUNS have the recommended number of paths
+# Set the Recommended number of paths per LUN [2]:
+
+ESXi Inode Exhaustion
+# Set the ESXi filesystem free Inode threshold in percent [40]:
+
+Host Profile Compliance
+# Show detailed information in report [$true]:
+# Show compliant servers [$false]:
+
+Hosts with Upcoming Certificate Expiration
+# How many days to warn before cert expiration (Default 60) [60]:
+
+Datastore Information
+# Set the warning threshold for Datastore % Free Space [25]:
+# Do not report on any Datastores that are defined here (Datastore Free Space Plugin) [local]:
+
+Number of VMs per Datastore
+# Max number of VMs per Datastore [5]:
+# Exclude these datastores from report [ExcludeMe]:
+
+Datastore OverAllocation
+# Datastore OverAllocation % [50]:
+# Exclude these datastores from report [ExcludeMe]:
+
+Datastores with Storage IO Control Disabled
+# Do not report on any Datastores that are defined here (Storage IO Control disabled Plugin) [local]:
+
+VSAN Datastore Capacity
+# Set the warning threshold for VSAN Datastore % Free Space [85]:
+
+VSAN Configuration Maximum Disk Group Per Host Report
+# Enable VSAN Config Max Disk Group Per Host Reporting? [$true]:
+# Percentage threshold to warn? [80]:
+
+VSAN Configuration Maximum Magnetic Disks Per Disk Group Report
+# Enable VSAN Config Max Magnetic Disks Per Disk Group Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum Total Magnetic Disks In All Disk Groups Per Host Report
+# Enable VSAN Config Max Total Magnetic Disks In All Disk Groups Per Host Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum Components Per Host Report
+# Enable VSAN Config Max Components Per Host Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum Hosts Per VSAN Cluster Report
+# Enable VSAN Config Max Hosts Per VSAN Cluster Reporting? [$true]:
+# Percentage threshold to warn? [45]:
+
+VSAN Configuration Maximum VMs Per Host Report
+# Enable VSAN Config Max VMs Per Host Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum VMs Per VSAN Cluster Report
+# Enable VSAN Config Max VMs Per VSAN Cluster Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+Checking Standard vSwitch Ports Free
+# vSwitch Port Left [5]:
+
+Checking Distributed vSwitch Port Groups for Ports Free
+# Distributed vSwitch PortGroup Ports Left [10]:
+
+vSwitch Security
+# Enable Checking of vSwitch security settings? [$true]:
+# Warn for AllowPromiscuous enabled? [$true]:
+# Warn for ForgedTransmits enabled? [$true]:
+# Warn for MacChanges enabled? [$true]:
+
+Snapshot Information
+# Set the warning threshold for snapshots in days old [14]:
+# Set snapshot name exception (regex) [ExcludeMe]:
+# Set snapshot description exception (regex) [ExcludeMe]:
+# Set snapshot creator exception (regex) [ExcludeMe]:
+
+Created or cloned VMs
+# Set the number of days to show VMs created for [5]:
+
+Removed VMs
+# Set the number of days to show VMs removed for [5]:
+
+VMs with over $vCPU vCPUs
+# Define the maximum amount of vCPUs your VMs are allowed [2]:
+
+VMs restarted due to Guest OS Error
+# HA VM reset day(s) number due to Guest OS error [5]:
+
+Guests with less than $MBFree MB
+# VM Disk space left, set the amount you would like to report on MBFree [1024]:
+# VM Disk space left, set the amount you would like to report on MBDiskMinSize [1024]:
+
+Checking VM Hardware Version
+# Hardware Version to check for at least [8]:
+#Adding filter for dsvas, vShield appliances or any other vms that will remain on a lower HW version [vShield*|dsva*]:
+
+VMs in inconsistent folders
+# Specify which Datastore(s) to filter from report [local]:
+
+No VM Tools
+# Do not report on any VMs who are defined here (regex) [VM1_*|VM2_*]:
+
+VM Tools Issues
+# VM Tools Issues, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+Removable Media Connected
+# VMs with removable media not to report on [APP*|ETC*]:
+
+Single Storage VMs
+# Local Stored VMs, do not report on any VMs who are defined here [Template_*|VDI*]:
+
+VM CPU %RDY
+# CPU ready on VMs should not exceed [10.0]:
+
+VM CPU Usage
+# VM Not to go over the following amount of CPU [75]:
+# VM CPU not allowed to go over the previous amount for how many days? [1]:
+
+Find VMs with thick or thin provisioned vmdk
+# Report on disk formats that are not "thin" or "thick", which format is not allowed? [thick]:
+# Specify Datastores to filter from report [local]:
+
+Virtual machines with incorrect OS configuration
+# VMs with incorrect OS Configuration, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+Powered Off VMs
+# VMs not to report on [Windows7*]:
+
+Unwanted virtual hardware found
+# Find unwanted virtual hardware [VirtualUSBController|VirtualParallelPort|VirtualSerialPort]:
+
+Mis-named virtual machines
+# Misnamed VMs, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+VM - is my network connected?
+# Only show NICs that are set to Connect at Startup [$true]:
+
+Reset VMs
+# Set the number of days to show reset VMs [1]:
+
+Snapshot activity
+# Set the number of days to show Snapshots for [5]:
+# User exception for Snapshot removed [s-veeam]:
+
+VMs with CPU or Memory Reservations Configured
+# VMs with CPU or Memory Reservations, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+VM Logging
+# The number of logs to keep for each VM [10]:
+# The size logs can reach before rotating to a new log (bytes) [1000000]:
+
+VM Tools Not Up to Date
+# Do not report on any VMs who are defined here (regex) [VM1_*|VM2_*]:
+# Maximum number of VMs shown [30]:
+
+NonPersistent Disks
+# Exclude all desktop virtual machines [^DV-|^MLB-]:
+
+VMs Memory/CPU Hot Add configuration
+# Should CPU hot plug be enabled [$true]:
+# Should Memory hot add be enabled [$true]:
+
+Site Recovery Manager - RPO Violation Report
+# SRM RPO Violations: Set the number of minutes an RPO has exceeded to report on [240]:
+# SRM RPO Violations: Only look for RPO events on VMs with these names: (regex) []:
+# SRM RPO Violations: Report on unresolved RPO violations only? [$true]:</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Once you have completed the prompts, the scan will run and a report will be generated.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<pre class="lang:ps decode:true "></pre>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Cmdlet for PowerCLI to load vCenter &#038; esxi Hosts</title>
+		<link>/blog/cmdlet-for-powecli-to-load-vcenter-esxi-hosts/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Wed, 24 May 2017 20:46:53 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[cmdlet]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[Powershell]]></category>
+		<category><![CDATA[PS]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<guid isPermaLink="false">/blog/?p=822</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Powershell &amp; PowerCLI Prep</h3>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>#Set Execution Policy</p>
+<pre class="lang:ps decode:true ">Set-ExecutionPolicy RemoteSigned</pre>
+<p>#Ignore SSL Certificates warnings</p>
+<pre class="lang:ps decode:true ">Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -WarningAction SilentlyContinue</pre>
+<p>#Connecting to server &amp; save creds:</p>
+<pre class="lang:ps decode:true ">Connect-VIServer vCenter.DOMAIN.com -User DOMAIN\Administrator -Password -SaveCredentials</pre>
+<p>#Location to open up PowerCLI normally:</p>
+<pre class="lang:ps decode:true ">. "C:\Program Files (x86)\VMware\Infrastructure\vSphere PowerCLI\Scripts\Initialize-PowerCLIEnvironment.ps1"</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>CMDLET</h4>
+<pre class="lang:ps decode:true ">function Load-PowerCLI
+{
+Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
+Add-PSSnapin VMware.VumAutomation -ErrorAction SilentlyContinue
+Add-PSSnapin VMware.DeployAutomation -ErrorAction SilentlyContinue
+Add-PSSnapin VMware.DeployAutomation -ErrorAction SilentlyContinue
+&amp; "C:\Program Files (x86)\VMware\Infrastructure\vSphere PowerCLI\Scripts\Initialize-PowerCLIEnvironment.ps1"
+Write-Host "================================================" -ForegroundColor White
+Write-Host "
+...connecting to vCenter servers
+"
+Connect-VIServer vCenter0.groffbox.com
+}</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>BONUS:</h3>
+<h4>Set the VMConsole to open correctly with Open-VMConsole Window</h4>
+<p>#Download and Install 32-bit Firefox, you NEED 32-bit<br />
+#Run:</p>
+<pre class="lang:ps decode:true ">Set-PowerCLIConfiguration –VMConsoleWindowBrowser “C:\Program Files (x86)\Mozilla Firefox\firefox.exe”</pre>
+<p>Now you can run Open-VMConsoleWindow</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Retro Gaming on Raspberry Pi</title>
+		<link>/blog/retro-gaming-raspberry-pi/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Mon, 06 Feb 2017 23:16:19 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Gaming]]></category>
+		<category><![CDATA[Raspberry Pi]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Games]]></category>
+		<category><![CDATA[N64]]></category>
+		<category><![CDATA[NES]]></category>
+		<category><![CDATA[Retro]]></category>
+		<category><![CDATA[Retro Pie]]></category>
+		<category><![CDATA[ROM]]></category>
+		<category><![CDATA[Sega]]></category>
+		<category><![CDATA[SNES]]></category>
+		<guid isPermaLink="false">/blog/?p=222</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I was recently asked to help someone build a &#8220;Retro Gaming System&#8221;. While thinking of the best way to do this, I figured that I would like to give them something that they can come back to and do this on their own; at anytime. There are plenty of other tutorials and ways to go about this, but this one is mine. Please leave any feedback through the site should you have any.</p>
+<h4>Parts List</h4>
+<ul>
+<li><a href="https://www.amazon.com/gp/product/B01C6EQNNK/ref=oh_aui_search_detailpage?ie=UTF8&amp;psc=1" target="_blank">Raspberry Pi 3</a> (Power supply and case are a given)</li>
+<li><a href="https://www.amazon.com/gp/product/B010Q57T02/ref=oh_aui_search_detailpage?ie=UTF8&amp;psc=1" target="_blank">Micro SD Card</a> (32GB or 64GB to fit all the roms)</li>
+<li>Controllers
+<ul>
+<li><a href="https://www.amazon.com/gp/product/B002YVD3KM/" target="_blank">NES</a> (dont buy these, just get 4 SNES controllers)</li>
+<li><a href="https://www.amazon.com/gp/product/B0034ZOAO0/ref=od_aui_detailpages00?ie=UTF8&amp;psc=1" target="_blank">SNES</a></li>
+<li><a href="https://www.amazon.com/dp/B008L3UUPS" target="_blank">N64</a></li>
+<li><a href="https://www.amazon.com/Hyperkin-Inc-Genesis-GN6-USB-Controller/dp/B00KX75UT6/ref=sr_1_1?ie=UTF8&amp;qid=1486422545&amp;sr=8-1&amp;keywords=sega+genesis+controller+USB" target="_blank">Sega Genesis</a></li>
+</ul>
+</li>
+</ul>
+<h4>Programs List</h4>
+<h5>Both</h5>
+<ul>
+<li>Latest Version of <a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank">Raspbian</a></li>
+</ul>
+<h5>Windows</h5>
+<ul>
+<li><a href="https://sourceforge.net/projects/win32diskimager/" target="_blank">Win32DiskImager</a></li>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">Putty</a> or <a href="https://puttytray.goeswhere.com/" target="_blank">PuttyTray</a></li>
+<li><a href="https://winscp.net/eng/docs/guide_install#downloading" target="_blank">WinSCP</a></li>
+</ul>
+<h5>Mac</h5>
+<ul>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">Putty</a></li>
+</ul>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>SD Card Configuration</h3>
+<p>Download the latest version of Raspbian, you can use torrent or HTTP to download this. Torrent will be quicker, but will require another program.</p>
+<p>The version at the time of this writing is <strong><em>Jesse</em></strong>. For this setup we will use the <strong>LITE</strong> version of Jesse as we do not need a Desktop GUI. This will help to save space on the SD Card among other things.</p>
+<p>You can find the latest version on <a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank">Raspberry Pi&#8217;s site</a>.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter wp-image-684 size-medium" src="/blog/wp-content/uploads/RetroPie1-300x165.png" width="300" height="165" srcset="/blog/wp-content/uploads/RetroPie1-300x165.png 300w, /blog/wp-content/uploads/RetroPie1.png 457w" sizes="(max-width: 300px) 100vw, 300px" /></p>
+<h4>Windows</h4>
+<p>Extract the zip that we just downloaded.</p>
+<p>Install Win32DiskImager utility if you don&#8217;t have it installed already. (You can download it on the utility from the <a href="http://sourceforge.net/projects/win32diskimager/" target="_blank">Sourceforge Project page</a>)</p>
+<p>Insert the SD Card into the PC.</p>
+<p>Run Win32DiskImager and select:</p>
+<ul>
+<li>Rapberry pi image we just extracted</li>
+<li>SD Card&#8217;s Drive Letter</li>
+</ul>
+<p>Select <strong>Write</strong>!</p>
+<p><img loading="lazy" decoding="async" class="aligncenter wp-image-685 size-medium" src="/blog/wp-content/uploads/RetroPie2-300x153.png" width="300" height="153" srcset="/blog/wp-content/uploads/RetroPie2-300x153.png 300w, /blog/wp-content/uploads/RetroPie2.png 407w" sizes="(max-width: 300px) 100vw, 300px" /></p>
+<p>Safely Eject the USB Drive and remove it from the PC</p>
+<p>Insert the SD Card into the Raspberry Pi.</p>
+<h4>Mac</h4>
+<p>Extract the zip that we just downloaded.</p>
+<p>Insert the SD Card into the PC.</p>
+<p>Follow this artcle provided by <a href="https://www.raspberrypi.org/documentation/installation/installing-images/mac.md" target="_blank">Raspberry Pi</a></p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Raspbian Initial Installation &amp; Configuration</h3>
+<p>Plug a Keyboard into one of the USB slots, a Monitor/TV into the HDMI slot and an Ethernet Cable into your Raspberry Pi. We will be downloading packages from the internet and using SSH for some of this, so Ethernet is required. (Note: You can use WiFi if you want, but that will not be covered in this tutorial, more info <a href="https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md" target="_blank">here</a>)</p>
+<p>Power on your Pi by plugging the Micro USB Power Cable in.</p>
+<p>You will see your Pi boot into a notification that the File System is being resized. This is an automated feature that expands the filesystem to take up your entire SD Card upon the first boot. The server will then reboot.</p>
+<p>After the reboot completes, you can now login with the following credentials:</p>
+<ul>
+<li><strong>Username</strong>: pi</li>
+<li><strong>Password</strong>: raspberry</li>
+</ul>
+<p>First things first, lets update that password, you can do so by entering the following:</p>
+<pre class="lang:sh decode:true">sudo passwd pi</pre>
+<p>Here you will enter your new password twice to confirm it has been entered correctly.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie3.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-693 size-full" src="/blog/wp-content/uploads/RetroPie3.png" width="268" height="63" /></a></p>
+<p>Run</p>
+<pre class="lang:sh decode:true">sudo raspi-config</pre>
+<p>Select &#8211; <strong>1 &#8211; Expand Filesystem</strong>, Hit [Enter] and proceed through the steps to get back to the selection screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie4.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-694 size-medium" src="/blog/wp-content/uploads/RetroPie4-300x108.png" width="300" height="108" srcset="/blog/wp-content/uploads/RetroPie4-300x108.png 300w, /blog/wp-content/uploads/RetroPie4-600x216.png 600w, /blog/wp-content/uploads/RetroPie4-768x277.png 768w, /blog/wp-content/uploads/RetroPie4.png 893w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Generate proper locales. (This step is for persons with ANSI/USA Keyboards)</p>
+<p>Select &#8211; <strong>4 &#8211; </strong><strong>Localisation Options </strong>&gt;<strong> I1 &#8211; Change Locale </strong>&gt; Deselect <strong>en_GB.UTF-8 UTF-8 </strong>and select <strong>en_US.UTF-8 UTF-8</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie23.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-757 size-medium" src="/blog/wp-content/uploads/RetroPie23-300x190.png" width="300" height="190" srcset="/blog/wp-content/uploads/RetroPie23-300x190.png 300w, /blog/wp-content/uploads/RetroPie23-600x381.png 600w, /blog/wp-content/uploads/RetroPie23-768x487.png 768w, /blog/wp-content/uploads/RetroPie23-1024x650.png 1024w, /blog/wp-content/uploads/RetroPie23.png 1565w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie24.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-756 size-medium" src="/blog/wp-content/uploads/RetroPie24-300x55.png" width="300" height="55" srcset="/blog/wp-content/uploads/RetroPie24-300x55.png 300w, /blog/wp-content/uploads/RetroPie24-600x110.png 600w, /blog/wp-content/uploads/RetroPie24-768x141.png 768w, /blog/wp-content/uploads/RetroPie24-1024x188.png 1024w, /blog/wp-content/uploads/RetroPie24.png 1415w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Change the keyboard layout</p>
+<p>Select &#8211; <strong>4 &#8211; </strong><strong>Localisation Options </strong>&gt;<strong> I1 &#8211; Change Keyboard Layout </strong>&gt; <strong>Generic 101-Key PC</strong> &gt; <strong>Other </strong>&gt; <strong>English (US) </strong>&gt;<strong> Enter </strong>&gt;<strong> Enter</strong></p>
+<p>Select &#8211; <strong>7 &#8211; Advanced Options </strong>&gt;<strong>  A2 &#8211; Hostname</strong> Enter a new hostname for this Pi:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie5.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-696 size-medium" src="/blog/wp-content/uploads/RetroPie5-300x226.png" width="300" height="226" srcset="/blog/wp-content/uploads/RetroPie5-300x226.png 300w, /blog/wp-content/uploads/RetroPie5.png 447w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Select &#8211; <strong>7 &#8211; Advanced Options &gt;  A3 &#8211; Memory Split</strong> Change the value to 128 if you have a Pi 3:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie6.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-698 size-medium" src="/blog/wp-content/uploads/RetroPie6-300x194.png" width="300" height="194" srcset="/blog/wp-content/uploads/RetroPie6-300x194.png 300w, /blog/wp-content/uploads/RetroPie6.png 514w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Select &#8211; <strong>5 &#8211; Interfacing Options &gt;  P2 &#8211; SSH &gt; Yes </strong>Enable SSH so we can access the Pi remotely:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie7.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-701 size-medium" src="/blog/wp-content/uploads/RetroPie7-300x224.png" width="300" height="224" srcset="/blog/wp-content/uploads/RetroPie7-300x224.png 300w, /blog/wp-content/uploads/RetroPie7.png 444w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Change anything else you see fit, select <strong>Finish</strong> and reboot your Pi:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie8.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-702 size-medium" src="/blog/wp-content/uploads/RetroPie8-300x223.png" width="300" height="223" srcset="/blog/wp-content/uploads/RetroPie8-300x223.png 300w, /blog/wp-content/uploads/RetroPie8.png 443w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>After the reboot completes, log back in at the console one more time,</p>
+<p>run</p>
+<pre class="lang:sh decode:true">ip a</pre>
+<p>and get the IP from the Ethernet connection labeled <strong>eth0</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie9.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-703 size-medium" src="/blog/wp-content/uploads/RetroPie9-300x102.png" width="300" height="102" srcset="/blog/wp-content/uploads/RetroPie9-300x102.png 300w, /blog/wp-content/uploads/RetroPie9-600x204.png 600w, /blog/wp-content/uploads/RetroPie9.png 760w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Remember or write down that IP, then type in</p>
+<pre class="lang:sh decode:true">logout</pre>
+<p>to logout.</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Install RetroPie</h3>
+<p>From your computer, open Putty and enter the IP you got from the last step and click <strong>Open</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie10.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-709 size-medium" src="/blog/wp-content/uploads/RetroPie10-300x300.png" width="300" height="300" srcset="/blog/wp-content/uploads/RetroPie10-300x300.png 300w, /blog/wp-content/uploads/RetroPie10-200x200.png 200w, /blog/wp-content/uploads/RetroPie10-150x150.png 150w, /blog/wp-content/uploads/RetroPie10.png 452w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>If you receive a certificate warning, ignore it and proceed.</p>
+<p>Enter your username and password to login. You will then see a nice blank screen as follows:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie11.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-710 size-medium" src="/blog/wp-content/uploads/RetroPie11-300x201.png" width="300" height="201" srcset="/blog/wp-content/uploads/RetroPie11-300x201.png 300w, /blog/wp-content/uploads/RetroPie11-600x403.png 600w, /blog/wp-content/uploads/RetroPie11.png 609w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Time to update your Pi!</p>
+<p>Run</p>
+<pre class="lang:sh decode:true">sudo apt-get update &amp;&amp; sudo apt-get upgrade -y</pre>
+<p>This may take take some time, so feel free to walk away for 5 minutes or so and come back.</p>
+<p>Install the prerequisites for RetroPie:</p>
+<pre class="lang:sh decode:true">sudo apt-get install -y git dialog lsb-release</pre>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie12.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-713 size-thumbnail" src="/blog/wp-content/uploads/RetroPie12-150x150.png" width="150" height="150" srcset="/blog/wp-content/uploads/RetroPie12-150x150.png 150w, /blog/wp-content/uploads/RetroPie12-300x300.png 300w, /blog/wp-content/uploads/RetroPie12-200x200.png 200w" sizes="(max-width: 150px) 100vw, 150px" /></a><br />
+Download the latest version RetroPie and begin the installation:</p>
+<pre class="lang:sh decode:true">cd
+git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+cd RetroPie-Setup
+chmod +x retropie_setup.sh
+sudo ./retropie_setup.sh</pre>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie13.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-715 size-medium" src="/blog/wp-content/uploads/RetroPie13-300x103.png" width="300" height="103" srcset="/blog/wp-content/uploads/RetroPie13-300x103.png 300w, /blog/wp-content/uploads/RetroPie13.png 580w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>After this runs, a GUI portion of this install will begin.</p>
+<p>When it comes to the following screen, Select <strong>OK. </strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie14.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-716 size-medium" src="/blog/wp-content/uploads/RetroPie14-300x222.png" width="300" height="222" srcset="/blog/wp-content/uploads/RetroPie14-300x222.png 300w, /blog/wp-content/uploads/RetroPie14.png 462w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Select <strong>Basic Install </strong>&gt; <strong>Yes</strong></p>
+<p>This will run through an install, it will take some time.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie15.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-719 size-medium" src="/blog/wp-content/uploads/RetroPie15-300x193.png" width="300" height="193" srcset="/blog/wp-content/uploads/RetroPie15-300x193.png 300w, /blog/wp-content/uploads/RetroPie15.png 569w" sizes="(max-width: 300px) 100vw, 300px" /><img loading="lazy" decoding="async" class="aligncenter wp-image-720 size-medium" src="/blog/wp-content/uploads/RetroPie16-300x191.png" width="300" height="191" srcset="/blog/wp-content/uploads/RetroPie16-300x191.png 300w, /blog/wp-content/uploads/RetroPie16.png 566w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Once that completes, select <strong>Configuration / Tools </strong>&gt;<strong> 802 &#8211; autostart </strong>&gt;<strong> 1 &#8211; Start Emulation Station at boot</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie17.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-728 size-medium" src="/blog/wp-content/uploads/RetroPie17-300x192.png" width="300" height="192" srcset="/blog/wp-content/uploads/RetroPie17-300x192.png 300w, /blog/wp-content/uploads/RetroPie17.png 564w" sizes="(max-width: 300px) 100vw, 300px" /></a> <a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie18.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-727 size-medium" src="/blog/wp-content/uploads/RetroPie18-300x192.png" width="300" height="192" srcset="/blog/wp-content/uploads/RetroPie18-300x192.png 300w, /blog/wp-content/uploads/RetroPie18.png 565w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Install drivers by selecting: <strong>Manage Packages </strong>&gt; <strong>Manage Driver Packages </strong>&gt; <strong>Install/Update all driver packages from binary</strong></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie19.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-729 size-medium" src="/blog/wp-content/uploads/RetroPie19-300x191.png" width="300" height="191" srcset="/blog/wp-content/uploads/RetroPie19-300x191.png 300w, /blog/wp-content/uploads/RetroPie19.png 569w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Finally, reboot the Pi!</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie20.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-731 size-medium" src="/blog/wp-content/uploads/RetroPie20-300x193.png" width="300" height="193" srcset="/blog/wp-content/uploads/RetroPie20-300x193.png 300w, /blog/wp-content/uploads/RetroPie20.png 564w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>ROM Installation</h3>
+<h4>Windows</h4>
+<p>Now it&#8217;s time to move ROM&#8217;s you own, to the Pi. You don&#8217;t own any ROMs? Don&#8217;t worry, you&#8217;re resourceful and I have a link for you to <a href="http://lmgtfy.com/?q=Free+Roms+for+emulators" target="_blank">Follow</a>.</p>
+<p>Install <a href="https://winscp.net/eng/docs/guide_install" target="_blank">WinSCP</a> if it is not installed already.</p>
+<p>Run WINSCP.</p>
+<p>Connect to your Pi with the IP from earlier and the password you configured as such:</p>
+<h4><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie21.png" target="_blank"><img loading="lazy" decoding="async" class="aligncenter wp-image-737 size-medium" src="/blog/wp-content/uploads/RetroPie21-280x300.png" width="280" height="300" srcset="/blog/wp-content/uploads/RetroPie21-280x300.png 280w, /blog/wp-content/uploads/RetroPie21.png 361w" sizes="(max-width: 280px) 100vw, 280px" /></a></h4>
+<p>Navigate to <strong>RetroPie</strong> &gt; <strong>roms </strong>and you will find a list of all the available systems that you can play.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/RetroPie22.png"><img loading="lazy" decoding="async" class="aligncenter wp-image-755 size-medium" src="/blog/wp-content/uploads/RetroPie22-226x300.png" width="226" height="300" srcset="/blog/wp-content/uploads/RetroPie22-226x300.png 226w, /blog/wp-content/uploads/RetroPie22.png 529w" sizes="(max-width: 226px) 100vw, 226px" /></a></p>
+<p>For this tutorial, we will be dropping roms in:</p>
+<ul>
+<li>megadrive (Sega Genesis)</li>
+<li>n64 (Nintendo 64)</li>
+<li>nes (Nintendo Entertainment System)</li>
+<li>snes (Super Nintendo Entertainment System)</li>
+</ul>
+<p>Now you will simply drag and drop your ROMs into the desired destination.</p>
+<p>Once all the ROMs have finished moving, reboot your Pi and go back to it.</p>
+<h4>Mac</h4>
+<p>(to come at a later date&#8230;)</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Time to Play!</h3>
+<p>If you have not rebooted since adding the ROMs, do so now.</p>
+<pre class="lang:sh decode:true">sudo reboot</pre>
+<p>Now that your Pi has been configured and has ROMs on it, you are ready to configure your controller and start playing.</p>
+<p>When your Pi reboots, if you set it up to auto-run as described, it should be up and running after the reboot.</p>
+<p>&nbsp;</p>
+<h4>Controller Configurations are as follows:</h4>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>NES</h4>
+<p>Hold a Random Button to start.</p>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>D-PAD UP</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>D-PAD DOWN</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>D-PAD LEFT</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>D-PAD RIGHT</td>
+</tr>
+<tr>
+<td>START</td>
+<td>START</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>SELECT</td>
+</tr>
+<tr>
+<td>A</td>
+<td>A</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+</tr>
+<tr>
+<td>X</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+<h4></h4>
+<h4>SNES</h4>
+<p>Hold a Random Button to start.</p>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>D-PAD UP</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>D-PAD DOWN</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>D-PAD LEFT</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>D-PAD RIGHT</td>
+</tr>
+<tr>
+<td>START</td>
+<td>START</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>SELECT</td>
+</tr>
+<tr>
+<td>A</td>
+<td>A</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+</tr>
+<tr>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>LEFT SHOULDER</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>RIGHT SHOULDER</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>[BLANK]</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>N64 &#8211; (Mupen64plus)</h4>
+<p>Hold a Random Button to start.</p>
+<h6>NOTE: On this controller, I sacrifice the LEFT TRIGGER for SELECT so it can be used to exit the emulator in conjunction with the start button.</h6>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>D-PAD UP</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>D-PAD DOWN</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>D-PAD LEFT</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>D-PAD RIGHT</td>
+</tr>
+<tr>
+<td>START</td>
+<td>START</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>A</td>
+<td>C-DOWN</td>
+</tr>
+<tr>
+<td>B</td>
+<td>A</td>
+</tr>
+<tr>
+<td>X</td>
+<td>C-LEFT</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>B</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>Z</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>RIGHT SHOULDER</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>LEFT SHOULDER</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>ANALOG STICK UP</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>ANALOG STICK DOWN</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>ANALOG STICK LEFT</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>ANALOG STICK RIGHT</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>C-UP</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>[BLANK]</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>C-RIGHT</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+<h5>Sega Genesis</h5>
+<p>Hold a Random Button to start.</p>
+<table style="width: 85%;" border="1">
+<thead>
+<tr>
+<th>RetroPie</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-PAD UP</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>D-PAD DOWN</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>D-PAD LEFT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>D-PAD RIGHT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>START</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>A</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>B</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>X</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT SHOULDER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT SHOULDER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT TRIGGER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT TRIGGER</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT THUMB</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT THUMB</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG UP</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG DOWN</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG LEFT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>LEFT ANALOG RIGHT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG UP</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG DOWN</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG LEFT</td>
+<td>NOT TESTED</td>
+</tr>
+<tr>
+<td>RIGHT ANALOG RIGHT</td>
+<td>NOT TESTED</td>
+</tr>
+</tbody>
+</table>
+<p>HIT A to finish!</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>Hotkeys and special buttons of Note</h4>
+<table style="width: 50%;" border="1">
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT + START</td>
+<td>Exit emulator.</td>
+</tr>
+<tr>
+<td>SELECT + L1</td>
+<td>Load state.</td>
+</tr>
+<tr>
+<td>SELECT + R1</td>
+<td>Save state.</td>
+</tr>
+<tr>
+<td>THUMB LEFT</td>
+<td>Enable memory expansion pak.</td>
+</tr>
+<tr>
+<td>THUMB RIGHT</td>
+<td>Enable rumble expansion pak.</td>
+</tr>
+</tbody>
+</table>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Further RetroPie Configurations</h3>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h1 style="text-align: center;">ENJOY!</h1>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>References:</h3>
+<p><a href="https://github.com/retropie/retropie-setup/wiki/manual-installation" target="_blank">RetroPie Github Manual Installation Page</a></p>
+<p><a href="https://www.raspberrypi.org/documentation/installation/installing-images/README.md" target="_blank">Raspberry Pi Installation Guide</a></p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Powershell On Linux</title>
+		<link>/blog/powershell-on-linux/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Fri, 19 Aug 2016 16:38:59 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<guid isPermaLink="false">/blog/?p=635</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="color: white; text-align: center;">You can now use Powershell with Linux Operating Systems!</h4>
+<h4 style="color: white; text-align: center;">See instructions below on how to set up your Linux distro with Powershell</h4>
+<h4 style="text-align: center;"><a href="https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md">Source</a></h4>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>CentOS / RHEL</h3>
+<p>Install wget (if not already installed):</p>
+<pre class="lang:sh decode:true">sudo yum install wget -y</pre>
+<p>Download PS to the temp folder:</p>
+<pre class="lang:sh decode:true">wget -i /tmp/ https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell-6.0.0_alpha.9-1.el7.centos.x86_64.rpm</pre>
+<p>Install PS:</p>
+<pre class="lang:sh decode:true">sudo yum install powershell-6.0.0_alpha.9-1.el7.centos.x86_64.rpm -y</pre>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Ubuntu 14.04</h3>
+<p>Install necessary packages:</p>
+<pre class="lang:sh decode:true">sudo apt-get install libunwind8 libicu55</pre>
+<p>Download PS to the temp folder:</p>
+<pre class="lang:sh decode:true">wget -i /tmp/ https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell_6.0.0-alpha.9-1ubuntu1.14.04.1_amd64.deb</pre>
+<p>Install PS:</p>
+<pre class="lang:sh decode:true">sudo dpkg -i powershell_6.0.0-alpha.9-1ubuntu1.14.04.1_amd64.deb</pre>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Ubuntu 16.04</h3>
+<p>Install necessary packages:</p>
+<pre class="lang:sh decode:true">sudo apt-get install libunwind8 libicu55</pre>
+<p>Download PS to the temp folder:</p>
+<pre class="lang:sh decode:true">wget -i /tmp/ https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell_6.0.0-alpha.9-1ubuntu1.16.04.1_amd64.deb</pre>
+<p>Install PS:</p>
+<pre class="lang:sh decode:true">sudo dpkg -i powershell_6.0.0-alpha.9-1ubuntu1.16.04.1_amd64.deb</pre>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>OS X 10.11</h3>
+<p>Download and run this with the GUI:</p>
+<p><a href="https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell-6.0.0-alpha.9.pkg" target="_blank">Powershell OS X Download</a></p>
+<p>If you wish to use the terminal, first download the .pkg and run:</p>
+<pre class="lang:sh decode:true">sudo installer -pkg powershell-6.0.0-alpha.9.pkg -target /</pre>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Running Powershell in Linux</h3>
+<p>Run &#8220;<span style="color: orange;">powershell</span>&#8221; from the terminal.</p>
+<p>Get-Command to list available commands</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>The Oregon Trail Deluxe (1992) on Windows, Linux &#038; Mac</title>
+		<link>/blog/the_oregon_trail_deluxe_1992_on_windows_linux_mac/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Fri, 12 Aug 2016 05:39:55 +0000</pubDate>
+				<category><![CDATA[Gaming]]></category>
+		<category><![CDATA[Technology]]></category>
+		<guid isPermaLink="false">/blog/?p=592</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="color: white; text-align: center;">Have you ever wanted to go back and play the Oregon Trail you grew up on?</h4>
+<h4 style="color: white; text-align: center;">Well it&#8217;s pretty easy to relive those childhood memories, just keep reading</h4>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Step 1: Download DOSBox and install it:</p>
+<p><a href="https://www.dosbox.com/download.php?main=1" target="_blank">DOSBox Download</a></p>
+<p>Step 2: Download Oregon Trail for Free:</p>
+<p><a href="http://www.old-games.com/getfree/5308" target="_blank">Oregon Trail Download</a></p>
+<h6>NOTE: This website has a limit of 2 free games/day</h6>
+<p>Now unzip Oregon Trail to a location you can remember, I made a folder for it, C:\Old_Games</p>
+<p>Step 3: Run Oregon Trail!</p>
+<p>Open DOSBox on your system (Windows, Mac, Linux)</p>
+<p>type in the following to mount your game folder to DOSBox:</p>
+<pre class="lang:batch decode:true">mount C C:\Old_Games</pre>
+<p>&#8220;hit enter&#8221;</p>
+<p>type in the following to navigate to the newly mounted drive:</p>
+<pre class="lang:batch decode:true"> C: #</pre>
+<p>&#8220;hit enter&#8221;<br />
+now it depends on how you dropped your folder in C:\Old_Games, i renamed mine as follows:</p>
+<pre class="lang:batch decode:true">C:\Old_Games\oregondlx</pre>
+<p>so now I will type in the following to run the game:</p>
+<pre class="lang:batch decode:true">.\OREGON~1\OREGON.EXE</pre>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>To run Full-Screen:</p>
+<p>Key Shortcut: ALT + ENTER</p>
+<p>Or you can edit your options file to automatically open DOSBox as follows (Windows, but I am sure Mac &amp; Linux are similar):</p>
+<p>Run/Open:</p>
+<pre class="lang:batch decode:true">C:\Program Files (x86)\DOSBox-0.74\DOSBox 0.74 Options.bat</pre>
+<p>Edit the following line to say true:</p>
+<p style="color: red;">OLD LINE: fullscreen=false</p>
+<p style="color: green;">NEW LINE: fullscreen=true</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>You can also run these commands automatically by editing the &#8220;[autoexec]&#8221; section of the <a style="color: orange;">dosbox.conf</a> file as follows:</p>
+<h6>NOTE: I would only suggest adding the lest 2 lines only if you intend to use this for Oregon Trail explicitly</h6>
+<pre class="lang:batch decode:true ">[autoexec]
+# Lines in this section will be run at startup.
+# You can put your MOUNT lines here.
+mount C C:\Old_Games
+C: #
+C:\Old_Games\oregondlx
+.\OREGON~1\OREGON.EXE</pre>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="color: white;">If you want to avoid all the steps above and just play the game, simply navigate to the link below you can play the game inside on a webpage. This is useful when you don&#8217;t have Administrative rights to a computer.</h4>
+<p>&nbsp;</p>
+<p style="text-align: center;"><a href="https://archive.org/details/msdos_Oregon_Trail_Deluxe_The_1992" class="btn-shortcode dt-btn-m dt-btn default-btn-color default-btn-hover-color default-btn-bg-color default-btn-bg-hover-color" target="_blank" id="dt-btn-1" rel="noopener"><span>Play Oregon Trail Online</span></a></p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

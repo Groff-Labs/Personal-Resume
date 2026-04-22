@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Authentication Failure &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/authentication-failure/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:02 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Fix Java Auth Error for KVM for Dell CS24-SC and other servers&#8230;</title>
+		<link>/blog/fix-java-auth-error-for-kvm-for-dell-cs24-sc-and-other-servers/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Sat, 15 Aug 2015 14:19:33 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Windows PC]]></category>
+		<category><![CDATA[Authentication Failure]]></category>
+		<category><![CDATA[BMC]]></category>
+		<category><![CDATA[Console]]></category>
+		<category><![CDATA[Dell CS24-SC]]></category>
+		<category><![CDATA[dell server]]></category>
+		<category><![CDATA[IOException]]></category>
+		<category><![CDATA[Java]]></category>
+		<category><![CDATA[KVM]]></category>
+		<guid isPermaLink="false">/blog/?p=257</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Is the KVM Console not working cause of damn Java?</h3>
+<p style="text-align: center;">Do you get the following <span style="color: orange;">&#8220;IOException &#8211; Authentication Failure!&#8221;</span> error when you are just simply trying to connect to your server (CS24-SC) via the built in KVM/Console in BMC? &#8211; Turns out this is a <span style="color: green; font-weight: bold;"><span style="font-size: large;">really easy</span></span> fix</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/JavaFix2.jpg" data-dt-img-description=""><img fetchpriority="high" decoding="async" class=" size-medium wp-image-270 alignleft" src="/blog/wp-content/uploads/JavaFix2-300x211.jpg" alt="JavaFix2" width="300" height="211" srcset="/blog/wp-content/uploads/JavaFix2-300x211.jpg 300w, /blog/wp-content/uploads/JavaFix2-600x421.jpg 600w, /blog/wp-content/uploads/JavaFix2.jpg 872w" sizes="(max-width: 300px) 100vw, 300px" /></a> <a class="dt-single-image" href="/blog/wp-content/uploads/JavaFix1.jpg" data-dt-img-description=""><img decoding="async" class=" size-medium wp-image-269 alignright" src="/blog/wp-content/uploads/JavaFix1-300x225.jpg" alt="JavaFix1" width="300" height="225" srcset="/blog/wp-content/uploads/JavaFix1-300x225.jpg 300w, /blog/wp-content/uploads/JavaFix1-600x450.jpg 600w, /blog/wp-content/uploads/JavaFix1.jpg 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 42px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4><span style="color: orange;">It turns out you&#8217;re just using the wrong version of Java&#8230;</span></h4>
+<p style="text-align: left;">You will need to install the 32 bit version of Java. Since the CS24-SC is older hardware, Java updates will likely break your remote access. In the case that you have updated Java or for some reasons the KVM just stopped working, you should roll back your Java version. I have found success with Java 7 Version 55 and 51, I have seen others have success with most other versions of 7, but this is working for me, so why change it. I&#8217;ve put a link to the java archive below:</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE:Also make sure you are opening your .jnlp file with javaws.exe if you continue to see this error after installing the 32bit version. This may happen if you have both 64bit and 32bit versions installed.</span></h6>
+<p style="text-align: center;"><a href="http://www.oracle.com/technetwork/java/archive-139210.html" class="btn-shortcode dt-btn-m dt-btn default-btn-color default-btn-hover-color default-btn-bg-color default-btn-bg-hover-color" target="_blank" id="dt-btn-1" rel="noopener"><span>Java Archive</span></a></p>
+<p style="text-align: center;"><a class="dt-single-image" href="/blog/wp-content/uploads/JavaFix4.png" data-dt-img-description=""><img decoding="async" class="alignnone wp-image-316 size-large" src="/blog/wp-content/uploads/JavaFix4-1024x768.png" alt="JavaFix4" width="1024" height="768" srcset="/blog/wp-content/uploads/JavaFix4.png 1024w, /blog/wp-content/uploads/JavaFix4-600x450.png 600w, /blog/wp-content/uploads/JavaFix4-300x225.png 300w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

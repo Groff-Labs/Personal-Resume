@@ -4,8 +4,8 @@ name: Deploy site
 # distribution, then invalidates the cache. Does NOT run CDK.
 #
 # Stage mapping:
-#   push to dev   → stage=dev   → bucket=cv-michaelgroff-dev   → dev.cv.michaelgroff.info
-#   push to main  → stage=prod  → bucket=cv-michaelgroff-prod  → cv.michaelgroff.info
+#   push to dev   → stage=dev   → bucket=cv-michaelgroff-dev   → dev.michaelgroff.info
+#   push to main  → stage=prod  → bucket=cv-michaelgroff-prod  → michaelgroff.info
 #
 # Fires on changes to frontend/** or this workflow file. README / infrastructure
 # / docs changes don't trigger a site redeploy.

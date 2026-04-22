@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Steam &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/steam/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 27 Dec 2023 16:25:07 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Populate list of all Steam Games</title>
+		<link>/blog/populate-list-of-all-steam-games/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 17 Oct 2017 02:04:51 +0000</pubDate>
+				<category><![CDATA[Gaming]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Steam]]></category>
+		<guid isPermaLink="false">/blog/?p=875</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I have updated this as of 12/27/2023 as a user came across this page and informed me the script I wrote is not long working. I have updated the script to work again.</p>
+<p>Log into your steam account, navigate to your profile page and then the &#8220;Games&#8221; page and Select &#8220;All Games&#8221;. Open up the console (F12) and run the following bit of code:</p>
+<div class="shortcode-code">
+<p>// Open the console on the desired Steam profile page and run this script:</p>
+<p>// Select all elements with the game name class<br />
+var gameNameElements = document.getElementsByClassName(&#039;gameslistitems_GameName_22awl&#039;);<br />
+var gameNames = &#039;&#039;;</p>
+<p>// Iterate over all selected elements and concatenate their text content<br />
+for (var i = 0; i &lt; gameNameElements.length; i++) {<br />
+gameNames += (gameNameElements&#091;i&#093;.innerText + &#039;\n&#039;);<br />
+}</p>
+<p>// Output the result<br />
+console.log(gameNames);<br />
+</p></div>
+<p class="lang:java decode:true ">The above console script will generate the list same as before.</p>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-356669e8551fe7963" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-356669e8551fe7963 uvc-4089  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-356669e8551fe7963 h2'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h2 style="--font-weight:theme;">Deprecated - 2017 Version</h2></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I wanted to populate a list of all my Steam games for export into a txt file or csv. I came across this bit of code out on the net somewhere and can&#8217;t seem to find where I grabbed it from. I did not write this snippet, but i can verify that is does work.</p>
+<p>Log into your steam account, navigate to your profile page and then the &#8220;Games&#8221; page. Open up the console (F12) and run the following bit of code:</p>
+<pre class="lang:java decode:true ">var names = document.body.getElementsByClassName('gameListRowItemName');
+var namesString = '';
+for (var i = 0; i &lt; names.length; i++) namesString += (names[i].innerText + '\n')</pre>
+<p>You will get a result similar to as follows:</p>
+<h6>3DMark<br />
+3DMark API Overhead feature test<br />
+3DMark Cloud Gate benchmark<br />
+3DMark Fire Strike benchmark<br />
+3DMark Ice Storm benchmark<br />
+3DMark Sky Diver benchmark<br />
+&#8230;</h6>
+
+		</div>
+	</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

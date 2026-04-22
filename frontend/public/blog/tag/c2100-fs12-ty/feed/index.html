@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>C2100 FS12-TY &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/c2100-fs12-ty/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:02 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>VMware ESXi 5.5.0 on Dell C2100 FS12-TY</title>
+		<link>/blog/vmware-esxi-5-5-0-on-dell-c2100-fs12-ty/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 17 Sep 2015 06:18:09 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[C2100]]></category>
+		<category><![CDATA[C2100 FS12-TY]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[dell server]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[ESXi 5.5.0]]></category>
+		<category><![CDATA[server]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<category><![CDATA[VMware ESXi 5.5.0]]></category>
+		<guid isPermaLink="false">/blog/?p=41</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3><span style="color: orange;">The Installation and Basic Configuration of VMware ESXi 5.5.0 on Dell C2100 FS12-TY</span></h3>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Server Specs:</p>
+<ul>
+<li>Dell PowerEdge C2100 FS12-TY</li>
+<li>2 x 2.13GHz Intel(R) Xeon(R) CPU E5506</li>
+<li>6 x 4GB RAM &#8211; Total 24GB&#8217;s of RAM</li>
+<li>RAID Controller &#8211; SAS 6iR
+<ul>
+<li>4 x 250GB WD RE 4 HDD&#8217;s</li>
+</ul>
+</li>
+</ul>
+<p>I have already set up my RAID Array as follows:</p>
+<ul>
+<li>2 x RAID-1 (mirror) Virtual Disks setup</li>
+</ul>
+<p>For this install I am using the <span style="color: orange;">Dell Customized Image</span> of ESX as it fixes known issues and loads drivers for Dell PowerEdge systems. Google if you don&#8217;t have the customized Image.</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>First you need to install the <span style="color: orange;">Dell Customized Image</span> onto a USB. I use Rufus on a Windows PC to do so. See the settings I chose for Rufus below:</p>
+<p style="text-align: center;">(Download <a href="https://rufus.akeo.ie/">Rufus</a>)</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_1.png" data-dt-img-description=""><img fetchpriority="high" decoding="async" class="aligncenter wp-image-343 size-medium" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_1-211x300.png" alt="ESX_Install_Dell_C2100_1" width="211" height="300" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_1-211x300.png 211w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_1.png 365w" sizes="(max-width: 211px) 100vw, 211px" /></a></p>
+<p>&nbsp;</p>
+<p>Eject the USB from your OS and go plug it into your C2100 and boot it up.</p>
+<p>The first thing you will see when your USB is finally booting, after the BIOS and RAID controller info, is the following image:</p>
+<p>Hit <span style="color: orange;">(Enter)</span> on the Installer:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_2.png" data-dt-img-description=""><img decoding="async" class="aligncenter wp-image-344 size-medium" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_2-300x190.png" alt="ESX_Install_Dell_C2100_2" width="300" height="190" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_2-300x190.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_2-600x379.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_2.png 725w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next ESX will proceed to boot into the installer, you will see the following two screens load all the way through and disappear:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_3.png" data-dt-img-description=""><img decoding="async" class="size-medium wp-image-345 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_3-300x241.png" alt="ESX_Install_Dell_C2100_3" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_3-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_3-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_3-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_3.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_4.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-346 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_4-300x241.png" alt="ESX_Install_Dell_C2100_4" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_4-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_4-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_4-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_4.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Once those two screens finish loading we will begin the installation.</p>
+<p>On the following screen hit <span style="color: orange;">(Enter)</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_5.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-347 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_5-300x241.png" alt="ESX_Install_Dell_C2100_5" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_5-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_5-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_5-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_5.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Then you will need to read through and agree to the EULA by hitting <span style="color: orange;">(F11)</span> to proceed with the installation:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_6.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-348 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_6-300x241.png" alt="ESX_Install_Dell_C2100_6" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_6-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_6-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_6-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_6.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>ESX will then scan attached devices that it can install on:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_7.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-349 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_7-300x241.png" alt="ESX_Install_Dell_C2100_7" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_7-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_7-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_7-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_7.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Select the USB drive that you inserted, not your Virtual Disks, and hit <span style="color: orange;">(Enter)</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_8.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-350 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_8-300x241.png" alt="ESX_Install_Dell_C2100_8" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_8-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_8-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_8-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_8.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>ESX will scan the drive again and then hit <span style="color: orange;">(Enter)</span> to confirm the USB drive will be overwritten:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_9.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-351 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_9-300x241.png" alt="ESX_Install_Dell_C2100_9" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_9-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_9-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_9-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_9.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_10.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-352 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_10-300x241.png" alt="ESX_Install_Dell_C2100_10" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_10-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_10-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_10-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_10.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next select your keyboard layout and hit <span style="color: orange;">(Enter)</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_11.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-353 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_11-300x241.png" alt="ESX_Install_Dell_C2100_11" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_11-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_11-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_11-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_11.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Type in the password for the root user twice and hit <span style="color: orange;">(Enter)</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_12.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-354 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_12-300x241.png" alt="ESX_Install_Dell_C2100_12" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_12-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_12-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_12-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_12.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>ESX will scan yet again, and when that is finished hit <span style="color: orange;">(F11)</span> to initiate the installation of ESX onto the USB:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_13.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-355 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_13-300x241.png" alt="ESX_Install_Dell_C2100_13" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_13-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_13-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_13-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_13.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_14.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-356 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_14-300x241.png" alt="ESX_Install_Dell_C2100_14" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_14-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_14-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_14-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_14.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>ESX will begin to install and once it is finished hit <span style="color: orange;">(Enter)</span> to reboot the server and complete the installation:</p>
+<p>This may take a couple minutes.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_15.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-357 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_15-300x241.png" alt="ESX_Install_Dell_C2100_15" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_15-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_15-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_15-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_15.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_16.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-358 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_16-300x241.png" alt="ESX_Install_Dell_C2100_16" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_16-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_16-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_16-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_16.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_17.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-359 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_17-300x241.png" alt="ESX_Install_Dell_C2100_17" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_17-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_17-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_17-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_17.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>After the reboot, ESX will boot into the following screen:</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: For this tutorial I have DHCP enabled so ESX already has an IP issued to it, but you will want to set this to a static IP for many reasons, so I have covered this in my post: <a href="/blog/set-a-static-ip-on-your-esx-host/">Set a Static IP on your ESX Host</a></span></h6>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_18.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-360 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_18-300x241.png" alt="ESX_Install_Dell_C2100_18" width="300" height="241" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_18-300x241.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_18-600x482.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_18-1024x822.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_18.png 1029w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now go back to your computer, open a web browser, and browse to the IP that we saw in the previous step and you will see the following page:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_19.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-361 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_19-300x163.png" alt="ESX_Install_Dell_C2100_19" width="300" height="163" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_19-300x163.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_19-600x325.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_19-1024x555.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_19.png 1920w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Click on the &#8220;<span style="color: #6699ff;">Download vSphere Client</span>&#8221; link and Install that on your local computer.</p>
+<p>Once <span style="color: orange;">VMware vSphere Client </span>is installed, open it, and fill in the fields appropriately.</p>
+<ul>
+<li style="text-align: left;">IP address / Name: <span style="color: orange;">IP of ESX Host</span></li>
+<li style="text-align: left;">User name: <span style="color: orange;">root</span></li>
+<li style="text-align: left;">Password: <span style="color: orange;">Password you created</span></li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_20.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-362 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_20-240x300.png" alt="ESX_Install_Dell_C2100_20" width="240" height="300" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_20-240x300.png 240w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_20.png 416w" sizes="(max-width: 240px) 100vw, 240px" /></a></p>
+<p>&nbsp;</p>
+<p>You will be prompted by a Security Warning, check the check-box for <span style="color: orange;">Install this certificate and do not display security warnings for &#8220;Your IP&#8221;.</span> Then click <span style="color: orange;">Ignore</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_21.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-363 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_21-300x159.png" alt="ESX_Install_Dell_C2100_21" width="300" height="159" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_21-300x159.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_21.png 506w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next you will come to a screen like the following:</p>
+<p>First thing you will need to do, is create a datastore. To do so, click on the blue link, <span style="color: orange;">click here to create a datastore&#8230;</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_22.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-364 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_22-300x163.png" alt="ESX_Install_Dell_C2100_22" width="300" height="163" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_22-300x163.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_22-600x325.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_22-1024x555.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_22.png 1920w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>This will bring up the following window, where you will choose the <span style="color: orange;">Disk/LUN</span> option and click <span style="color: orange;">Next</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_23.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-365 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_23-300x236.png" alt="ESX_Install_Dell_C2100_23" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_23-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_23-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_23.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Select one of the disks that you would like to create a datastore out of and click <span style="color: orange;">Next</span>:</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: I selected one of the two RAID-1 Arrays I set up prior to this tutorial</span></h6>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_24.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-366 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_24-300x236.png" alt="ESX_Install_Dell_C2100_24" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_24-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_24-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_24.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>On the next screen leave the <span style="color: orange;">VMFS-5</span> option selected and then click <span style="color: orange;">Next</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_25.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-338 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_25-300x236.png" alt="ESX_Install_Dell_C2100_25" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_25-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_25-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_25.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Confirm the disk layout settings by clicking <span style="color: orange;">Next</span>:</p>
+<p>&nbsp;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_26.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-339 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_26-300x236.png" alt="ESX_Install_Dell_C2100_26" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_26-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_26-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_26.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Name your datastore with a naming scheme that you see fit. I have named mine <span style="color: orange;">VM1-RAID1</span>. Then click <span style="color: orange;">Next</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_27.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-340 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_27-300x236.png" alt="ESX_Install_Dell_C2100_27" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_27-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_27-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_27.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Leave <span style="color: orange;">Maximum available space</span> selected, unless for some reason you are not applying all the RAID-1 to this host, and click <span style="color: orange;">Next</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_28.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-341 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_28-300x236.png" alt="ESX_Install_Dell_C2100_28" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_28-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_28-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_28.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click <span style="color: orange;">Finish</span> to create the datastore:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_29.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-342 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_29-300x236.png" alt="ESX_Install_Dell_C2100_29" width="300" height="236" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_29-300x236.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_29-600x472.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_29.png 738w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Next we are going to add an image to the datastore so we can create Virtual Machines off of that image.</p>
+<p>In the <span style="color: orange;">VMware vSphere Client</span> click on the <span style="color: orange;">Configuration</span> tab and then click on <span style="color: orange;">Storage</span> under the Hardware Section.<br />
+Here you will right click on your new datastore and click <span style="color: orange;">Browse Datastore&#8230;</span>:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_30.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-377 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_30-300x122.png" alt="ESX_Install_Dell_C2100_30" width="300" height="122" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_30-300x122.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_30-600x244.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_30-1024x416.png 1024w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_30.png 1081w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Create a folder in the root of that drive named <span style="color: orange;">Images</span> and then click the <span style="color: orange;">Upload Icon</span> and choose <span style="color: orange;">Upload File&#8230;</span>:</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: You can also choose to set up an NFS datastore to store your .iso and other bootable files. If you choos to go that route you can skip this step. I have already covered how to accomplish this in my tutorial: <a href="/blog/how-to-create-and-esx-datastore-from-a-windows-nfs-share/">How to create and ESX Datastore from a Windows NFS Share</a></span></h6>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_31.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-379 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_31-300x137.png" alt="ESX_Install_Dell_C2100_31" width="300" height="137" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_31-300x137.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_31-600x274.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_31.png 888w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&nbsp;</p>
+<p>Once the .iso, for whatever OS you have chosen, has finished uploading, you will simply right-click on your host and select <span style="color: orange;">New Virtual Machine&#8230;</span>, and proceed to set up your VM according the the specs that you need.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_32.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-380 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_32-297x300.png" alt="ESX_Install_Dell_C2100_32" width="297" height="300" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_32-297x300.png 297w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_32.png 443w" sizes="(max-width: 297px) 100vw, 297px" /></a></p>
+<p>&nbsp;</p>
+<p>In the last step of creating the VM, where the tab on the left reads <span style="color: orange;">Ready To Complete</span> and you have a <span style="color: orange;">Finish</span> option, check the check box for <span style="color: orange;">&#8220;Edit the virtual machine settings before completion&#8221; </span>and then click <span style="color: orange;">Continue</span>.</p>
+<p>In the popup window you will need to browse to the <span style="color: orange;">New CD/DVD (Adding)</span> section and then select <span style="color: orange;">Datastore ISO File</span> to <span style="color: orange;">Connect at power on</span>. You are going to want to click <span style="color: orange;">Browse&#8230;</span> and browse to the .iso that you previously uploaded, then click <span style="color: orange;">Finish</span>.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/ESX_Install_Dell_C2100_33.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-381 aligncenter" src="/blog/wp-content/uploads/ESX_Install_Dell_C2100_33-300x268.png" alt="ESX_Install_Dell_C2100_33" width="300" height="268" srcset="/blog/wp-content/uploads/ESX_Install_Dell_C2100_33-300x268.png 300w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_33-600x536.png 600w, /blog/wp-content/uploads/ESX_Install_Dell_C2100_33.png 708w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>That is it, wait for your VM to create and then power it on.</p>
+<p>Once you power it on, you can open the console and set up network connectivity to the server as it meets your needs.</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: After you complete the installation of whatever OS you chose, you will want to go back into setting, and set either set this setting to &#8220;Client Device&#8221; or remove the check next to &#8220;Connect at power on&#8221;.</span></h6>
+<p>&nbsp;</p>
+<p>If you have any questions, please contact me through the site.</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

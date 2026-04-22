@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Lab &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/lab/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Mon, 11 Mar 2019 05:08:19 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Home Lab 2.0</title>
+		<link>/blog/home-lab-2-0/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Fri, 01 Mar 2019 00:22:12 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Cabling]]></category>
+		<category><![CDATA[Cat6]]></category>
+		<category><![CDATA[CS24-SC]]></category>
+		<category><![CDATA[Dell]]></category>
+		<category><![CDATA[Dell C2100]]></category>
+		<category><![CDATA[Home Lab]]></category>
+		<category><![CDATA[Lab]]></category>
+		<category><![CDATA[Storage]]></category>
+		<category><![CDATA[Switches]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<guid isPermaLink="false">/blog/?p=927</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This post will serve as the 10,000 ft overview of my environment and what it all consists of. I plan to follow up this post with a series of smaller posts breaking down my Home Lab into the following sections:</p>
+<h5>(as I update these blog posts, links will appear and become active)</h5>
+<ul>
+<li><strong>Home Lab Servers &amp; Storage</strong></li>
+<li><strong>Home Lab Routing &amp; Switching</strong></li>
+<li><strong>Home Lab Access Points</strong></li>
+<li><strong>Home Lab Surveillance</strong></li>
+<li><strong>Home Cat6 Cable Wiring</strong></li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div><div class="vc_empty_space"   style="height: 15px"><span class="vc_empty_space_inner"></span></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-286869e85517aaedc" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-286869e85517aaedc uvc-9080  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-286869e85517aaedc h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Servers &amp; Storage</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I go into details about the server and storage that I use in my Home Lab environment.</p>
+<p>The current hardware I use is:</p>
+<ul>
+<li>Dell PowerEdge R710 SFF &amp; LFF</li>
+<li>Dell PowerEdge C2100</li>
+<li>Dell PowerEdge CS24-SC (Essentially a 2950)</li>
+<li>Dell PowerEdge R510 LFF</li>
+</ul>
+<p>The operating systems that I use are:</p>
+<ul>
+<li>VMware esxi 6.5</li>
+<li>VMware esxi 6.7</li>
+<li>Windows Server 2012 R2</li>
+<li>Windows Server 2016</li>
+<li>Windows Server 2019</li>
+<li>FreeNAS 11.1 (U7 if you care)</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>I have purchased or otherwise acquired some Gen10 and Gen11 Dell PowerEdge Servers throughout my years in IT. I enjoy having a Home Lab to work in and learn new things without repercussions of really messing something up. In my environment, nuke and pave is not frowned upon at all. I do my best to say up-to-date and using the latest and greatest trial software, but due to the hardware I am running, that goal comes with some limitations.For instance, my C2100 servers simply cannot be upgraded beyond esxi 6.5. The processors are not compatible with esxi 6.7. However, I was able to upgrade my vCenter Server to 6.7 and still have it manage my 6.5 hosts.</p>
+<p>Most of my servers are running Windows Server 2019, but some are still running 2016 as I havent had the time or need to update them. (Such as DC&#8217;s and DB&#8217;s)</p>
+<p>My Storage devices are all PowerEdge Servers running FreeNAS. I set them up with FreeNAS and configure the iSCSI service for MPIO to my esxi hosts. I find it is a set-it and forget-it type of thing. I am subscribed to some FreeNAS emails and RSS feeds, so I look out for OS updates and install them accordingly.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-721669e85517ab374" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-721669e85517ab374 uvc-5070  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-721669e85517ab374 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Routing &amp; Switching</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover all the networking equipment that I use in my home lab and how I use it.</p>
+<p>The networking hardware that I use is:</p>
+<ul>
+<li>Unifi USG-PRO-4 (Gateway)</li>
+<li>Unifi US-24 (Switch)</li>
+<li>Unifi US-8-150 (Switch)</li>
+<li>3 x Dell PowerConnect 7048P (Switch)</li>
+<li>Netgear ProSAFE GS108Ev3 8-Port</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>For most of my networking equipment, I run Ubiquiti Unifi equipment. This is marketed as &#8220;Enterprise&#8221; networking equipment, but imho, it is far from &#8220;Enterprise&#8221;. I would place it solidly in the &#8220;prosumer&#8221; line of networking equipment. Dont get me wrong, their WAP&#8217;s are pretty awesome. But their switching and routing devices leave much to be desired. Their GUI is quite pretty and you can do enough to get by through it, but for really advanced setups, you are required to edit a json file. Often the editing of the json file is unsupported and a PITA the figure out.</p>
+<p>For the rest of my networking equipment, I run some classic Dell PowerConnect switches. I run the 7048P&#8217;s. For the most part, I dont need the PoE feature, but for under $150 per switch, I couldnt not get the PoE feature. I just disable it on the ports where it is not needed. The language is pretty similar to Cisco so getting by in command line is my preferred way to manage these.</p>
+<p>Oh, and I have a Netgear managed 8-port switch. This little guy has kept up with the other two brands of switches afaic. I like the little guy and it works great as an under the desk switch.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-934169e85517ab6aa" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-934169e85517ab6aa uvc-1031  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-934169e85517ab6aa h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Access Points</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover the Access point that I use in my home, discussing wiring, port and physical placement.</p>
+<p>The hardware access points I currently use are:</p>
+<ul>
+<li>Unifi UAP-AC-PRO</li>
+<li>Unifi UAP-AC-M-PRO</li>
+<li>Unifi UAP-IW-PRO</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>For all my Wireless, I trust in the Ubiquiti Unifi line. They are a great &#8220;prosumer&#8221; product at a price that I can afford. And they definitely do their job for my home needs. I have even installed these at a few businesses with very solid results.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-208269e85517ab9aa" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-208269e85517ab9aa uvc-381  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-208269e85517ab9aa h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Lab Surveillance</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will cover my Home Surveillance Solution using my Home Lab equipment.</p>
+<p>Some of the equipment I use is as follows:</p>
+<ul>
+<li>Home Server (Sometimes virtualized, sometimes standalone)</li>
+<li><a href="http://blueirissoftware.com/">BlueIris</a> NVR Software</li>
+<li>Reolink IP Cams
+<ul>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-410</li>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-411</li>
+<li class="pro-name active" data-id="107314" data-parent-id="48">RLC-420</li>
+<li class="pro-name active" data-id="50" data-parent-id="50">RLC-423</li>
+</ul>
+</li>
+<li>HikVision IP Cams
+<ul>
+<li>DS-2CD2142FWD-IS 4MP</li>
+</ul>
+</li>
+<li>Ring Pro Doorbell</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>When I first got into the surveillance game, I was purchasing Hikvision IP Cameras from a specific re-seller in my area. Since then, Reolink has become quite a mainstream prosumer product and I can get them from Amazon. So as of late, all of my Reolink cams have been purchased from random amazon sales.</p>
+<p>Overall I enjoy both cams, but prefer the Reolink branded cams over Hikvision.</p>
+<p>As for the Ring Pro Doorbell. I got it because it&#8217;s easy for the wife to use and not answer the door if she doesn&#8217;t want to. I have it on a &#8220;security device&#8221; vlan, so it is segmented off. I actually do enjoy the device. It is nice having something in the cloud separate from Blue Iris.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-458769e85517abcc1" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-458769e85517abcc1 uvc-3943  uvc-heading-default-font-sizes" data-hspacer="no_spacer"  data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive"  data-ultimate-target='.uvc-heading.ultimate-heading-458769e85517abcc1 h3'  data-responsive-json-new='{"font-size":"","line-height":""}' ><h3 style="--font-weight:theme;">Home Cat6 Cable Wiring</h3></div></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>In this post I will go through what it takes to wire up your home with Cat6 cabling. This is currently an ongoing process for me and may be for some time yet to come.<br />
+The materials you will need to complete wiring in your house are as follows:</p>
+<ul>
+<li>Cat6 cabling</li>
+<li>RJ45 Cat6 Jacks</li>
+<li>RJ45 Boots</li>
+<li>RJ45 Crimping tool</li>
+<li>RJ45 Punch Down tool</li>
+<li>Cat6 Wall Plates with Jacks</li>
+<li>Pull String</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Wiring your house is a process. If you have unlimited amounts of money, then hire a company to do it and they will charge you a few grand to go in there and get it done. They will most likely run the cables in a manner that works, but is not tech approved bc they are dudes who just know how to run cables, not why they are run or consequences of how they are run. If you are like me where money is not an endless pit of fun and you like having control over things, then you will want to take on wiring yourself. Overall you can do this for a fraction of the cost compared to contracting it out, but it will be a lot of work and sometimes, a complete, PITA. If you live in Texas like me, only plan on doing this kind of work from late October through late April&#8230; It gets hot in there.</p>
+<p>Overall, I have found wiring my house to be quite rewarding, both financially and emotionally. I am able to &#8220;put a stamp&#8221; on my work and be proud of what I have done.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_50 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

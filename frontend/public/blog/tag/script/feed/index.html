@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Script &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/script/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:01 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>PS Script install WP manually on Server 2012 R2</title>
+		<link>/blog/ps-script-install-wp-manually-server-2012-r2/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 14 Jul 2016 22:23:07 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[2012]]></category>
+		<category><![CDATA[2012R2]]></category>
+		<category><![CDATA[IIS]]></category>
+		<category><![CDATA[IIS 8.5]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Powershell]]></category>
+		<category><![CDATA[PS]]></category>
+		<category><![CDATA[Script]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<category><![CDATA[WP]]></category>
+		<guid isPermaLink="false">/blog/?p=548</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This post does basically the same thing that I have already covered in my &#8220;<a href="/blog/wordpress-iis-8-5-windows-2012-r2/">WordPress on IIS 8.5 (Windows 2012 R2)</a>&#8221; post, but it is a script that does literally everything for you. You will just need to add in a few of your own settings into the script, run it, and you will have a functional WP site.</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 18px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>First lets start of with the Features that I already have installed:</h4>
+<p>You will most likely have all of these but Telnet&#8230; <strong>INSTALL TELNET!</strong></p>
+<p>&nbsp;</p>
+<pre class="lang:xhtml decode:true ">DisplayName                                   Name                      InstallState
+-----------                                   ----                      ------------
+File and Storage Services                     FileAndStorage-Services      Installed
+Storage Services                              Storage-Services             Installed
+.NET Framework 4.5 Features                   NET-Framework-45-Features    Installed
+.NET Framework 4.5                            NET-Framework-45-Core        Installed
+WCF Services                                  NET-WCF-Services45           Installed
+TCP Port Sharing                              NET-WCF-TCP-PortSharing45    Installed
+SMB 1.0/CIFS File Sharing Support             FS-SMB1                      Installed
+Telnet Client                                 Telnet-Client                Installed
+User Interfaces and Infrastructure            User-Interfaces-Infra        Installed
+Graphical Management Tools and Infrastructure Server-Gui-Mgmt-Infra        Installed
+Server Graphical Shell                        Server-Gui-Shell             Installed
+Windows PowerShell                            PowerShellRoot               Installed
+Windows PowerShell 4.0                        PowerShell                   Installed
+Windows PowerShell ISE                        PowerShell-ISE               Installed
+WoW64 Support                                 WoW64-Support                Installed</pre>
+<p>&nbsp;</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 18px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>NOTES:</h3>
+<ul>
+<li>Use <a href="https://api.wordpress.org/secret-key/1.1/salt/">https://api.wordpress.org/secret-key/1.1/salt/</a> to generate your Salt Keys&#8230; After they have been generated, you must replace any &#8220;$&#8221; character with any other character. Not just this script, but WordPress will not work if there is a &#8220;$&#8221; character in the salt keys.</li>
+<li>You will be asked for some variables, they are as follows:</li>
+</ul>
+<table style="width: 50%;" border="1">
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IIS Site Name</td>
+<td>MyWordpressSite.com</td>
+</tr>
+<tr>
+<td>IIS App Pool Name</td>
+<td>MyWordpressSite.com</td>
+</tr>
+<tr>
+<td>Directory Path for website</td>
+<td>C:\inetpub\wwwroot\MyWordpressSite</td>
+</tr>
+<tr>
+<td>Database Name</td>
+<td>wordpress612</td>
+</tr>
+<tr>
+<td>Database Username</td>
+<td>wordpressuser612</td>
+</tr>
+<tr>
+<td>Database Password</td>
+<td>mysecretpassword612</td>
+</tr>
+<tr>
+<td>MySQL root Password</td>
+<td>v9gvBhTG@*b6n#^!v</td>
+</tr>
+<tr>
+<td>FTP Username</td>
+<td>FTPUser</td>
+</tr>
+<tr>
+<td>FTP Password</td>
+<td>FTPPass123!</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>You can download check out the progress of the script on my <a href="https://github.com/mgroff2/Powershell/tree/master/WP_Installer" target="_blank">Github</a> and you can download it with the following icon:</li>
+</ul>
+<p><a href="/blog/wp-content/uploads/Wordpress-setup.zip"><img decoding="async" class="aligncenter wp-image-587 size-full" src="/blog/wp-content/uploads/ps1_Icon.png" alt="ps1_Icon" width="128" height="128" /></a></p>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Now for the Script</h3>
+<pre class="lang:ps decode:true">
+<# 
+
+    .SYNOPSIS
+    Install a new WP site with all pre-reqs using pre-set variables. Can be used for additional sites.
+    
+    .DESCRIPTION
+    This script will create a WordPress site with known-working configurations.
+    Script can also be used to add additional sites as checks are in place. 
+    To customize site, update custom variables as desired. 
+    CAUTION - this script will overwrite a current site
+        
+    .OUTPUTS  
+    A new wp site ready for your configuration! ;-)
+     
+    .NOTES
+    Author: Michael Groff
+    Minimum OS: 2012, 2012 R2
+    PS Version: 4.0
+    Date:  1/12/17
+    
+#>
+
+#Checking Powershell Version
+
+$LocalPSVers = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\PowerShell\3\PowerShellEngine\").PowerShellVersion | Where-Object {$_ -gt "4"}
+
+IF (-not$LocalPSVers)
+{
+    Write-Host "
+You need to upgrade to atleast PS Verion 5 before running this script!
+" -ForegroundColor Red
+    Read-Host "Press enter to exit"
+    BREAK
+}
+ELSE
+{
+    Write-Host "
+Correct Powershell Version found, you are good to go!
+    " -ForegroundColor Green
+}
+
+###
+###Variables Start: 
+###
+#Site Name, must inclue the TLD (.com, .info, .net, etc.)
+Write-Host "
+The website name, must inclue the TLD (.com, .info, .net, etc.)
+" -ForegroundColor Yellow
+$iisAppName = Read-host -prompt "Enter the website name"
+#IIS App Pool Name: 
+Write-Host "
+The iis app pool name, can be same as website
+" -ForegroundColor Yellow
+$iisAppPoolName = Read-host -prompt "Enter the iis app pool name, can be same as website"
+#Site Path
+Write-Host "
+The suggested website root directory path is 'C:\inetpub\wwwroot\MyWordpressSite'
+" -ForegroundColor Yellow
+$directoryPath = Read-host -prompt "Enter the Website root directory path"
+#Database Name
+Write-Host "
+The WordPress Database is a MySQL Database
+" -ForegroundColor Yellow
+$dbn = Read-host -prompt "Enter the WordPress Database Name"
+#Database Username
+Write-Host "
+The WordPress Database User is a MySQL User
+" -ForegroundColor Yellow
+$dbun = Read-host -prompt "Enter the WordPress Database Username"
+#Database User Password
+Write-Host "
+The WordPress Database Password should be a strong password, minimum 12 characters
+" -ForegroundColor Yellow
+$dbpw = Read-host -prompt "Enter the WordPress Database User Password"
+#MySQL root password
+Write-Host "
+The  MySQL root password, this will create one if it doesnt exist
+" -ForegroundColor Yellow
+$MySQL = Read-host -prompt "Enter the MySQL root password"
+#Salt Keys - https://api.wordpress.org/secret-key/1.1/salt/ (NOTE: Replace any $ that you see with another character!)
+#Authentication Key
+$AuthKey = "ry=,b*Gp,+1-voDYM`zq#:S_^ODN Lp9:_:&D5o6C%0SXsyi<k`Q .Z&#093;NK3144ay"
+#Secure Authentication Key
+$SecAuthKey = "f5h-Ss+}97fG%m+yS5X,zh3)>B/_/^C0x:sJv7Cta0+Cy=X_{E>[RN+A=-(*%Z+t"
+#Logged In Key
+$LogInKey = "N-< +&#091;doN4gwtyk?PZK>=~iU8]-oS)wPt6l~.qMES}<vr v.Px`d#4MxOb`e.&#038;7-"
+#Nonce Key
+$NKey = ":!!Pu0e5a?ux,+P)C&#091;|T~,:IN,+m0H.6.JT%Ov_;_.J9;<@dCNpu|+@;L{G)W%|3"
+#Authentication Salt
+$AuthSalt = "SlHw{qnL#.kN--|u+Rw|kTe#(QR=Ak`_MUO8!#&#093;`3L7.L=X<nX3><w/}MuRu9w`J"
+#Secure Authentication Salt
+$SecAuthSalt = "a}4L-qvxEx~x(f_&#093;YiBgP(18%r)IerB+e4-I6m+ZkzgW4//V?x:P&#038;:IvjIxguJIX"
+#Logged In Salt
+$LogInSalt = "d-O >T]uyh:9?Pu`i8|222S|eY5lW8,`lPwG-b|^-|8z5]j(P+-T6c[^PO;4ZM2q"
+#Nonce Salt
+$NSalt = "pT[la{_E,yMHhMu|F1F|k7*q+PQ]u[e zdUjj5(%&gZnsxUGJgYsi?:h[d|o`5I)"
+#FTPUsername
+Write-Host "
+The FTP Username is a Windows User
+" -ForegroundColor Yellow
+$FTPSiteUser = Read-host -prompt "Enter the FTP Username"
+#FTP Password - NOTE: Must be UNDER 14 characters, also must have a capital letter and special character
+Write-Host "
+The FTP User Pasword must be UNDER 14 characters & must have a capital letter and special character
+" -ForegroundColor Yellow
+$FTPSiteUserPW = Read-host -prompt "Enter the FTP User Pasword"
+#FTP Group
+$FTPGroup = "FTP_User_Group"
+###
+###Variables End: 
+###
+
+###Variables to leave alone: 
+$iisAppPoolDotNetVersion = "v4.0"
+$sitelocation = "IIS:\sites\$iisAppName"
+
+Write-Host "
+Installing Windows Roles & Features if necessary... be patient
+" -ForegroundColor Cyan
+
+#Windows Roles & Features if they are not already installed
+Function Install-WP-Web-Features {
+IF ( Get-WindowsFeature -Name Web-Server, Web-Log-Libraries, Web-Request-Monitor, Web-App-Dev, Web-Net-Ext45, Web-CGI, Web-Ftp-Server, NET-Framework-Features | Where {$_.InstallState -eq "Available"} )
+        {
+            Install-WindowsFeature -Name Web-Server, Web-Log-Libraries, Web-Request-Monitor, Web-App-Dev, Web-Net-Ext45, Web-CGI, Web-Ftp-Server, NET-Framework-Features -IncludeManagementTools
+        }
+        ELSE
+        {
+            Return  Write-Host "
+Necessary Windows Features are already installed!
+            " -ForegroundColor Green
+        }
+}
+
+Install-WP-Web-Features
+
+#Create a new Website and AppPool for WP to live in
+
+Import-Module WebAdministration
+
+Write-Host "
+Creating site and App Pool in IIS
+" -ForegroundColor Cyan 
+
+#navigate to the app pools root
+cd IIS:\AppPools\
+
+#check if the app pool exists
+if (!(Test-Path $iisAppPoolName -pathType container))
+{
+    #create the app pool
+    $appPool = New-Item $iisAppPoolName
+    $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value $iisAppPoolDotNetVersion
+}
+
+#navigate to the sites root
+cd IIS:\Sites\
+
+#check if the site exists
+if (!(Test-Path $iisAppName -pathType container))
+{
+    #create the site
+    $iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisAppName} -physicalPath $directoryPath
+    $iisApp | Set-ItemProperty -Name "applicationPool" -Value $iisAppPoolName
+}
+
+Write-Host "
+Adding in hosts file entry
+" -ForegroundColor Cyan 
+
+#Adds in hosts file entry for your new site: 
+function add-hostfilecontent {            
+ [CmdletBinding(SupportsShouldProcess=$true)]            
+ param (            
+  [parameter(Mandatory=$true)]            
+  [ValidatePattern("\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")]            
+  [string]$IPAddress,            
+              
+  [parameter(Mandatory=$true)]            
+  [string]$computer            
+ )            
+ $file = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"            
+ if (-not (Test-Path -Path $file)){            
+   Throw "Hosts file not found"            
+ }            
+ $data = Get-Content -Path $file             
+ $data += "$IPAddress  $computer"            
+ Set-Content -Value $data -Path $file -Force -Encoding ASCII             
+}
+
+#add host file entries
+add-hostfilecontent -IPAddress 127.0.0.1 -computer $iisAppName
+
+Write-Host "
+Installing Web Platform Installer
+" -ForegroundColor Cyan
+
+#Install Web Platform Installer if its not already installed
+$WPIPath = Test-Path "C:\Program Files\Microsoft\Web Platform Installer\WebPlatformInstaller.exe"
+Function Install-WPI {
+        IF (-not$WPIPath)
+        {
+            msiexec.exe /package http://download.microsoft.com/download/C/F/F/CFF3A0B8-99D4-41A2-AE1A-496C08BEB904/WebPlatformInstaller_amd64_en-US.msi /quiet /passive | Out-Null
+        }
+        ELSE
+        {
+            Return Write-Host "
+Web Plaform Installer 5.0 is already installed!
+            " -ForegroundColor Green
+            break
+        }
+} 
+
+Install-WPI
+
+#The .app info
+Write-Host "
+If the script stopped here..." -ForegroundColor Red
+Write-Host "you did not fill out the variable information above... correctly
+" -ForegroundColor Yellow
+
+New-Item $env:USERPROFILE\Desktop\wp.app -ItemType file -value "AppPath[@]$iisAppName
+
+DbServer[@]localhost
+
+DbName[@]$dbn
+
+DbUsername[@]$dbun
+
+DbPassword[@]$dbpw
+
+DbAdminUsername[@]root
+
+DbAdminPassword[@]$MySQL
+
+Authentication Key[@]$AuthKey
+
+Secure Authentication Key[@]$SecAuthKey
+
+Logged In Key[@]$LogInKey 
+
+Nonce Key[@]$NKey
+
+Authentication Salt[@]$AuthSalt
+
+Secure Authentication Salt[@]$SecAuthSalt
+
+Logged In Salt[@]$LogInSalt
+
+Nonce Salt[@]$NSalt
+
+"
+
+#Reload Paths to understand WebPICMD.exe
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
+Write-Host "
+Starting the WP install" -ForegroundColor Cyan 
+
+#Install WP & all necessary modules
+cd $env:USERPROFILE\Desktop
+WebPICMD.exe /Install /Products:PHPManager /AcceptEULA
+WebPICMD.exe /Install /Application:Wordpress@wp.app /Products:PHP54 /AcceptEULA /MySQLPassword:$MySQL /Log:$env:HOMEDRIVE\WPIntsalllog.txt
+
+#Configure URL Rewrite Rule 
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules" -name "." -value @{name='Wordpress';patternSyntax='Wildcard'}
+Set-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/match" -name "url" -value "*"
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/conditions" -name "." -value @{input='{REQUEST_FILENAME}';matchType='IsFile';negate='True'}
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/conditions" -name "." -value @{input='{REQUEST_FILENAME}';matchType='IsDirectory';negate='True'}
+Set-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/action" -name "url" -value "index.php"
+
+#Remove unnecessary Default Docs: 
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='Default.htm'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='Default.asp'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='index.htm'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='index.html'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='iisstart.htm'}
+
+#Remove PHP 5.5 as WP only works with 5.4 afaik: 
+$TestPHP55 =  Get-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST'  -filter "system.webServer/handlers/add[@name='PHP55_via_FastCGI']"  -Name "type"
+
+IF ($TestPHP55)
+{     
+    Remove-WebConfigurationProperty  -pspath 'MACHINE/WEBROOT/APPHOST'  -filter "system.webServer/handlers" -name "." -AtElement @{name='PHP55_via_FastCGI'}           
+}
+ELSE
+{
+    Write-Host "
+PHP 5.5 has already been removed!
+    " -ForegroundColor Green
+}
+
+#Create FTP Group & User - Uses preset variables 
+#Group Creation
+
+IF (-not (Get-WmiObject -Class Win32_Group | Where-Object {$_.Name -eq "$FTPGroup"}))
+{
+    Write-Host "
+Creating FTP User Group
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net localgroup /add $FTPGroup}
+}
+ELSE
+{
+    Write-Host "
+Local Group already exists
+    " -ForegroundColor Yellow
+}
+
+#Users Creation
+
+IF (-not (Get-WmiObject -Class Win32_UserAccount | Where-Object {$_.Name -eq "$FTPSiteUser"}))
+{
+    Write-Host "
+Creating FTP User
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net user /add $FTPSiteUser $FTPSiteUserPW} -ErrorAction SilentlyContinue
+    Write-Host "
+Adding user to FTP User Group
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net localgroup $FTPGroup $FTPSiteUser /add }
+}
+ELSE
+{
+    Write-Host "
+Local User already exists
+    " -ForegroundColor Red
+}
+
+#Create FTP Site (To update WordPress and Plugins)
+$FTPSiteName = "Main FTP"
+$FTPSitePath = "C:\inetpub\ftproot"
+$FTPSitePathLocUsr = "C:\inetpub\ftproot\LocalUser"
+
+IF (-not (Test-Path -Path "$FTPSitePathLocUsr"))
+{
+    New-Item -Path $FTPSitePathLocUsr -ItemType Directory -ErrorAction SilentlyContinue
+    New-Item -Path $FTPSitePath -ItemType Directory -ErrorAction SilentlyContinue
+    New-WebFtpSite -Name $FTPSiteName -PhysicalPath $FTPSitePath -IPAddress * -Port 21
+}
+ELSE
+{
+    Write-Host "
+FTP Site already exists in location: 'C:\inetpub\ftproot\LocalUser'
+Updating your WordPress site may not work as designed with FTP
+    " -ForegroundColor Yellow
+    Write-Host "
+Attempting to create virtual direcotry in FTP Site. 
+    " -ForegroundColor Yellow
+} 
+
+IF (-not (Get-WebVirtualDirectory -Name "*$FTPSiteUser*") )
+{
+    New-WebVirtualDirectory -Site "$FTPSiteName\LocalUser" -Name $FTPSiteUser -PhysicalPath $directoryPath -ErrorAction SilentlyContinue
+    Write-Host "
+FTP virtual direcotry has been created!
+    " -ForegroundColor Green
+}
+ELSE
+{
+    Write-Host "
+Virtual Directory for FTP Site already exists
+    " -ForegroundColor Red 
+}
+
+#Setting User/Group Permissions for FTP User Group in IIS - Adding Authorization in IIS
+
+#Giving Windows Group permissions to site for FTP
+IF (-not((Get-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -location "$FTPSiteName" -filter "system.ftpServer/security/authorization/add" -name ".").roles))
+{
+Add-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -location "$FTPSiteName" -filter "system.ftpServer/security/authorization" -name "." -value @{accessType='Allow';roles="$FTPGroup";permissions='Read,Write'}
+}
+ELSE
+{
+    Write-Host " 
+FTP User Group has already been given proper permissions in IIS. 
+    " -ForegroundColor Green 
+}
+
+#Enable Basic Auth for the FTP Site
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.authentication.basicAuthentication.enabled -Value $true
+
+#Setup User Isolation
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.userisolation.mode -Value IsolateAllDirectories
+
+#Disable Require SSL on FTP Site
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.ssl.controlChannelPolicy -Value SslAllow
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.ssl.dataChannelPolicy -Value SslAllow
+
+#Permission for FTP user to WP Directory
+$FTPAcl = Get-Acl -Path "$directoryPath"
+$FTPAclUser = New-Object system.security.accesscontrol.filesystemaccessrule("$FTPGroup","FullControl","ContainerInherit, ObjectInherit","None","Allow")
+$FTPAcl.SetAccessRule($FTPAclUser)
+Set-Acl -Path "$directoryPath" -AclObject $FTPAcl
+
+#Finishing up and loading your site
+#Cleanup
+Remove-Item $env:USERPROFILE\Desktop\wp.app -Force
+
+#Disable IE Enhanced Security & UAC
+function Disable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 0
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been disabled." -ForegroundColor Green
+}
+function Enable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 1
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 1
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been enabled." -ForegroundColor Green
+}
+function Disable-UserAccessControl {
+    Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 00000000
+    Write-Host "User Access Control (UAC) has been disabled." -ForegroundColor Green    
+}
+
+#Disable IE Enhanced Security if its not already
+IF (
+((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}").IsInstalled | Where-Object {$_ -gt "0"}) + 
+((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}").IsInstalled | Where-Object {$_ -gt "0"})
+)
+{
+    Disable-InternetExplorerESC
+}
+ELSE
+{
+    Write-Host "
+IE Enhanced Security Configuration (ESC) has already been disabled.
+    " -ForegroundColor Green
+}
+
+#Disable User Access Control
+IF (((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System").ConsentPromptBehaviorAdmin | Where-Object {$_ -gt "0"}))
+{
+    Disable-UserAccessControl
+}
+ELSE
+{
+    Write-Host "
+User Access Control (UAC) has already been disabled. 
+    " -ForegroundColor Green
+}
+
+Write-Host "
+Done! Now go configure your site" -ForegroundColor Green 
+#Opening IE to your WP site
+$url = "http://$iisAppName/"
+
+$IEwp = New-Object -com internetexplorer.application;
+$IEwp.visible = $true; 
+$IEwp.navigate($url);
+
+#Opening your new WP folder with File Explorer
+Start-Process $directoryPath
+
+#Openeing WP Install Log file for review
+Start-Process $env:HOMEDRIVE\WPIntsalllog.txt
+
+#Open IIS
+Start-Process C:\Windows\system32\inetsrv\inetmgr.exe
+
+Write-Host ""
+Read-Host -Prompt "Press Enter to exit" 
+</pre>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

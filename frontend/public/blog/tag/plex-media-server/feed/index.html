@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Plex Media Server &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/plex-media-server/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:03 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Install and Setup Plex on FreeNAS</title>
+		<link>/blog/install-and-setup-plex-on-freenas/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 30 Jun 2015 08:11:41 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[CS24-SC]]></category>
+		<category><![CDATA[Dell CS24-SC]]></category>
+		<category><![CDATA[FreeNAS]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Movie Server]]></category>
+		<category><![CDATA[Movies]]></category>
+		<category><![CDATA[Plex Media Server]]></category>
+		<category><![CDATA[Plex Server]]></category>
+		<guid isPermaLink="false">/blog/?p=227</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="text-align: center;"><span style="color: orange;">NOTE: This how-to assumes that you have set up you FreeNAS installation according to the instructions shown in my tutorial: <span style="text-decoration: underline;"><a href="/blog/install-and-setup-freenas-on-dell-cs24-sc/">Install and Setup FreeNAS on Dell CS24-SC</a></span></span></h4>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Setting up a Share</h3>
+<p>First we are going to need to set up a share(I did cover this in my Install and Setup FreeNAS on Dell CS24-SC tutorial, so you can skip if you already followed that).</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: I have chosen to use CIFS, as I am going this from a Windows Machine.</span></h6>
+<p>Navigate to your FreeNAS IP and login, then expand &#8220;<strong>Services</strong>&#8221; on the side and click on &#8220;<strong>CIFS&#8221; </strong>and it will bring up the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install16.png" data-dt-img-description=""><img fetchpriority="high" decoding="async" class=" size-medium wp-image-147 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install16-300x169.png" alt="FreeNas Install16" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install16-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install16-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install16-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install16.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>You can choose what to put in all these fields, just make sure you check and IP to bind it to at the bottom. Next go back to the left side of the screen and click on &#8220;<strong>Control Services</strong>&#8221; under the &#8220;<strong>Services</strong>&#8221; section.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install17.png" data-dt-img-description=""><img decoding="async" class=" size-medium wp-image-148 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install17-300x169.png" alt="FreeNas Install17" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install17-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install17-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install17-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install17.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you will need to turn &#8220;<strong>CIFS</strong>&#8221; on. Now we will need to add a CIFS share onto FreeNAS, first expand &#8220;<strong>Sharing</strong>&#8221; then expand &#8220;<strong>Windows (CIFS) Shares</strong>&#8221; and click on &#8220;<strong>Add Windows (CIFS) Share</strong>&#8221;<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install18.png" data-dt-img-description=""><img decoding="async" class=" size-medium wp-image-149 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install18-300x169.png" alt="FreeNas Install18" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install18-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install18-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install18-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install18.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>I am choosing to share the root of my &#8220;<strong>Volume0</strong>&#8221; and I decided to name the share &#8220;<strong>FreeNASROOT</strong>&#8221;</p>
+<p>After this is done bring up Windows Explorer and verify that you can access the share. For me I had to type in \\FreeNAS or \\192.168.0.91 in my explorer bar. Once it connected I saw the share &#8220;<strong>FreeNASROOT</strong>&#8221; and when i selected that I was asked for creds to access the share, enter the root creds you use to log into the WebGUI as we have not created any users at this time.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install24.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-206 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install24-300x227.png" alt="FreeNas Install24" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install24-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install24-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install24.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: center;"><span style="color: orange;">**I am not covering users and user permissions in this how-to, but it is pretty simple and you should always create a user so you are not doing everything as the root user**</span></p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Installing Plex</h3>
+<p>FreeNAS makes this pretty damn easy. Simply click on the &#8220;<strong>Plugins</strong>&#8221; tab and wait for it to load.</p>
+<p>Once its loaded you will see something along the lines of the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install19.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-158 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install19-300x169.png" alt="FreeNas Install19" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install19-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install19-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install19-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install19.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you need to scroll down to &#8220;<strong>PlexMediaServer</strong>&#8221; select it, then click &#8220;<strong>Install</strong>&#8221; at the bottom of the page. You will get a popup notification that reads &#8220;Are you sure you want to install &#8220;PlexMediaServer&#8221; plugin?&#8221; Click &#8220;<strong>OK</strong>&#8221; and it will proceed with the install and configurations.<br />
+Now we need to configure what IP Plex will listen on. You can do this by expanding the &#8220;<strong>Jails</strong>&#8221; tab and then expand &#8220;<strong>plexmediaserver_1</strong>&#8221; and now click &#8220;<strong>edit</strong>&#8221;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install21.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-161 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install21-300x169.png" alt="FreeNas Install21" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install21-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install21-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install21-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install21.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Go ahead and give it an IP that will work for you. And now click on the &#8220;<b>Installed</b>&#8221; tab on the Plugins page and you will see the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install20.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-160 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install20-300x169.png" alt="FreeNas Install20" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install20-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install20-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install20-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install20.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>The only difference between what you see and the image above is that your Plex will be powered off (<span style="color: red;">red</span>). Go ahead and turn it on (<span style="color: blue;">blue</span>). Note that you may get &#8220;some error occurred&#8221; when you try to do this. That is bc we just changed the Jail IP. Go ahead and reboot the box if that is the case. After it powers back up, navigate back to the page above and power Plex on. Once it is on you can go to the following address: <span style="font-size: xx-small;"><i>(change the IP with the IP of your Plex Jail)</i></span><br />
+<span style="color: orange;">http://192.168.0.93:32400/web/index.html</span><br />
+You can also get here by refreshing your page, then expand the plugins tab and select Plex Media Server as seen in the following screenshot:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install22.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-165 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install22-300x169.png" alt="FreeNas Install22" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install22-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install22-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install22-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install22.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>In the popup window click on the &#8220;<strong>here</strong>&#8221; link and that will bring up Plex! You did it, you installed Plex successfully!</p>
+<p>Now we just have to configure it so you can see your movies on there.</p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Configuring Movies with Plex</h3>
+<p>Once you browse to <span style="color: orange;">http://192.168.0.93:32400/web/index.html</span> your screen should look like this:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install23.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-168 size-medium" src="/blog/wp-content/uploads/FreeNas-Install23-300x169.png" alt="FreeNas Install23" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install23-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install23-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install23-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install23.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a><br />
+Before we can tell what movies Plex to look at, we first have to add a movie, or movies, to our FreeNAS Share we set up. So, go ahead and navigate back to your Share in explorer and add a folder called &#8220;<strong>Movies</strong>&#8220;, then add a Movie into that Folder as shown below:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install25.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-207 alignnone" src="/blog/wp-content/uploads/FreeNas-Install25-300x227.png" alt="FreeNas Install25" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install25-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install25-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install25.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a>                           <a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install26.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-208 alignnone" src="/blog/wp-content/uploads/FreeNas-Install26-300x258.png" alt="FreeNas Install26" width="300" height="258" srcset="/blog/wp-content/uploads/FreeNas-Install26-300x258.png 300w, /blog/wp-content/uploads/FreeNas-Install26.png 515w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>We also need to add in a corresponding folder in our freenas jail, to do this, navigate to: <em>\\freenas\FreeNASROOT\jails\plexmediaserver_1\media</em> (if you have named everything as i have here) and add a folder called &#8220;<strong>Movies</strong>&#8220;.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install26.1.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-212 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install26.1-300x182.png" alt="FreeNas Install26.1" width="300" height="182" srcset="/blog/wp-content/uploads/FreeNas-Install26.1-300x182.png 300w, /blog/wp-content/uploads/FreeNas-Install26.1-600x365.png 600w, /blog/wp-content/uploads/FreeNas-Install26.1.png 913w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>This is going to act as an alias in the FreeNAS Jail&#8217;s storage we are about to configure. So go ahead and open back up your web browser, open up FreeNAS and navigate to <strong>Jails</strong> on the left hand side, expand everything you can.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install28.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-213 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install28-300x169.png" alt="FreeNas Install28" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install28-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install28-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install28-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install28.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&#8230;and you should be in the &#8220;<b>Add Storage</b>&#8221; section of your Plex jail. Go ahead and click on Add Storage. For <strong>Source</strong> put <em>/mnt/Volume0/Movies</em> or navigate to wherever your movies actually live. And for <strong>Destination</strong> put <em>/media/Movies</em></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install29.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-215 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install29-300x169.png" alt="FreeNas Install29" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install29-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install29-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install29-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install29.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now go back to Plex and Click on the <strong>+ (plus) </strong>in the upper left, next to the name of your Media Server and you will get something that looks like this:<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install27.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-210 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install27-300x169.png" alt="FreeNas Install27" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install27-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install27-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install27-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install27.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>From here you will choose &#8220;<strong>Movies</strong>&#8221; and click <span style="color: orange;"><strong>Next</strong></span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install30.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-216 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install30-300x169.png" alt="FreeNas Install30" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install30-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install30-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install30-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install30.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click on &#8220;<strong>Add folders</strong>&#8221; on the left hand side and choose the alias that we created <em>/media/Movies.</em> Now Plex should auto-update and find the new movie(s), but in case it doesn&#8217;t, just click on the gear on the upper left and select &#8220;<strong>Update Libraries</strong>&#8221; and there you have it, you can now see your new movie(s) on Plex!</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install31.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-218 size-full" src="/blog/wp-content/uploads/FreeNas-Install31.png" alt="FreeNas Install31" width="1366" height="768" srcset="/blog/wp-content/uploads/FreeNas-Install31.png 1366w, /blog/wp-content/uploads/FreeNas-Install31-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install31-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install31-1024x576.png 1024w" sizes="(max-width: 1366px) 100vw, 1366px" /></a></p>
+<p>Now that I have gotten you up and running you just have to go look through the Plex settings by clicking on the Wrench and Screw Driver in the upper right hand corner. It&#8217;s all pretty straight forward and simple but if you can&#8217;t figure it out then google that shit, then if that doesnt work comment and message me and i will see how I can help.</p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="text-align: center;">So that&#8217;s it, pretty simple install. If I left anything out that you notice or are having any trouble, leave a comment or send me and email on the right hand toolbar</h4>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

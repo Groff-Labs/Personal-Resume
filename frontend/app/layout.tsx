@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
-const SITE_URL = "https://cv.michaelgroff.info";
+const SITE_URL = "https://michaelgroff.info";
 const TITLE = "Michael Groff · AWS Sr. Solutions Architect";
 const DESCRIPTION =
   "AWS Sr. Solutions Architect at AllCloud. Building serverless, scalable, cost-optimized platforms for SMB to enterprise; serverless-first, IaC everything, security by default.";
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     url: SITE_URL,
-    siteName: "cv.michaelgroff.info",
+    siteName: "michaelgroff.info",
     type: "website",
     locale: "en_US",
     images: [

@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>ESX &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/esx/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:01 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Configure and Run vCheck</title>
+		<link>/blog/configure-and-run-vcheck/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2017 20:16:50 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[ESX]]></category>
+		<category><![CDATA[esxi]]></category>
+		<category><![CDATA[vCheck]]></category>
+		<category><![CDATA[VMWare]]></category>
+		<guid isPermaLink="false">/blog/?p=844</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>vCheck is a <em><strong>PowerShell HTML framework script</strong> </em>that started with one guy, but is now a community driven and from what I have seen, it’s pretty neat.</p>
+<p>vCheck can be configured to just run once, or as a scheduled task on a Windows box. It also offers the option of sending the report via email. With those two features coupled together, you can set up a daily environment scan to run an hour or two before you get to work each morning and have a nice HTML report in your inbox of what changed and/or broke since you left the night before.This tutorial covers the installation and configuration of the vCheck tool.</p>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Programs Needed:</h3>
+<ul>
+<li><a href="https://my.vmware.com/web/vmware/details?downloadGroup=PCLI650R1&amp;productId=614">PowerCLI</a> &#8211; Latest Version is best but will work with 5.0+</li>
+<li><a href="https://msdn.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell">PowerShell </a>&#8211; minimum Version 3</li>
+<li><a href="https://github.com/alanrenouf/vCheck-vSphere">vCheck</a> &#8211; (Download the zip and extract)
+<ul>
+<li><a href="https://github.com/alanrenouf/vCheck-vSphere/tree/dev">vCheck Dev Version</a> (use at your own risk)</li>
+</ul>
+</li>
+</ul>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Download and Extract vCheck with Powershell:</p>
+<pre class="lang:ps decode:true ">$ZipPath = "C:\vCheck\vCheck-vSphere-master.zip"
+$Destination = "C:\vCheck\"
+
+IF (-not (Test-Path -Path "$Destination"))
+{
+    New-Item -Path $Destination -ItemType Directory -ErrorAction SilentlyContinue
+}
+
+iwr https://github.com/alanrenouf/vCheck-vSphere/archive/master.zip -OutFile "$ZipPath"
+Add-Type -assembly "system.io.compression.filesystem"
+[io.compression.zipfile]::ExtractToDirectory($ZipPath, $Destination)</pre>
+<p>Load PowerCLI (open the Program)<br />
+Login to vCenter Server</p>
+<pre class="lang:ps decode:true ">Connect-VIServer</pre>
+<p>&#8211; or &#8211;</p>
+<pre class="lang:ps decode:true ">Connect-VIServer VCENTER.DOMAIN.COM -User DOMAIN\Administrator -Password -SaveCredentials</pre>
+<p>Run vCheck ps1 file</p>
+<pre class="lang:ps decode:true ">&amp; "C:\vCheck\vCheck-vSphere-master\vCheck.ps1"
+
+- or - 
+
+. "C:\vCheck\vCheck-vSphere-master\vCheck.ps1"</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>You will then be asked to respond to the following prompts:</p>
+<pre class="lang:shell decode:true "># Report header [vCheck]:
+# Would you like the report displayed in the local browser once completed ? [$true]:
+# Display the report even if it is empty? [$true]:
+# Use the following item to define if an email report should be sent once completed [$false]:
+# Please Specify the SMTP server address (and optional port) [servername(:port)] [mysmtpserver.mydomain.local]:
+# Would you like to use SSL to send email? [$false]:
+# Please specify the email address who will send the vCheck report [me@mydomain.local]:
+# Please specify the email address(es) who will receive the vCheck report (separate multiple addresses with comma) [me@mydomain.local]:
+# Please specify the email address(es) who will be CCd to receive the vCheck report (separate multiple addresses with comma) []:
+# Please specify an email subject [$Server vCheck Report]:
+# Send the report by e-mail even if it is empty? [$true]:
+# If you would prefer the HTML file as an attachment then enable the following: [$false]:
+# Set the style template to use. [VMware]:
+# Do you want to include plugin details in the report? [$true]:
+# List Enabled plugins first in Plugin Report? [$true]:
+# Set the following setting to $true to see how long each Plugin takes to run as part of the report [$true]:
+# Report on plugins that take longer than the following amount of seconds [30]:
+
+Connection settings for vCenter
+# Please Specify the address (and optional port) of the vCenter server to connect to [servername(:port)] [192.168.0.0]:
+# Maximum number of samples to gather for events [100000]:
+
+General Information
+# Set the number of days of DRS Migrations to report and count on [1]:
+# Set the number of days of Storage DRS Migrations to report and count on [1]:
+
+Windows vCenter Error Event Logs
+# Set the number of days of VC Events to check for errors [1]:
+# Set the number of days of VC Event Logs to check for warnings and errors [1]:
+
+vCenter Sessions Age
+# Enter maximum vCenter session length in hours [48]:
+# Enter minimum vCenter session length in minutes (IdleMinutes) [10]:
+# Do not report on usernames that are defined here (regex) [DOMAIN\\user1|DOMAIN\\user2]:
+
+vCenter License Report
+# Enable License Reporting? [$true]:
+
+HA configuration issues
+# HA Configuration Issues, do not report on any Clusters that are defined here [Example_Cluster_*|Test_Cluster_*]:
+# HA should be set to ... [$true]:
+# HA host monitoring should be set to ... [$true]:
+# HA Admission Control should be set to ... [$true]:
+
+HA VMs restarted
+# HA VM restart day(s) number [5]:
+
+DRS &amp; SDRS Migrations
+# Set the number of days of DRS Migrations to report and count on [1]:
+# Set the number of days of Storage DRS Migrations to report and count on [1]:
+
+Cluster Slot Sizes
+# Number of slots available in a cluster [10]:
+
+Datastore Consistency
+# Do not report on any Datastores that are defined here (Datastore Consistency Plugin) [local*|datastore*]:
+
+Clusters with DRS disabled
+# Clusters with DRS Disabled, do not report on any Clusters that are defined here [VM1_*|VM2_*]:
+
+QuickStats Capacity Planning
+# Max CPU usage for non HA cluster [0.6]:
+# Max MEM usage for non HA cluster [0.6]:
+
+s/vMotion Information
+# Set the number of days to go back and check for s/vMotions [5]:
+# Include vMotions in report [$true;]:
+# Include Storage vMotions in report [$true;]:
+
+DRS Rules
+# Display VM affinity rules? [$true]:
+# Display VM anti-affinity rules? [$true]:
+# Display HOSTaffinity rules? [$true]:
+# Set DRS Rule name exception (regex) [ExcludeMe]:
+
+Hosts Overcommit state
+# Return results in GB or MB? [GB]:
+
+NTP Name and Service
+# The NTP server which should be set on your hosts [pool.ntp.org|pool2.ntp.org]:
+
+VMKernel Warnings
+# Disabling displaying Google/KB links in order to have wider message column [$true]:
+
+Syslog Name
+# The Syslog server which should be set on your hosts [syslogserver]:
+
+Disk Max Total Latency
+# Disk Max Total Latency Settings in Milliseconds [50]:
+# Disk Max Total Latency range to inspect (1-24) [24]:
+
+Lost Access to Volume
+# Set the number of days of Lost Action Volume to report and count on [1]:
+
+Check LUNS have the recommended number of paths
+# Set the Recommended number of paths per LUN [2]:
+
+ESXi Inode Exhaustion
+# Set the ESXi filesystem free Inode threshold in percent [40]:
+
+Host Profile Compliance
+# Show detailed information in report [$true]:
+# Show compliant servers [$false]:
+
+Hosts with Upcoming Certificate Expiration
+# How many days to warn before cert expiration (Default 60) [60]:
+
+Datastore Information
+# Set the warning threshold for Datastore % Free Space [25]:
+# Do not report on any Datastores that are defined here (Datastore Free Space Plugin) [local]:
+
+Number of VMs per Datastore
+# Max number of VMs per Datastore [5]:
+# Exclude these datastores from report [ExcludeMe]:
+
+Datastore OverAllocation
+# Datastore OverAllocation % [50]:
+# Exclude these datastores from report [ExcludeMe]:
+
+Datastores with Storage IO Control Disabled
+# Do not report on any Datastores that are defined here (Storage IO Control disabled Plugin) [local]:
+
+VSAN Datastore Capacity
+# Set the warning threshold for VSAN Datastore % Free Space [85]:
+
+VSAN Configuration Maximum Disk Group Per Host Report
+# Enable VSAN Config Max Disk Group Per Host Reporting? [$true]:
+# Percentage threshold to warn? [80]:
+
+VSAN Configuration Maximum Magnetic Disks Per Disk Group Report
+# Enable VSAN Config Max Magnetic Disks Per Disk Group Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum Total Magnetic Disks In All Disk Groups Per Host Report
+# Enable VSAN Config Max Total Magnetic Disks In All Disk Groups Per Host Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum Components Per Host Report
+# Enable VSAN Config Max Components Per Host Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum Hosts Per VSAN Cluster Report
+# Enable VSAN Config Max Hosts Per VSAN Cluster Reporting? [$true]:
+# Percentage threshold to warn? [45]:
+
+VSAN Configuration Maximum VMs Per Host Report
+# Enable VSAN Config Max VMs Per Host Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+VSAN Configuration Maximum VMs Per VSAN Cluster Report
+# Enable VSAN Config Max VMs Per VSAN Cluster Reporting? [$true]:
+# Percentage threshold to warn? [50]:
+
+Checking Standard vSwitch Ports Free
+# vSwitch Port Left [5]:
+
+Checking Distributed vSwitch Port Groups for Ports Free
+# Distributed vSwitch PortGroup Ports Left [10]:
+
+vSwitch Security
+# Enable Checking of vSwitch security settings? [$true]:
+# Warn for AllowPromiscuous enabled? [$true]:
+# Warn for ForgedTransmits enabled? [$true]:
+# Warn for MacChanges enabled? [$true]:
+
+Snapshot Information
+# Set the warning threshold for snapshots in days old [14]:
+# Set snapshot name exception (regex) [ExcludeMe]:
+# Set snapshot description exception (regex) [ExcludeMe]:
+# Set snapshot creator exception (regex) [ExcludeMe]:
+
+Created or cloned VMs
+# Set the number of days to show VMs created for [5]:
+
+Removed VMs
+# Set the number of days to show VMs removed for [5]:
+
+VMs with over $vCPU vCPUs
+# Define the maximum amount of vCPUs your VMs are allowed [2]:
+
+VMs restarted due to Guest OS Error
+# HA VM reset day(s) number due to Guest OS error [5]:
+
+Guests with less than $MBFree MB
+# VM Disk space left, set the amount you would like to report on MBFree [1024]:
+# VM Disk space left, set the amount you would like to report on MBDiskMinSize [1024]:
+
+Checking VM Hardware Version
+# Hardware Version to check for at least [8]:
+#Adding filter for dsvas, vShield appliances or any other vms that will remain on a lower HW version [vShield*|dsva*]:
+
+VMs in inconsistent folders
+# Specify which Datastore(s) to filter from report [local]:
+
+No VM Tools
+# Do not report on any VMs who are defined here (regex) [VM1_*|VM2_*]:
+
+VM Tools Issues
+# VM Tools Issues, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+Removable Media Connected
+# VMs with removable media not to report on [APP*|ETC*]:
+
+Single Storage VMs
+# Local Stored VMs, do not report on any VMs who are defined here [Template_*|VDI*]:
+
+VM CPU %RDY
+# CPU ready on VMs should not exceed [10.0]:
+
+VM CPU Usage
+# VM Not to go over the following amount of CPU [75]:
+# VM CPU not allowed to go over the previous amount for how many days? [1]:
+
+Find VMs with thick or thin provisioned vmdk
+# Report on disk formats that are not "thin" or "thick", which format is not allowed? [thick]:
+# Specify Datastores to filter from report [local]:
+
+Virtual machines with incorrect OS configuration
+# VMs with incorrect OS Configuration, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+Powered Off VMs
+# VMs not to report on [Windows7*]:
+
+Unwanted virtual hardware found
+# Find unwanted virtual hardware [VirtualUSBController|VirtualParallelPort|VirtualSerialPort]:
+
+Mis-named virtual machines
+# Misnamed VMs, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+VM - is my network connected?
+# Only show NICs that are set to Connect at Startup [$true]:
+
+Reset VMs
+# Set the number of days to show reset VMs [1]:
+
+Snapshot activity
+# Set the number of days to show Snapshots for [5]:
+# User exception for Snapshot removed [s-veeam]:
+
+VMs with CPU or Memory Reservations Configured
+# VMs with CPU or Memory Reservations, do not report on any VMs who are defined here [VM1_*|VM2_*]:
+
+VM Logging
+# The number of logs to keep for each VM [10]:
+# The size logs can reach before rotating to a new log (bytes) [1000000]:
+
+VM Tools Not Up to Date
+# Do not report on any VMs who are defined here (regex) [VM1_*|VM2_*]:
+# Maximum number of VMs shown [30]:
+
+NonPersistent Disks
+# Exclude all desktop virtual machines [^DV-|^MLB-]:
+
+VMs Memory/CPU Hot Add configuration
+# Should CPU hot plug be enabled [$true]:
+# Should Memory hot add be enabled [$true]:
+
+Site Recovery Manager - RPO Violation Report
+# SRM RPO Violations: Set the number of minutes an RPO has exceeded to report on [240]:
+# SRM RPO Violations: Only look for RPO events on VMs with these names: (regex) []:
+# SRM RPO Violations: Report on unresolved RPO violations only? [$true]:</pre>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>Once you have completed the prompts, the scan will run and a report will be generated.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<pre class="lang:ps decode:true "></pre>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

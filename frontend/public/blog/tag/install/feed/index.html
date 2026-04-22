@@ -1,0 +1,1170 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Install &#8211; Michael Groff</title>
+	<atom:link href="/blog/tag/install/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Wed, 12 Dec 2018 16:14:03 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>PS Script install WP manually on Server 2012 R2</title>
+		<link>/blog/ps-script-install-wp-manually-server-2012-r2/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Thu, 14 Jul 2016 22:23:07 +0000</pubDate>
+				<category><![CDATA[DIY]]></category>
+		<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[2012]]></category>
+		<category><![CDATA[2012R2]]></category>
+		<category><![CDATA[IIS]]></category>
+		<category><![CDATA[IIS 8.5]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Powershell]]></category>
+		<category><![CDATA[PS]]></category>
+		<category><![CDATA[Script]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<category><![CDATA[WP]]></category>
+		<guid isPermaLink="false">/blog/?p=548</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>This post does basically the same thing that I have already covered in my &#8220;<a href="/blog/wordpress-iis-8-5-windows-2012-r2/">WordPress on IIS 8.5 (Windows 2012 R2)</a>&#8221; post, but it is a script that does literally everything for you. You will just need to add in a few of your own settings into the script, run it, and you will have a functional WP site.</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 18px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4>First lets start of with the Features that I already have installed:</h4>
+<p>You will most likely have all of these but Telnet&#8230; <strong>INSTALL TELNET!</strong></p>
+<p>&nbsp;</p>
+<pre class="lang:xhtml decode:true ">DisplayName                                   Name                      InstallState
+-----------                                   ----                      ------------
+File and Storage Services                     FileAndStorage-Services      Installed
+Storage Services                              Storage-Services             Installed
+.NET Framework 4.5 Features                   NET-Framework-45-Features    Installed
+.NET Framework 4.5                            NET-Framework-45-Core        Installed
+WCF Services                                  NET-WCF-Services45           Installed
+TCP Port Sharing                              NET-WCF-TCP-PortSharing45    Installed
+SMB 1.0/CIFS File Sharing Support             FS-SMB1                      Installed
+Telnet Client                                 Telnet-Client                Installed
+User Interfaces and Infrastructure            User-Interfaces-Infra        Installed
+Graphical Management Tools and Infrastructure Server-Gui-Mgmt-Infra        Installed
+Server Graphical Shell                        Server-Gui-Shell             Installed
+Windows PowerShell                            PowerShellRoot               Installed
+Windows PowerShell 4.0                        PowerShell                   Installed
+Windows PowerShell ISE                        PowerShell-ISE               Installed
+WoW64 Support                                 WoW64-Support                Installed</pre>
+<p>&nbsp;</p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 18px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>NOTES:</h3>
+<ul>
+<li>Use <a href="https://api.wordpress.org/secret-key/1.1/salt/">https://api.wordpress.org/secret-key/1.1/salt/</a> to generate your Salt Keys&#8230; After they have been generated, you must replace any &#8220;$&#8221; character with any other character. Not just this script, but WordPress will not work if there is a &#8220;$&#8221; character in the salt keys.</li>
+<li>You will be asked for some variables, they are as follows:</li>
+</ul>
+<table style="width: 50%;" border="1">
+<thead>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IIS Site Name</td>
+<td>MyWordpressSite.com</td>
+</tr>
+<tr>
+<td>IIS App Pool Name</td>
+<td>MyWordpressSite.com</td>
+</tr>
+<tr>
+<td>Directory Path for website</td>
+<td>C:\inetpub\wwwroot\MyWordpressSite</td>
+</tr>
+<tr>
+<td>Database Name</td>
+<td>wordpress612</td>
+</tr>
+<tr>
+<td>Database Username</td>
+<td>wordpressuser612</td>
+</tr>
+<tr>
+<td>Database Password</td>
+<td>mysecretpassword612</td>
+</tr>
+<tr>
+<td>MySQL root Password</td>
+<td>v9gvBhTG@*b6n#^!v</td>
+</tr>
+<tr>
+<td>FTP Username</td>
+<td>FTPUser</td>
+</tr>
+<tr>
+<td>FTP Password</td>
+<td>FTPPass123!</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>You can download check out the progress of the script on my <a href="https://github.com/mgroff2/Powershell/tree/master/WP_Installer" target="_blank">Github</a> and you can download it with the following icon:</li>
+</ul>
+<p><a href="/blog/wp-content/uploads/Wordpress-setup.zip"><img decoding="async" class="aligncenter wp-image-587 size-full" src="/blog/wp-content/uploads/ps1_Icon.png" alt="ps1_Icon" width="128" height="128" /></a></p>
+
+		</div>
+	</div>
+
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Now for the Script</h3>
+<pre class="lang:ps decode:true">
+<# 
+
+    .SYNOPSIS
+    Install a new WP site with all pre-reqs using pre-set variables. Can be used for additional sites.
+    
+    .DESCRIPTION
+    This script will create a WordPress site with known-working configurations.
+    Script can also be used to add additional sites as checks are in place. 
+    To customize site, update custom variables as desired. 
+    CAUTION - this script will overwrite a current site
+        
+    .OUTPUTS  
+    A new wp site ready for your configuration! ;-)
+     
+    .NOTES
+    Author: Michael Groff
+    Minimum OS: 2012, 2012 R2
+    PS Version: 4.0
+    Date:  1/12/17
+    
+#>
+
+#Checking Powershell Version
+
+$LocalPSVers = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\PowerShell\3\PowerShellEngine\").PowerShellVersion | Where-Object {$_ -gt "4"}
+
+IF (-not$LocalPSVers)
+{
+    Write-Host "
+You need to upgrade to atleast PS Verion 5 before running this script!
+" -ForegroundColor Red
+    Read-Host "Press enter to exit"
+    BREAK
+}
+ELSE
+{
+    Write-Host "
+Correct Powershell Version found, you are good to go!
+    " -ForegroundColor Green
+}
+
+###
+###Variables Start: 
+###
+#Site Name, must inclue the TLD (.com, .info, .net, etc.)
+Write-Host "
+The website name, must inclue the TLD (.com, .info, .net, etc.)
+" -ForegroundColor Yellow
+$iisAppName = Read-host -prompt "Enter the website name"
+#IIS App Pool Name: 
+Write-Host "
+The iis app pool name, can be same as website
+" -ForegroundColor Yellow
+$iisAppPoolName = Read-host -prompt "Enter the iis app pool name, can be same as website"
+#Site Path
+Write-Host "
+The suggested website root directory path is 'C:\inetpub\wwwroot\MyWordpressSite'
+" -ForegroundColor Yellow
+$directoryPath = Read-host -prompt "Enter the Website root directory path"
+#Database Name
+Write-Host "
+The WordPress Database is a MySQL Database
+" -ForegroundColor Yellow
+$dbn = Read-host -prompt "Enter the WordPress Database Name"
+#Database Username
+Write-Host "
+The WordPress Database User is a MySQL User
+" -ForegroundColor Yellow
+$dbun = Read-host -prompt "Enter the WordPress Database Username"
+#Database User Password
+Write-Host "
+The WordPress Database Password should be a strong password, minimum 12 characters
+" -ForegroundColor Yellow
+$dbpw = Read-host -prompt "Enter the WordPress Database User Password"
+#MySQL root password
+Write-Host "
+The  MySQL root password, this will create one if it doesnt exist
+" -ForegroundColor Yellow
+$MySQL = Read-host -prompt "Enter the MySQL root password"
+#Salt Keys - https://api.wordpress.org/secret-key/1.1/salt/ (NOTE: Replace any $ that you see with another character!)
+#Authentication Key
+$AuthKey = "ry=,b*Gp,+1-voDYM`zq#:S_^ODN Lp9:_:&D5o6C%0SXsyi<k`Q .Z&#093;NK3144ay"
+#Secure Authentication Key
+$SecAuthKey = "f5h-Ss+}97fG%m+yS5X,zh3)>B/_/^C0x:sJv7Cta0+Cy=X_{E>[RN+A=-(*%Z+t"
+#Logged In Key
+$LogInKey = "N-< +&#091;doN4gwtyk?PZK>=~iU8]-oS)wPt6l~.qMES}<vr v.Px`d#4MxOb`e.&#038;7-"
+#Nonce Key
+$NKey = ":!!Pu0e5a?ux,+P)C&#091;|T~,:IN,+m0H.6.JT%Ov_;_.J9;<@dCNpu|+@;L{G)W%|3"
+#Authentication Salt
+$AuthSalt = "SlHw{qnL#.kN--|u+Rw|kTe#(QR=Ak`_MUO8!#&#093;`3L7.L=X<nX3><w/}MuRu9w`J"
+#Secure Authentication Salt
+$SecAuthSalt = "a}4L-qvxEx~x(f_&#093;YiBgP(18%r)IerB+e4-I6m+ZkzgW4//V?x:P&#038;:IvjIxguJIX"
+#Logged In Salt
+$LogInSalt = "d-O >T]uyh:9?Pu`i8|222S|eY5lW8,`lPwG-b|^-|8z5]j(P+-T6c[^PO;4ZM2q"
+#Nonce Salt
+$NSalt = "pT[la{_E,yMHhMu|F1F|k7*q+PQ]u[e zdUjj5(%&gZnsxUGJgYsi?:h[d|o`5I)"
+#FTPUsername
+Write-Host "
+The FTP Username is a Windows User
+" -ForegroundColor Yellow
+$FTPSiteUser = Read-host -prompt "Enter the FTP Username"
+#FTP Password - NOTE: Must be UNDER 14 characters, also must have a capital letter and special character
+Write-Host "
+The FTP User Pasword must be UNDER 14 characters & must have a capital letter and special character
+" -ForegroundColor Yellow
+$FTPSiteUserPW = Read-host -prompt "Enter the FTP User Pasword"
+#FTP Group
+$FTPGroup = "FTP_User_Group"
+###
+###Variables End: 
+###
+
+###Variables to leave alone: 
+$iisAppPoolDotNetVersion = "v4.0"
+$sitelocation = "IIS:\sites\$iisAppName"
+
+Write-Host "
+Installing Windows Roles & Features if necessary... be patient
+" -ForegroundColor Cyan
+
+#Windows Roles & Features if they are not already installed
+Function Install-WP-Web-Features {
+IF ( Get-WindowsFeature -Name Web-Server, Web-Log-Libraries, Web-Request-Monitor, Web-App-Dev, Web-Net-Ext45, Web-CGI, Web-Ftp-Server, NET-Framework-Features | Where {$_.InstallState -eq "Available"} )
+        {
+            Install-WindowsFeature -Name Web-Server, Web-Log-Libraries, Web-Request-Monitor, Web-App-Dev, Web-Net-Ext45, Web-CGI, Web-Ftp-Server, NET-Framework-Features -IncludeManagementTools
+        }
+        ELSE
+        {
+            Return  Write-Host "
+Necessary Windows Features are already installed!
+            " -ForegroundColor Green
+        }
+}
+
+Install-WP-Web-Features
+
+#Create a new Website and AppPool for WP to live in
+
+Import-Module WebAdministration
+
+Write-Host "
+Creating site and App Pool in IIS
+" -ForegroundColor Cyan 
+
+#navigate to the app pools root
+cd IIS:\AppPools\
+
+#check if the app pool exists
+if (!(Test-Path $iisAppPoolName -pathType container))
+{
+    #create the app pool
+    $appPool = New-Item $iisAppPoolName
+    $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value $iisAppPoolDotNetVersion
+}
+
+#navigate to the sites root
+cd IIS:\Sites\
+
+#check if the site exists
+if (!(Test-Path $iisAppName -pathType container))
+{
+    #create the site
+    $iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisAppName} -physicalPath $directoryPath
+    $iisApp | Set-ItemProperty -Name "applicationPool" -Value $iisAppPoolName
+}
+
+Write-Host "
+Adding in hosts file entry
+" -ForegroundColor Cyan 
+
+#Adds in hosts file entry for your new site: 
+function add-hostfilecontent {            
+ [CmdletBinding(SupportsShouldProcess=$true)]            
+ param (            
+  [parameter(Mandatory=$true)]            
+  [ValidatePattern("\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")]            
+  [string]$IPAddress,            
+              
+  [parameter(Mandatory=$true)]            
+  [string]$computer            
+ )            
+ $file = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"            
+ if (-not (Test-Path -Path $file)){            
+   Throw "Hosts file not found"            
+ }            
+ $data = Get-Content -Path $file             
+ $data += "$IPAddress  $computer"            
+ Set-Content -Value $data -Path $file -Force -Encoding ASCII             
+}
+
+#add host file entries
+add-hostfilecontent -IPAddress 127.0.0.1 -computer $iisAppName
+
+Write-Host "
+Installing Web Platform Installer
+" -ForegroundColor Cyan
+
+#Install Web Platform Installer if its not already installed
+$WPIPath = Test-Path "C:\Program Files\Microsoft\Web Platform Installer\WebPlatformInstaller.exe"
+Function Install-WPI {
+        IF (-not$WPIPath)
+        {
+            msiexec.exe /package http://download.microsoft.com/download/C/F/F/CFF3A0B8-99D4-41A2-AE1A-496C08BEB904/WebPlatformInstaller_amd64_en-US.msi /quiet /passive | Out-Null
+        }
+        ELSE
+        {
+            Return Write-Host "
+Web Plaform Installer 5.0 is already installed!
+            " -ForegroundColor Green
+            break
+        }
+} 
+
+Install-WPI
+
+#The .app info
+Write-Host "
+If the script stopped here..." -ForegroundColor Red
+Write-Host "you did not fill out the variable information above... correctly
+" -ForegroundColor Yellow
+
+New-Item $env:USERPROFILE\Desktop\wp.app -ItemType file -value "AppPath[@]$iisAppName
+
+DbServer[@]localhost
+
+DbName[@]$dbn
+
+DbUsername[@]$dbun
+
+DbPassword[@]$dbpw
+
+DbAdminUsername[@]root
+
+DbAdminPassword[@]$MySQL
+
+Authentication Key[@]$AuthKey
+
+Secure Authentication Key[@]$SecAuthKey
+
+Logged In Key[@]$LogInKey 
+
+Nonce Key[@]$NKey
+
+Authentication Salt[@]$AuthSalt
+
+Secure Authentication Salt[@]$SecAuthSalt
+
+Logged In Salt[@]$LogInSalt
+
+Nonce Salt[@]$NSalt
+
+"
+
+#Reload Paths to understand WebPICMD.exe
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
+Write-Host "
+Starting the WP install" -ForegroundColor Cyan 
+
+#Install WP & all necessary modules
+cd $env:USERPROFILE\Desktop
+WebPICMD.exe /Install /Products:PHPManager /AcceptEULA
+WebPICMD.exe /Install /Application:Wordpress@wp.app /Products:PHP54 /AcceptEULA /MySQLPassword:$MySQL /Log:$env:HOMEDRIVE\WPIntsalllog.txt
+
+#Configure URL Rewrite Rule 
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules" -name "." -value @{name='Wordpress';patternSyntax='Wildcard'}
+Set-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/match" -name "url" -value "*"
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/conditions" -name "." -value @{input='{REQUEST_FILENAME}';matchType='IsFile';negate='True'}
+Add-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/conditions" -name "." -value @{input='{REQUEST_FILENAME}';matchType='IsDirectory';negate='True'}
+Set-WebConfigurationProperty -pspath $sitelocation -filter "system.webServer/rewrite/rules/rule[@name='Wordpress']/action" -name "url" -value "index.php"
+
+#Remove unnecessary Default Docs: 
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='Default.htm'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='Default.asp'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='index.htm'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='index.html'}
+Remove-WebConfigurationProperty  -pspath $sitelocation -filter "system.webServer/defaultDocument/files" -name "." -AtElement @{value='iisstart.htm'}
+
+#Remove PHP 5.5 as WP only works with 5.4 afaik: 
+$TestPHP55 =  Get-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST'  -filter "system.webServer/handlers/add[@name='PHP55_via_FastCGI']"  -Name "type"
+
+IF ($TestPHP55)
+{     
+    Remove-WebConfigurationProperty  -pspath 'MACHINE/WEBROOT/APPHOST'  -filter "system.webServer/handlers" -name "." -AtElement @{name='PHP55_via_FastCGI'}           
+}
+ELSE
+{
+    Write-Host "
+PHP 5.5 has already been removed!
+    " -ForegroundColor Green
+}
+
+#Create FTP Group & User - Uses preset variables 
+#Group Creation
+
+IF (-not (Get-WmiObject -Class Win32_Group | Where-Object {$_.Name -eq "$FTPGroup"}))
+{
+    Write-Host "
+Creating FTP User Group
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net localgroup /add $FTPGroup}
+}
+ELSE
+{
+    Write-Host "
+Local Group already exists
+    " -ForegroundColor Yellow
+}
+
+#Users Creation
+
+IF (-not (Get-WmiObject -Class Win32_UserAccount | Where-Object {$_.Name -eq "$FTPSiteUser"}))
+{
+    Write-Host "
+Creating FTP User
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net user /add $FTPSiteUser $FTPSiteUserPW} -ErrorAction SilentlyContinue
+    Write-Host "
+Adding user to FTP User Group
+    " -ForegroundColor Cyan
+    Invoke-Command -ScriptBlock {net localgroup $FTPGroup $FTPSiteUser /add }
+}
+ELSE
+{
+    Write-Host "
+Local User already exists
+    " -ForegroundColor Red
+}
+
+#Create FTP Site (To update WordPress and Plugins)
+$FTPSiteName = "Main FTP"
+$FTPSitePath = "C:\inetpub\ftproot"
+$FTPSitePathLocUsr = "C:\inetpub\ftproot\LocalUser"
+
+IF (-not (Test-Path -Path "$FTPSitePathLocUsr"))
+{
+    New-Item -Path $FTPSitePathLocUsr -ItemType Directory -ErrorAction SilentlyContinue
+    New-Item -Path $FTPSitePath -ItemType Directory -ErrorAction SilentlyContinue
+    New-WebFtpSite -Name $FTPSiteName -PhysicalPath $FTPSitePath -IPAddress * -Port 21
+}
+ELSE
+{
+    Write-Host "
+FTP Site already exists in location: 'C:\inetpub\ftproot\LocalUser'
+Updating your WordPress site may not work as designed with FTP
+    " -ForegroundColor Yellow
+    Write-Host "
+Attempting to create virtual direcotry in FTP Site. 
+    " -ForegroundColor Yellow
+} 
+
+IF (-not (Get-WebVirtualDirectory -Name "*$FTPSiteUser*") )
+{
+    New-WebVirtualDirectory -Site "$FTPSiteName\LocalUser" -Name $FTPSiteUser -PhysicalPath $directoryPath -ErrorAction SilentlyContinue
+    Write-Host "
+FTP virtual direcotry has been created!
+    " -ForegroundColor Green
+}
+ELSE
+{
+    Write-Host "
+Virtual Directory for FTP Site already exists
+    " -ForegroundColor Red 
+}
+
+#Setting User/Group Permissions for FTP User Group in IIS - Adding Authorization in IIS
+
+#Giving Windows Group permissions to site for FTP
+IF (-not((Get-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -location "$FTPSiteName" -filter "system.ftpServer/security/authorization/add" -name ".").roles))
+{
+Add-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -location "$FTPSiteName" -filter "system.ftpServer/security/authorization" -name "." -value @{accessType='Allow';roles="$FTPGroup";permissions='Read,Write'}
+}
+ELSE
+{
+    Write-Host " 
+FTP User Group has already been given proper permissions in IIS. 
+    " -ForegroundColor Green 
+}
+
+#Enable Basic Auth for the FTP Site
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.authentication.basicAuthentication.enabled -Value $true
+
+#Setup User Isolation
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.userisolation.mode -Value IsolateAllDirectories
+
+#Disable Require SSL on FTP Site
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.ssl.controlChannelPolicy -Value SslAllow
+Set-ItemProperty "IIS:\Sites\$FTPSiteName" -Name ftpServer.security.ssl.dataChannelPolicy -Value SslAllow
+
+#Permission for FTP user to WP Directory
+$FTPAcl = Get-Acl -Path "$directoryPath"
+$FTPAclUser = New-Object system.security.accesscontrol.filesystemaccessrule("$FTPGroup","FullControl","ContainerInherit, ObjectInherit","None","Allow")
+$FTPAcl.SetAccessRule($FTPAclUser)
+Set-Acl -Path "$directoryPath" -AclObject $FTPAcl
+
+#Finishing up and loading your site
+#Cleanup
+Remove-Item $env:USERPROFILE\Desktop\wp.app -Force
+
+#Disable IE Enhanced Security & UAC
+function Disable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 0
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been disabled." -ForegroundColor Green
+}
+function Enable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 1
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 1
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been enabled." -ForegroundColor Green
+}
+function Disable-UserAccessControl {
+    Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 00000000
+    Write-Host "User Access Control (UAC) has been disabled." -ForegroundColor Green    
+}
+
+#Disable IE Enhanced Security if its not already
+IF (
+((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}").IsInstalled | Where-Object {$_ -gt "0"}) + 
+((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}").IsInstalled | Where-Object {$_ -gt "0"})
+)
+{
+    Disable-InternetExplorerESC
+}
+ELSE
+{
+    Write-Host "
+IE Enhanced Security Configuration (ESC) has already been disabled.
+    " -ForegroundColor Green
+}
+
+#Disable User Access Control
+IF (((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System").ConsentPromptBehaviorAdmin | Where-Object {$_ -gt "0"}))
+{
+    Disable-UserAccessControl
+}
+ELSE
+{
+    Write-Host "
+User Access Control (UAC) has already been disabled. 
+    " -ForegroundColor Green
+}
+
+Write-Host "
+Done! Now go configure your site" -ForegroundColor Green 
+#Opening IE to your WP site
+$url = "http://$iisAppName/"
+
+$IEwp = New-Object -com internetexplorer.application;
+$IEwp.visible = $true; 
+$IEwp.navigate($url);
+
+#Opening your new WP folder with File Explorer
+Start-Process $directoryPath
+
+#Openeing WP Install Log file for review
+Start-Process $env:HOMEDRIVE\WPIntsalllog.txt
+
+#Open IIS
+Start-Process C:\Windows\system32\inetsrv\inetmgr.exe
+
+Write-Host ""
+Read-Host -Prompt "Press Enter to exit" 
+</pre>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>WordPress on IIS 8.5  (Windows 2012 R2)</title>
+		<link>/blog/wordpress-iis-8-5-windows-2012-r2/</link>
+					<comments>/blog/wordpress-iis-8-5-windows-2012-r2/#comments</comments>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Sun, 24 Jan 2016 05:11:12 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[2012]]></category>
+		<category><![CDATA[2012R2]]></category>
+		<category><![CDATA[IIS]]></category>
+		<category><![CDATA[IIS 8.5]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Windows]]></category>
+		<category><![CDATA[WordPress]]></category>
+		<category><![CDATA[WP]]></category>
+		<guid isPermaLink="false">/blog/?p=43</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3><span style="color: orange;">The Manual Installation and Configuration of WordPress and all accompanying components on Windows Server 2012 R2</span></h3>
+
+		</div>
+	</div>
+<div class="ult-spacer spacer-69e85516dcd0a" data-id="69e85516dcd0a" data-height="5" data-height-mobile="5" data-height-tab="5" data-height-tab-portrait="" data-height-mobile-landscape="" style="clear:both;display:block;"></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div><div class="ult-spacer spacer-69e85516dcd1e" data-id="69e85516dcd1e" data-height="2" data-height-mobile="2" data-height-tab="2" data-height-tab-portrait="" data-height-mobile-landscape="" style="clear:both;display:block;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>WordPress &#8220;Requirements&#8221;</h3>
+<ul>
+<li>PHP 5.6 or greater</li>
+<li>MySQL 5.5 or greater</li>
+<li>The mod_rewrite Apache module</li>
+</ul>
+<p>&#8211; You can find the requirements more depth directly from the WordpPress page: <a href="https://wordpress.org/about/requirements/">WordPress Requirements</a></p>
+<p>We are going to use:</p>
+<ul>
+<li>WordPress Version 4.3.1</li>
+<li>PHP 5.4</li>
+<li>MySQL 5.5</li>
+<li>IIS URL Rewrite</li>
+</ul>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: This tutorial assumes you have turned off IE Enhanced Security and Enabled downloads in IE</span></h6>
+<h6 style="text-align: center;"><span style="color: #6699ff;">And that you have set up DNS correctly or modified your hosts file with your domain name</span></h6>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Prep</h3>
+<h4><span style="color: orange;">Windows Roles and Services</span></h4>
+<h6 style="text-align: center;"><span style="color: orange;">First we need to install the proper Windows Roles and Services, some IIS add-ons and MySQL</span></h6>
+<p><strong>Roles</strong>:</p>
+<ul>
+<li>Web Server (IIS) &#8211; Add features that are required and Include management tools (if applicable)</li>
+</ul>
+<p><strong>Features</strong>:</p>
+<ul>
+<li>.NET Framework 3.5 Features &#8211; Add features that are required and Include management tools (if applicable) &#8211; Note: this includes .net 2.0 for PHP Manager that we will install later</li>
+</ul>
+<ul>
+<li>SMTP Server &#8211; Add features that are required and Include management tools (if applicable) *This will not be covered</li>
+</ul>
+<ul>
+<li>Telnet Client (you dont need it for wordpress, but you should always have this installed for testing)</li>
+</ul>
+<p><strong>Role Services for IIS</strong>: (leave the default and add the following)</p>
+<ul>
+<li>Health and Diagnostics:
+<ul>
+<li>Logging Tools</li>
+<li>Request Monitor</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-1.png" data-dt-img-description=""><img decoding="async" class="size-full wp-image-419 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-1.png" alt="Wordpress Installation 1" width="295" height="151" /></a></p>
+<p>&nbsp;</p>
+<ul>
+<li>Application Development:
+<ul>
+<li>ASP.NET 4.5 &#8211; Add features that are required and Include management tools (if applicable)</li>
+<li>CGI</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-2.png" data-dt-img-description=""><img fetchpriority="high" decoding="async" class="size-full wp-image-420 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-2.png" alt="Wordpress Installation 2" width="294" height="255" /></a></p>
+<h4><span style="color: orange;">IIS add-ons (PHP, URL Rewrite, </span></h4>
+<p>Open IIS, click on your server, and a pop-up box will ask you if <span style="color: orange;">&#8220;&#8230;you want to get started with Microsoft Web Platform&#8230;&#8221;</span> Click <span style="color: orange;">Yes</span>, then proceed to download and install the Web Platform Installer.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-3.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-424 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-3-300x184.png" alt="Wordpress Installation 3" width="300" height="184" srcset="/blog/wp-content/uploads/Wordpress-Installation-3-300x184.png 300w, /blog/wp-content/uploads/Wordpress-Installation-3-600x369.png 600w, /blog/wp-content/uploads/Wordpress-Installation-3-1024x630.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-3.png 1244w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Close IIS and the re-open it, now you will see the <span style="color: orange;">Web Platform Installer</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-4.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-423 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-4-300x227.png" alt="Wordpress Installation 4" width="300" height="227" srcset="/blog/wp-content/uploads/Wordpress-Installation-4-300x227.png 300w, /blog/wp-content/uploads/Wordpress-Installation-4-600x454.png 600w, /blog/wp-content/uploads/Wordpress-Installation-4.png 811w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Open the <span style="color: orange;">Web Platform Installer</span> and Install the following:</p>
+<ul>
+<li>PHP 5.4.24, this will install:
+<ul>
+<li>Microsoft Drivers 3.2 for PHP v5.4 for SQL Server in IIS</li>
+<li>IIS Manager</li>
+</ul>
+</li>
+<li>URL Rewrite</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-5.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-425 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-5-300x198.png" alt="Wordpress Installation 5" width="300" height="198" srcset="/blog/wp-content/uploads/Wordpress-Installation-5-300x198.png 300w, /blog/wp-content/uploads/Wordpress-Installation-5-600x396.png 600w, /blog/wp-content/uploads/Wordpress-Installation-5.png 804w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click <span style="color: orange;">Finish</span> and close IIS as we are done with that for now.</p>
+<h4><span style="color: orange;">MySQL</span></h4>
+<p>Now we are going to Download &amp; Install MySQL 5.5.45 and MySQL Workbench.</p>
+<h6><span style="color: #6699ff;">NOTE: If you know how to run mysql from the command line, the more power to you, this is for Windows. </span><span style="color: #6699ff;">We are going to use a feature of my sql that incorporates a windowed GUI, hence the name</span></h6>
+<p>Links to Downloads: <a href="https://dev.mysql.com/downloads/mysql/">MySQL Server</a> &amp; <a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></p>
+<p>First install MySQL 5.5.45 and at the end of the installation, leave the box checked and you will enter the Instance Configuration.</p>
+<p>Choose the <span style="color: orange;">Standard Configuration</span> option, click <span style="color: orange;">Next</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-6.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-428 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-6-300x230.png" alt="Wordpress Installation 6" width="300" height="230" srcset="/blog/wp-content/uploads/Wordpress-Installation-6-300x230.png 300w, /blog/wp-content/uploads/Wordpress-Installation-6.png 511w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Choose the <span style="color: orange;">Install As Windows Service</span> option, name it, and then click <span style="color: orange;">Next</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-7.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-429 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-7-300x229.png" alt="Wordpress Installation 7" width="300" height="229" srcset="/blog/wp-content/uploads/Wordpress-Installation-7-300x229.png 300w, /blog/wp-content/uploads/Wordpress-Installation-7.png 512w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Set your root password and click <span style="color: orange;">Next</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-8.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-430 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-8-300x229.png" alt="Wordpress Installation 8" width="300" height="229" srcset="/blog/wp-content/uploads/Wordpress-Installation-8-300x229.png 300w, /blog/wp-content/uploads/Wordpress-Installation-8.png 512w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Last click <span style="color: orange;">Execute</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-9.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-431 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-9-300x229.png" alt="Wordpress Installation 9" width="300" height="229" srcset="/blog/wp-content/uploads/Wordpress-Installation-9-300x229.png 300w, /blog/wp-content/uploads/Wordpress-Installation-9.png 510w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now to install <span style="color: orange;">MySQL Workbench</span>. I will let you figure this one out. Hint: Download the prerequisites.<br />
+At the end of the install, make sure you launch MySQL Workbench before you click <span style="color: orange;">Finish</span></p>
+<h4><span style="color: orange;">WordPress</span></h4>
+<p>Download <a href="https://wordpress.org/download/">WordPress</a> and unzip it to C:\inetpub\wwwroot, so you should see the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-10.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-435 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-10-300x198.png" alt="Wordpress Installation 10" width="300" height="198" srcset="/blog/wp-content/uploads/Wordpress-Installation-10-300x198.png 300w, /blog/wp-content/uploads/Wordpress-Installation-10-600x396.png 600w, /blog/wp-content/uploads/Wordpress-Installation-10.png 847w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>That concludes the prep for a WordPress site to be built, now we need to start the actual configurations.</p>
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Configuration</h3>
+<h4><span style="color: orange;">IIS Configuration</span></h4>
+<p>Create a new website in IIS, and fill out the fields appropriately:</p>
+<ul>
+<li>Site Name: MyDomain WP Site (arbitrary, just make it identifiable)</li>
+<li>Physical path: C:\inetpub\wwwroot\wordpress (the folder we extracted earlier)</li>
+<li>IP address: Depends on the IP&#8217;s on your server, I have one so all unassigned is fine.</li>
+<li>Host name: www.mydomain.com</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-11.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-440 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-11-300x289.png" alt="Wordpress Installation 11" width="300" height="289" srcset="/blog/wp-content/uploads/Wordpress-Installation-11-300x289.png 300w, /blog/wp-content/uploads/Wordpress-Installation-11.png 596w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Add in an additional binding for non-www: <span style="color: orange;">http</span>, <span style="color: orange;">All Unassigned</span>, <span style="color: orange;">Port 80</span>, and <span style="color: orange;">mydomain.com</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-24.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-472 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-24-300x129.png" alt="Wordpress Installation 24" width="300" height="129" srcset="/blog/wp-content/uploads/Wordpress-Installation-24-300x129.png 300w, /blog/wp-content/uploads/Wordpress-Installation-24-600x258.png 600w, /blog/wp-content/uploads/Wordpress-Installation-24.png 917w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Move the Default Document for <span style="color: orange;">index.php</span> to the to of the list:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-12.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-441 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-12-300x184.png" alt="Wordpress Installation 12" width="300" height="184" srcset="/blog/wp-content/uploads/Wordpress-Installation-12-300x184.png 300w, /blog/wp-content/uploads/Wordpress-Installation-12-600x369.png 600w, /blog/wp-content/uploads/Wordpress-Installation-12-1024x629.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-12.png 1239w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Create a <span style="color: orange;">URL Rewrite</span> rule as follows:</p>
+<ul>
+<li>Rule Name: WordPress (or whatever you want, this is arbitrary)</li>
+<li>Match URL:
+<ul>
+<li>Requested URL: Matches the Pattern</li>
+<li>Using: Wildcards</li>
+<li>Pattern: *</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-13.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-442 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-13-300x102.png" alt="Wordpress Installation 13" width="300" height="102" srcset="/blog/wp-content/uploads/Wordpress-Installation-13-300x102.png 300w, /blog/wp-content/uploads/Wordpress-Installation-13-600x205.png 600w, /blog/wp-content/uploads/Wordpress-Installation-13.png 677w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<ul>
+<li>Conditions:
+<ul>
+<li>Is Not a File</li>
+<li>Is Not a Directory</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-14.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-443 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-14-300x144.png" alt="Wordpress Installation 14" width="300" height="144" srcset="/blog/wp-content/uploads/Wordpress-Installation-14-300x144.png 300w, /blog/wp-content/uploads/Wordpress-Installation-14-600x287.png 600w, /blog/wp-content/uploads/Wordpress-Installation-14.png 677w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<ul>
+<li>Action:
+<ul>
+<li>Action type: Rewrite</li>
+<li>Rewrite URL: index.php</li>
+<li>Append Query String: Check</li>
+</ul>
+</li>
+</ul>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-15.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-444 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-15-300x129.png" alt="Wordpress Installation 15" width="300" height="129" srcset="/blog/wp-content/uploads/Wordpress-Installation-15-300x129.png 300w, /blog/wp-content/uploads/Wordpress-Installation-15-600x257.png 600w, /blog/wp-content/uploads/Wordpress-Installation-15.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Create another <span style="color: orange;">URL Rewrite</span> rule as follows:</p>
+<ul>
+<li>Type: Canonical domain name</li>
+<li>Select the primary host name: www.mydomain.com</li>
+</ul>
+<p>After both rules have been entered, your URL Rewrites should look similar to the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-16.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-446 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-16-300x87.png" alt="Wordpress Installation 16" width="300" height="87" srcset="/blog/wp-content/uploads/Wordpress-Installation-16-300x87.png 300w, /blog/wp-content/uploads/Wordpress-Installation-16-600x174.png 600w, /blog/wp-content/uploads/Wordpress-Installation-16-1024x297.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-16.png 1501w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Additional, recommended configutations:</p>
+<ul>
+<li>Stop your site, there is no reason to have it running.</li>
+<li>Set up Recycling for App Pool:
+<ul>
+<li>Time: 4:00 AM (or whenever your site is least active, and remove the check for Regular Time Intervals)</li>
+</ul>
+</li>
+<li>Edit PHP.ini file (C:\Program Files (x86)\PHP\v5.4\php.ini):
+<ul>
+<li>Old Line: post_max_size = 8M
+<ul>
+<li>New Line: <span style="color: orange;">post_max_size = 1024M</span></li>
+</ul>
+</li>
+<li>Old Line: ;upload_tmp_dir =
+<ul>
+<li>New Line: <span style="color: orange;">upload_tmp_dir = C:\inetpub\temp</span></li>
+</ul>
+</li>
+<li>Old Line: upload_max_filesize = 2M
+<ul>
+<li>New Line: <span style="color: orange;">upload_max_filesize = 1000M</span></li>
+</ul>
+</li>
+<li>Old Line: max_file_uploads = 20
+<ul>
+<li>New Line: <span style="color: orange;">max_file_uploads = 200</span></li>
+</ul>
+</li>
+<li>Add Modify Permission the C:\inetpub\temp</li>
+</ul>
+</li>
+</ul>
+<p>&nbsp;</p>
+<h4><span style="color: orange;">MySQL Configuration</span></h4>
+<p>Open MySQL and log into the instance we created previously.</p>
+<p>First thing you will want to do is change the default character-set-server variable to UTF8 as UTF-8 supports any language.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-17.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-453 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-17-300x225.png" alt="Wordpress Installation 17" width="300" height="225" srcset="/blog/wp-content/uploads/Wordpress-Installation-17-300x225.png 300w, /blog/wp-content/uploads/Wordpress-Installation-17-600x450.png 600w, /blog/wp-content/uploads/Wordpress-Installation-17-1024x768.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-17.png 1196w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Restart MySQL for the settings to take, or just make sure you manually set the collation of you DB to UTF8 in the next step. (Powershell command: <span style="color: orange;">Restart-Service MySQL</span>)</p>
+<p>Next we are going to create your WordPress Database.</p>
+<p>Right-click on the blank space under the test DB and choose <span style="color: orange;">Create Schema&#8230;</span></p>
+<p style="text-align: center;"><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-18.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="alignnone size-medium wp-image-454" src="/blog/wp-content/uploads/Wordpress-Installation-18-300x226.png" alt="Wordpress Installation 18" width="300" height="226" srcset="/blog/wp-content/uploads/Wordpress-Installation-18-300x226.png 300w, /blog/wp-content/uploads/Wordpress-Installation-18-600x451.png 600w, /blog/wp-content/uploads/Wordpress-Installation-18-1024x770.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-18.png 1195w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;">Give your Schema/DB an appropriate name, I will use <span style="color: orange;">mydomainwpdatabase</span></p>
+<p style="text-align: left;"><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-19.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-455 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-19-300x285.png" alt="Wordpress Installation 19" width="300" height="285" srcset="/blog/wp-content/uploads/Wordpress-Installation-19-300x285.png 300w, /blog/wp-content/uploads/Wordpress-Installation-19-600x570.png 600w, /blog/wp-content/uploads/Wordpress-Installation-19.png 608w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;">Next, create a user for that database. I will use <span style="color: orange;">mydomainwpdbuser</span>, and give that user full permissions to the Schema/DB that you just created. It will look similar to the following:</p>
+<p style="text-align: left;"><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-20.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-458 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-20-300x225.png" alt="Wordpress Installation 20" width="300" height="225" srcset="/blog/wp-content/uploads/Wordpress-Installation-20-300x225.png 300w, /blog/wp-content/uploads/Wordpress-Installation-20-600x450.png 600w, /blog/wp-content/uploads/Wordpress-Installation-20-1024x767.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-20.png 1197w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;"><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-21.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-459 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-21-300x225.png" alt="Wordpress Installation 21" width="300" height="225" srcset="/blog/wp-content/uploads/Wordpress-Installation-21-300x225.png 300w, /blog/wp-content/uploads/Wordpress-Installation-21-600x449.png 600w, /blog/wp-content/uploads/Wordpress-Installation-21-1024x767.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-21.png 1198w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;">And that concludes the database configuration, we are almost done, just a couple more steps.</p>
+<h4><span style="color: orange;">WordPress Connection Configuration</span></h4>
+<p>Navigate to <span style="color: orange;">C:\inetpub\wwwroot\wordpress</span> and copy your <span style="color: orange;">wp-config-sample.php</span> in the same folder, then rename it <span style="color: orange;">wp-config.php</span></p>
+<p>Then you will need to make the following changes to that file to allow your WP site to connect to the database.</p>
+<p style="text-align: left; padding-left: 90px;">========================================</p>
+<p style="text-align: left; padding-left: 90px;">// ** MySQL settings &#8211; You can get this info from your web host ** //<br />
+/** The name of the database for WordPress */<br />
+define(&#8216;DB_NAME&#8217;, &#8216;<span style="color: orange;">mydomainwpdatabase</span>&#8216;);</p>
+<p style="text-align: left; padding-left: 90px;">/** MySQL database username */<br />
+define(&#8216;DB_USER&#8217;, &#8216;<span style="color: orange;">mydomainwpdatabaseuser</span>&#8216;);</p>
+<p style="text-align: left; padding-left: 90px;">/** MySQL database password */<br />
+define(&#8216;DB_PASSWORD&#8217;, &#8216;<span style="color: orange;">mydomainwpdatabaseuerpsswd</span>&#8216;);</p>
+<p style="text-align: left; padding-left: 90px;">/** MySQL hostname */<br />
+define(&#8216;DB_HOST&#8217;, &#8216;localhost&#8217;);</p>
+<p style="text-align: left; padding-left: 90px;">/** Database Charset to use in creating database tables. */<br />
+define(&#8216;DB_CHARSET&#8217;, &#8216;utf8&#8217;);</p>
+<p style="text-align: left; padding-left: 90px;">/** The Database Collate type. Don&#8217;t change this if in doubt. */<br />
+define(&#8216;DB_COLLATE&#8217;, &#8221;);</p>
+<p style="text-align: left; padding-left: 90px;">========================================</p>
+<p style="padding-left: 90px;">
+
+		</div>
+	</div>
+<div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>WordPress Login</h3>
+<p>You are ready to start your site, navigate to IIS and start it up (or restart it, if it has been up this whole time). Then browse to the site in IE and set up the admin creds as you see fit.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-22.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="size-medium wp-image-463 aligncenter" src="/blog/wp-content/uploads/Wordpress-Installation-22-300x142.png" alt="Wordpress Installation 22" width="300" height="142" srcset="/blog/wp-content/uploads/Wordpress-Installation-22-300x142.png 300w, /blog/wp-content/uploads/Wordpress-Installation-22-600x285.png 600w, /blog/wp-content/uploads/Wordpress-Installation-22-1024x486.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-22.png 1910w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: center;"><span style="color: orange; font-size: 15pt;">You are done!</span>    <span style="color: white; font-size: 13pt;">Just log into your site and start configuring your new WordPress Site.</span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/Wordpress-Installation-23.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-466 size-large" src="/blog/wp-content/uploads/Wordpress-Installation-23-1024x630.png" alt="Wordpress Installation 23" width="1024" height="630" srcset="/blog/wp-content/uploads/Wordpress-Installation-23-1024x630.png 1024w, /blog/wp-content/uploads/Wordpress-Installation-23-600x369.png 600w, /blog/wp-content/uploads/Wordpress-Installation-23-300x184.png 300w, /blog/wp-content/uploads/Wordpress-Installation-23.png 1166w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="ult-spacer spacer-69e85516dd581" data-id="69e85516dd581" data-height="20" data-height-mobile="20" data-height-tab="20" data-height-tab-portrait="" data-height-mobile-landscape="" style="clear:both;display:block;"></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Additional Setup for WP</h3>
+<h4><span style="color: orange;">Suggested WP Plugins</span></h4>
+<ul>
+<li><a href="https://wordpress.org/plugins/easy-wp-smtp/">Easy WP SMTP</a></li>
+<li><a href="https://wordpress.org/plugins/imsanity/">Imsanity</a></li>
+<li><a href="https://wordpress.org/plugins/limit-login-attempts/">Limit Login Attempts</a></li>
+<li><a href="http://vc.wpbakery.com/">WPBakery Visual Composer</a></li>
+</ul>
+<h4><span style="color: orange;">Suggested WP Settings Changes</span></h4>
+<p>Settings &gt; General Settings</p>
+<ul>
+<li>Site Title</li>
+<li>Tagline</li>
+<li>Membership</li>
+<li>Timezone</li>
+</ul>
+<p>Settings &gt; Discussion</p>
+<ul>
+<li>Deselect &#8211; <label for="default_comment_status">Allow people to post comments on new articles</label></li>
+</ul>
+<p>Settings &gt; Permalinks</p>
+<ul>
+<li>Common Settings &gt; Post name (or whatever makes the most sense for your site)</li>
+</ul>
+<p>&nbsp;</p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+					<wfw:commentRss>/blog/wordpress-iis-8-5-windows-2012-r2/feed/</wfw:commentRss>
+			<slash:comments>1</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Install and Setup Plex on FreeNAS</title>
+		<link>/blog/install-and-setup-plex-on-freenas/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 30 Jun 2015 08:11:41 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[CS24-SC]]></category>
+		<category><![CDATA[Dell CS24-SC]]></category>
+		<category><![CDATA[FreeNAS]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Movie Server]]></category>
+		<category><![CDATA[Movies]]></category>
+		<category><![CDATA[Plex Media Server]]></category>
+		<category><![CDATA[Plex Server]]></category>
+		<guid isPermaLink="false">/blog/?p=227</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="text-align: center;"><span style="color: orange;">NOTE: This how-to assumes that you have set up you FreeNAS installation according to the instructions shown in my tutorial: <span style="text-decoration: underline;"><a href="/blog/install-and-setup-freenas-on-dell-cs24-sc/">Install and Setup FreeNAS on Dell CS24-SC</a></span></span></h4>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Setting up a Share</h3>
+<p>First we are going to need to set up a share(I did cover this in my Install and Setup FreeNAS on Dell CS24-SC tutorial, so you can skip if you already followed that).</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE: I have chosen to use CIFS, as I am going this from a Windows Machine.</span></h6>
+<p>Navigate to your FreeNAS IP and login, then expand &#8220;<strong>Services</strong>&#8221; on the side and click on &#8220;<strong>CIFS&#8221; </strong>and it will bring up the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install16.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-147 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install16-300x169.png" alt="FreeNas Install16" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install16-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install16-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install16-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install16.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>You can choose what to put in all these fields, just make sure you check and IP to bind it to at the bottom. Next go back to the left side of the screen and click on &#8220;<strong>Control Services</strong>&#8221; under the &#8220;<strong>Services</strong>&#8221; section.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install17.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-148 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install17-300x169.png" alt="FreeNas Install17" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install17-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install17-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install17-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install17.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you will need to turn &#8220;<strong>CIFS</strong>&#8221; on. Now we will need to add a CIFS share onto FreeNAS, first expand &#8220;<strong>Sharing</strong>&#8221; then expand &#8220;<strong>Windows (CIFS) Shares</strong>&#8221; and click on &#8220;<strong>Add Windows (CIFS) Share</strong>&#8221;<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install18.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-149 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install18-300x169.png" alt="FreeNas Install18" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install18-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install18-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install18-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install18.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>I am choosing to share the root of my &#8220;<strong>Volume0</strong>&#8221; and I decided to name the share &#8220;<strong>FreeNASROOT</strong>&#8221;</p>
+<p>After this is done bring up Windows Explorer and verify that you can access the share. For me I had to type in \\FreeNAS or \\192.168.0.91 in my explorer bar. Once it connected I saw the share &#8220;<strong>FreeNASROOT</strong>&#8221; and when i selected that I was asked for creds to access the share, enter the root creds you use to log into the WebGUI as we have not created any users at this time.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install24.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-206 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install24-300x227.png" alt="FreeNas Install24" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install24-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install24-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install24.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: center;"><span style="color: orange;">**I am not covering users and user permissions in this how-to, but it is pretty simple and you should always create a user so you are not doing everything as the root user**</span></p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Installing Plex</h3>
+<p>FreeNAS makes this pretty damn easy. Simply click on the &#8220;<strong>Plugins</strong>&#8221; tab and wait for it to load.</p>
+<p>Once its loaded you will see something along the lines of the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install19.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-158 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install19-300x169.png" alt="FreeNas Install19" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install19-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install19-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install19-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install19.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you need to scroll down to &#8220;<strong>PlexMediaServer</strong>&#8221; select it, then click &#8220;<strong>Install</strong>&#8221; at the bottom of the page. You will get a popup notification that reads &#8220;Are you sure you want to install &#8220;PlexMediaServer&#8221; plugin?&#8221; Click &#8220;<strong>OK</strong>&#8221; and it will proceed with the install and configurations.<br />
+Now we need to configure what IP Plex will listen on. You can do this by expanding the &#8220;<strong>Jails</strong>&#8221; tab and then expand &#8220;<strong>plexmediaserver_1</strong>&#8221; and now click &#8220;<strong>edit</strong>&#8221;</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install21.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-161 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install21-300x169.png" alt="FreeNas Install21" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install21-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install21-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install21-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install21.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Go ahead and give it an IP that will work for you. And now click on the &#8220;<b>Installed</b>&#8221; tab on the Plugins page and you will see the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install20.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-160 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install20-300x169.png" alt="FreeNas Install20" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install20-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install20-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install20-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install20.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>The only difference between what you see and the image above is that your Plex will be powered off (<span style="color: red;">red</span>). Go ahead and turn it on (<span style="color: blue;">blue</span>). Note that you may get &#8220;some error occurred&#8221; when you try to do this. That is bc we just changed the Jail IP. Go ahead and reboot the box if that is the case. After it powers back up, navigate back to the page above and power Plex on. Once it is on you can go to the following address: <span style="font-size: xx-small;"><i>(change the IP with the IP of your Plex Jail)</i></span><br />
+<span style="color: orange;">http://192.168.0.93:32400/web/index.html</span><br />
+You can also get here by refreshing your page, then expand the plugins tab and select Plex Media Server as seen in the following screenshot:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install22.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-165 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install22-300x169.png" alt="FreeNas Install22" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install22-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install22-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install22-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install22.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>In the popup window click on the &#8220;<strong>here</strong>&#8221; link and that will bring up Plex! You did it, you installed Plex successfully!</p>
+<p>Now we just have to configure it so you can see your movies on there.</p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Configuring Movies with Plex</h3>
+<p>Once you browse to <span style="color: orange;">http://192.168.0.93:32400/web/index.html</span> your screen should look like this:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install23.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-168 size-medium" src="/blog/wp-content/uploads/FreeNas-Install23-300x169.png" alt="FreeNas Install23" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install23-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install23-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install23-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install23.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a><br />
+Before we can tell what movies Plex to look at, we first have to add a movie, or movies, to our FreeNAS Share we set up. So, go ahead and navigate back to your Share in explorer and add a folder called &#8220;<strong>Movies</strong>&#8220;, then add a Movie into that Folder as shown below:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install25.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-207 alignnone" src="/blog/wp-content/uploads/FreeNas-Install25-300x227.png" alt="FreeNas Install25" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install25-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install25-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install25.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a>                           <a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install26.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-208 alignnone" src="/blog/wp-content/uploads/FreeNas-Install26-300x258.png" alt="FreeNas Install26" width="300" height="258" srcset="/blog/wp-content/uploads/FreeNas-Install26-300x258.png 300w, /blog/wp-content/uploads/FreeNas-Install26.png 515w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>We also need to add in a corresponding folder in our freenas jail, to do this, navigate to: <em>\\freenas\FreeNASROOT\jails\plexmediaserver_1\media</em> (if you have named everything as i have here) and add a folder called &#8220;<strong>Movies</strong>&#8220;.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install26.1.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-212 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install26.1-300x182.png" alt="FreeNas Install26.1" width="300" height="182" srcset="/blog/wp-content/uploads/FreeNas-Install26.1-300x182.png 300w, /blog/wp-content/uploads/FreeNas-Install26.1-600x365.png 600w, /blog/wp-content/uploads/FreeNas-Install26.1.png 913w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>This is going to act as an alias in the FreeNAS Jail&#8217;s storage we are about to configure. So go ahead and open back up your web browser, open up FreeNAS and navigate to <strong>Jails</strong> on the left hand side, expand everything you can.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install28.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-213 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install28-300x169.png" alt="FreeNas Install28" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install28-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install28-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install28-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install28.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>&#8230;and you should be in the &#8220;<b>Add Storage</b>&#8221; section of your Plex jail. Go ahead and click on Add Storage. For <strong>Source</strong> put <em>/mnt/Volume0/Movies</em> or navigate to wherever your movies actually live. And for <strong>Destination</strong> put <em>/media/Movies</em></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install29.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-215 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install29-300x169.png" alt="FreeNas Install29" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install29-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install29-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install29-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install29.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now go back to Plex and Click on the <strong>+ (plus) </strong>in the upper left, next to the name of your Media Server and you will get something that looks like this:<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install27.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-210 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install27-300x169.png" alt="FreeNas Install27" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install27-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install27-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install27-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install27.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>From here you will choose &#8220;<strong>Movies</strong>&#8221; and click <span style="color: orange;"><strong>Next</strong></span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install30.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-216 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install30-300x169.png" alt="FreeNas Install30" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install30-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install30-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install30-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install30.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click on &#8220;<strong>Add folders</strong>&#8221; on the left hand side and choose the alias that we created <em>/media/Movies.</em> Now Plex should auto-update and find the new movie(s), but in case it doesn&#8217;t, just click on the gear on the upper left and select &#8220;<strong>Update Libraries</strong>&#8221; and there you have it, you can now see your new movie(s) on Plex!</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install31.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="aligncenter wp-image-218 size-full" src="/blog/wp-content/uploads/FreeNas-Install31.png" alt="FreeNas Install31" width="1366" height="768" srcset="/blog/wp-content/uploads/FreeNas-Install31.png 1366w, /blog/wp-content/uploads/FreeNas-Install31-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install31-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install31-1024x576.png 1024w" sizes="(max-width: 1366px) 100vw, 1366px" /></a></p>
+<p>Now that I have gotten you up and running you just have to go look through the Plex settings by clicking on the Wrench and Screw Driver in the upper right hand corner. It&#8217;s all pretty straight forward and simple but if you can&#8217;t figure it out then google that shit, then if that doesnt work comment and message me and i will see how I can help.</p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="text-align: center;">So that&#8217;s it, pretty simple install. If I left anything out that you notice or are having any trouble, leave a comment or send me and email on the right hand toolbar</h4>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Install and Setup FreeNAS on Dell CS24-SC</title>
+		<link>/blog/install-and-setup-freenas-on-dell-cs24-sc/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Mon, 15 Jun 2015 06:30:40 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[CS24-SC]]></category>
+		<category><![CDATA[Dell CS24-SC]]></category>
+		<category><![CDATA[FreeNAS]]></category>
+		<category><![CDATA[Install]]></category>
+		<category><![CDATA[Media Server]]></category>
+		<guid isPermaLink="false">/blog/?p=61</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p style="text-align: center;"><span style="color: white;"><a href="http://www.freenas.org/">FreeNAS</a> is offered in two ways: Install and support it yourself, as it is a Free/OpenSource Operating System, or invest in a turnkey solution from <a href="http://www.ixsystems.com/">iXsystems Inc.</a> Their support is great as they built the OS and know how it works best, I would strongly recommend contacting them if you are running FreeNAS as a business solution.</span></p>
+<p style="text-align: center;"><span style="color: white; font-size: 13pt;">This how-to will cover the basic install and very basic set-up of FreeNAS. FreeNAS has a lot of options and you will set it up pretty uniquely with each option. So for this tutorial I have covered a basic setup and a CIFS/SMB Share. This will allow you to use your FreeNAS server as a Data/File Store.</span></p>
+<h3>What you will need</h3>
+<ul>
+<li>1 &#8211; Dell CS24-SC</li>
+<li>2 &#8211; 8GB Flash Drives</li>
+<li>LAN Connectivity</li>
+<li>Keyboard and Monitor &#8211; (if you are not going to use BMC)</li>
+<li>1 &#8211; Windows Computer &#8211; (I am using Win7)</li>
+</ul>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>FreeNAS USB Stick</h3>
+<p>Obtain a copy of the <a href="http://www.freenas.org/download/">FreeNAS ISO</a>.<br />
+NOTE: <i>This Guide is using the Build FreeNAS 9.3 Stable</i></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Downloads-Page.png" data-dt-img-description=""><img loading="lazy" decoding="async" class="alignnone size-medium wp-image-73" src="/blog/wp-content/uploads/FreeNas-Downloads-Page-300x132.png" alt="FreeNas Downloads Page" width="300" height="132" srcset="/blog/wp-content/uploads/FreeNas-Downloads-Page-300x132.png 300w, /blog/wp-content/uploads/FreeNas-Downloads-Page-600x264.png 600w, /blog/wp-content/uploads/FreeNas-Downloads-Page.png 750w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Write the ISO to a USB drive (Use a USB Drive of at least 8GB&#8217;s)<br />
+&#8211; You can do this using <a href="http://sourceforge.net/projects/win32diskimager/">Win32 Disk Imager</a> or <a href="https://rufus.akeo.ie/">Rufus</a></p>
+<p style="text-align: center;"><a class="dt-single-image" href="/blog/wp-content/uploads/Win32-Disk-Imager.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-78 alignnone" src="/blog/wp-content/uploads/Win32-Disk-Imager-300x152.png" alt="Win32 Disk Imager" width="300" height="152" /></a>                        <a class="dt-single-image" href="/blog/wp-content/uploads/Rufus.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-95 alignnone" src="/blog/wp-content/uploads/Rufus-213x300.png" alt="Rufus" width="213" height="300" srcset="/blog/wp-content/uploads/Rufus-213x300.png 213w, /blog/wp-content/uploads/Rufus.png 369w" sizes="(max-width: 213px) 100vw, 213px" /></a></p>
+<p><span style="font-size: x-small;"><i>**Use the settings you see above in Rufus</i></span></p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Installing FreeNAS</h3>
+<p><span style="font-size: x-small;"><i>You can also refer to the FreeNAS installation instructions from the developers website found <a href="http://doc.freenas.org/9.3/freenas_install.html">here</a></i></span><br />
+I am using 2 separate USB&#8217;s for the install, I have found this to be easier as i keep quite a few OS&#8217;s on USB sticks at any given time. One is set up as shown above with the ISO mounted to it, and the other one is currently formatted as FAT32, FreeNAS will work fine with this. Attach the ISO drive to the back and the blank drive to one of the front slots.<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install6.png" data-dt-img-description=""><br />
+</a></p>
+<h4>Boot your CS-24</h4>
+<p>You can do this from the BMC console which is where I will get the following screenshots come from. You will get the exact some thing when hooking up a monitor and keyboard to your CS-24.</p>
+<p>When FreeNAS boots you will see the following screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install1.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-101 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install1-300x276.png" alt="FreeNas Install1" width="300" height="276" srcset="/blog/wp-content/uploads/FreeNas-Install1-300x276.png 300w, /blog/wp-content/uploads/FreeNas-Install1-600x551.png 600w, /blog/wp-content/uploads/FreeNas-Install1.png 725w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click &#8220;<strong>enter</strong>&#8221; on the one and only option, if you fail to do so FreeNAS will proceed with executing the FreeNAS installation anyway.</p>
+<p>Next You will see this screen with four options:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install2.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-102 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install2-300x240.png" alt="FreeNas Install2" width="300" height="240" srcset="/blog/wp-content/uploads/FreeNas-Install2-300x240.png 300w, /blog/wp-content/uploads/FreeNas-Install2-600x480.png 600w, /blog/wp-content/uploads/FreeNas-Install2.png 722w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click &#8220;<strong>enter</strong>&#8221; on the first option, <strong>Install/Upgrade</strong>, and you will get the following screen:<br />
+<span style="font-size: small;"><i>(Note &#8211; I used 2 different brand flash drives that were different sizes so it was easy to identify the two)</i></span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install3.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-108 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install3-300x227.png" alt="FreeNas Install3" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install3-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install3-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install3.png 779w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you will select the flash drive that is plugged into the front, by scrolling to it and hitting &#8220;<strong>space</strong>&#8221; and then &#8220;<strong>enter</strong>&#8221; and you will get the following screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install4.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-110 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install4-300x227.png" alt="FreeNas Install4" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install4-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install4-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install4.png 779w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click &#8220;<strong>enter</strong>&#8221; on <b>YES </b>here, this is just formatting the drive with the correct permissions for FreeNAS, and you will get the following screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install5.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-111 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install5-300x227.png" alt="FreeNas Install5" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install5-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install5-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install5.png 779w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here, enter your password into both fields and click &#8220;<strong>enter</strong>&#8221; on <strong>OK</strong>, then you will see some script run and after a while you will finally get this screen:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install6.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-112 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install6-300x227.png" alt="FreeNas Install6" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install6-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install6-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install6.png 779w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Click &#8220;<strong>enter</strong>&#8221; to acknowledge that you understand the notification. And this will bring you back to the original screen where you will now choose option 4 <strong>Shutdown System</strong></p>
+<h6><span style="color: orange;">Once the server is off, remove the flash drive from the back of the machine, and move the one from the front to the slot in the back and you are ready to roll. Power that baby on and wait for the install to complete&#8230;</span></h6>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Configuring FreeNAS</h3>
+<p>When your server does finally get done booting for the first time you will see the following screen that will have an IP address on it if your network has DHCP enabled, if not you will have to configure the network settings , which will be covered in the next step:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install7.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-117 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install7-300x230.png" alt="FreeNas Install7" width="300" height="230" srcset="/blog/wp-content/uploads/FreeNas-Install7-300x230.png 300w, /blog/wp-content/uploads/FreeNas-Install7-600x461.png 600w, /blog/wp-content/uploads/FreeNas-Install7.png 766w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now to configure the network chose option <strong>1 </strong>and click &#8220;<strong>enter</strong>&#8221;<br />
+<span style="color: orange;"><span style="font-size: small;"><i>Now I am going to be using both NIC&#8217;s, you can choose to use just one or the other if you wish, but i have chosen to use both for redundancy reasons, both NIC&#8217;s are not necessary.</i></span></span><br />
+Now you can set up your network as follows, since I am on the 192.168.0.0/24 Network I will be setting my FreeNAS box accordingly.<br />
+You can see my configurations here:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install8.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-118 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install8-300x230.png" alt="FreeNas Install8" width="300" height="230" srcset="/blog/wp-content/uploads/FreeNas-Install8-300x230.png 300w, /blog/wp-content/uploads/FreeNas-Install8-600x461.png 600w, /blog/wp-content/uploads/FreeNas-Install8.png 766w" sizes="(max-width: 300px) 100vw, 300px" /></a>                                          <a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install9.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-119 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install9-300x230.png" alt="FreeNas Install9" width="300" height="230" srcset="/blog/wp-content/uploads/FreeNas-Install9-300x230.png 300w, /blog/wp-content/uploads/FreeNas-Install9-600x461.png 600w, /blog/wp-content/uploads/FreeNas-Install9.png 766w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Once you have done the steps above, you will come back to the main screen and it will look like the screen below:<br />
+<span style="color: orange;"><span style="font-size: small;"><i>(but the IP'(s) listed will be static IP'(s) on your network)</i></span></span></p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install10.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-127 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install10-300x231.png" alt="FreeNas Install10" width="300" height="231" srcset="/blog/wp-content/uploads/FreeNas-Install10-300x231.png 300w, /blog/wp-content/uploads/FreeNas-Install10-600x462.png 600w, /blog/wp-content/uploads/FreeNas-Install10.png 755w" sizes="(max-width: 300px) 100vw, 300px" /></a><br />
+Now you just need to change the root password, do so by selecting option <strong>7</strong> and following the reset password prompts.</p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>FreeNAS GUI Configuration</h3>
+<p>Now that we have done all the steps for the console configuration we will choose one of the two IP&#8217;s above, open a browser from a computer on your local network and navigate to one of those IP&#8217;s. When you navigate to either of those IP&#8217;s you will see the following login screen:<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install11.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-128 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install11-300x169.png" alt="FreeNas Install11" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install11-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install11-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install11-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install11.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Type in the username &#8220;<strong>root</strong>&#8221; and enter the password that you set up in the previous step. Once logged in you will get the following screen:<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install12.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-129 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install12-300x169.png" alt="FreeNas Install12" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install12-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install12-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install12-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install12.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p><span style="color: orange;"><span style="font-size: small;"><i>*It may not come up directly to this screen, you will likely get a pop-up for the language and time zone, set these accordingly, and you will get another pop-up asking to create volumes, just click exit on this.</i></span></span><br />
+Start off by clicking on the &#8220;<strong>General</strong>&#8221; tab and you will get this screen:<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install131.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-140 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install131-300x169.png" alt="FreeNas Install13" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install131-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install131-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install131-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install131.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>I chose to bind the WebGUI to my .91 address and I verified my Time Zone was correct here. Now you will want to click on the &#8220;<strong>Network</strong>&#8221; tab</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install13.1.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-153 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install13.1-300x169.png" alt="FreeNas Install13.1" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install13.1-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install13.1-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install13.1-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install13.1.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you will want to change your <em>Hostname</em>, add in the <em>Defualt</em> <em>IPv4</em> <em>Gateway</em>, and the <em>DNS</em> <em>servers</em>. After saving these settings navigate to the &#8220;<strong>Storage</strong>&#8221; tab and choose &#8220;<strong>Volume Manager</strong>&#8221; and you will see something like this:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install14.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-141 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install14-300x169.png" alt="FreeNas Install14" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install14-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install14-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install14-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install14.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: left;">Since I am running hardware RAID 10 with 4x120GB&#8217;s Hard Drives. You will see Volume settings as above. Your volumes will most likely be different from this, so you have some freedom here to choose what best fits you.</p>
+<p style="text-align: center;"><span style="color: orange;"><span style="font-size: small;"><i>You may have to run the following commands from the shell if your Add Volume fails the first time, there is some trash in the partition table area:</i></span></span><br />
+<span style="color: red;">sysctl kern.geom.debugflags=0x10</span><br />
+<span style="color: red;">dd if=/dev/zero of=/dev/ada0 </span><br />
+<span style="color: orange;">after this runs for about a minute, hit ctrl+C and then go ahead and proceed with setting up the volume.</span></p>
+<p>Once you have configured these settings to your liking click on &#8220;<strong>Add Volume</strong>&#8220;. After your volume finishes writing you will see something along the lines of the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install15.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-142 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install15-300x169.png" alt="FreeNas Install15" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install15-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install15-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install15-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install15.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Now that we have our storage set up, we need to setup access for it. I have chosen to use CIFS, as I am going this from a Windows Machine. Expand &#8220;<strong>Services</strong>&#8221; on the left hand side and select the &#8220;<strong>CIFS</strong>&#8221; tab. and it will bring up the following:</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install16.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-147 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install16-300x169.png" alt="FreeNas Install16" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install16-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install16-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install16-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install16.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>You can choose what to put in all these fields, just make sure you check and IP to bind it to at the bottom. Next go back to the left side of the screen and click on &#8220;<strong>Control Services</strong>&#8221; under the &#8220;<strong>Services</strong>&#8221; section.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install17.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-148 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install17-300x169.png" alt="FreeNas Install17" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install17-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install17-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install17-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install17.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>Here you will need to turn &#8220;<strong>CIFS</strong>&#8221; on. Now we will need to add a CIFS share onto FreeNAS, first expand &#8220;<strong>Sharing</strong>&#8221; then expand &#8220;<strong>Windows (CIFS) Shares</strong>&#8221; and click on &#8220;<strong>Add Windows (CIFS) Share</strong>&#8221;<br />
+<a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install18.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-149 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install18-300x169.png" alt="FreeNas Install18" width="300" height="169" srcset="/blog/wp-content/uploads/FreeNas-Install18-300x169.png 300w, /blog/wp-content/uploads/FreeNas-Install18-600x337.png 600w, /blog/wp-content/uploads/FreeNas-Install18-1024x576.png 1024w, /blog/wp-content/uploads/FreeNas-Install18.png 1366w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p>I am choosing to share the root of my &#8220;<strong>Volume0</strong>&#8221; and I decided to name the share &#8220;<strong>FreeNASROOT</strong>&#8221;</p>
+<p>After this is done bring up Windows Explorer and verify that you can access the share. For me I had to type in \\FreeNAS or \\192.168.0.91 in my explorer bar. Once it connected I saw the share &#8220;<strong>FreeNASROOT</strong>&#8221; and when i selected that I was asked for creds to access the share, enter the root creds you use to log into the WebGUI as we have not created any users at this time.</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/FreeNas-Install24.png" data-dt-img-description=""><img loading="lazy" decoding="async" class=" size-medium wp-image-206 aligncenter" src="/blog/wp-content/uploads/FreeNas-Install24-300x227.png" alt="FreeNas Install24" width="300" height="227" srcset="/blog/wp-content/uploads/FreeNas-Install24-300x227.png 300w, /blog/wp-content/uploads/FreeNas-Install24-600x454.png 600w, /blog/wp-content/uploads/FreeNas-Install24.png 676w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<p style="text-align: center;"><span style="color: orange;">**I am not covering users and user permissions in this how-to, but it is pretty simple and you should always create a user so you are not doing everything as the root user**</span></p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey wpb_content_element  wpb_content_element" ><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div></div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

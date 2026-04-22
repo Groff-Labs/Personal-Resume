@@ -20,7 +20,7 @@ Commit the regenerated resume.pdf alongside edits to this file.
 # Michael Groff
 
 **AWS Sr. Solutions Architect** · San Antonio, TX
-[cv.michaelgroff.info](https://cv.michaelgroff.info) · [LinkedIn](https://www.linkedin.com/in/michael-groff-8b367489) · [GitHub](https://github.com/mgroff2)
+[michaelgroff.info](https://michaelgroff.info) · [LinkedIn](https://www.linkedin.com/in/michael-groff-8b367489) · [GitHub](https://github.com/mgroff2)
 
 ---
 
@@ -128,7 +128,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - VMware VSP / VTSP partner accreditations across BC, HCI, MA, MO, NV, SV (2017–2018)
 - Microsoft Technology Associate – Networking Fundamentals (2017)
 
-*Live badges and verification links at [cv.michaelgroff.info](https://cv.michaelgroff.info).*
+*Live badges and verification links at [michaelgroff.info](https://michaelgroff.info).*
 
 ---
 

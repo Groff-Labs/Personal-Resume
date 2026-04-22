@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Windows PC &#8211; Michael Groff</title>
+	<atom:link href="/blog/category/technology/windows-pc/feed/" rel="self" type="application/rss+xml" />
+	<link>/blog</link>
+	<description>Expand or Die</description>
+	<lastBuildDate>Mon, 16 Nov 2020 20:52:12 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.9.4</generator>
+	<item>
+		<title>Install Visio 2016 alongside Office 365</title>
+		<link>/blog/install-visio-2016-alongside-office-365/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Tue, 25 Feb 2020 04:40:24 +0000</pubDate>
+				<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Windows PC]]></category>
+		<category><![CDATA[Office 365]]></category>
+		<category><![CDATA[Office365]]></category>
+		<category><![CDATA[Visio]]></category>
+		<category><![CDATA[WIndows 10]]></category>
+		<guid isPermaLink="false">/blog/?p=1015</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4 style="text-align: center;">Have you ever tried to install Visio 2016 on a computer that you already have Office 365 installed already and it gave you a &#8220;Click-to-Run&#8221; error? This error is fairly easy to get around and in this post I will teach you how.</h4>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<p>First thing you will want to do is download the &#8220;<a href="https://www.microsoft.com/en-gb/download/details.aspx?id=36778">Office Deployment Tool</a>&#8221; and extract it somewhere. I prefer to do this on my Desktop or in my Downloads directory.</p>
+<p>EDIT: I recently did this again and had to use this &#8220;<a href="https://www.microsoft.com/en-us/download/details.aspx?id=49117">Office Deployment Tool</a>&#8221;</p>
+<p>Next, you will want to create the following &#8220;downloadconfig.xml&#8221; in the directory that you extracted the Office Deployment tool into. Inside that document, put in the following information (please edit for <a href="https://docs.microsoft.com/en-us/DeployOffice/use-the-office-deployment-tool-to-install-volume-licensed-editions-of-visio-2016?redirectSourcePath=%252fen-us%252farticle%252f82691bd7-a3d5-47ca-8d8a-0ee43ec2c01f">your version of Visio</a>). For this install, I am installing Visio Professional 2016.</p>
+<pre class="lang:xhtml decode:true ">&lt;Configuration&gt;
+  &lt;Add OfficeClientEdition="64" &gt;
+    &lt;Product ID="VisioProXVolume" PIDKEY="69WXN-MBYV6-22PQG-3WGHK-RM6XC"&gt;
+        &lt;Language ID="en-us" /&gt;
+     &lt;/Product&gt;
+   &lt;/Add&gt;  
+&lt;/Configuration&gt;</pre>
+<p>Once you have that done, you will want to run the following two commands from the root of the Office Deployment Tool Directory. One to download the needed files and the other to perform the installation.<br />
+Download:</p>
+<pre class="lang:ps decode:true ">.\setup.exe /download .\downloadconfig.xml</pre>
+<p>Install:</p>
+<pre class="lang:ps decode:true ">.\setup.exe /configure .\downloadconfig.xml</pre>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Download pictures from Flickr even if download is &#8220;disabled&#8221;</title>
+		<link>/blog/download-pictures-from-flickr-even-if-download-is-disabled/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Wed, 16 Sep 2015 06:49:16 +0000</pubDate>
+				<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Windows PC]]></category>
+		<category><![CDATA[Chrome]]></category>
+		<category><![CDATA[Download]]></category>
+		<category><![CDATA[Edge]]></category>
+		<category><![CDATA[Firefox]]></category>
+		<category><![CDATA[Flickr]]></category>
+		<category><![CDATA[IE]]></category>
+		<category><![CDATA[Internet Explorer]]></category>
+		<category><![CDATA[Pictures]]></category>
+		<guid isPermaLink="false">/blog/?p=332</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3><span style="color: orange;">So this is insanely easy and short, but surprisingly most don&#8217;t know it&#8217;s an option.</span></h3>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 32px"><span class="vc_empty_space_inner"></span></div><div class="hr-thin style-line" style="width: 100%;border-top-width: 1px;"></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4><span style="color: orange;">For Chrome:</span></h4>
+<ul>
+<li>Browse to the photo you want to download, click the download icon and select &#8220;View all sizes&#8221;</li>
+<li>Select the size of the image that you want to download. (I always choose the largest)</li>
+<li>Right click on the photo and select &#8220;Inspect Element&#8221;. This will open the Developer bar, which will be open to the Elements Tab.</li>
+<li>Right click the link under the line that is highlighted and select &#8220;Open link in new tab&#8221;.</li>
+<li>Right click and choose &#8220;Save image as&#8230;&#8221;</li>
+</ul>
+<h4><span style="color: orange;">For Firefox:</span></h4>
+<ul>
+<li>Browse to the photo you want to download, click the download icon and select &#8220;View all sizes&#8221;</li>
+<li>Select the size of the image that you want to download. (I always choose the largest)</li>
+<li>Right click on the photo and select &#8220;Inspect Element (Q)&#8221;. This will open the Developer Tools bar, which will be open to the Inspector Tab.</li>
+<li>Right click the link under the line that is highlighted and select &#8220;Open link in new tab&#8221;.</li>
+<li>Right click and choose &#8220;Save Image As&#8230;&#8221;</li>
+</ul>
+<h4><span style="color: orange;">For IE:</span></h4>
+<ul>
+<li>Browse to the photo you want to download, click the download icon and select &#8220;View all sizes&#8221;</li>
+<li>Select the size of the image that you want to download. (I always choose the largest)</li>
+<li>Right click on the photo and select &#8220;Inspect Element&#8221;. This will open the Developer Tools bar, which will be open to the DOM Explorer Tab.</li>
+<li>Copy the link under the line that is highlighted and paste it in a the URL bar. (You will have to remove the part of the text that you copy that is not part of the URL, like the following: &lt;img src=&#8221;HTTP THAT YOU KEEP&#8221; /&gt;</li>
+<li>Right click and choose &#8220;Save picture as&#8230;&#8221;</li>
+</ul>
+<h4><span style="color: orange;">For Edge:</span></h4>
+<ul>
+<li>Browse to the photo you want to download, click the download icon and select &#8220;View all sizes&#8221;</li>
+<li>Select the size of the image that you want to download. (I always choose the largest)</li>
+<li>Right click on the photo and select &#8220;Inspect Element&#8221;. This will open the Developer Tools bar, which will be open to the DOM Explorer Tab.</li>
+<li>Copy the link under the line that is highlighted and paste it in a the URL bar. (You will have to remove the part of the text that you copy that is not part of the URL, like the following: &lt;img src=&#8221;HTTP THAT YOU KEEP&#8221; /&gt;</li>
+<li>Right click and choose &#8220;Save picture&#8221;</li>
+</ul>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Fix Java Auth Error for KVM for Dell CS24-SC and other servers&#8230;</title>
+		<link>/blog/fix-java-auth-error-for-kvm-for-dell-cs24-sc-and-other-servers/</link>
+		
+		<dc:creator><![CDATA[Michael]]></dc:creator>
+		<pubDate>Sat, 15 Aug 2015 14:19:33 +0000</pubDate>
+				<category><![CDATA[Servers]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[Windows PC]]></category>
+		<category><![CDATA[Authentication Failure]]></category>
+		<category><![CDATA[BMC]]></category>
+		<category><![CDATA[Console]]></category>
+		<category><![CDATA[Dell CS24-SC]]></category>
+		<category><![CDATA[dell server]]></category>
+		<category><![CDATA[IOException]]></category>
+		<category><![CDATA[Java]]></category>
+		<category><![CDATA[KVM]]></category>
+		<guid isPermaLink="false">/blog/?p=257</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<div class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h3>Is the KVM Console not working cause of damn Java?</h3>
+<p style="text-align: center;">Do you get the following <span style="color: orange;">&#8220;IOException &#8211; Authentication Failure!&#8221;</span> error when you are just simply trying to connect to your server (CS24-SC) via the built in KVM/Console in BMC? &#8211; Turns out this is a <span style="color: green; font-weight: bold;"><span style="font-size: large;">really easy</span></span> fix</p>
+<p><a class="dt-single-image" href="/blog/wp-content/uploads/JavaFix2.jpg" data-dt-img-description=""><img fetchpriority="high" decoding="async" class=" size-medium wp-image-270 alignleft" src="/blog/wp-content/uploads/JavaFix2-300x211.jpg" alt="JavaFix2" width="300" height="211" srcset="/blog/wp-content/uploads/JavaFix2-300x211.jpg 300w, /blog/wp-content/uploads/JavaFix2-600x421.jpg 600w, /blog/wp-content/uploads/JavaFix2.jpg 872w" sizes="(max-width: 300px) 100vw, 300px" /></a> <a class="dt-single-image" href="/blog/wp-content/uploads/JavaFix1.jpg" data-dt-img-description=""><img decoding="async" class=" size-medium wp-image-269 alignright" src="/blog/wp-content/uploads/JavaFix1-300x225.jpg" alt="JavaFix1" width="300" height="225" srcset="/blog/wp-content/uploads/JavaFix1-300x225.jpg 300w, /blog/wp-content/uploads/JavaFix1-600x450.jpg 600w, /blog/wp-content/uploads/JavaFix1.jpg 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+
+		</div>
+	</div>
+<div class="vc_empty_space"   style="height: 42px"><span class="vc_empty_space_inner"></span></div>
+	<div class="wpb_text_column wpb_content_element " >
+		<div class="wpb_wrapper">
+			<h4><span style="color: orange;">It turns out you&#8217;re just using the wrong version of Java&#8230;</span></h4>
+<p style="text-align: left;">You will need to install the 32 bit version of Java. Since the CS24-SC is older hardware, Java updates will likely break your remote access. In the case that you have updated Java or for some reasons the KVM just stopped working, you should roll back your Java version. I have found success with Java 7 Version 55 and 51, I have seen others have success with most other versions of 7, but this is working for me, so why change it. I&#8217;ve put a link to the java archive below:</p>
+<h6 style="text-align: center;"><span style="color: #6699ff;">NOTE:Also make sure you are opening your .jnlp file with javaws.exe if you continue to see this error after installing the 32bit version. This may happen if you have both 64bit and 32bit versions installed.</span></h6>
+<p style="text-align: center;"><a href="http://www.oracle.com/technetwork/java/archive-139210.html" class="btn-shortcode dt-btn-m dt-btn default-btn-color default-btn-hover-color default-btn-bg-color default-btn-bg-hover-color" target="_blank" id="dt-btn-1" rel="noopener"><span>Java Archive</span></a></p>
+<p style="text-align: center;"><a class="dt-single-image" href="/blog/wp-content/uploads/JavaFix4.png" data-dt-img-description=""><img decoding="async" class="alignnone wp-image-316 size-large" src="/blog/wp-content/uploads/JavaFix4-1024x768.png" alt="JavaFix4" width="1024" height="768" srcset="/blog/wp-content/uploads/JavaFix4.png 1024w, /blog/wp-content/uploads/JavaFix4-600x450.png 600w, /blog/wp-content/uploads/JavaFix4-300x225.png 300w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+
+		</div>
+	</div>
+</div></div></div></div>
+</div>]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>
