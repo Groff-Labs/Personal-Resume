@@ -1,0 +1,16 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Groff;Michael;;;
+FN:Michael Groff
+TITLE:Sr. Solutions Architect
+ORG:AllCloud
+TEL;TYPE=CELL,VOICE:+1-830-688-2830
+EMAIL;TYPE=INTERNET:mg1459.mg@gmail.com
+ADR;TYPE=HOME:;;;San Antonio;TX;;United States
+URL:https://michaelgroff.info
+X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/michael-groff-8b367489
+X-SOCIALPROFILE;TYPE=github:https://github.com/mgroff2
+X-SOCIALPROFILE;TYPE=twitter:https://twitter.com/Groffskiii
+NOTE:AWS Sr. Solutions Architect. See michaelgroff.info for the full CV.
+REV:2026-04-22T20:45:00Z
+END:VCARD

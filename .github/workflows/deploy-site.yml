@@ -102,6 +102,19 @@ jobs:
             --content-type application/pdf \
             --content-disposition "inline; filename=Michael_Groff_resume_${YEAR}.pdf"
 
+      # The .vcf ships with application/octet-stream by default (aws s3
+      # sync's mimetypes lib doesn't know the extension), which demotes
+      # iOS Safari's "Add to Contacts" sheet into a plain download. Set
+      # the RFC 6350 MIME type so mobile + macOS Contacts recognize it.
+      - name: Set Content-Type on michael-groff.vcf
+        run: |
+          aws s3 cp \
+            "s3://${{ steps.stack.outputs.bucket }}/michael-groff.vcf" \
+            "s3://${{ steps.stack.outputs.bucket }}/michael-groff.vcf" \
+            --metadata-directive REPLACE \
+            --content-type text/vcard \
+            --content-disposition "inline; filename=Michael_Groff.vcf"
+
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \

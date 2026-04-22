@@ -1,4 +1,4 @@
-import { Github, Linkedin, Twitter, Mail, Phone } from "lucide-react";
+import { Github, Linkedin, Twitter, Mail, Phone, UserPlus } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -60,6 +60,14 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+            <a
+              href="/michael-groff.vcf"
+              download
+              className="mt-3 inline-flex items-center gap-2 text-sm text-ink-muted hover:text-accent transition-colors"
+            >
+              <UserPlus className="w-4 h-4" />
+              Save contact (.vcf)
+            </a>
           </div>
 
           <div>
