@@ -24,6 +24,12 @@ const IMAGES_DIR = path.resolve(HERE, "../public/images");
 // Map raster extensions → webp. SVGs stay SVG.
 const CONVERT_EXT = new Set([".jpg", ".jpeg", ".png"]);
 
+// Exempt from both resize-to-800 and WebP conversion. These assets need
+// their original resolution preserved (lightbox scales them up).
+const EXCLUDE_SUBSTRINGS = [
+  "diagrams/cv_infra_diagram",
+];
+
 async function* walk(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
   for (const e of entries) {
@@ -42,6 +48,12 @@ for await (const src of walk(IMAGES_DIR)) {
   const ext = path.extname(src).toLowerCase();
   if (!CONVERT_EXT.has(ext)) continue;
 
+  const rel = path.relative(IMAGES_DIR, src);
+  if (EXCLUDE_SUBSTRINGS.some((s) => rel.includes(s))) {
+    skipped++;
+    continue;
+  }
+
   const dest = src.slice(0, -ext.length) + ".webp";
   const srcStat = await fs.stat(src);
 
@@ -57,15 +69,20 @@ for await (const src of walk(IMAGES_DIR)) {
     continue;
   }
 
+  // Cap the longest side at 800 px. No image on the site renders larger
+  // than ~1024 physical pixels (the Education hero banner) and most max
+  // out at 300–400 px. 800 covers 2x retina for any 400 px display slot.
+  // withoutEnlargement leaves small source images alone.
+  //
   // Quality 82 is the practical sweet spot for photographic content;
   // effort 4 balances compression vs. encode time (effort 6 shaves a
   // few % more bytes but doubles the CPU).
   await sharp(src)
+    .resize({ width: 800, height: 800, fit: "inside", withoutEnlargement: true })
     .webp({ quality: 82, effort: 4 })
     .toFile(dest);
 
   const destSize = (await fs.stat(dest)).size;
-  const rel = path.relative(IMAGES_DIR, src);
 
   // For simple graphics (logos, line-art diagrams), PNG often beats WebP.
   // If the generated .webp is larger than the source, discard it — the
