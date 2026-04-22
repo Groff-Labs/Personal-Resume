@@ -24,6 +24,9 @@ yarn-error.log*
 .next/
 out/
 
+# Generated artifacts (rebuilt on every `npm run build` from resume.md)
+frontend/public/resume.pdf
+
 # CDK
 cdk.out/
 .cdk.staging/

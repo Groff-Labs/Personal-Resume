@@ -26,7 +26,7 @@ Commit the regenerated resume.pdf alongside edits to this file.
 
 ## Summary
 
-AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructure. Serverless-first, IaC everything, security by default. Background in ops (Rackspace Windows admin → AWS Cloud Support Engineer) shapes how I design for production: it has to run at 2 a.m. on a Sunday without anyone waking up.
+AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructure. Serverless-first, IaC everything, security by default. Career arc runs Rackspace Windows Admin → AWS Cloud Support Engineer → AWS Architect, which shapes how I design for production: it has to run at 2 a.m. on a Sunday without anyone waking up.
 
 ---
 

@@ -94,8 +94,9 @@ export default function AboutMe() {
                 IaC everything, security by default.
               </p>
               <p>
-                My background is ops (Rackspace Windows admin{" "}
-                <span aria-hidden>→</span> AWS Cloud Support Engineer), which
+                My background is ops (Rackspace Windows Admin{" "}
+                <span aria-hidden>→</span> AWS Cloud Support Engineer{" "}
+                <span aria-hidden>→</span> AWS Architect), which
                 shapes how I think about what gets deployed: it has to run at 2
                 a.m. on a Sunday without anyone waking up.
               </p>
