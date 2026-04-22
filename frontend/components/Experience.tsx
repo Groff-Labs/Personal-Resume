@@ -186,16 +186,14 @@ export default function Experience() {
         {/* Footer strip */}
         <div className="text-center max-w-3xl mx-auto mt-10 space-y-1 text-sm">
           <p className="text-ink-muted">
-            Visit my blog at{" "}
+            See the{" "}
             <a
-              href="http://michaelgroff.info"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/blog/"
               className="text-accent hover:text-accent-light font-medium"
             >
-              michaelgroff.info
+              blog archive
             </a>{" "}
-            for technology write-ups and tutorials.
+            for technology write-ups from 2015–2020 (read-only).
           </p>
           <p className="text-ink-subtle text-xs">
             Letters of recommendation and contact information for all previous
