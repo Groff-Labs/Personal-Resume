@@ -90,6 +90,11 @@ const pdf = await mdToPdf(
   { path: SRC },
   {
     dest: DEST,
+    // Sets the <title> tag, which Chromium embeds as the PDF's
+    // document-title metadata. Without this, the PDF title defaults to
+    // the source URL (e.g. "localhost:44657/resume.md#") which is ugly
+    // in browser tab titles and PDF viewers.
+    document_title: "Michael Groff — Résumé",
     stylesheet: [], // skip md-to-pdf's default markdown.css
     stylesheet_encoding: "utf-8",
     css,
