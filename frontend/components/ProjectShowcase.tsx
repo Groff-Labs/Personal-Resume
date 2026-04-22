@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Github, ExternalLink, Archive } from "lucide-react";
+import { Github, ExternalLink, Archive, X } from "lucide-react";
 
 const COMPARISON = [
   {
@@ -27,22 +28,46 @@ const TRADEOFFS = [
   "Static export, not SSR; zero servers and no per-request logic. Fits a resume, not a SaaS.",
 ];
 
-function ArchitectureDiagram() {
+const DIAGRAM_ALT =
+  "Architecture diagram: Git push to GitHub triggers GitHub Actions, which assumes an IAM OIDC role to deploy infrastructure (CloudFront, ACM, OAC, S3) via CDK and sync site content to S3. Site visitors reach the site via CloudFlare (CNAME) → CloudFront (TLS via ACM) → OAC → S3.";
+
+function ArchitectureDiagram({ onOpen }: { onOpen: () => void }) {
   return (
-    <div className="relative w-full aspect-[1500/810] bg-white rounded-md overflow-hidden">
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label="Enlarge architecture diagram"
+      className="relative w-full aspect-[1500/810] bg-white rounded-md overflow-hidden block cursor-zoom-in focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    >
       <Image
         src="/images/diagrams/cv_infra_diagram.png"
-        alt="Architecture diagram: Git push to GitHub triggers GitHub Actions, which assumes an IAM OIDC role to deploy infrastructure (CloudFront, ACM, OAC, S3) via CDK and sync site content to S3. Site visitors reach the site via CloudFlare (CNAME) → CloudFront (TLS via ACM) → OAC → S3."
+        alt={DIAGRAM_ALT}
         fill
         sizes="(max-width: 1024px) 100vw, 1024px"
         className="object-contain"
         priority={false}
       />
-    </div>
+    </button>
   );
 }
 
 export default function ProjectShowcase() {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightboxOpen]);
+
   return (
     <section id="project" className="section-container bg-surface-1">
       <motion.div
@@ -64,9 +89,9 @@ export default function ProjectShowcase() {
           </p>
         </div>
 
-        {/* Architecture diagram */}
+        {/* Architecture diagram (click to enlarge) */}
         <div className="card mb-10">
-          <ArchitectureDiagram />
+          <ArchitectureDiagram onOpen={() => setLightboxOpen(true)} />
         </div>
 
         {/* Comparison table */}
@@ -139,6 +164,39 @@ export default function ProjectShowcase() {
           for posterity; same domain, same bucket, no WordPress runtime involved.
         </p>
       </motion.div>
+
+      {lightboxOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Architecture diagram"
+          onClick={() => setLightboxOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 cursor-zoom-out"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative cursor-default"
+          >
+            <Image
+              src="/images/diagrams/cv_infra_diagram.png"
+              alt={DIAGRAM_ALT}
+              width={1500}
+              height={810}
+              sizes="95vw"
+              className="w-[min(95vw,1500px)] max-h-[90vh] h-auto rounded-md shadow-2xl bg-white"
+              priority
+            />
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(false)}
+              aria-label="Close"
+              className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-surface-0 text-ink shadow-lg flex items-center justify-center hover:bg-surface-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

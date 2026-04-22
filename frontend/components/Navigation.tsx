@@ -128,8 +128,8 @@ export default function Navigation() {
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden pb-4">
-            <div className="flex flex-col">
+          <div className="md:hidden pb-4 -mx-4 sm:-mx-6 px-4 sm:px-6 bg-surface-0 border-t border-line shadow-sm">
+            <div className="flex flex-col pt-2">
               {navLinks.map((link) => {
                 const isActive = activeSection === link.sectionId;
                 return (

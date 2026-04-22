@@ -27,13 +27,7 @@ Plus two read-only archives parked alongside the site:
 
 ## Architecture
 
-```
-Visitor → CloudFlare (DNS) → CloudFront (OAC) → S3 (private bucket)
-                                    ↑
-                               ACM Certificate
-                                    ↑
-GitHub Actions ─── OIDC ──→ cdk deploy / s3 sync / cf invalidate
-```
+![CV site architecture: git push → GitHub Actions → OIDC → CDK deploys to CloudFront/ACM/OAC/S3. Visitor → CloudFlare (DNS) → CloudFront → OAC → S3.](frontend/public/images/diagrams/cv_infra_diagram.png)
 
 Highlights and trade-offs are documented on the site itself under **Project →
 WordPress → Next.js on AWS**. Short version: zero servers, pennies per month,

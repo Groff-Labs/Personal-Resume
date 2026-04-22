@@ -45,7 +45,7 @@ export default function Education() {
         <div className="max-w-5xl mx-auto">
           {/* Hero banner: campus photo + overlaid credential card */}
           <div className="relative rounded-xl overflow-hidden border border-line shadow-lg">
-            <div className="relative aspect-[5/2] md:aspect-[16/5]">
+            <div className="relative aspect-[3/2] md:aspect-[16/5]">
               <Image
                 src="/images/education/txstate-aerial.jpg"
                 alt="Texas State University campus, aerial view"

@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { certifications } from "@/lib/data/certifications";
 import CertTimeline from "./CertTimeline";
-import CertTrainingGrid from "./CertTrainingGrid";
 
 const FEATURED = [
   {
@@ -89,14 +88,23 @@ export default function Certifications() {
             <CertTimeline />
           </div>
 
-          {/* Training & micro-credentials */}
-          <div className="mt-14">
-            <CertTrainingGrid />
+          {/* Full Credly profile link */}
+          <div className="text-center mt-12">
+            <a
+              href="https://www.credly.com/users/michael-groff.1872e705/badges#credly"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 border border-line text-ink rounded-md font-medium hover:border-accent hover:text-accent transition-colors"
+            >
+              See full Credly profile
+              <ExternalLink className="w-3.5 h-3.5 opacity-70" />
+            </a>
           </div>
 
-          <p className="text-sm text-ink-subtle italic text-center mt-10 max-w-2xl mx-auto">
-            Spans Dell/VMware partner enablement in 2017 through current AWS
-            proctored exams. Click any dot, chip, or tile to verify on Credly.
+          <p className="text-sm text-ink-subtle italic text-center mt-6 max-w-2xl mx-auto">
+            Spans Dell / VMware partner enablement in 2017 through current AWS
+            proctored exams and AWS training badges. Click any dot to verify on
+            Credly.
           </p>
         </div>
       </motion.div>
