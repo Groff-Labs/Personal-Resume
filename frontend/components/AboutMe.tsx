@@ -131,7 +131,7 @@ export default function AboutMe() {
                     className="relative w-[120px] h-[120px] shrink-0 rounded-lg overflow-hidden border border-line hover:border-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     <Image
-                      src="/images/profile/family.jpg"
+                      src="/images/profile/family.webp"
                       alt="Michael Groff with family"
                       fill
                       sizes="120px"
@@ -229,7 +229,7 @@ export default function AboutMe() {
             className="relative cursor-default"
           >
             <Image
-              src="/images/profile/family.jpg"
+              src="/images/profile/family.webp"
               alt="Michael Groff with family"
               width={1200}
               height={900}

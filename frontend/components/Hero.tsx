@@ -8,9 +8,9 @@ import { certifications } from "@/lib/data/certifications";
 
 const FEATURED_AWS_CERT_IDS = ["aws-sa-pro", "aws-sa-associate", "aws-sysops"] as const;
 const BADGE_SRC: Record<string, string> = {
-  "aws-sa-pro": "/images/certifications/aws-sa-pro-credly.png",
-  "aws-sa-associate": "/images/certifications/aws-sa-associate-credly.png",
-  "aws-sysops": "/images/certifications/aws-sysops-credly.png",
+  "aws-sa-pro": "/images/certifications/aws-sa-pro-credly.webp",
+  "aws-sa-associate": "/images/certifications/aws-sa-associate-credly.webp",
+  "aws-sysops": "/images/certifications/aws-sysops-credly.webp",
 };
 const BADGE_SHORT: Record<string, string> = {
   "aws-sa-pro": "SA · Professional",
@@ -118,7 +118,7 @@ export default function Hero() {
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent to-secondary p-[3px]">
               <div className="relative w-full h-full rounded-2xl overflow-hidden bg-surface-1">
                 <Image
-                  src="/images/profile/michael-groff.jpg"
+                  src="/images/profile/michael-groff.webp"
                   alt="Michael Groff"
                   fill
                   priority
