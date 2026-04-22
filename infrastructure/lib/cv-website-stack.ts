@@ -20,6 +20,11 @@ export class CvWebsiteStack extends cdk.Stack {
 
     const { stage, domainName } = props;
 
+    // Prod keeps cv.michaelgroff.info live as a second alias so bookmarks
+    // from the previous URL era still resolve. Dev uses only its own host.
+    const extraAliases = stage === "prod" ? [`cv.${domainName}`] : [];
+    const allAliases = [domainName, ...extraAliases];
+
     // S3 Bucket for static website hosting.
     // Note: we deliberately do NOT use `autoDeleteObjects: true` because that
     // construct spins up a Lambda-backed custom resource, and Lambda creation
@@ -52,6 +57,7 @@ export class CvWebsiteStack extends cdk.Stack {
     // Note: This assumes the certificate is already created or will be validated via DNS
     const certificate = new acm.Certificate(this, 'Certificate', {
       domainName: domainName,
+      subjectAlternativeNames: extraAliases.length > 0 ? extraAliases : undefined,
       validation: acm.CertificateValidation.fromDns(),
     });
 
@@ -115,7 +121,7 @@ export class CvWebsiteStack extends cdk.Stack {
     // CloudFront Distribution
     this.distribution = new cloudfront.Distribution(this, 'Distribution', {
       comment: `CV Website - ${stage}`,
-      domainNames: [domainName],
+      domainNames: allAliases,
       certificate: certificate,
       defaultRootObject: 'index.html',
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100, // Use only North America and Europe for lower cost

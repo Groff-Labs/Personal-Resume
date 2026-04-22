@@ -35,63 +35,74 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 ### Sr. Solutions Architect — AllCloud
 *May 2024 – Present · Remote (San Antonio, TX)*
 
-- Architect and deliver AWS cloud solutions for SMB-to-enterprise customers, balancing scalability, reliability, and cost.
-- Design serverless systems on Lambda, API Gateway, S3, CloudFront, WAF, DynamoDB — minimal infrastructure, event-driven, containerized where it fits.
-- Build reusable IaC patterns in CloudFormation and Terraform to shorten customer time-to-deploy and enforce consistency.
-- Integrate AI/ML into customer workflows for predictive analytics and automation; champion generative AI tooling for operational leverage.
-- Lead technical workshops, pre-sales engineering, and strategic roadmap conversations that land deals and grow accounts.
-- Continuously optimize cloud spend via CloudWatch, Trusted Advisor, Cost Explorer, and third-party cost platforms.
+- Architect AWS platforms for customers from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allows.
+- Lead pre-sales discovery, reference-architecture design, and executive presentations that translate business outcomes into buildable cloud systems and help close engagements.
+- Own end-to-end cloud migrations — assessment through blue/green cutover — using CI/CD pipelines and CloudFormation / Terraform to shorten downtime windows.
+- Integrate generative-AI services (Bedrock, SageMaker) into customer workflows for document processing, decision automation, and predictive analytics.
+- Run cost-optimization engagements across CloudWatch, Trusted Advisor, Cost Explorer, and third-party tools; surface right-sizing, Savings Plans, and anomaly remediation.
+- Harden customer environments against AWS Well-Architected Framework pillars, emphasizing IAM boundaries, VPC segmentation, and GuardDuty / WAF posture.
+- Mentor customer engineering teams on cloud-native patterns and IaC so they own the platform after engagement end.
 
 ### Solutions Architect — Vivsoft Technologies
 *September 2022 – December 2024 · Herndon, VA*
 
-- Lead cloud architecture for government programs under DoD security and operational standards.
-- Design secure, resilient systems for defense platforms; integrate cloud services for controlled data exchange.
-- Drive migration strategies (including blue/green deployments) for mission-critical workloads with zero tolerance for downtime.
-- Translate cloud value to executives so adoption decisions are driven by outcomes, not acronyms.
+- Led cloud architecture for DoD and federal programs, designing secure, multi-tenant systems against IL4 / IL5 accreditation requirements and DISA SRG controls.
+- Drove end-to-end migrations for mission-critical applications, including blue/green deployments that preserved uptime across cutover windows.
+- Served as customer-facing architecture lead on cross-functional program teams, aligning cloud adoption with program-office requirements and security authorities.
+- Translated cloud-adoption ROI for customer executives — security posture, operational cost, scalability headroom — driving buy-in on modernization roadmaps.
 
 ### Sr. Solutions Architect / Cloud Architect — Innovative Solutions
 *May 2021 – September 2022 · West Henrietta, NY*
 
-- Led customer-facing migration and modernization strategy across SMB and mid-market AWS accounts.
-- Designed repeatable migration patterns and automated deployment with CloudFormation, Terraform, and CodePipeline/CodeBuild/CodeDeploy.
-- Configured and hardened core AWS services (EC2, VPC, RDS, S3, IAM, WAF, Security Groups) for scale and compliance.
-- Captured reference patterns for the Innovative Managed Cloud Services offering, influencing product direction.
-- Fed customer observations back to AWS service teams to shape feature development.
+- Led customer discovery and migration strategy across SMB and mid-market AWS accounts, owning the technical narrative from first call through post-deploy handoff.
+- Designed repeatable migration patterns (assessment → landing zone → 6R application move → operational handoff) that the delivery team reused across engagements.
+- Built AWS infrastructure across EC2, VPC, RDS, IAM, and WAF; automated provisioning in CloudFormation and Terraform.
+- Stood up customer CI/CD on CodePipeline, CodeBuild, and CodeDeploy, replacing manual release processes with repeatable pipelines.
+- Fed customer pain points back to AWS service and partner teams, shaping roadmap where it touched Innovative's Managed Cloud Services offering.
 
 ### Cloud Tech Architect Delivery Specialist — Accenture Federal Services
 *December 2019 – May 2021 · San Antonio, TX*
 
-- Designed AWS and Azure environments spanning IaaS, PaaS, and SaaS for federal customers.
-- Built network topology (VPC/VNet, subnets, load balancers) alongside the application layer (EC2, RDS, Elastic Beanstalk, App Service, Azure SQL).
-- Created reusable on-prem-to-cloud migration plans; ran Azure-vs-AWS cost comparisons to support CSP selection.
-- Obtained an Active Security Clearance (type available upon request).
+- Designed cross-cloud architectures for federal customers on Azure and AWS, spanning IaaS, PaaS, and SaaS layers.
+- Built network and application topology: VPC / VNet, subnets, load balancers, EC2 / VMs, RDS, Azure SQL, Elastic Beanstalk, and App Service Environment.
+- Created reusable on-prem-to-cloud migration plans for mission-critical applications under Agile delivery.
+- Produced Azure-vs-AWS cost comparisons that informed CSP selection for new workloads.
+- Held an Active Security Clearance (type available upon request).
 
 ### Cloud Support Engineer — AWS (Amazon Web Services)
 *May 2019 – December 2019 · Dallas, TX*
 
-- Supported Windows-focused AWS workloads: EC2, VPC, ASG, Directory Services, SSM, VMImport, CloudEndure, WorkSpaces, ECS, ELB, EBS, S3, RDS, AWS Backup.
-- Assisted customers with migrations, HA/DR implementations, and troubleshooting on Active Directory, MSSQL, Exchange, IIS, and Terminal Server.
-- Collaborated with AWS service and documentation teams to ship fixes and improvements informed by real customer pain.
+- Supported Windows-focused AWS workloads across 15+ services — EC2, VPC, ASG, SSM, Directory Services, CloudEndure, WorkSpaces, ECS, ELB, EBS, S3, RDS, AWS Backup.
+- Resolved customer incidents spanning Windows systems, Active Directory, MSSQL, Exchange, IIS, Terminal Server, and remote-access issues.
+- Led customer HA / DR engagements for hybrid workloads moving from on-prem to AWS.
+- Partnered with AWS service and documentation teams to drive fixes and improvements informed by real customer incidents.
+- Automated repetitive customer operations using AWS CLI, AWS Tools for PowerShell, and Lambda.
 
 ### Solutions Architect / Solutions Engineer — Unique Digital (UDI)
 *April 2017 – May 2019 · San Antonio, TX*
 
-- Designed Dell EMC and partner-technology IT solutions against customers' 3/5/7-year business and application targets.
-- Served as pre-sales technical lead for outside sales; shaped strategies with product management to tune solutions to customer priorities.
+- Architected on-prem and hybrid IT solutions built on Dell EMC and partner technologies, sized against customers' 3 / 5 / 7-year capacity and budget plans.
+- Served as pre-sales technical lead supporting outside sales across customers in multiple verticals.
+- Ran vendor discovery and technical qualification to shape multi-year IT strategies and partner-tech selection.
+- Partnered with product management to tune the solution catalog against shifting customer demand and partner priorities.
 
 ### Windows Administrator I & II — Rackspace
 *January 2015 – April 2017 · San Antonio, TX*
 
-- Built and maintained Windows workloads on bare metal and on Hyper-V / VMware ESXi.
-- Ran patching, backups, and performance tuning across Active Directory, MSSQL, Exchange, IIS, Terminal Server, and DNS.
-- Automated repetitive admin work in PowerShell to compress ticket turnaround.
+- Owned Windows Server workload lifecycle — bare-metal and Hyper-V / VMware ESXi VM deployment, configuration, and remediation — as a 24×7 managed-hosting engineer.
+- Ran patching, MSSQL updates, and Windows service-pack cycles across the managed fleet against Rackspace and customer SLAs.
+- Configured Windows Roles and Features (Active Directory, MSSQL, Exchange, IIS, Terminal Server, DNS) per customer requirements.
+- Authored PowerShell automation that collapsed common admin tasks from hours to minutes.
+- Engaged customers on phone, chat, and ticket portal for high-severity incidents, often leading customer-side troubleshooting calls.
 
 ### IT / Network Administrator — R & K Specialized Homes
 *July 2013 – January 2015 · San Antonio, TX*
 
-- Owned infrastructure for 200+ employees across multiple sites: Windows AD, Terminal Server, FreeNAS, VoIP (RingCentral), MDM, GPS fleet tracking.
-- Designed and deployed a full office-remodel network refresh: 81 data drops, PoE switching, new WAPs, T1 → fiber uplink.
+- Owned IT for 200+ employees across main office, satellite sites, and remote staff — Windows AD, Terminal Server, FreeNAS, a 46-handset RingCentral VoIP rollout, and MDM for 39 company Android / iOS phones.
+- Designed and deployed a full network refresh during a two-suite office remodel: 81 data drops, two 48-port PoE switches, one 24-port switch, three WAPs, and a T1-to-fiber upgrade with Time Warner.
+- Rolled out real-time GPS fleet tracking on 32 company vehicles via Network Fleet, replacing manual timekeeping and improving billable accuracy.
+- Built an internal employee directory and calendar portal on FreeNAS + OwnCloud, replacing paper-based contact management across sites.
+- Authored video and PDF training materials covering staff systems, reducing repeat 101-level support volume.
 
 ---
 
