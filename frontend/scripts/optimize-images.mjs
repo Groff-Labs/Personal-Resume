@@ -44,9 +44,29 @@ let converted = 0;
 let skipped = 0;
 let savings = 0;
 
-for await (const src of walk(IMAGES_DIR)) {
+// Collect sources once so we can detect collisions (e.g. foo.jpg and
+// foo.jpeg both generating foo.webp, where filesystem order decides the
+// winner non-deterministically). Bail loudly instead of shipping the
+// wrong image silently.
+const sources = [];
+for await (const p of walk(IMAGES_DIR)) {
+  if (CONVERT_EXT.has(path.extname(p).toLowerCase())) sources.push(p);
+}
+sources.sort();
+const stems = new Map();
+for (const s of sources) {
+  const stem = s.slice(0, -path.extname(s).length);
+  if (stems.has(stem)) {
+    const other = stems.get(stem);
+    throw new Error(
+      `WebP output collision: ${path.relative(IMAGES_DIR, s)} and ${path.relative(IMAGES_DIR, other)} would both write ${stem}.webp. Delete or rename one.`,
+    );
+  }
+  stems.set(stem, s);
+}
+
+for (const src of sources) {
   const ext = path.extname(src).toLowerCase();
-  if (!CONVERT_EXT.has(ext)) continue;
 
   const rel = path.relative(IMAGES_DIR, src);
   if (EXCLUDE_SUBSTRINGS.some((s) => rel.includes(s))) {
