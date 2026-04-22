@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { certifications } from "@/lib/data/certifications";
@@ -45,11 +46,23 @@ export default function CertTrainingGrid() {
             viewport={{ once: true }}
             className="group flex items-start gap-3 p-3 rounded-md border border-line bg-surface-1 hover:border-accent hover:bg-surface-0 transition-colors"
           >
-            <span
-              aria-hidden
-              className="mt-1 w-2 h-2 rounded-full shrink-0"
-              style={{ backgroundColor: "#0891b2" }}
-            />
+            {cert.badgeImage ? (
+              <div className="relative w-11 h-11 shrink-0">
+                <Image
+                  src={cert.badgeImage}
+                  alt=""
+                  fill
+                  sizes="44px"
+                  className="object-contain"
+                />
+              </div>
+            ) : (
+              <span
+                aria-hidden
+                className="mt-1 w-2 h-2 rounded-full shrink-0"
+                style={{ backgroundColor: "#FF9900" }}
+              />
+            )}
             <div className="flex-1 min-w-0">
               <div className="text-sm font-medium text-ink leading-snug group-hover:text-accent transition-colors">
                 {cert.name}

@@ -5,7 +5,7 @@ import { ExternalLink } from "lucide-react";
 import { certifications, vendors, type Certification } from "@/lib/data/certifications";
 
 const START_YEAR = 2017;
-const END_YEAR = 2025;
+const END_YEAR = 2026;
 const YEAR_SPAN = END_YEAR - START_YEAR;
 
 // width/height in SVG viewBox units; scales responsively via CSS
@@ -23,20 +23,30 @@ const STACK_STEP = 22;
 const HOVER_DISMISS_MS = 120;
 
 const VENDOR_COLOR: Record<string, string> = {
-  "Amazon Web Services (AWS)": "#0891b2", // cyan-600
+  "Amazon Web Services (AWS)": "#FF9900", // AWS brand orange
   CompTIA: "#dc2626", // red-600
-  "Dell EMC": "#2563eb", // blue-600
-  ICAgile: "#16a34a", // green-600
-  Microsoft: "#9333ea", // purple-600
-  "Red Hat": "#ea580c", // orange-600
-  VMware: "#334155", // slate-700
+  "Dell EMC": "#0ea5e9", // sky-500 (intentionally lighter than Microsoft blue)
+  ICAgile: "#9333ea", // purple-600
+  Microsoft: "#2563eb", // blue-600
+  "Red Hat": "#b91c1c", // red-700 (deeper than CompTIA to differentiate)
+  VMware: "#16a34a", // green-600
 };
 
 function parseYear(issueDate: string): number {
-  // "2023-04" | "2017" → decimal year (e.g. 2023.25)
-  const [y, m] = issueDate.split("-").map(Number);
+  // "2023-02-14" | "2023-04" | "2017" → decimal year
+  const [y, m, d] = issueDate.split("-").map(Number);
   if (!m) return y;
-  return y + (m - 1) / 12;
+  const dayFraction = d ? (d - 1) / 365 : 0;
+  return y + (m - 1) / 12 + dayFraction;
+}
+
+// Shape per cert type. Circles read as "real exam / credential"; diamonds
+// read as "partner accreditation or training completion" — a lower bar than
+// a proctored exam but still verified on Credly.
+function shapeFor(cert: Certification): "circle" | "diamond" {
+  return cert.type === "training" || cert.type === "partner"
+    ? "diamond"
+    : "circle";
 }
 
 function xFor(issueDate: string): number {
@@ -55,28 +65,25 @@ interface PositionedCert extends Certification {
 function position(certs: Certification[]): PositionedCert[] {
   // Only show certs within the visible window; older ones remain in the data
   // (and in the featured row / counts) but don't clutter the timeline.
-  // Training badges (AWS Partner / AWS Knowledge completions) are rendered
-  // separately in CertTrainingGrid to keep the timeline about real exams.
   const visible = certs.filter((c) => {
-    if (c.type === "training") return false;
     const y = Number(c.issueDate.split("-")[0]);
     return y >= START_YEAR;
   });
 
-  // Stack same-year certs vertically upward
-  const byYear = new Map<string, Certification[]>();
+  // Stack certs that share an exact issueDate (same-day cluster) vertically.
+  // Day-level precision splits the 16-training cluster of Feb 2023 into
+  // 1 + 5 + 7 stacks instead of one impossible 16-high tower.
+  const byDate = new Map<string, Certification[]>();
   for (const c of visible) {
-    const key = c.issueDate.split("-")[0];
-    if (!byYear.has(key)) byYear.set(key, []);
-    byYear.get(key)!.push(c);
+    if (!byDate.has(c.issueDate)) byDate.set(c.issueDate, []);
+    byDate.get(c.issueDate)!.push(c);
   }
   const out: PositionedCert[] = [];
-  for (const [yearKey, group] of byYear) {
-    // keep deterministic order by original index
+  for (const [, group] of byDate) {
     group.forEach((c, i) => {
       out.push({
         ...c,
-        yearKey,
+        yearKey: c.issueDate.split("-")[0],
         x: xFor(c.issueDate),
         y: AXIS_Y - DOT_R - 4 - i * STACK_STEP,
       });
@@ -135,6 +142,24 @@ export default function CertTimeline() {
 
   return (
     <div className="w-full">
+      {/* Shape legend */}
+      <div className="flex items-center justify-center gap-5 mb-4 text-xs text-ink-muted">
+        <span className="inline-flex items-center gap-1.5">
+          <span
+            aria-hidden
+            className="w-2.5 h-2.5 rounded-full bg-ink-muted"
+          />
+          Proctored exam
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span
+            aria-hidden
+            className="w-2.5 h-2.5 rotate-45 bg-ink-muted"
+          />
+          Partner or training
+        </span>
+      </div>
+
       {/* Vendor filter chips */}
       <div className="flex flex-wrap gap-2 mb-6">
         <button
@@ -243,18 +268,39 @@ export default function CertTimeline() {
                   onBlur={scheduleDismiss}
                   aria-label={`${cert.name}, ${cert.issueDate}`}
                 >
-                  <circle
-                    cx={cert.x}
-                    cy={cert.y}
-                    r={isHovered ? DOT_R + 2 : DOT_R}
-                    fill={color}
-                    opacity={dim ? 0.2 : 1}
-                    className="transition-all cursor-pointer"
-                    stroke="rgb(var(--surface-0))"
-                    strokeWidth={2}
-                  />
+                  {shapeFor(cert) === "circle" ? (
+                    <circle
+                      cx={cert.x}
+                      cy={cert.y}
+                      r={isHovered ? DOT_R + 2 : DOT_R}
+                      fill={color}
+                      opacity={dim ? 0.2 : 1}
+                      className="transition-all cursor-pointer"
+                      stroke="rgb(var(--surface-0))"
+                      strokeWidth={2}
+                    />
+                  ) : (
+                    // Diamond — square rotated 45°, centered on (cert.x, cert.y).
+                    // Signals "partner accreditation / training completion"
+                    // without overloading vendor color.
+                    (() => {
+                      const r = isHovered ? DOT_R + 2 : DOT_R;
+                      const pts = `${cert.x},${cert.y - r} ${cert.x + r},${cert.y} ${cert.x},${cert.y + r} ${cert.x - r},${cert.y}`;
+                      return (
+                        <polygon
+                          points={pts}
+                          fill={color}
+                          opacity={dim ? 0.2 : 1}
+                          className="transition-all cursor-pointer"
+                          stroke="rgb(var(--surface-0))"
+                          strokeWidth={2}
+                          strokeLinejoin="round"
+                        />
+                      );
+                    })()
+                  )}
                   {/* Invisible hit target — makes the dot easy to click even
-                      when three certs are stacked on the same x-column. */}
+                      when several certs stack on the same date. */}
                   <circle
                     cx={cert.x}
                     cy={cert.y}
@@ -327,7 +373,8 @@ export default function CertTimeline() {
                         className="flex items-start gap-3 group"
                       >
                         <span
-                          className="w-3 h-3 rounded-full shrink-0 mt-1"
+                          aria-hidden
+                          className={`w-3 h-3 shrink-0 mt-1 ${shapeFor(cert) === "diamond" ? "rotate-45" : "rounded-full"}`}
                           style={{ backgroundColor: color }}
                         />
                         <div className="flex-1 min-w-0">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
@@ -13,6 +14,7 @@ import {
   Waves,
   BookOpen,
   Sun,
+  X,
 } from "lucide-react";
 
 const SHOW_FAMILY_PHOTO = true;
@@ -73,6 +75,23 @@ const gallupStrengths: Strength[] = [
 ];
 
 export default function AboutMe() {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    // Lock background scroll while modal is open
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightboxOpen]);
+
   return (
     <section id="about" className="section-container bg-surface-0">
       <motion.div
@@ -105,7 +124,12 @@ export default function AboutMe() {
             <div className="card">
               <div className="flex items-start gap-4">
                 {SHOW_FAMILY_PHOTO && (
-                  <div className="relative w-[120px] h-[120px] shrink-0 rounded-lg overflow-hidden border border-line">
+                  <button
+                    type="button"
+                    onClick={() => setLightboxOpen(true)}
+                    aria-label="View family photo larger"
+                    className="relative w-[120px] h-[120px] shrink-0 rounded-lg overflow-hidden border border-line hover:border-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  >
                     <Image
                       src="/images/profile/family.jpg"
                       alt="Michael Groff with family"
@@ -113,7 +137,7 @@ export default function AboutMe() {
                       sizes="120px"
                       className="object-cover"
                     />
-                  </div>
+                  </button>
                 )}
                 <div className="flex-1">
                   <p className="eyebrow mb-3">Off the clock</p>
@@ -191,6 +215,39 @@ export default function AboutMe() {
           </div>
         </div>
       </motion.div>
+
+      {SHOW_FAMILY_PHOTO && lightboxOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Family photo"
+          onClick={() => setLightboxOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-6 cursor-zoom-out"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative cursor-default"
+          >
+            <Image
+              src="/images/profile/family.jpg"
+              alt="Michael Groff with family"
+              width={1200}
+              height={900}
+              sizes="(max-width: 640px) 90vw, min(90vw, 900px)"
+              className="w-[min(90vw,900px)] max-h-[85vh] h-auto rounded-md shadow-2xl"
+              priority
+            />
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(false)}
+              aria-label="Close"
+              className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-surface-0 text-ink shadow-lg flex items-center justify-center hover:bg-surface-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

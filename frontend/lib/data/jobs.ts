@@ -47,7 +47,7 @@ export const jobs: Job[] = [
     title: "Solutions Architect",
     location: "Herndon, VA",
     startDate: "September 2022",
-    endDate: "Present",
+    endDate: "December 2024",
     website: "https://vivsoft.io",
     logo: "/images/companies/vivsoft.webp",
     logoBg: "#0f172a", // dark slate; Vivsoft's wordmark is white-on-transparent

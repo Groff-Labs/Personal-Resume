@@ -43,7 +43,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Continuously optimize cloud spend via CloudWatch, Trusted Advisor, Cost Explorer, and third-party cost platforms.
 
 ### Solutions Architect — Vivsoft Technologies
-*September 2022 – Present · Herndon, VA*
+*September 2022 – December 2024 · Herndon, VA*
 
 - Lead cloud architecture for government programs under DoD security and operational standards.
 - Design secure, resilient systems for defense platforms; integrate cloud services for controlled data exchange.
