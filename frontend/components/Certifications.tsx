@@ -9,17 +9,17 @@ import CertTimeline from "./CertTimeline";
 const FEATURED = [
   {
     id: "aws-sa-pro",
-    badge: "/images/certifications/aws-sa-pro-credly.webp",
+    badge: "/images/certifications/aws-sa-pro-credly.png",
     label: "Solutions Architect – Professional",
   },
   {
     id: "aws-sa-associate",
-    badge: "/images/certifications/aws-sa-associate-credly.webp",
+    badge: "/images/certifications/aws-sa-associate-credly.png",
     label: "Solutions Architect – Associate",
   },
   {
     id: "aws-sysops",
-    badge: "/images/certifications/aws-sysops-credly.webp",
+    badge: "/images/certifications/aws-sysops-credly.png",
     label: "SysOps Administrator – Associate",
   },
 ] as const;

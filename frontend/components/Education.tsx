@@ -47,7 +47,7 @@ export default function Education() {
           <div className="relative rounded-xl overflow-hidden border border-line shadow-lg">
             <div className="relative aspect-[3/2] md:aspect-[16/5]">
               <Image
-                src="/images/education/txstate-aerial.webp"
+                src="/images/education/txstate-aerial.jpg"
                 alt="Texas State University campus, aerial view"
                 fill
                 priority
