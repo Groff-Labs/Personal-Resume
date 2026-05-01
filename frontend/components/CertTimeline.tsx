@@ -5,7 +5,12 @@ import { ExternalLink } from "lucide-react";
 import { certifications, vendors, type Certification } from "@/lib/data/certifications";
 
 const START_YEAR = 2017;
-const END_YEAR = 2026;
+// Right edge tracks the data + 1 year of headroom, so the most recent
+// cert year always has room to spread along the axis instead of clamping
+// every entry to the rightmost x. Self-maintaining: the next time a cert
+// crosses into a new year, END_YEAR follows on the next build.
+const END_YEAR =
+  Math.max(...certifications.map((c) => Number(c.issueDate.split("-")[0]))) + 1;
 const YEAR_SPAN = END_YEAR - START_YEAR;
 
 // width/height in SVG viewBox units; scales responsively via CSS
