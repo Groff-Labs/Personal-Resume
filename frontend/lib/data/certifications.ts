@@ -122,7 +122,7 @@ export const certifications: Certification[] = [
     name: "VSP – BC (Business Continuity) 5.8",
     vendor: "VMware",
     type: "partner",
-    issueDate: "2018",
+    issueDate: "2018-05-16",
     pdfUrl: "/legacy/wp-content/uploads/2018/08/VSP-BC-5.8.pdf",
   },
   {
@@ -130,7 +130,7 @@ export const certifications: Certification[] = [
     name: "VSP – HCI (Hyper-converged Infrastructure) 2017",
     vendor: "VMware",
     type: "partner",
-    issueDate: "2017",
+    issueDate: "2018-05-17",
     pdfUrl: "/legacy/wp-content/uploads/2018/08/VSP-HCI-2017.pdf",
   },
   {
@@ -138,7 +138,7 @@ export const certifications: Certification[] = [
     name: "VSP – MA (Management Automation) 2017",
     vendor: "VMware",
     type: "partner",
-    issueDate: "2017",
+    issueDate: "2018-05-23",
     pdfUrl: "/legacy/wp-content/uploads/2018/08/VSP-MA-2017.pdf",
   },
   {
@@ -146,7 +146,7 @@ export const certifications: Certification[] = [
     name: "VSP – MO (Management Operations) 2017",
     vendor: "VMware",
     type: "partner",
-    issueDate: "2017",
+    issueDate: "2018-05-22",
     pdfUrl: "/legacy/wp-content/uploads/2018/08/VSP-MO-2017.pdf",
   },
   {
@@ -154,7 +154,7 @@ export const certifications: Certification[] = [
     name: "VSP – NV (Network Virtualization) 2017",
     vendor: "VMware",
     type: "partner",
-    issueDate: "2017",
+    issueDate: "2018-05-14",
     pdfUrl: "/legacy/wp-content/uploads/2018/08/VSP-NV-2017.pdf",
   },
   {
@@ -162,7 +162,7 @@ export const certifications: Certification[] = [
     name: "VSP – SV (Server Virtualization) 2017",
     vendor: "VMware",
     type: "partner",
-    issueDate: "2017",
+    issueDate: "2018-05-14",
     pdfUrl: "/legacy/wp-content/uploads/2018/08/VSP-SV-2017.pdf",
   },
   {
@@ -170,7 +170,7 @@ export const certifications: Certification[] = [
     name: "VTSP – BC (Business Continuity) 5.8",
     vendor: "VMware",
     type: "partner",
-    issueDate: "2018",
+    issueDate: "2018-05-22",
     pdfUrl: "/legacy/wp-content/uploads/2018/08/VTSP-BC-5.8.pdf",
   },
   {
@@ -178,7 +178,7 @@ export const certifications: Certification[] = [
     name: "VTSP – HCI (Hyper-converged Infrastructure) 2017",
     vendor: "VMware",
     type: "partner",
-    issueDate: "2017",
+    issueDate: "2018-05-18",
     pdfUrl: "/legacy/wp-content/uploads/2018/08/VTSP-HCI-2017.pdf",
   },
   {
@@ -186,7 +186,7 @@ export const certifications: Certification[] = [
     name: "VTSP – NV (Network Virtualization) 2017",
     vendor: "VMware",
     type: "partner",
-    issueDate: "2017",
+    issueDate: "2018-05-15",
     pdfUrl: "/legacy/wp-content/uploads/2018/08/VTSP-NV-2017.pdf",
   },
   {
