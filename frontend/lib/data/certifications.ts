@@ -202,6 +202,24 @@ export const certifications: Certification[] = [
   // their own compact grid rather than on the timeline. Ordered chronologically
   // so the resume grid reads newest-first when sorted.
   {
+    id: "aws-partner-agentic-ai-technical",
+    name: "AWS Partner: Agentic AI Technical Learning Plan Assessment",
+    vendor: "Amazon Web Services (AWS)",
+    type: "training",
+    issueDate: "2026-05-01",
+    credlyUrl: "https://www.credly.com/badges/9a8a0234-3312-4839-9be1-87155ee9f064/public_url",
+    badgeImage: "/images/certifications/training/aws-partner-agentic-ai-technical.webp",
+  },
+  {
+    id: "aws-knowledge-transform-fundamentals",
+    name: "AWS Knowledge: AWS Transform Fundamentals",
+    vendor: "Amazon Web Services (AWS)",
+    type: "training",
+    issueDate: "2026-05-01",
+    credlyUrl: "https://www.credly.com/badges/afe9b94f-30e0-49cc-a72c-e7a1d9d7ddaa/public_url",
+    badgeImage: "/images/certifications/training/aws-knowledge-transform-fundamentals.webp",
+  },
+  {
     id: "aws-partner-agentic-ai-sales",
     name: "AWS Partner: Agentic AI – Sales",
     vendor: "Amazon Web Services (AWS)",
