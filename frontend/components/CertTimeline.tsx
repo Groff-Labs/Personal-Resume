@@ -76,6 +76,13 @@ const PROXIMITY = 16;
 // (Feb 2023 had 13 certs) from overflowing the SVG vertically.
 const MAX_STACK_ROWS = 7;
 const COL_SPACING = 18;
+// Minimum horizontal gap between the rightmost dot of one cluster and the
+// leftmost dot of the next. When a cluster overflows into a second column
+// it can intrude on its neighbor's natural x — without this, the Dell
+// EMC pair (Aug 2018) collides with the second column of the May 2018
+// VMware cluster, which lives ~22 SVG units later but only ~4 units
+// after the overflow column ends.
+const MIN_CLUSTER_GAP = 6;
 
 function position(certs: Certification[]): PositionedCert[] {
   // Only show certs within the visible window; older ones remain in the data
@@ -114,10 +121,23 @@ function position(certs: Certification[]): PositionedCert[] {
   // issueDate so older certs sit at the bottom of the first column —
   // gives the cluster a chronological reading order bottom-to-top, then
   // overflow to a second column on the right for the densest cases.
+  //
+  // After laying out a cluster, track its rightmost rendered x. The next
+  // cluster gets shifted right if its natural baseX would put its leftmost
+  // dot inside the previous cluster's rightmost dot + MIN_CLUSTER_GAP.
+  // Trade-off: shifted dots no longer sit at their exact date x, but the
+  // alternative is dots painting on top of each other — which is what the
+  // user reported. We accept some date-axis slippage for visible dots.
   const out: PositionedCert[] = [];
+  let prevRightEdge = -Infinity;
   for (const cluster of clusters) {
     cluster.sort((a, b) => a.cert.issueDate.localeCompare(b.cert.issueDate));
-    const baseX = cluster[Math.floor(cluster.length / 2)].x;
+    let baseX = cluster[Math.floor(cluster.length / 2)].x;
+    const numCols = Math.ceil(cluster.length / MAX_STACK_ROWS);
+
+    const minBaseX = prevRightEdge + MIN_CLUSTER_GAP + DOT_R;
+    if (baseX < minBaseX) baseX = minBaseX;
+
     cluster.forEach((item, i) => {
       const col = Math.floor(i / MAX_STACK_ROWS);
       const row = i % MAX_STACK_ROWS;
@@ -128,6 +148,8 @@ function position(certs: Certification[]): PositionedCert[] {
         y: AXIS_Y - DOT_R - 4 - row * STACK_STEP,
       });
     });
+
+    prevRightEdge = baseX + (numCols - 1) * COL_SPACING + DOT_R;
   }
   return out;
 }
