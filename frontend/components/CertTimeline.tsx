@@ -67,6 +67,16 @@ interface PositionedCert extends Certification {
   yearKey: string;
 }
 
+// Two dots are considered visually overlapping when their x-positions are
+// closer than this many SVG units. Set to ≥ DOT diameter so any cluster
+// that would overlap visually gets handled together.
+const PROXIMITY = 16;
+// Once a vertical stack reaches this many dots, the next dot starts a new
+// column to the right of the first. Keeps tall same-month clusters
+// (Feb 2023 had 13 certs) from overflowing the SVG vertically.
+const MAX_STACK_ROWS = 7;
+const COL_SPACING = 18;
+
 function position(certs: Certification[]): PositionedCert[] {
   // Only show certs within the visible window; older ones remain in the data
   // (and in the featured row / counts) but don't clutter the timeline.
@@ -75,22 +85,47 @@ function position(certs: Certification[]): PositionedCert[] {
     return y >= START_YEAR;
   });
 
-  // Stack certs that share an exact issueDate (same-day cluster) vertically.
-  // Day-level precision splits the 16-training cluster of Feb 2023 into
-  // 1 + 5 + 7 stacks instead of one impossible 16-high tower.
-  const byDate = new Map<string, Certification[]>();
-  for (const c of visible) {
-    if (!byDate.has(c.issueDate)) byDate.set(c.issueDate, []);
-    byDate.get(c.issueDate)!.push(c);
+  // Compute every cert's natural x and sort. Then walk in x-order and
+  // group anything within PROXIMITY into a single visual cluster — even
+  // if the certs have different issueDates. This is what stops the 9-cert
+  // VMware May 2018 cluster (dates 9 days apart, x positions only ~2 SVG
+  // units apart on a 10-year axis) from rendering as one indistinguishable
+  // blob: they all stack in one column instead of overlapping.
+  const sorted = visible
+    .map((c) => ({ cert: c, x: xFor(c.issueDate) }))
+    .sort((a, b) => a.x - b.x || a.cert.issueDate.localeCompare(b.cert.issueDate));
+
+  type Entry = (typeof sorted)[number];
+  const clusters: Entry[][] = [];
+  let current: Entry[] = [];
+  let lastX = -Infinity;
+  for (const item of sorted) {
+    if (item.x - lastX > PROXIMITY) {
+      if (current.length) clusters.push(current);
+      current = [];
+    }
+    current.push(item);
+    lastX = item.x;
   }
+  if (current.length) clusters.push(current);
+
+  // Within each cluster, anchor everything to the median x and lay items
+  // out in vertical columns of MAX_STACK_ROWS. Sort within the cluster by
+  // issueDate so older certs sit at the bottom of the first column —
+  // gives the cluster a chronological reading order bottom-to-top, then
+  // overflow to a second column on the right for the densest cases.
   const out: PositionedCert[] = [];
-  for (const [, group] of byDate) {
-    group.forEach((c, i) => {
+  for (const cluster of clusters) {
+    cluster.sort((a, b) => a.cert.issueDate.localeCompare(b.cert.issueDate));
+    const baseX = cluster[Math.floor(cluster.length / 2)].x;
+    cluster.forEach((item, i) => {
+      const col = Math.floor(i / MAX_STACK_ROWS);
+      const row = i % MAX_STACK_ROWS;
       out.push({
-        ...c,
-        yearKey: c.issueDate.split("-")[0],
-        x: xFor(c.issueDate),
-        y: AXIS_Y - DOT_R - 4 - i * STACK_STEP,
+        ...item.cert,
+        yearKey: item.cert.issueDate.split("-")[0],
+        x: baseX + col * COL_SPACING,
+        y: AXIS_Y - DOT_R - 4 - row * STACK_STEP,
       });
     });
   }
