@@ -1,0 +1,73 @@
+name: CI
+
+# Validates pull requests without touching AWS — the "does it still build?" gate.
+# Runs the same install + build/synth steps as the deploy workflows, minus the
+# credentialed deploy stages, so Dependabot's PRs (and any other PR) get checked
+# before they're merged into dev.
+#
+# This is the prerequisite for auto-merge: if auto-merge is ever added, make the
+# `frontend` and `infrastructure` jobs below REQUIRED status checks on dev so
+# `gh pr merge --auto` waits for them. (Not enabled today — the repo uses a
+# direct-push dev→main flow, and a required check would block those pushes.)
+
+on:
+  pull_request:
+    branches: [dev, main]
+
+# Read-only: this workflow never needs to write to the repo or assume AWS roles.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Build frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm ci
+
+      # Full build incl. the prebuild hook (image optimize + resume PDF), same as
+      # deploy-site.yml. The analytics token isn't needed to validate the build.
+      - name: Build Next.js static export
+        working-directory: frontend
+        run: npm run build
+
+  infrastructure:
+    name: Synth infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: infrastructure/package-lock.json
+
+      - name: Install CDK deps
+        working-directory: infrastructure
+        run: npm ci
+
+      # `cdk synth` needs no AWS credentials — it just compiles the stacks and
+      # renders CloudFormation, which catches type errors and lib/CLI schema
+      # mismatches (exactly the aws-cdk-lib vs aws-cdk CLI drift kind).
+      - name: CDK synth
+        working-directory: infrastructure
+        run: npx cdk synth

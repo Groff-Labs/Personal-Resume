@@ -1,0 +1,98 @@
+# Dependabot version updates — https://docs.github.com/code-security/dependabot
+#
+# Adapted from the myvaultlog-app config, with three deliberate differences for
+# this repo:
+#
+#   1. NOT a monorepo. There's no root package.json / workspace — `frontend/`
+#      and `infrastructure/` are two independent npm projects, each with its own
+#      package-lock.json. So each gets its OWN npm entry (a single "/" would find
+#      nothing here). npm, not Bun — no lockfile-sync HITL dance needed.
+#   2. No Dockerfile, so no `docker` ecosystem.
+#   3. NO companion auto-merge workflow (yet). myvaultlog-app auto-merges
+#      low-risk PRs because it has a required CI suite to gate on. This repo has
+#      no PR-level required checks and uses a direct-push dev→main flow (a
+#      required status check would block those pushes), so every Dependabot PR is
+#      reviewed and merged by hand via the normal dev-first flow. See
+#      .github/workflows/ci.yml — it validates PRs (build + synth) and is the
+#      prerequisite if auto-merge is ever wired up later.
+#
+# target-branch is `dev` so PRs land on the staging branch first, matching the
+# dev → verify → promote workflow. NOTE: Dependabot *security* updates ignore
+# target-branch and open against the default branch (`main`); that's fine here —
+# with no auto-merge, they get manual review before they can reach prod.
+#
+# Cost: version updates are free. Grouped so we get a few PRs a week, not dozens.
+version: 2
+updates:
+  # ── Next.js frontend ──
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "frontend"
+    commit-message:
+      prefix: "deps"
+    groups:
+      # Tooling-only bumps (types, eslint, tailwind, postcss, sharp, etc.) —
+      # one PR for all dev-dependency patch + minor.
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      # Production PATCH bumps (bug/security fixes, no semver API change) —
+      # one PR. next/react minor & major stay ungrouped for individual review.
+      production-patches:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+
+  # ── AWS CDK infrastructure ──
+  - package-ecosystem: "npm"
+    directory: "/infrastructure"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "infrastructure"
+    commit-message:
+      prefix: "deps"
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      # aws-cdk-lib and the aws-cdk CLI must move together (a lib bump raises the
+      # cloud-assembly schema version the CLI has to be new enough to read), so
+      # group all production patches into one PR rather than splitting them.
+      production-patches:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+
+  # ── GitHub Actions pinned in .github/workflows (checkout, setup-node, OIDC) ──
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+    groups:
+      github-actions:
+        update-types:
+          - "minor"
+          - "patch"
