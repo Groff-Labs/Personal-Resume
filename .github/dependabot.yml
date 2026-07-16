@@ -65,6 +65,12 @@ updates:
       # supports ESLint 10, then drop this ignore. (Closed #11.)
       - dependency-name: "eslint"
         update-types: ["version-update:semver-major"]
+      # TypeScript 7 breaks the lint toolchain: eslint-config-next 16 bundles a
+      # typescript-eslint that calls TS compiler APIs removed in TS 7. tsc +
+      # build pass but `npm run lint` crashes. Stay on 5.x until typescript-eslint
+      # supports TS 7. (Closed #8.)
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   # ── AWS CDK infrastructure ──
   - package-ecosystem: "npm"
@@ -92,6 +98,12 @@ updates:
         dependency-type: "production"
         update-types:
           - "patch"
+    ignore:
+      # TypeScript 7 breaks `cdk synth`: ts-node (the CDK app runner) calls a TS
+      # compiler API removed in TS 7 (fileExists), and no ts-node release
+      # supports TS 7 yet. Stay on 5.x until it does. (Closed #4.)
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   # ── GitHub Actions pinned in .github/workflows (checkout, setup-node, OIDC) ──
   - package-ecosystem: "github-actions"
