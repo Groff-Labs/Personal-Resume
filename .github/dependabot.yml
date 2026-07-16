@@ -51,6 +51,14 @@ updates:
         dependency-type: "production"
         update-types:
           - "patch"
+    ignore:
+      # lucide-react 1.x dropped the GitHub/LinkedIn/Twitter brand icons the
+      # Footer/Testimonials/ProjectShowcase rely on, with no replacement in the
+      # set. It's a cosmetic bump with no security benefit — stay on 0.469.x.
+      # Security alerts still fire regardless of this ignore; only the routine
+      # major-version PR is suppressed.
+      - dependency-name: "lucide-react"
+        update-types: ["version-update:semver-major"]
 
   # ── AWS CDK infrastructure ──
   - package-ecosystem: "npm"
