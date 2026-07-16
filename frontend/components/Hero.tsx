@@ -5,6 +5,33 @@ import { motion } from "framer-motion";
 import { ExternalLink, Radio } from "lucide-react";
 import { jobs } from "@/lib/data/jobs";
 import { certifications } from "@/lib/data/certifications";
+import { activeHeroStatus, type StatusTone } from "@/lib/data/status";
+
+// Tailwind can't see dynamically-built class names, so each tone's classes
+// are spelled out statically here.
+const STATUS_TONES: Record<
+  StatusTone,
+  { wrap: string; dot: string; icon: string; ping: boolean }
+> = {
+  available: {
+    wrap: "border-emerald-500/30 bg-emerald-500/5",
+    dot: "bg-emerald-500",
+    icon: "text-emerald-600",
+    ping: true,
+  },
+  open: {
+    wrap: "border-accent/30 bg-accent/5",
+    dot: "bg-accent",
+    icon: "text-accent",
+    ping: true,
+  },
+  settled: {
+    wrap: "border-line bg-surface-1",
+    dot: "bg-ink-subtle",
+    icon: "text-ink-subtle",
+    ping: false,
+  },
+};
 
 const FEATURED_AWS_CERT_IDS = ["aws-sa-pro", "aws-sa-associate", "aws-sysops"] as const;
 const BADGE_SRC: Record<string, string> = {
@@ -23,6 +50,8 @@ export default function Hero() {
   const featured = FEATURED_AWS_CERT_IDS.map((id) =>
     certifications.find((c) => c.id === id),
   ).filter((c): c is NonNullable<typeof c> => Boolean(c));
+  const status = activeHeroStatus;
+  const tone = STATUS_TONES[status.tone];
 
   return (
     <section
@@ -129,16 +158,27 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Open-to signal */}
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-accent/30 bg-accent/5 text-sm">
+          {/* Open-to signal — text + tone driven by lib/data/status.ts */}
+          <div
+            className={`inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border text-sm ${tone.wrap}`}
+          >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+              {tone.ping && (
+                <span
+                  className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${tone.dot}`}
+                />
+              )}
+              <span
+                className={`relative inline-flex rounded-full h-2 w-2 ${tone.dot}`}
+              />
             </span>
-            <Radio className="w-3.5 h-3.5 text-accent" />
+            <Radio className={`w-3.5 h-3.5 ${tone.icon}`} />
             <span className="text-ink-muted">
-              Happy at <span className="font-semibold text-ink">AllCloud</span>;
-              interesting conversations welcome.
+              {status.lead}
+              {status.emphasis && (
+                <span className="font-semibold text-ink">{status.emphasis}</span>
+              )}
+              {status.tail}
             </span>
           </div>
         </motion.div>
