@@ -59,6 +59,12 @@ updates:
       # major-version PR is suppressed.
       - dependency-name: "lucide-react"
         update-types: ["version-update:semver-major"]
+      # eslint-config-next 16 bundles eslint-plugin-react built against the
+      # ESLint 9 rule API (context.getFilename), which ESLint 10 removed — so
+      # ESLint 10 crashes at lint time. Stay on 9.x until eslint-config-next
+      # supports ESLint 10, then drop this ignore. (Closed #11.)
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
 
   # ── AWS CDK infrastructure ──
   - package-ecosystem: "npm"
