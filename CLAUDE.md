@@ -16,6 +16,7 @@ WordPress → Next.js refactor and apex-migration work is already done.
 | Skills | `frontend/lib/data/skills.ts` |
 | Bio / About copy | `frontend/components/AboutMe.tsx` |
 | Hero tagline / title | `frontend/components/Hero.tsx` |
+| Availability status pill (the "open to…" signal under the headshot) | `frontend/lib/data/status.ts` — flip `ACTIVE_STATUS_ID` to a preset id (`open-to-roles`, `open-conversations`, `open-consulting`, `settled`); add a preset by copying an entry. `Hero.tsx` renders the active one; tone drives color + ping |
 | Contact info (phone / email / socials) | `frontend/components/Footer.tsx` **+** `frontend/public/michael-groff.vcf` **+** `resume.md` (all three hold canonical copies) |
 | New headshot | Replace `frontend/public/images/profile/michael-groff.jpg` → prebuild regenerates `.webp` |
 | Resume bullets / layout | `resume.md` — PDF regenerates on next build |
@@ -125,6 +126,43 @@ Dev server: `npm run dev` on port 3000. **Next dev doesn't auto-serve
 directory index files**, so local URLs like `/blog/` 404 in dev —
 append `/index.html` to test those. In prod, a CloudFront Function
 rewrites `/foo/` → `/foo/index.html`.
+
+---
+
+## Dependency management (Dependabot)
+
+Set up July 2026. `.github/dependabot.yml` runs weekly grouped version
+updates against **dev** for two independent npm projects (`/frontend`,
+`/infrastructure` — not a monorepo, no workspace) plus github-actions.
+`.github/workflows/ci.yml` (`on: pull_request`) builds the frontend and
+runs `cdk synth` with no AWS access, so Dependabot PRs are validated
+before merge.
+
+- **No auto-merge, by design.** The direct-push dev→main flow is
+  incompatible with the required-status-checks that make auto-merge safe
+  (a required check would block your own pushes to dev/main). `ci.yml` is
+  the prerequisite if you ever move to a PR-based flow and want it.
+- **Security updates ignore `target-branch`** and open against the
+  default branch (`main`). With no auto-merge, they get manual review
+  before reaching prod — fine.
+- **Dependabot alerts lag.** After a fix lands on `main`, GitHub's
+  dependency-graph re-scan can take hours to flip alerts to "fixed."
+  Trust local `npm audit` (0 in both projects) over the alert count.
+- **Intentional `ignore` rules** (each has a comment in `dependabot.yml`
+  explaining why — don't "unblock" without checking the reason still holds):
+  - `lucide-react` major → 1.x drops the GitHub/LinkedIn/Twitter brand
+    icons the Footer needs. Stay on 0.x (minors like 0.577 are fine).
+  - `typescript` major (both projects) → TS 7 breaks ts-node (`cdk synth`)
+    and typescript-eslint (`npm run lint`); tooling isn't ready.
+  - `eslint` major → eslint-config-next 16 caps at ESLint 9 (its bundled
+    eslint-plugin-react uses `getFilename()`, removed in ESLint 10).
+- **Linting is flat-config** (`frontend/eslint.config.mjs`, ESLint 9,
+  `eslint .`). `next lint` was removed in Next 16. `public/**` is
+  ignored (the byte-preserved WP archives).
+- **Deferred: Tailwind 3→4** (PR #12 left open) — a visual-regression
+  migration (JS config → CSS `@theme`, remap the color tokens + dark
+  mode). Do it in a focused session with dev visual verification, not a
+  drive-by merge.
 
 ---
 
