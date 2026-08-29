@@ -99,7 +99,13 @@ jobs:
         run: |
           set -euo pipefail
           gzip -t ipinfo_lite.csv.gz
-          HEADER=$(gunzip -c ipinfo_lite.csv.gz | head -1 | tr -d '\r')
+          # Decompress once to a file rather than piping. `gunzip -c ... | head -1`
+          # SIGPIPEs gunzip when head exits, which pipefail turns into a failure.
+          gunzip -c ipinfo_lite.csv.gz > lite.csv
+          HEADER=$(head -1 lite.csv | tr -d '\r')
+          ROWS=$(wc -l < lite.csv)
+          echo "header: $HEADER"
+          echo "rows:   $ROWS"
           EXPECTED='network,country,country_code,continent,continent_code,asn,as_name,as_domain'
           if [ "$HEADER" != "$EXPECTED" ]; then
             echo "Unexpected IPinfo Lite schema." >&2
@@ -108,11 +114,11 @@ jobs:
             echo "Update the ip_ranges table columns in infrastructure/lib/visitor-analytics.ts to match." >&2
             exit 1
           fi
-          ROWS=$(gunzip -c ipinfo_lite.csv.gz | wc -l)
           if [ "$ROWS" -lt 100000 ]; then
             echo "Only $ROWS rows — expected millions. Refusing to publish a truncated file." >&2
             exit 1
           fi
+          rm -f lite.csv
           echo "OK: $ROWS rows, schema matches."
 
       # Fixed object name so each run REPLACES the previous database. A varying
