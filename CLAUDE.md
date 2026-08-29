@@ -237,7 +237,12 @@ before merge.
   before reaching prod — fine.
 - **Dependabot alerts lag.** After a fix lands on `main`, GitHub's
   dependency-graph re-scan can take hours to flip alerts to "fixed."
-  Trust local `npm audit` (0 in both projects) over the alert count.
+  Trust local `npm audit` over the alert count — and note GitHub counts each
+  advisory×package instance, so "63 alerts" was really 8 vulnerable packages.
+- **`brace-expansion` in `/infrastructure` can't be fixed by `npm audit fix`.**
+  It's a *bundled* dependency inside `aws-cdk-lib`, so the only fix is bumping
+  `aws-cdk-lib` itself. `npm audit fix` says so explicitly and then does
+  nothing about it.
 - **Intentional `ignore` rules** (each has a comment in `dependabot.yml`
   explaining why — don't "unblock" without checking the reason still holds):
   - `lucide-react` major → 1.x drops the GitHub/LinkedIn/Twitter brand
