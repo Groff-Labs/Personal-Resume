@@ -31,6 +31,8 @@ by `npm run resume`, which runs as a `prebuild` hook).
 - **Path-filtered GitHub Actions workflows:**
   - `frontend/**` → `Deploy site`
   - `infrastructure/**` → `Deploy infrastructure`
+  - `Refresh IP data` is **not** path-filtered — it's a monthly `schedule:`
+    cron (plus `workflow_dispatch`) that reloads the analytics IP database
   - neither fires for README / docs / `resume.md` alone — site workflow
     intentionally also watches `resume.md`? (no — it doesn't; if you
     need a resume-only redeploy, touch any frontend file or dispatch the
@@ -48,12 +50,76 @@ by `npm run resume`, which runs as a `prebuild` hook).
 
 ---
 
+## Analytics
+
+Two independent systems. Neither was documented before Aug 2026.
+
+### 1. CloudFlare Web Analytics (visitor counts) — since April 2026
+
+Beacon injected in `frontend/app/layout.tsx`, gated on
+`NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN`; empty value disables the tag.
+
+**The token is a GitHub _environment_-scoped variable, not a repo variable** —
+`gh variable list` shows nothing, which makes it look unconfigured. It isn't:
+
+```
+gh api repos/:owner/:repo/environments/production/variables
+gh api repos/:owner/:repo/environments/dev/variables
+```
+
+Separate token per stage, so dev traffic doesn't pollute prod numbers. View at
+CloudFlare → Analytics & Logs → Web Analytics (two sites listed).
+
+Cookieless and anonymous by design: pageviews, referrers, countries, paths — no
+visitor identity. Being a JS beacon, ad blockers suppress it, so it undercounts.
+
+### 2. Company-level visitor identification (Athena) — since Aug 2026
+
+Answers "which organizations read the CV". Server-side, no third-party JS, ~$0.
+
+| Piece | Where |
+|---|---|
+| Glue DB, tables, Athena workgroup, saved queries | `infrastructure/lib/visitor-analytics.ts` |
+| Fork config, ISP/cloud ASN exclusion list | `infrastructure/cdk.json` → `context` |
+| IP database loading | `.github/workflows/refresh-ip-data.yml` (monthly) |
+| Requires | repo secret `IPINFO_TOKEN` (free at ipinfo.io) |
+
+Run the saved queries from the Athena console under workgroup
+`cv-michaelgroff-analytics-<stage>`. **Start with `MatchRateDiagnostics`** — it
+reports how much traffic actually resolves.
+
+Things that will bite you:
+
+- **Expect a low match rate.** Reverse-IP only resolves corporate networks;
+  remote work, mobile NAT and iCloud Private Relay defeat it. 5–15% is normal.
+  A near-zero result usually means `enrichment/` is empty, not that nobody visited.
+- **Bots dominate raw traffic.** CloudFlare filters them for you; Athena does
+  not. The queries filter on user-agent *and* exclude cloud/ISP ASNs — the ASN
+  list does most of the work (one real scanner in these logs identifies itself
+  as "Hello from Palo Alto Networks", which no bot regex would catch).
+- **The `ip_ranges` table is positional.** IPinfo Lite is keyed by a CIDR
+  `network` column (not `start_ip`/`end_ip`), and `as_name` is quoted because it
+  contains commas — hence `OpenCSVSerde`. The refresh workflow asserts the
+  header before uploading, so an upstream schema change fails loudly instead of
+  silently mis-mapping columns.
+- **IPv4 only.** The CIDR->range join is 32-bit integer math; Athena has no
+  `IPPREFIX`/`IPADDRESS` type (verified — `CAST(... AS IPPREFIX)` fails), so
+  IPv6 visitors can't be resolved. Measured on dev in Aug 2026: **30 of 226
+  real visitor IPs (13.3%) were IPv6**, so this is a real gap, not a rounding
+  error. `MatchRateDiagnostics` reports it as `ipv6_ips_skipped` rather than
+  hiding it.
+- **Fixed object name on upload.** A varying filename would leave two databases
+  under the prefix and Athena would read the union.
+- **The log bucket's lifecycle rules are prefix-scoped.** They used to be a
+  single unscoped 90-day expiry; that would now delete the IP database. Don't
+  collapse them back.
+
 ## Infra quirks (learned the hard way)
 
 ### LZA Service Control Policies are active
 
-Account `421219980479` sits under a Landing Zone Accelerator org. Two
-SCPs have bitten deploys:
+Account `421219980479` sits under a Landing Zone Accelerator org. Three
+SCP statements have bitten deploys:
 
 1. **`InfrastructureProtection-SCP` → `DenyUnencryptedS3Uploads`** denies
    every `s3:PutObject` that doesn't carry the
@@ -62,7 +128,16 @@ SCPs have bitten deploys:
    silently fails. The `deploy-site.yml` workflow already passes
    `--sse AES256` on every `aws s3 sync` / `aws s3 cp`. **If you add a
    new S3 command, include the flag.**
-2. **`NetworkPerimeter-SCP`** denies based on source IP unless the
+2. **`NetworkPerimeter-SCP` → `DenyLambdaWithoutVPC`** denies
+   `lambda:CreateFunction` / `UpdateFunctionConfiguration` when
+   `lambda:VpcIds` is null. Note it is Lambda *outside a VPC* that's denied,
+   **not Lambda outright** — older comments in this repo said otherwise and
+   nearly caused a wrong design call. In practice there's no VPC in this
+   account, so any Lambda-backed CDK custom resource (`autoDeleteObjects`,
+   `BucketDeployment`, the L2 OIDC provider) still fails. Adding a VPC would
+   also mean a NAT Gateway (~$32/mo) for internet egress, since `ipinfo.io`
+   is IPv4-only.
+3. **`NetworkPerimeter-SCP`** also denies based on source IP unless the
    principal carries `LZA:EXC:NET=true` (exact case). The GH Actions
    role gets this tag via CDK in `infrastructure/lib/github-oidc-stack.ts`
    (`cdk.Tags.of(this.role).add('LZA:EXC:NET', 'true')`). **Don't drop
@@ -204,6 +279,31 @@ Both are byte-preserved from the source WP installs. Do not try to
 - **`michael-groff.jpg` stays in the repo** even though the `.webp`
   derivative is what ships. The raster is the source.
 - **`resume.pdf` is gitignored** — regenerated by CI on every build.
+
+---
+
+## Forking this repo (it's public)
+
+Config lives in `infrastructure/cdk.json` → `context`. Edit that one block:
+
+| Key | Why |
+|---|---|
+| `domainName`, `account` | yours |
+| `githubOrg`, `githubRepo` | drives the OIDC trust policy subjects |
+| `resourcePrefix` | **must change** — S3 bucket names are globally unique, so `cv-michaelgroff-*` is already taken |
+| `ipinfoDatasetUrl`, `ispExclusionAsns` | analytics tuning |
+
+Then, outside the repo:
+
+- Repo **variables**: `AWS_ACCOUNT_ID`, `AWS_ROLE_ARN`
+- Environment **variables** (`production` + `dev`): `CLOUDFLARE_ANALYTICS_TOKEN`
+- Repo **secret**: `IPINFO_TOKEN` (only if you want the Athena analytics)
+- GitHub environments named `production` and `dev` must exist — the OIDC trust
+  policy matches on `repo:ORG/REPO:environment:NAME`, so a workflow without an
+  `environment:` cannot assume the role
+- Bootstrap `CvWebsite-OIDC` **manually** (`npx cdk deploy CvWebsite-OIDC`);
+  `deploy-infra.yml` deliberately skips it, since it's the stack that grants the
+  workflow its own credentials
 
 ---
 

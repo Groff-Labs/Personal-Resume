@@ -15,6 +15,14 @@ const stage = app.node.tryGetContext('stage') || process.env.STAGE || 'dev';
 const rootDomain = app.node.tryGetContext('domainName') || 'michaelgroff.info';
 const fullDomainName = stage === 'prod' ? rootDomain : `${stage}.${rootDomain}`;
 
+// Fork config. Defaults live in cdk.json's context block — someone forking this
+// repo edits that one file rather than hunting through the stacks. The `||`
+// fallbacks here are only a safety net for a stripped cdk.json.
+const resourcePrefix = app.node.tryGetContext('resourcePrefix') || 'cv-michaelgroff';
+const githubOrg = app.node.tryGetContext('githubOrg') || 'Groff-Labs';
+const githubRepo = app.node.tryGetContext('githubRepo') || 'Personal-Resume';
+const ispExclusionAsns: string[] = app.node.tryGetContext('ispExclusionAsns') || [];
+
 const env = {
   account: app.node.tryGetContext('account') || process.env.CDK_DEFAULT_ACCOUNT || '421219980479',
   region: 'us-east-1', // CloudFront requires us-east-1 for ACM certificates
@@ -30,6 +38,8 @@ new CvWebsiteStack(app, `CvWebsite-${stage}`, {
   env,
   stage,
   domainName: fullDomainName,
+  resourcePrefix,
+  ispExclusionAsns,
   tags: {
     ...commonTags,
     Stage: stage,
@@ -38,8 +48,9 @@ new CvWebsiteStack(app, `CvWebsite-${stage}`, {
 
 new GitHubOidcStack(app, 'CvWebsite-OIDC', {
   env,
-  githubOrg: 'Groff-Labs',
-  githubRepo: 'Personal-Resume',
+  githubOrg,
+  githubRepo,
+  resourcePrefix,
   tags: {
     ...commonTags,
     Stage: 'shared',

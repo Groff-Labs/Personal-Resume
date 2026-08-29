@@ -5,6 +5,8 @@ import { Construct } from 'constructs';
 export interface GitHubOidcStackProps extends cdk.StackProps {
   githubOrg: string;
   githubRepo: string;
+  /** Prefix for the S3 buckets this role may write to. Set from cdk.json context. */
+  resourcePrefix: string;
 }
 
 export class GitHubOidcStack extends cdk.Stack {
@@ -13,13 +15,16 @@ export class GitHubOidcStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: GitHubOidcStackProps) {
     super(scope, id, props);
 
-    const { githubOrg, githubRepo } = props;
+    const { githubOrg, githubRepo, resourcePrefix } = props;
 
     // Use the native CloudFormation OIDC provider resource (AWS::IAM::OIDCProvider)
     // instead of CDK's L2 OpenIdConnectProvider, which spins up a Lambda-backed
-    // custom resource. The Lambda creation is blocked in this account by SCP
-    // `p-e8vbo6ej`, and we don't need the custom-resource niceties since this
-    // is a one-shot create.
+    // custom resource. LZA's `NetworkPerimeter-SCP` carries a
+    // `DenyLambdaWithoutVPC` statement — it denies lambda:CreateFunction when
+    // `lambda:VpcIds` is null — and there is no VPC in this account, so any
+    // custom-resource Lambda fails. (Earlier comments here said Lambda was
+    // denied outright; it is specifically Lambda *outside a VPC*.) We don't
+    // need the custom-resource niceties anyway since this is a one-shot create.
     const provider = new iam.CfnOIDCProvider(this, 'GitHubProvider', {
       url: 'https://token.actions.githubusercontent.com',
       clientIdList: ['sts.amazonaws.com'],
@@ -40,11 +45,21 @@ export class GitHubOidcStack extends cdk.Stack {
       assumedBy: new iam.FederatedPrincipal(
         provider.attrArn,
         {
+          // Scoped to the deployment environments rather than `repo:org/repo:*`.
+          // The wildcard would let any ref in the repo assume this role, which
+          // matters more now that the repo is public and forked as a template.
+          //
+          // NOTE: every workflow that assumes this role sets `environment:` on
+          // the job, so GitHub issues a subject of the form
+          // `repo:ORG/REPO:environment:NAME` — NOT `...:ref:refs/heads/NAME`.
+          // Listing branch refs here instead would lock out every deploy.
+          // A new workflow needing AWS must set `environment:` to match.
           StringEquals: {
             'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
-          },
-          StringLike: {
-            'token.actions.githubusercontent.com:sub': `repo:${githubOrg}/${githubRepo}:*`,
+            'token.actions.githubusercontent.com:sub': [
+              `repo:${githubOrg}/${githubRepo}:environment:production`,
+              `repo:${githubOrg}/${githubRepo}:environment:dev`,
+            ],
           },
         },
         'sts:AssumeRoleWithWebIdentity',
@@ -98,8 +113,8 @@ export class GitHubOidcStack extends cdk.Stack {
         's3:GetBucketLocation',
       ],
       resources: [
-        'arn:aws:s3:::cv-michaelgroff-*',
-        'arn:aws:s3:::cv-michaelgroff-*/*',
+        `arn:aws:s3:::${resourcePrefix}-*`,
+        `arn:aws:s3:::${resourcePrefix}-*/*`,
       ],
     }));
 

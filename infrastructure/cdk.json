@@ -17,6 +17,24 @@
     ]
   },
   "context": {
+    "//fork-config": "---------- Fork/deploy config: edit these to make this repo yours ----------",
+    "domainName": "michaelgroff.info",
+    "account": "421219980479",
+    "githubOrg": "Groff-Labs",
+    "githubRepo": "Personal-Resume",
+    "//resourcePrefix": "Prefix for globally-unique S3 bucket names. Change this when forking or bucket creation will fail (names are taken).",
+    "resourcePrefix": "cv-michaelgroff",
+    "//ipinfoDatasetUrl": "IPinfo Lite CSV. Free + unlimited but needs a token, supplied by the IPINFO_TOKEN GitHub secret at refresh time.",
+    "ipinfoDatasetUrl": "https://ipinfo.io/data/ipinfo_lite.csv.gz",
+    "//ispExclusionAsns": "Consumer-ISP, hosting and cloud ASNs. Reverse-IP resolves these to the network owner, not an employer, so they are noise for visitor identification. Cloud ASNs are also where automated scanners live.",
+    "ispExclusionAsns": [
+      "AS7922", "AS7018", "AS701", "AS20115", "AS22773", "AS11427", "AS21928",
+      "AS6167", "AS20057", "AS22394", "AS5650", "AS209", "AS33363", "AS10796",
+      "AS16509", "AS14618", "AS15169", "AS396982", "AS8075", "AS8068",
+      "AS14061", "AS16276", "AS24940", "AS13335", "AS20940", "AS54113",
+      "AS63949", "AS45102", "AS37963", "AS4134", "AS4837", "AS9808"
+    ],
+    "//cdk-flags": "---------- CDK feature flags below (managed by cdk init / cdk migrate) ----------",
     "@aws-cdk/aws-signer:signingProfileNamePassedToCfn": true,
     "@aws-cdk/aws-ecs-patterns:secGroupsDisablesImplicitOpenListener": true,
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,

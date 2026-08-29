@@ -5,28 +5,37 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
+import { VisitorAnalytics } from './visitor-analytics';
 
 export interface CvWebsiteStackProps extends cdk.StackProps {
   stage: string;
   domainName: string;
+  /** Prefix for globally-unique S3 bucket names. Set from cdk.json context. */
+  resourcePrefix: string;
+  /** Consumer-ISP / cloud ASNs treated as noise by the visitor-analytics queries. */
+  ispExclusionAsns: string[];
 }
 
 export class CvWebsiteStack extends cdk.Stack {
   public readonly websiteBucket: s3.Bucket;
   public readonly distribution: cloudfront.Distribution;
+  public readonly logBucket: s3.Bucket;
 
   constructor(scope: Construct, id: string, props: CvWebsiteStackProps) {
     super(scope, id, props);
 
-    const { stage, domainName } = props;
+    const { stage, domainName, resourcePrefix, ispExclusionAsns } = props;
 
     // S3 Bucket for static website hosting.
     // Note: we deliberately do NOT use `autoDeleteObjects: true` because that
-    // construct spins up a Lambda-backed custom resource, and Lambda creation
-    // is denied by the org's SCP `p-e8vbo6ej`. If we ever need to destroy this
-    // stack, empty the bucket first via `aws s3 rm s3://cv-michaelgroff-<stage> --recursive`.
+    // construct spins up a Lambda-backed custom resource. LZA's
+    // `NetworkPerimeter-SCP` has a `DenyLambdaWithoutVPC` statement (denies
+    // lambda:CreateFunction when `lambda:VpcIds` is null) and this account has
+    // no VPC, so that Lambda can't be created. Note it is Lambda *outside a
+    // VPC* that's denied, not Lambda outright. If we ever need to destroy this
+    // stack, empty the bucket first via `aws s3 rm s3://<resourcePrefix>-<stage> --recursive`.
     this.websiteBucket = new s3.Bucket(this, 'WebsiteBucket', {
-      bucketName: `cv-michaelgroff-${stage}`,
+      bucketName: `${resourcePrefix}-${stage}`,
       encryption: s3.BucketEncryption.S3_MANAGED,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       removalPolicy: stage === 'prod' ? cdk.RemovalPolicy.RETAIN : cdk.RemovalPolicy.DESTROY,
@@ -112,6 +121,36 @@ export class CvWebsiteStack extends cdk.Stack {
       `),
     });
 
+    // Access logs. Hoisted out of the Distribution props (where it used to be
+    // constructed inline) so the analytics construct below can read it. The
+    // construct id stays 'LogBucket' — renaming it would replace the bucket.
+    //
+    // Lifecycle rules are prefix-scoped on purpose. The original rule had no
+    // prefix, so it applied to the whole bucket; once enrichment data lives
+    // here too, an unscoped 90-day expiry would silently delete it.
+    this.logBucket = new s3.Bucket(this, 'LogBucket', {
+      bucketName: `${resourcePrefix}-logs-${stage}`,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED, // CloudFront log delivery requires ACLs
+      removalPolicy: stage === 'prod' ? cdk.RemovalPolicy.RETAIN : cdk.RemovalPolicy.DESTROY,
+      lifecycleRules: [
+        {
+          id: 'expire-cloudfront-logs',
+          prefix: 'cloudfront-logs/',
+          expiration: cdk.Duration.days(90),
+        },
+        {
+          // Query results contain visitor IPs — keep the window short.
+          id: 'expire-athena-results',
+          prefix: 'athena-results/',
+          expiration: cdk.Duration.days(7),
+        },
+        // 'enrichment/' is deliberately absent: the IP database is replaced in
+        // place by the refresh workflow and must not expire between runs.
+      ],
+    });
+
     // CloudFront Distribution
     this.distribution = new cloudfront.Distribution(this, 'Distribution', {
       comment: `CV Website - ${stage}`,
@@ -120,18 +159,7 @@ export class CvWebsiteStack extends cdk.Stack {
       defaultRootObject: 'index.html',
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100, // Use only North America and Europe for lower cost
       enableLogging: true,
-      logBucket: new s3.Bucket(this, 'LogBucket', {
-        bucketName: `cv-michaelgroff-logs-${stage}`,
-        encryption: s3.BucketEncryption.S3_MANAGED,
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED, // CloudFront log delivery requires ACLs
-        removalPolicy: stage === 'prod' ? cdk.RemovalPolicy.RETAIN : cdk.RemovalPolicy.DESTROY,
-        lifecycleRules: [
-          {
-            expiration: cdk.Duration.days(90),
-          },
-        ],
-      }),
+      logBucket: this.logBucket,
       logFilePrefix: 'cloudfront-logs/',
       defaultBehavior: {
         origin: new origins.S3Origin(this.websiteBucket),
@@ -179,11 +207,26 @@ export class CvWebsiteStack extends cdk.Stack {
       },
     }));
 
+    // Company-level visitor identification over the CloudFront access logs.
+    // Glue + Athena only — all L1 CFN, so nothing here needs a Lambda-backed
+    // custom resource (SCP `DenyLambdaWithoutVPC` blocks those in this account).
+    new VisitorAnalytics(this, 'VisitorAnalytics', {
+      stage,
+      resourcePrefix,
+      logBucket: this.logBucket,
+      ispExclusionAsns,
+    });
+
     // CloudFormation Outputs
     new cdk.CfnOutput(this, 'WebsiteBucketName', {
       value: this.websiteBucket.bucketName,
       description: 'S3 Bucket for website content',
       exportName: `${stage}-WebsiteBucket`,
+    });
+
+    new cdk.CfnOutput(this, 'LogBucketName', {
+      value: this.logBucket.bucketName,
+      description: 'CloudFront access-log bucket (also holds analytics enrichment data)',
     });
 
     new cdk.CfnOutput(this, 'DistributionId', {
