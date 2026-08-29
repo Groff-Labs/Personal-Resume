@@ -15,7 +15,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 
 ## Experience
 
-### Pre-Sales Solutions Architect / Team Lead — AllCloud
+### Sr. Pre-Sales Solutions Architect / Team Lead — AllCloud
 *July 2026 – Present · Remote (San Antonio, TX)*
 
 - Lead the pre-sales solutions-architecture team, setting the bar for technical qualification, reference-architecture quality, and how engagements get scoped before they reach delivery.
@@ -23,7 +23,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Lead pre-sales discovery, reference-architecture design, and executive presentations that translate business outcomes into buildable systems and help close engagements.
 - Run cost-optimization engagements across CloudWatch, Trusted Advisor, Cost Explorer, and third-party tools; surface right-sizing, Savings Plans, and anomaly remediation.
 
-### Pre-Sales Solutions Architect — AllCloud
+### Sr. Pre-Sales Solutions Architect — AllCloud
 *June 2025 – July 2026 · Remote (San Antonio, TX)*
 
 - Owned pre-sales discovery and reference-architecture design across the AWS portfolio, translating business outcomes into buildable systems and defensible estimates.
@@ -31,7 +31,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Built proofs of concept and architecture narratives that de-risked the technical decision before customers committed budget.
 - Carried delivery experience into the sales motion, so what was scoped matched what delivery could actually build.
 
-### Cloud Solutions Architect — AllCloud
+### Sr. Cloud Solutions Architect — AllCloud
 *May 2024 – June 2025 · Remote (San Antonio, TX)*
 
 - Architected AWS platforms for customers from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allowed.
@@ -39,7 +39,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Integrated generative-AI services (Bedrock, SageMaker) into customer workflows for document processing, decision automation, and predictive analytics.
 - Hardened customer environments against AWS Well-Architected pillars (IAM boundaries, VPC segmentation, GuardDuty / WAF).
 
-### Solutions Architect — Vivsoft Technologies
+### Sr. Solutions Architect — Vivsoft Technologies
 *September 2022 – December 2024 · Remote (San Antonio, TX)*
 
 - Led cloud architecture for DoD and federal programs, designing secure, multi-tenant systems against IL4 / IL5 accreditation requirements and DISA SRG controls.

@@ -27,7 +27,7 @@ export const jobs: Job[] = [
   //   {
   //     id: "allcloud-delivery-lead",
   //     company: "AllCloud",
-  //     title: "Cloud Solutions Architect / Team Lead",
+  //     title: "Sr. Cloud Solutions Architect / Team Lead",
   //     location: "Remote, based in San Antonio, TX",
   //     startDate: "October 2026",
   //     endDate: "Present",
@@ -38,7 +38,7 @@ export const jobs: Job[] = [
   {
     id: "allcloud",
     company: "AllCloud",
-    title: "Pre-Sales Solutions Architect / Team Lead",
+    title: "Sr. Pre-Sales Solutions Architect / Team Lead",
     location: "Remote, based in San Antonio, TX",
     startDate: "July 2026",
     endDate: "Present",
@@ -54,7 +54,7 @@ export const jobs: Job[] = [
   {
     id: "allcloud-presales",
     company: "AllCloud",
-    title: "Pre-Sales Solutions Architect",
+    title: "Sr. Pre-Sales Solutions Architect",
     location: "Remote, based in San Antonio, TX",
     startDate: "June 2025",
     endDate: "July 2026",
@@ -70,7 +70,7 @@ export const jobs: Job[] = [
   {
     id: "allcloud-cloud-sa",
     company: "AllCloud",
-    title: "Cloud Solutions Architect",
+    title: "Sr. Cloud Solutions Architect",
     location: "Remote, based in San Antonio, TX",
     startDate: "May 2024",
     endDate: "June 2025",
@@ -87,7 +87,7 @@ export const jobs: Job[] = [
   {
     id: "vivsoft",
     company: "Vivsoft Technologies",
-    title: "Solutions Architect",
+    title: "Sr. Solutions Architect",
     location: "Remote, based in San Antonio, TX",
     startDate: "September 2022",
     endDate: "December 2024",

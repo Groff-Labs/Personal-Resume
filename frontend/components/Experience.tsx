@@ -91,14 +91,17 @@ export default function Experience() {
                       </div>
 
                       {/* Meta — stacked on sm, inline on md+ */}
-                      <div className="flex-1 min-w-0 md:grid md:grid-cols-[1.5fr_1.6fr_1fr] md:items-center md:gap-4">
-                        <div className="font-semibold text-ink group-hover:text-accent transition-colors truncate">
+                      <div className="flex-1 min-w-0 md:grid md:grid-cols-[minmax(0,auto)_minmax(0,1fr)_auto] md:items-center md:gap-4">
+                        <div className="font-semibold text-ink group-hover:text-accent transition-colors">
                           {job.company}
                         </div>
-                        <div className="text-sm text-accent md:truncate">
+                        {/* Not truncated: titles here run long (e.g. "Sr. Pre-Sales
+                            Solutions Architect / Team Lead") and clipping them hid
+                            the part that matters. Wraps instead. */}
+                        <div className="text-sm text-accent text-pretty">
                           {job.title}
                         </div>
-                        <div className="font-mono text-xs text-ink-subtle md:text-right">
+                        <div className="font-mono text-xs text-ink-subtle md:text-right whitespace-nowrap">
                           {job.startDate} – {job.endDate}
                         </div>
                       </div>
@@ -161,8 +164,14 @@ export default function Experience() {
                               </div>
                             </div>
 
-                            {/* Right: responsibilities */}
+                            {/* Right: title + responsibilities */}
                             <div>
+                              <h3 className="text-base font-semibold text-ink mb-1">
+                                {job.title}
+                              </h3>
+                              <p className="text-sm text-ink-subtle mb-4">
+                                {job.company}
+                              </p>
                               <ul className="space-y-2.5">
                                 {job.responsibilities.map((r, i) => (
                                   <li key={i} className="flex gap-3 text-ink-muted leading-relaxed">

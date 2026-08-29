@@ -24,8 +24,9 @@ WordPress → Next.js refactor and apex-migration work is already done.
 `resume.md` is the source of truth for the downloadable PDF (auto-built
 by `npm run resume`, which runs as a `prebuild` hook).
 
-**Scheduled change — 1 Oct 2026:** the AllCloud role changes from *Pre-Sales
-Solutions Architect / Team Lead* to *Cloud Solutions Architect / Team Lead*
+**Scheduled change — 1 Oct 2026:** the AllCloud role changes from *Sr. Pre-Sales
+Solutions Architect / Team Lead* to *Sr. Cloud Solutions Architect / Team
+Lead*
 (moving back to delivery). A ready-to-uncomment entry sits at the top of
 `frontend/lib/data/jobs.ts`; set the current entry's `endDate` to
 `"October 2026"` and mirror both in `resume.md`. Deliberately not published
