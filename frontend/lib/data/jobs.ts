@@ -17,23 +17,71 @@ export interface Job {
 }
 
 export const jobs: Job[] = [
+  // AllCloud role progression, newest first. Split into separate entries in
+  // Aug 2026 — a single "Sr. Solutions Architect / May 2024 – Present" block
+  // hid both the delivery→pre-sales→delivery arc and the Team Lead promotion.
+  //
+  // SCHEDULED: on 1 Oct 2026 this role ends and the delivery role begins.
+  // Add above this block, and set the entry below to end "October 2026":
+  //
+  //   {
+  //     id: "allcloud-delivery-lead",
+  //     company: "AllCloud",
+  //     title: "Cloud Solutions Architect / Team Lead",
+  //     location: "Remote, based in San Antonio, TX",
+  //     startDate: "October 2026",
+  //     endDate: "Present",
+  //     website: "https://allcloud.io",
+  //     logo: "/images/companies/allcloud.webp",
+  //     responsibilities: [ /* delivery-side bullets */ ],
+  //   },
   {
     id: "allcloud",
     company: "AllCloud",
-    title: "Sr. Solutions Architect",
+    title: "Pre-Sales Solutions Architect / Team Lead",
     location: "Remote, based in San Antonio, TX",
-    startDate: "May 2024",
+    startDate: "July 2026",
     endDate: "Present",
     website: "https://allcloud.io",
     logo: "/images/companies/allcloud.webp",
     responsibilities: [
-      "Architect AWS platforms for customers ranging from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allows.",
+      "Lead the pre-sales solutions-architecture team, setting the bar for technical qualification, reference-architecture quality, and how engagements get scoped before they reach delivery.",
+      "Mentor solutions architects on discovery technique, sizing, and executive communication.",
       "Lead pre-sales discovery, reference-architecture design, and executive presentations that translate business outcomes into buildable cloud systems and help close the engagement.",
-      "Own end-to-end cloud migrations — assessment through blue/green cutover — using CI/CD pipelines and CloudFormation / Terraform to shorten downtime windows.",
-      "Integrate generative-AI services (Bedrock, SageMaker) into customer workflows for document processing, decision automation, and predictive analytics.",
       "Run cost-optimization engagements across CloudWatch, Trusted Advisor, Cost Explorer, and third-party tools; surface workload right-sizing, Savings Plans, and anomaly remediation.",
-      "Harden customer environments against the AWS Well-Architected Framework, emphasizing IAM boundaries, VPC segmentation, and GuardDuty / WAF posture.",
-      "Mentor customer engineering teams on cloud-native patterns and IaC so they own the platform after engagement end.",
+    ],
+  },
+  {
+    id: "allcloud-presales",
+    company: "AllCloud",
+    title: "Pre-Sales Solutions Architect",
+    location: "Remote, based in San Antonio, TX",
+    startDate: "June 2025",
+    endDate: "July 2026",
+    website: "https://allcloud.io",
+    logo: "/images/companies/allcloud.webp",
+    responsibilities: [
+      "Owned pre-sales discovery and reference-architecture design across the AWS portfolio, translating business outcomes into buildable systems and defensible estimates.",
+      "Partnered with account teams on technical qualification, scoping, and executive presentations through to close.",
+      "Built proofs of concept and architecture narratives that de-risked the technical decision before customers committed budget.",
+      "Carried delivery experience into the sales motion, so what was scoped in pre-sales matched what delivery could actually build.",
+    ],
+  },
+  {
+    id: "allcloud-cloud-sa",
+    company: "AllCloud",
+    title: "Cloud Solutions Architect",
+    location: "Remote, based in San Antonio, TX",
+    startDate: "May 2024",
+    endDate: "June 2025",
+    website: "https://allcloud.io",
+    logo: "/images/companies/allcloud.webp",
+    responsibilities: [
+      "Architected AWS platforms for customers ranging from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allowed.",
+      "Owned end-to-end cloud migrations — assessment through blue/green cutover — using CI/CD pipelines and CloudFormation / Terraform to shorten downtime windows.",
+      "Integrated generative-AI services (Bedrock, SageMaker) into customer workflows for document processing, decision automation, and predictive analytics.",
+      "Hardened customer environments against the AWS Well-Architected Framework, emphasizing IAM boundaries, VPC segmentation, and GuardDuty / WAF posture.",
+      "Mentored customer engineering teams on cloud-native patterns and IaC so they owned the platform after engagement end.",
     ],
   },
   {

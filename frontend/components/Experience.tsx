@@ -13,7 +13,9 @@ function startYear(date: string): string {
 }
 
 export default function Experience() {
-  const [expandedJob, setExpandedJob] = useState<string>("allcloud");
+  // Expand the most recent role. Tracks jobs[0] rather than a hardcoded id so
+  // this keeps working when the current role changes.
+  const [expandedJob, setExpandedJob] = useState<string>(jobs[0]?.id ?? "");
 
   return (
     <section id="experience" className="section-container bg-surface-1">
