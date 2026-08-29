@@ -31,8 +31,6 @@ by `npm run resume`, which runs as a `prebuild` hook).
 - **Path-filtered GitHub Actions workflows:**
   - `frontend/**` → `Deploy site`
   - `infrastructure/**` → `Deploy infrastructure`
-  - `Refresh IP data` is **not** path-filtered — it's a monthly `schedule:`
-    cron (plus `workflow_dispatch`) that reloads the analytics IP database
   - neither fires for README / docs / `resume.md` alone — site workflow
     intentionally also watches `resume.md`? (no — it doesn't; if you
     need a resume-only redeploy, touch any frontend file or dispatch the
@@ -73,46 +71,51 @@ CloudFlare → Analytics & Logs → Web Analytics (two sites listed).
 Cookieless and anonymous by design: pageviews, referrers, countries, paths — no
 visitor identity. Being a JS beacon, ad blockers suppress it, so it undercounts.
 
-### 2. Company-level visitor identification (Athena) — since Aug 2026
+### 2. Company-level visitor identification — TRIED AND REMOVED (Aug 2026)
 
-Answers "which organizations read the CV". Server-side, no third-party JS, ~$0.
+**Don't rebuild this.** A full Glue + Athena pipeline over the CloudFront
+access logs (joined to the free IPinfo Lite IP→org database) was built,
+deployed to dev *and* prod, and measured against 90 days of real traffic. It
+worked flawlessly and produced nothing useful. It was removed in the same
+session. The evidence, so nobody spends the day again:
 
-| Piece | Where |
-|---|---|
-| Glue DB, tables, Athena workgroup, saved queries | `infrastructure/lib/visitor-analytics.ts` |
-| Fork config, ISP/cloud ASN exclusion list | `infrastructure/cdk.json` → `context` |
-| IP database loading | `.github/workflows/refresh-ip-data.yml` (monthly) |
-| Requires | repo secret `IPINFO_TOKEN` (free at ipinfo.io) |
+- **93.8% of IPv4 visitor IPs resolved** to an organization — the join,
+  CIDR math and enrichment were all correct. The problem was never accuracy.
+- **~100% of resolved orgs were hosting/cloud infrastructure, not employers.**
+  Top orgs by page views were `vdsina.ru` (5,858), Tencent across 8 regions,
+  `dmzhost.co`, Leaseweb, Contabo, FranTech, ColoCrossing. By distinct IPs:
+  Amazon 3,076, Tencent 587, Google 335. **Zero real corporate visitors** in
+  64,085 filtered page views.
+- **Three noise filters were tested and all failed**: expanded ASN exclusion
+  lists, `as_name`/`as_domain` keyword matching, and requiring asset fetches
+  (`_next/static`, css/js/woff). Modern scanners render pages fully, so they
+  fetch assets and pass browser heuristics.
 
-Run the saved queries from the Athena console under workgroup
-`cv-michaelgroff-analytics-<stage>`. **Start with `MatchRateDiagnostics`** — it
-reports how much traffic actually resolves.
+Two root causes, neither fixable by tuning:
 
-Things that will bite you:
+1. **CloudFront logs everything; CloudFlare doesn't.** The ~87 daily uniques
+   CloudFlare reports are already bot-filtered. Raw CloudFront logs are
+   dominated by internet-wide scanning.
+2. **Real humans carry no employer signal.** They arrive on residential,
+   mobile and IPv6 addresses. A recruiter reading this CV from home resolves
+   to Comcast, not their firm. IPv6 can't be resolved at all — Athena has no
+   `IPPREFIX` type (`CAST(... AS IPPREFIX)` fails), and 6% of prod visitor
+   IPs were IPv6.
 
-- **Expect a low match rate.** Reverse-IP only resolves corporate networks;
-  remote work, mobile NAT and iCloud Private Relay defeat it. 5–15% is normal.
-  A near-zero result usually means `enrichment/` is empty, not that nobody visited.
-- **Bots dominate raw traffic.** CloudFlare filters them for you; Athena does
-  not. The queries filter on user-agent *and* exclude cloud/ISP ASNs — the ASN
-  list does most of the work (one real scanner in these logs identifies itself
-  as "Hello from Palo Alto Networks", which no bot regex would catch).
-- **The `ip_ranges` table is positional.** IPinfo Lite is keyed by a CIDR
-  `network` column (not `start_ip`/`end_ip`), and `as_name` is quoted because it
-  contains commas — hence `OpenCSVSerde`. The refresh workflow asserts the
-  header before uploading, so an upstream schema change fails loudly instead of
-  silently mis-mapping columns.
-- **IPv4 only.** The CIDR->range join is 32-bit integer math; Athena has no
-  `IPPREFIX`/`IPADDRESS` type (verified — `CAST(... AS IPPREFIX)` fails), so
-  IPv6 visitors can't be resolved. Measured on dev in Aug 2026: **30 of 226
-  real visitor IPs (13.3%) were IPv6**, so this is a real gap, not a rounding
-  error. `MatchRateDiagnostics` reports it as `ipv6_ips_skipped` rather than
-  hiding it.
-- **Fixed object name on upload.** A varying filename would leave two databases
-  under the prefix and Athena would read the union.
-- **The log bucket's lifecycle rules are prefix-scoped.** They used to be a
-  single unscoped 90-day expiry; that would now delete the IP database. Don't
-  collapse them back.
+If the "which companies read my CV" question ever comes back, reverse-IP is
+not the answer — person-level identity-graph tools (RB2B ~$79/mo and
+similar) are, because they resolve residential IPs. That reopens both the
+cost and a privacy-policy obligation (person-level data is personal data
+under GDPR/CCPA; this site has no privacy policy today).
+
+Traces left behind, all harmless and deliberately kept:
+
+- The LZA `kill-switch.json` SCP was split so `glue:*` is no longer blanket
+  denied — `DenyGlueBillableCompute` denies jobs/crawlers/dev-endpoints while
+  the free Data Catalog is allowed. Better hygiene than the old blanket rule;
+  revert only if you want Glue fully closed again.
+- The log bucket's expiry rule is prefix-scoped to `cloudfront-logs/` rather
+  than bucket-wide.
 
 ## Infra quirks (learned the hard way)
 
@@ -297,7 +300,6 @@ Then, outside the repo:
 
 - Repo **variables**: `AWS_ACCOUNT_ID`, `AWS_ROLE_ARN`
 - Environment **variables** (`production` + `dev`): `CLOUDFLARE_ANALYTICS_TOKEN`
-- Repo **secret**: `IPINFO_TOKEN` (only if you want the Athena analytics)
 - GitHub environments named `production` and `dev` must exist — the OIDC trust
   policy matches on `repo:ORG/REPO:environment:NAME`, so a workflow without an
   `environment:` cannot assume the role

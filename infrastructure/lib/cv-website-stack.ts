@@ -5,15 +5,12 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
-import { VisitorAnalytics } from './visitor-analytics';
 
 export interface CvWebsiteStackProps extends cdk.StackProps {
   stage: string;
   domainName: string;
   /** Prefix for globally-unique S3 bucket names. Set from cdk.json context. */
   resourcePrefix: string;
-  /** Consumer-ISP / cloud ASNs treated as noise by the visitor-analytics queries. */
-  ispExclusionAsns: string[];
 }
 
 export class CvWebsiteStack extends cdk.Stack {
@@ -24,7 +21,7 @@ export class CvWebsiteStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: CvWebsiteStackProps) {
     super(scope, id, props);
 
-    const { stage, domainName, resourcePrefix, ispExclusionAsns } = props;
+    const { stage, domainName, resourcePrefix } = props;
 
     // S3 Bucket for static website hosting.
     // Note: we deliberately do NOT use `autoDeleteObjects: true` because that
@@ -122,12 +119,11 @@ export class CvWebsiteStack extends cdk.Stack {
     });
 
     // Access logs. Hoisted out of the Distribution props (where it used to be
-    // constructed inline) so the analytics construct below can read it. The
-    // construct id stays 'LogBucket' — renaming it would replace the bucket.
+    // constructed inline) so it can be referenced and exported. The construct
+    // id stays 'LogBucket' — renaming it would replace the bucket.
     //
-    // Lifecycle rules are prefix-scoped on purpose. The original rule had no
-    // prefix, so it applied to the whole bucket; once enrichment data lives
-    // here too, an unscoped 90-day expiry would silently delete it.
+    // The expiry rule is prefix-scoped rather than bucket-wide, so anything
+    // else stored here later isn't silently deleted by the log retention.
     this.logBucket = new s3.Bucket(this, 'LogBucket', {
       bucketName: `${resourcePrefix}-logs-${stage}`,
       encryption: s3.BucketEncryption.S3_MANAGED,
@@ -140,14 +136,6 @@ export class CvWebsiteStack extends cdk.Stack {
           prefix: 'cloudfront-logs/',
           expiration: cdk.Duration.days(90),
         },
-        {
-          // Query results contain visitor IPs — keep the window short.
-          id: 'expire-athena-results',
-          prefix: 'athena-results/',
-          expiration: cdk.Duration.days(7),
-        },
-        // 'enrichment/' is deliberately absent: the IP database is replaced in
-        // place by the refresh workflow and must not expire between runs.
       ],
     });
 
@@ -207,16 +195,6 @@ export class CvWebsiteStack extends cdk.Stack {
       },
     }));
 
-    // Company-level visitor identification over the CloudFront access logs.
-    // Glue + Athena only — all L1 CFN, so nothing here needs a Lambda-backed
-    // custom resource (SCP `DenyLambdaWithoutVPC` blocks those in this account).
-    new VisitorAnalytics(this, 'VisitorAnalytics', {
-      stage,
-      resourcePrefix,
-      logBucket: this.logBucket,
-      ispExclusionAsns,
-    });
-
     // CloudFormation Outputs
     new cdk.CfnOutput(this, 'WebsiteBucketName', {
       value: this.websiteBucket.bucketName,
@@ -226,7 +204,7 @@ export class CvWebsiteStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'LogBucketName', {
       value: this.logBucket.bucketName,
-      description: 'CloudFront access-log bucket (also holds analytics enrichment data)',
+      description: 'CloudFront access-log bucket',
     });
 
     new cdk.CfnOutput(this, 'DistributionId', {

@@ -21,7 +21,6 @@ const fullDomainName = stage === 'prod' ? rootDomain : `${stage}.${rootDomain}`;
 const resourcePrefix = app.node.tryGetContext('resourcePrefix') || 'cv-michaelgroff';
 const githubOrg = app.node.tryGetContext('githubOrg') || 'Groff-Labs';
 const githubRepo = app.node.tryGetContext('githubRepo') || 'Personal-Resume';
-const ispExclusionAsns: string[] = app.node.tryGetContext('ispExclusionAsns') || [];
 
 const env = {
   account: app.node.tryGetContext('account') || process.env.CDK_DEFAULT_ACCOUNT || '421219980479',
@@ -39,7 +38,6 @@ new CvWebsiteStack(app, `CvWebsite-${stage}`, {
   stage,
   domainName: fullDomainName,
   resourcePrefix,
-  ispExclusionAsns,
   tags: {
     ...commonTags,
     Stage: stage,
