@@ -24,18 +24,20 @@ WordPress → Next.js refactor and apex-migration work is already done.
 `resume.md` is the source of truth for the downloadable PDF (auto-built
 by `npm run resume`, which runs as a `prebuild` hook).
 
-**Scheduled change — 1 Oct 2026:** the AllCloud role changes from *Sr. Pre-Sales
-Solutions Architect / Team Lead* to *Sr. Cloud Solutions Architect / Team
-Lead*
-(moving back to delivery). A ready-to-uncomment entry sits at the top of
-`frontend/lib/data/jobs.ts`; set the current entry's `endDate` to
-`"October 2026"` and mirror both in `resume.md`. Deliberately not published
-early — the site shouldn't claim a role that hasn't started.
+**Scheduled change — 1 Oct 2026:** the AllCloud role changes from *Sr.
+Pre-Sales Solutions Architect / Team Lead* to *Sr. Cloud Solutions Architect /
+Team Lead* (moving back to delivery). In `frontend/lib/data/jobs.ts`, prepend
+the ready-to-uncomment role to the AllCloud `roles` array, set the previous
+role's `endDate` to `"October 2026"`, and update the card's top-level `title`
+(it mirrors `roles[0]`). Mirror all of it in `resume.md`. Deliberately not
+published early — the site shouldn't claim a role that hasn't started.
 
-AllCloud is **three entries**, not one, so the delivery → pre-sales →
-delivery arc and the Team Lead promotion are visible. `Experience.tsx`
-expands `jobs[0]` by default, so the newest role stays open without a
-hardcoded id.
+**AllCloud is one card holding a `roles` array**, not one card per title, so it
+reads as growth at a single company. A `Job` sets *either* `roles` (a promotion
+path, newest first) *or* `responsibilities` (a single title) — `Experience.tsx`
+branches on which is present. The card's `startDate`/`endDate` span the whole
+tenure while each role carries its own dates. `Experience.tsx` also expands
+`jobs[0]` by default, so the newest role stays open without a hardcoded id.
 
 ---
 

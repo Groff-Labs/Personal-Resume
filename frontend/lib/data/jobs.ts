@@ -1,8 +1,18 @@
+/** One title held at a company, for entries that span a promotion path. */
+export interface JobRole {
+  title: string;
+  startDate: string;
+  endDate: string;
+  responsibilities: string[];
+}
+
 export interface Job {
   id: string;
   company: string;
+  /** Headline title. For multi-role entries this is the most recent one. */
   title: string;
   location: string;
+  /** Tenure at the company overall, not the current title. */
   startDate: string;
   endDate: string;
   website?: string;
@@ -13,26 +23,27 @@ export interface Job {
    * (e.g. Vivsoft's all-white wordmark) and would be invisible on white.
    */
   logoBg?: string;
-  responsibilities: string[];
+  /**
+   * Set exactly one of `roles` or `responsibilities`.
+   * `roles` (newest first) renders a promotion path inside a single card —
+   * one company block instead of one card per title.
+   */
+  roles?: JobRole[];
+  responsibilities?: string[];
 }
 
 export const jobs: Job[] = [
-  // AllCloud role progression, newest first. Split into separate entries in
-  // Aug 2026 — a single "Sr. Solutions Architect / May 2024 – Present" block
-  // hid both the delivery→pre-sales→delivery arc and the Team Lead promotion.
+  // AllCloud is ONE card holding the full promotion path, rather than one card
+  // per title — it reads as growth at a single company instead of three stints.
+  // `title` mirrors roles[0]; `startDate`/`endDate` span the whole tenure.
   //
-  // SCHEDULED: on 1 Oct 2026 this role ends and the delivery role begins.
-  // Add above this block, and set the entry below to end "October 2026":
+  // SCHEDULED: on 1 Oct 2026, prepend this role and set the current entry's
+  // endDate to "October 2026". Remember to update `title` above it too:
   //
   //   {
-  //     id: "allcloud-delivery-lead",
-  //     company: "AllCloud",
   //     title: "Sr. Cloud Solutions Architect / Team Lead",
-  //     location: "Remote, based in San Antonio, TX",
   //     startDate: "October 2026",
   //     endDate: "Present",
-  //     website: "https://allcloud.io",
-  //     logo: "/images/companies/allcloud.webp",
   //     responsibilities: [ /* delivery-side bullets */ ],
   //   },
   {
@@ -40,48 +51,45 @@ export const jobs: Job[] = [
     company: "AllCloud",
     title: "Sr. Pre-Sales Solutions Architect / Team Lead",
     location: "Remote, based in San Antonio, TX",
-    startDate: "July 2026",
+    startDate: "May 2024",
     endDate: "Present",
     website: "https://allcloud.io",
     logo: "/images/companies/allcloud.webp",
-    responsibilities: [
-      "Lead the pre-sales solutions-architecture team, setting the bar for technical qualification, reference-architecture quality, and how engagements get scoped before they reach delivery.",
-      "Mentor solutions architects on discovery technique, sizing, and executive communication.",
-      "Lead pre-sales discovery, reference-architecture design, and executive presentations that translate business outcomes into buildable cloud systems and help close the engagement.",
-      "Run cost-optimization engagements across CloudWatch, Trusted Advisor, Cost Explorer, and third-party tools; surface workload right-sizing, Savings Plans, and anomaly remediation.",
-    ],
-  },
-  {
-    id: "allcloud-presales",
-    company: "AllCloud",
-    title: "Sr. Pre-Sales Solutions Architect",
-    location: "Remote, based in San Antonio, TX",
-    startDate: "June 2025",
-    endDate: "July 2026",
-    website: "https://allcloud.io",
-    logo: "/images/companies/allcloud.webp",
-    responsibilities: [
-      "Owned pre-sales discovery and reference-architecture design across the AWS portfolio, translating business outcomes into buildable systems and defensible estimates.",
-      "Partnered with account teams on technical qualification, scoping, and executive presentations through to close.",
-      "Built proofs of concept and architecture narratives that de-risked the technical decision before customers committed budget.",
-      "Carried delivery experience into the sales motion, so what was scoped in pre-sales matched what delivery could actually build.",
-    ],
-  },
-  {
-    id: "allcloud-cloud-sa",
-    company: "AllCloud",
-    title: "Sr. Cloud Solutions Architect",
-    location: "Remote, based in San Antonio, TX",
-    startDate: "May 2024",
-    endDate: "June 2025",
-    website: "https://allcloud.io",
-    logo: "/images/companies/allcloud.webp",
-    responsibilities: [
-      "Architected AWS platforms for customers ranging from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allowed.",
-      "Owned end-to-end cloud migrations — assessment through blue/green cutover — using CI/CD pipelines and CloudFormation / Terraform to shorten downtime windows.",
-      "Integrated generative-AI services (Bedrock, SageMaker) into customer workflows for document processing, decision automation, and predictive analytics.",
-      "Hardened customer environments against the AWS Well-Architected Framework, emphasizing IAM boundaries, VPC segmentation, and GuardDuty / WAF posture.",
-      "Mentored customer engineering teams on cloud-native patterns and IaC so they owned the platform after engagement end.",
+    roles: [
+      {
+        title: "Sr. Pre-Sales Solutions Architect / Team Lead",
+        startDate: "July 2026",
+        endDate: "Present",
+        responsibilities: [
+          "Lead the pre-sales solutions-architecture team, setting the bar for technical qualification, reference-architecture quality, and how engagements get scoped before they reach delivery.",
+          "Mentor solutions architects on discovery technique, sizing, and executive communication.",
+          "Lead pre-sales discovery, reference-architecture design, and executive presentations that translate business outcomes into buildable cloud systems and help close the engagement.",
+          "Run cost-optimization engagements across CloudWatch, Trusted Advisor, Cost Explorer, and third-party tools; surface workload right-sizing, Savings Plans, and anomaly remediation.",
+        ],
+      },
+      {
+        title: "Sr. Pre-Sales Solutions Architect",
+        startDate: "June 2025",
+        endDate: "July 2026",
+        responsibilities: [
+          "Owned pre-sales discovery and reference-architecture design across the AWS portfolio, translating business outcomes into buildable systems and defensible estimates.",
+          "Partnered with account teams on technical qualification, scoping, and executive presentations through to close.",
+          "Built proofs of concept and architecture narratives that de-risked the technical decision before customers committed budget.",
+          "Carried delivery experience into the sales motion, so what was scoped in pre-sales matched what delivery could actually build.",
+        ],
+      },
+      {
+        title: "Sr. Cloud Solutions Architect",
+        startDate: "May 2024",
+        endDate: "June 2025",
+        responsibilities: [
+          "Architected AWS platforms for customers ranging from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allowed.",
+          "Owned end-to-end cloud migrations — assessment through blue/green cutover — using CI/CD pipelines and CloudFormation / Terraform to shorten downtime windows.",
+          "Integrated generative-AI services (Bedrock, SageMaker) into customer workflows for document processing, decision automation, and predictive analytics.",
+          "Hardened customer environments against the AWS Well-Architected Framework, emphasizing IAM boundaries, VPC segmentation, and GuardDuty / WAF posture.",
+          "Mentored customer engineering teams on cloud-native patterns and IaC so they owned the platform after engagement end.",
+        ],
+      },
     ],
   },
   {

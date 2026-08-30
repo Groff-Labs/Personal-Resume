@@ -15,24 +15,24 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 
 ## Experience
 
-### Sr. Pre-Sales Solutions Architect / Team Lead — AllCloud
-*July 2026 – Present · Remote (San Antonio, TX)*
+### AllCloud
+*May 2024 – Present · Remote (San Antonio, TX)*
+
+**Sr. Pre-Sales Solutions Architect / Team Lead** · *July 2026 – Present*
 
 - Lead the pre-sales solutions-architecture team, setting the bar for technical qualification, reference-architecture quality, and how engagements get scoped before they reach delivery.
 - Mentor solutions architects on discovery technique, sizing, and executive communication.
 - Lead pre-sales discovery, reference-architecture design, and executive presentations that translate business outcomes into buildable systems and help close engagements.
 - Run cost-optimization engagements across CloudWatch, Trusted Advisor, Cost Explorer, and third-party tools; surface right-sizing, Savings Plans, and anomaly remediation.
 
-### Sr. Pre-Sales Solutions Architect — AllCloud
-*June 2025 – July 2026 · Remote (San Antonio, TX)*
+**Sr. Pre-Sales Solutions Architect** · *June 2025 – July 2026*
 
 - Owned pre-sales discovery and reference-architecture design across the AWS portfolio, translating business outcomes into buildable systems and defensible estimates.
 - Partnered with account teams on technical qualification, scoping, and executive presentations through to close.
 - Built proofs of concept and architecture narratives that de-risked the technical decision before customers committed budget.
 - Carried delivery experience into the sales motion, so what was scoped matched what delivery could actually build.
 
-### Sr. Cloud Solutions Architect — AllCloud
-*May 2024 – June 2025 · Remote (San Antonio, TX)*
+**Sr. Cloud Solutions Architect** · *May 2024 – June 2025*
 
 - Architected AWS platforms for customers from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allowed.
 - Owned end-to-end cloud migrations — assessment through blue/green cutover — using CI/CD pipelines and CloudFormation / Terraform to shorten downtime windows.

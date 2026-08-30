@@ -100,6 +100,11 @@ export default function Experience() {
                             the part that matters. Wraps instead. */}
                         <div className="text-sm text-accent text-pretty">
                           {job.title}
+                          {job.roles && job.roles.length > 1 && (
+                            <span className="ml-2 whitespace-nowrap text-xs text-ink-subtle">
+                              · {job.roles.length} roles
+                            </span>
+                          )}
                         </div>
                         <div className="font-mono text-xs text-ink-subtle md:text-right whitespace-nowrap">
                           {job.startDate} – {job.endDate}
@@ -164,24 +169,54 @@ export default function Experience() {
                               </div>
                             </div>
 
-                            {/* Right: title + responsibilities */}
+                            {/* Right: promotion path, or a single role */}
                             <div>
-                              <h3 className="text-base font-semibold text-ink mb-1">
-                                {job.title}
-                              </h3>
-                              <p className="text-sm text-ink-subtle mb-4">
-                                {job.company}
-                              </p>
-                              <ul className="space-y-2.5">
-                                {job.responsibilities.map((r, i) => (
-                                  <li key={i} className="flex gap-3 text-ink-muted leading-relaxed">
-                                    <span className="text-accent mt-1 shrink-0 select-none">
-                                      ▸
-                                    </span>
-                                    <span>{r}</span>
-                                  </li>
-                                ))}
-                              </ul>
+                              {job.roles ? (
+                                <ol className="space-y-6">
+                                  {job.roles.map((role, ri) => (
+                                    <li
+                                      key={`${role.title}-${role.startDate}`}
+                                      className={ri > 0 ? "pt-6 border-t border-line" : ""}
+                                    >
+                                      <h3 className="text-base font-semibold text-ink">
+                                        {role.title}
+                                      </h3>
+                                      <p className="font-mono text-xs text-ink-subtle mb-3">
+                                        {role.startDate} – {role.endDate}
+                                      </p>
+                                      <ul className="space-y-2.5">
+                                        {role.responsibilities.map((r, i) => (
+                                          <li key={i} className="flex gap-3 text-ink-muted leading-relaxed">
+                                            <span className="text-accent mt-1 shrink-0 select-none">
+                                              ▸
+                                            </span>
+                                            <span>{r}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </li>
+                                  ))}
+                                </ol>
+                              ) : (
+                                <>
+                                  <h3 className="text-base font-semibold text-ink mb-1">
+                                    {job.title}
+                                  </h3>
+                                  <p className="text-sm text-ink-subtle mb-4">
+                                    {job.company}
+                                  </p>
+                                  <ul className="space-y-2.5">
+                                    {job.responsibilities?.map((r, i) => (
+                                      <li key={i} className="flex gap-3 text-ink-muted leading-relaxed">
+                                        <span className="text-accent mt-1 shrink-0 select-none">
+                                          ▸
+                                        </span>
+                                        <span>{r}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </>
+                              )}
                             </div>
                           </div>
                         </motion.div>
