@@ -112,19 +112,33 @@ export const jobs: Job[] = [
   {
     id: "innovative-solutions",
     company: "Innovative Solutions",
-    title: "Sr. Solutions Architect / Cloud Architect",
+    title: "Sr. Solutions Architect",
     location: "Remote, based in San Antonio, TX",
     startDate: "May 2021",
     endDate: "September 2022",
     website: "https://innovativesol.com/",
     logo: "/images/companies/innovative-solutions.webp",
-    responsibilities: [
-      "Led customer discovery and migration strategy across SMB and mid-market AWS accounts, owning the technical narrative from first call through post-deploy handoff.",
-      "Designed repeatable migration patterns (assessment → landing zone → 6R application move → operational handoff) that the delivery team reused across engagements.",
-      "Built AWS infrastructure across EC2, VPC, RDS, IAM, and WAF; automated provisioning in CloudFormation and Terraform.",
-      "Stood up customer CI/CD on CodePipeline, CodeBuild, and CodeDeploy, replacing manual release processes with repeatable pipelines.",
-      "Fed customer pain points back to AWS service and partner teams, shaping roadmap where it touched Innovative's Managed Cloud Services offering.",
-      "Authored internal patterns and runbooks reused by the SA community; participated in AWS partner knowledge exchange.",
+    roles: [
+      {
+        title: "Sr. Solutions Architect",
+        startDate: "January 2022",
+        endDate: "September 2022",
+        responsibilities: [
+          "Moved into pre-sales, leading customer discovery and migration strategy across SMB and mid-market AWS accounts, and owning the technical narrative from first call through post-deploy handoff.",
+          "Fed customer pain points back to AWS service and partner teams, shaping roadmap where it touched Innovative's Managed Cloud Services offering.",
+          "Authored internal patterns and runbooks reused by the SA community; participated in AWS partner knowledge exchange.",
+        ],
+      },
+      {
+        title: "Sr. Cloud Architect",
+        startDate: "May 2021",
+        endDate: "January 2022",
+        responsibilities: [
+          "Designed repeatable migration patterns (assessment → landing zone → 6R application move → operational handoff) that the delivery team reused across engagements.",
+          "Built AWS infrastructure across EC2, VPC, RDS, IAM, and WAF; automated provisioning in CloudFormation and Terraform.",
+          "Stood up customer CI/CD on CodePipeline, CodeBuild, and CodeDeploy, replacing manual release processes with repeatable pipelines.",
+        ],
+      },
     ],
   },
   {
@@ -180,19 +194,33 @@ export const jobs: Job[] = [
   {
     id: "rackspace",
     company: "Rackspace",
-    title: "Windows Administrator I & II",
+    title: "Windows Administrator II",
     location: "San Antonio, TX",
     startDate: "January 2015",
     endDate: "April 2017",
     website: "https://www.rackspace.com",
     logo: "/images/companies/rackspace.webp",
-    responsibilities: [
-      "Owned Windows Server workload lifecycle — bare-metal and Hyper-V / VMware ESXi VM deployment, configuration, and remediation — as a 24×7 managed-hosting engineer.",
-      "Ran patching, MSSQL updates, and Windows service-pack cycles across the managed fleet against Rackspace and customer SLAs.",
-      "Configured Windows Roles and Features (Active Directory, MSSQL, Exchange, IIS, Terminal Server, DNS) per customer requirements.",
-      "Performed system and file backups and recovery against customer-defined RPO / RTO targets.",
-      "Authored PowerShell automation that collapsed common admin tasks from hours to minutes.",
-      "Engaged customers on phone, chat, and ticket portal for high-severity incidents, often leading customer-side troubleshooting calls.",
+    roles: [
+      {
+        title: "Windows Administrator II",
+        startDate: "January 2016",
+        endDate: "April 2017",
+        responsibilities: [
+          "Owned Windows Server workload lifecycle — bare-metal and Hyper-V / VMware ESXi VM deployment, configuration, and remediation — as a 24×7 managed-hosting engineer.",
+          "Authored PowerShell automation that collapsed common admin tasks from hours to minutes.",
+          "Engaged customers on phone, chat, and ticket portal for high-severity incidents, often leading customer-side troubleshooting calls.",
+        ],
+      },
+      {
+        title: "Windows Administrator I",
+        startDate: "January 2015",
+        endDate: "January 2016",
+        responsibilities: [
+          "Ran patching, MSSQL updates, and Windows service-pack cycles across the managed fleet against Rackspace and customer SLAs.",
+          "Configured Windows Roles and Features (Active Directory, MSSQL, Exchange, IIS, Terminal Server, DNS) per customer requirements.",
+          "Performed system and file backups and recovery against customer-defined RPO / RTO targets.",
+        ],
+      },
     ],
   },
   {

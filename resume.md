@@ -47,10 +47,16 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Served as customer-facing architecture lead on cross-functional program teams, aligning cloud adoption with program-office requirements and security authorities.
 - Translated cloud-adoption ROI for customer executives — security posture, operational cost, scalability headroom — driving buy-in on modernization roadmaps.
 
-### Sr. Solutions Architect / Cloud Architect — Innovative Solutions
+### Innovative Solutions
 *May 2021 – September 2022 · Remote (San Antonio, TX)*
 
-- Led customer discovery and migration strategy across SMB and mid-market AWS accounts, owning the technical narrative from first call through post-deploy handoff.
+**Sr. Solutions Architect** · *January 2022 – September 2022*
+
+- Moved into pre-sales, leading customer discovery and migration strategy across SMB and mid-market AWS accounts, and owning the technical narrative from first call through post-deploy handoff.
+- Fed customer pain points back to AWS service and partner teams, shaping roadmap where it touched Innovative's Managed Cloud Services offering.
+
+**Sr. Cloud Architect** · *May 2021 – January 2022*
+
 - Designed repeatable migration patterns (assessment → landing zone → 6R application move → operational handoff) that the delivery team reused across engagements.
 - Built AWS infrastructure across EC2, VPC, RDS, IAM, and WAF; automated provisioning in CloudFormation and Terraform.
 - Stood up customer CI/CD on CodePipeline, CodeBuild, and CodeDeploy, replacing manual release processes with repeatable pipelines.
@@ -74,7 +80,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 ### Earlier Experience
 
 - **Unique Digital (UDI)** — Solutions Architect / Solutions Engineer · *Apr 2017 – May 2019 · San Antonio, TX.* Dell EMC and partner-technology solution design, pre-sales technical lead across multiple verticals.
-- **Rackspace** — Windows Administrator I & II · *Jan 2015 – Apr 2017 · San Antonio, TX.* 24×7 managed Windows workloads on bare metal and Hyper-V / VMware; AD, MSSQL, Exchange, IIS; PowerShell automation for repeat admin tasks.
+- **Rackspace** — Windows Administrator I → II · *Jan 2015 – Apr 2017 · San Antonio, TX.* 24×7 managed Windows workloads on bare metal and Hyper-V / VMware; AD, MSSQL, Exchange, IIS; PowerShell automation for repeat admin tasks.
 - **R & K Specialized Homes** — IT / Network Administrator · *Jul 2013 – Jan 2015 · San Antonio, TX.* Owned IT for 200+ employees across sites; led office-remodel network refresh (81 data drops, T1→fiber); HIPAA-compliant employee account lifecycle.
 
 ---
