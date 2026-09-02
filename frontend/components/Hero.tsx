@@ -80,8 +80,14 @@ export default function Hero() {
 
           <div className="flex flex-wrap gap-3 mb-10">
             <a
-              href="#experience"
+              href="#contact"
               className="inline-flex items-center px-6 py-3 bg-accent text-white rounded-md font-medium hover:bg-accent-dark transition-colors"
+            >
+              Get in touch
+            </a>
+            <a
+              href="#experience"
+              className="inline-flex items-center px-6 py-3 border border-line text-ink rounded-md font-medium hover:border-accent hover:text-accent transition-colors"
             >
               View Experience
             </a>

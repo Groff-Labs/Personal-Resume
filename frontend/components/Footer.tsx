@@ -35,7 +35,13 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-surface-2 border-t border-line py-10 no-print">
+    // id="contact" is the target for the nav + hero CTAs. A recruiter fed back
+    // that contact details were only findable by scrolling here, so they now
+    // have a link from the top of the page.
+    <footer
+      id="contact"
+      className="bg-surface-2 border-t border-line py-10 no-print"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>

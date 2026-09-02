@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, Download } from "lucide-react";
+import { Menu, X, Download, Mail } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
@@ -99,6 +99,13 @@ export default function Navigation() {
               <Download className="w-3.5 h-3.5" />
               Resume
             </a>
+            <a
+              href="#contact"
+              className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-accent rounded-md hover:bg-accent-dark transition-colors"
+            >
+              <Mail className="w-3.5 h-3.5" />
+              Contact
+            </a>
             <span aria-hidden className="w-px h-5 bg-line mx-2" />
             <ThemeToggle />
           </div>
@@ -147,6 +154,14 @@ export default function Navigation() {
                   </a>
                 );
               })}
+              <a
+                href="#contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="mt-3 mx-3 inline-flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-medium text-white bg-accent rounded-md hover:bg-accent-dark transition-colors"
+              >
+                <Mail className="w-4 h-4" />
+                Contact
+              </a>
             </div>
           </div>
         )}
