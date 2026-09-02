@@ -238,10 +238,27 @@ before merge.
 - **Security updates ignore `target-branch`** and open against the
   default branch (`main`). With no auto-merge, they get manual review
   before reaching prod — fine.
-- **Dependabot alerts lag.** After a fix lands on `main`, GitHub's
-  dependency-graph re-scan can take hours to flip alerts to "fixed."
-  Trust local `npm audit` over the alert count — and note GitHub counts each
-  advisory×package instance, so "63 alerts" was really 8 vulnerable packages.
+- **If the alert count never drops, the dependency graph is stuck — don't wait
+  it out.** In Sep 2026 this repo showed 65 alerts while `npm audit` was 0/0.
+  It was not lag: GitHub's graph was frozen on a *July* lockfile snapshot, and
+  **zero alerts had ever reached "fixed" state** across two successful
+  remediation rounds. New advisories kept firing against the stale snapshot, so
+  the count went *up* over time. Pushing corrected lockfiles does not dislodge
+  it. The fix is to force a re-parse by toggling alerts off and on:
+
+  ```
+  gh api -X DELETE repos/:owner/:repo/vulnerability-alerts
+  gh api -X PUT    repos/:owner/:repo/vulnerability-alerts
+  ```
+
+  65 open → 2 open within 30 seconds, and auto-close has worked since.
+  **Diagnostic that tells lag from stuck:** if `state=="fixed"` count is 0
+  while open alerts persist after a real fix, it's stuck, not lagging.
+- **`npm audit` alone is NOT sufficient.** npm's advisory DB and GitHub's GHSA
+  disagree. `browserslist` GHSA-73wf-gq98-2v4g was a real, current high that
+  GitHub flagged and `npm audit` reported nothing about. Check both.
+- GitHub counts each advisory×package *instance*, so a scary "65 alerts" was
+  really a handful of packages.
 - **`brace-expansion` in `/infrastructure` can't be fixed by `npm audit fix`.**
   It's a *bundled* dependency inside `aws-cdk-lib`, so the only fix is bumping
   `aws-cdk-lib` itself. `npm audit fix` says so explicitly and then does
@@ -314,7 +331,6 @@ Config lives in `infrastructure/cdk.json` → `context`. Edit that one block:
 | `domainName`, `account` | yours |
 | `githubOrg`, `githubRepo` | drives the OIDC trust policy subjects |
 | `resourcePrefix` | **must change** — S3 bucket names are globally unique, so `cv-michaelgroff-*` is already taken |
-| `ipinfoDatasetUrl`, `ispExclusionAsns` | analytics tuning |
 
 Then, outside the repo:
 
