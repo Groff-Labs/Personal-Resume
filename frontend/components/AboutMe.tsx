@@ -23,7 +23,7 @@ const stats = [
   { icon: User, label: "Native Texan from Bandera, TX" },
   { icon: Users, label: "Married to a Texas public school teacher" },
   { icon: Users, label: "Father of two daughters" },
-  { icon: Sparkles, label: "Fur-father of three; two Huskies and one standard-issue cat" },
+  { icon: Sparkles, label: "Fur-father of four; two Huskies, one standard-issue tabby, and one black cat" },
   { icon: Briefcase, label: "Based in San Antonio, TX" },
   { icon: Target, label: "Avid tech enthusiast" },
 ];

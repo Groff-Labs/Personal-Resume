@@ -3,27 +3,27 @@
 import { motion } from "framer-motion";
 import {
   Cloud,
+  ShieldCheck,
+  Network,
   Boxes,
-  Code2,
+  ClipboardList,
   Workflow,
   Crosshair,
   Wrench,
   Rocket,
-  Activity,
-  Server,
 } from "lucide-react";
 import { skillGroups } from "@/lib/data/skills";
 
 const CATEGORY_ICON: Record<string, typeof Cloud> = {
   AWS: Cloud,
-  "Infrastructure as Code": Boxes,
-  Languages: Code2,
+  "AWS Governance & Security": ShieldCheck,
+  Networking: Network,
+  "IaC & Languages": Boxes,
+  "Pre-Sales & Solution Design": ClipboardList,
   "Patterns & Practices": Workflow,
   Specializations: Crosshair,
   "CI/CD & GitOps": Rocket,
-  "Monitoring & Observability": Activity,
-  "Configuration Management": Server,
-  "Platforms & Tools": Wrench,
+  "Platforms & Observability": Wrench,
 };
 
 export default function Skills() {

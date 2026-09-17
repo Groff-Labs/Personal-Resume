@@ -11,7 +11,7 @@
 
 ## Professional Summary
 
-AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastructure, spanning hands-on delivery and pre-sales leadership. Delivered 17 AWS engagements across 11 industries covering landing zones, enterprise migrations, and multi-tenant SaaS modernization, then technically influenced **~$10.5M in closed-won services across ~150 opportunities** at a **~62% win rate**, roughly 10 points above team average, while carrying the **highest technical request volume of 37 solution architects globally**. Attained **~125% of a $4M booking quota** in FY2026. Serverless-first, IaC everything, security by default.
+AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastructure, spanning hands-on delivery and pre-sales leadership. At AllCloud since 2024: delivered 17 AWS engagements across 11 industries covering landing zones, enterprise migrations, and multi-tenant SaaS modernization, then technically influenced **~$10.5M in closed-won services across ~150 opportunities** at a **~62% win rate**, roughly 10 points above the team average, while carrying the **highest technical request volume of 37 solution architects globally** and attaining **~125% of a $4M booking quota** in FY2026. Serverless-first, IaC everything, security by default.
 
 ---
 

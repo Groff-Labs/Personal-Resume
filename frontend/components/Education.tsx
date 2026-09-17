@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Award, Users, Newspaper, HeartHandshake, MapPin } from "lucide-react";
+import { Award, Trophy, Users, Newspaper, HeartHandshake, MapPin } from "lucide-react";
 
 // Texas State maroon + gold as a secondary accent for this section
 const TXST_MAROON = "#501214";
@@ -15,7 +15,7 @@ const achievements = [
     description: "Recognition across multiple semesters.",
   },
   {
-    icon: Users,
+    icon: Trophy,
     title: "Intramural sports",
     description: "Football and softball through school.",
   },
