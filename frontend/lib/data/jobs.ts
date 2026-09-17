@@ -69,7 +69,7 @@ export const jobs: Job[] = [
       },
       {
         title: "Sr. Pre-Sales Solutions Architect",
-        startDate: "June 2025",
+        startDate: "July 2025",
         endDate: "July 2026",
         responsibilities: [
           "Owned pre-sales discovery and reference-architecture design across the AWS portfolio, translating business outcomes into buildable systems and defensible estimates.",
@@ -81,7 +81,7 @@ export const jobs: Job[] = [
       {
         title: "Sr. Cloud Solutions Architect",
         startDate: "May 2024",
-        endDate: "June 2025",
+        endDate: "July 2025",
         responsibilities: [
           "Architected AWS platforms for customers ranging from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allowed.",
           "Owned end-to-end cloud migrations — assessment through blue/green cutover — using CI/CD pipelines and CloudFormation / Terraform to shorten downtime windows.",
@@ -97,7 +97,10 @@ export const jobs: Job[] = [
     company: "Vivsoft Technologies",
     title: "Sr. Solutions Architect",
     location: "Remote, based in San Antonio, TX",
-    startDate: "September 2022",
+    // Overlaps AllCloud (May–Dec 2024) on purpose — both roles were held
+    // concurrently. Dates match LinkedIn and employment records; truncating
+    // would contradict a background check.
+    startDate: "September 2023",
     endDate: "December 2024",
     website: "https://vivsoft.io",
     logo: "/images/companies/vivsoft.webp",
@@ -115,22 +118,32 @@ export const jobs: Job[] = [
     title: "Sr. Solutions Architect",
     location: "Remote, based in San Antonio, TX",
     startDate: "May 2021",
-    endDate: "September 2022",
+    endDate: "September 2023",
     website: "https://innovativesol.com/",
     logo: "/images/companies/innovative-solutions.webp",
+    // Titles here mirror LinkedIn exactly. The Mar 2023 step to Sr. is a real
+    // promotion — flattening it to "Sr." throughout would hide the progression.
     roles: [
       {
         title: "Sr. Solutions Architect",
-        startDate: "January 2022",
-        endDate: "September 2022",
+        startDate: "March 2023",
+        endDate: "September 2023",
         responsibilities: [
-          "Moved into pre-sales, leading customer discovery and migration strategy across SMB and mid-market AWS accounts, and owning the technical narrative from first call through post-deploy handoff.",
           "Fed customer pain points back to AWS service and partner teams, shaping roadmap where it touched Innovative's Managed Cloud Services offering.",
           "Authored internal patterns and runbooks reused by the SA community; participated in AWS partner knowledge exchange.",
         ],
       },
       {
-        title: "Sr. Cloud Architect",
+        title: "Solutions Architect",
+        startDate: "January 2022",
+        endDate: "March 2023",
+        responsibilities: [
+          "Moved into pre-sales, leading customer discovery and migration strategy across SMB and mid-market AWS accounts.",
+          "Owned the technical narrative from first call through post-deploy handoff, keeping scoping honest against what delivery could actually build.",
+        ],
+      },
+      {
+        title: "Cloud Architect",
         startDate: "May 2021",
         endDate: "January 2022",
         responsibilities: [
@@ -144,7 +157,7 @@ export const jobs: Job[] = [
   {
     id: "accenture",
     company: "Accenture Federal Services",
-    title: "Cloud Tech Architect Delivery Specialist",
+    title: "Cloud Migration Architect",
     location: "Remote, based in San Antonio, TX",
     startDate: "December 2019",
     endDate: "May 2021",

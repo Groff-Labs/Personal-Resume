@@ -32,6 +32,22 @@ role's `endDate` to `"October 2026"`, and update the card's top-level `title`
 (it mirrors `roles[0]`). Mirror all of it in `resume.md`. Deliberately not
 published early — the site shouldn't claim a role that hasn't started.
 
+**LinkedIn is the source of truth for dates and titles.** Sep 2026: the site and
+LinkedIn disagreed by a full *year* on Innovative and Vivsoft, and the site was
+missing an entire Innovative role. Resolved in LinkedIn's favor. If they ever
+diverge again, fix the site — a resume that contradicts a live public profile
+(or an employment-verification record) is the expensive kind of wrong.
+
+Two deliberate exceptions, both because the external title reads better than the
+internal one: AllCloud roles carry **Sr.** though HR called them "Solutions
+Architect II", and Accenture is **Cloud Migration Architect** rather than "Cloud
+Tech Architect Delivery Specialist". Innovative uses LinkedIn's exact titles,
+because the Mar 2023 step to Sr. is a real promotion worth showing.
+
+**The AllCloud / Vivsoft overlap (May–Dec 2024) is intentional and accurate** —
+both roles were genuinely held at once. Don't "fix" it by truncating Vivsoft:
+that would contradict both LinkedIn and Vivsoft's employment record.
+
 **AllCloud is one card holding a `roles` array**, not one card per title, so it
 reads as growth at a single company. A `Job` sets *either* `roles` (a promotion
 path, newest first) *or* `responsibilities` (a single title) — `Experience.tsx`

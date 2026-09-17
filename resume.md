@@ -25,14 +25,14 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Lead pre-sales discovery, reference-architecture design, and executive presentations that translate business outcomes into buildable systems and help close engagements.
 - Run cost-optimization engagements across CloudWatch, Trusted Advisor, Cost Explorer, and third-party tools; surface right-sizing, Savings Plans, and anomaly remediation.
 
-**Sr. Pre-Sales Solutions Architect** · *June 2025 – July 2026*
+**Sr. Pre-Sales Solutions Architect** · *July 2025 – July 2026*
 
 - Owned pre-sales discovery and reference-architecture design across the AWS portfolio, translating business outcomes into buildable systems and defensible estimates.
 - Partnered with account teams on technical qualification, scoping, and executive presentations through to close.
 - Built proofs of concept and architecture narratives that de-risked the technical decision before customers committed budget.
 - Carried delivery experience into the sales motion, so what was scoped matched what delivery could actually build.
 
-**Sr. Cloud Solutions Architect** · *May 2024 – June 2025*
+**Sr. Cloud Solutions Architect** · *May 2024 – July 2025*
 
 - Architected AWS platforms for customers from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allowed.
 - Owned end-to-end cloud migrations — assessment through blue/green cutover — using CI/CD pipelines and CloudFormation / Terraform to shorten downtime windows.
@@ -40,7 +40,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Hardened customer environments against AWS Well-Architected pillars (IAM boundaries, VPC segmentation, GuardDuty / WAF).
 
 ### Sr. Solutions Architect — Vivsoft Technologies
-*September 2022 – December 2024 · Remote (San Antonio, TX)*
+*September 2023 – December 2024 · Remote (San Antonio, TX)*
 
 - Led cloud architecture for DoD and federal programs, designing secure, multi-tenant systems against IL4 / IL5 accreditation requirements and DISA SRG controls.
 - Drove end-to-end migrations for mission-critical applications, including blue/green deployments that preserved uptime across cutover windows.
@@ -48,20 +48,25 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - Translated cloud-adoption ROI for customer executives — security posture, operational cost, scalability headroom — driving buy-in on modernization roadmaps.
 
 ### Innovative Solutions
-*May 2021 – September 2022 · Remote (San Antonio, TX)*
+*May 2021 – September 2023 · Remote (San Antonio, TX)*
 
-**Sr. Solutions Architect** · *January 2022 – September 2022*
+**Sr. Solutions Architect** · *March 2023 – September 2023*
 
-- Moved into pre-sales, leading customer discovery and migration strategy across SMB and mid-market AWS accounts, and owning the technical narrative from first call through post-deploy handoff.
 - Fed customer pain points back to AWS service and partner teams, shaping roadmap where it touched Innovative's Managed Cloud Services offering.
+- Authored internal patterns and runbooks reused by the SA community; participated in AWS partner knowledge exchange.
 
-**Sr. Cloud Architect** · *May 2021 – January 2022*
+**Solutions Architect** · *January 2022 – March 2023*
+
+- Moved into pre-sales, leading customer discovery and migration strategy across SMB and mid-market AWS accounts.
+- Owned the technical narrative from first call through post-deploy handoff, keeping scoping honest against what delivery could actually build.
+
+**Cloud Architect** · *May 2021 – January 2022*
 
 - Designed repeatable migration patterns (assessment → landing zone → 6R application move → operational handoff) that the delivery team reused across engagements.
 - Built AWS infrastructure across EC2, VPC, RDS, IAM, and WAF; automated provisioning in CloudFormation and Terraform.
 - Stood up customer CI/CD on CodePipeline, CodeBuild, and CodeDeploy, replacing manual release processes with repeatable pipelines.
 
-### Cloud Tech Architect Delivery Specialist — Accenture Federal Services
+### Cloud Migration Architect — Accenture Federal Services
 *December 2019 – May 2021 · Remote (San Antonio, TX)*
 
 - Designed cross-cloud architectures for federal customers on Azure and AWS, spanning IaaS, PaaS, and SaaS layers.
