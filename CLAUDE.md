@@ -326,9 +326,23 @@ Both are byte-preserved from the source WP installs. Do not try to
 
 ## Known non-issues (don't "fix" without asking)
 
-- **AWS SA Pro + SA Associate are expired per Credly** (2025-01-07).
-  User is aware, leaving as historical record. Don't add expiration
-  callouts to the UI.
+- **AWS certifications: earn years only, no status labels.** All three
+  proctored AWS certs carry earn dates older than the 3-year validity window
+  (SA Pro 2022-01, SA Associate 2021-04, SysOps 2023-04). Raised again in
+  Sep 2026 when the resume started listing them; user's decision is to show
+  the earn year and nothing else, on both the site and the resume. A bare
+  "(2022)" states when it was earned and claims no currency. **Don't add
+  expiry callouts, don't split Active vs Previously Held, don't remove them.**
+  (Note: AWS added a Skill Builder certification-maintenance path in Jul 2026,
+  so Credly earn dates may understate actual status anyway.)
+- **Delivery-phase cost savings don't exist.** Confirmed Sep 2026 across the
+  full document set: Assess-phase design guides defer TCO to Mobilize, the
+  Mobilize readouts hold current-state baselines and forward projections only,
+  and no delivery-phase TCO workbook exists for any of the 17 engagements.
+  The category is deliberately absent from the resume. Don't go looking again.
+- **Never use the "Business Impact at a Glance" percentages** (43% time-to-market,
+  69% unplanned downtime, 45% security incidents) that appear in a customer deck.
+  They are labelled "(AWS benchmark)" — vendor marketing, not delivered results.
 - **Orphan images in `public/images/`** (`icagile.jpg`,
   `redhat-ansible.jpg`, `dell-poweredge-*.png`, `strengths-graphic.png`)
   — unreferenced but retained as reference material. Don't auto-clean.
