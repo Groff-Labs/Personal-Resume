@@ -30,7 +30,7 @@ const css = `
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 9pt;
-    line-height: 1.27;
+    line-height: 1.25;
     color: #111827;
   }
   h1 {

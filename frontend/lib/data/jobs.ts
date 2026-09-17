@@ -61,12 +61,14 @@ export const jobs: Job[] = [
         startDate: "July 2026",
         endDate: "Present",
         responsibilities: [
-          "Lead a pre-sales solutions architecture team, owning technical qualification standards, reference architecture quality, and engagement scoping ahead of handoff to delivery. Mentor solutions architects on discovery technique, sizing, and executive communication.",
-          "Partner with practice and sales leadership on staffing, resource allocation, and pipeline review; contribute to hiring and onboarding, including authoring the pre-sales solutions architect interview guide.",
+          "Player-coach lead for a pre-sales solutions architecture team spanning cloud infrastructure and data/AI; personally own pre-sales on the most strategic and complex opportunities, and ensure what is sold is what delivery can build.",
+          "Own review and approval of level-of-effort estimates, solution designs, and proposals before they reach the customer, and estimation discipline end to end: scoping, assumptions, risk, phasing, and pricing inputs.",
+          "Allocate architect coverage against pipeline priority, deal size, and technical fit; build reusable discovery frameworks, estimation models, and proposal templates; contribute to hiring and onboarding, including authoring the pre-sales SA interview guide.",
           "One of three practice team leads; guide three solutions architects and own a $4M annual booking quota, attained ~125% (~$5M) in FY2026.",
           "Built and lead an internal AI tooling library of 13 skills spanning the full engagement lifecycle, from SOW review and architecture design guides through MAP readouts, licensing assessments, Jira task generation, and change orders. Authored 9 net-new and contributed ~90% of commits and ~21,000 lines in three weeks.",
           "Lead AllCloud North America's AWS One OLA (Optimization and Licensing Assessment) partner certification: completed the Microsoft enablement track, produced the full deliverable set against an AWS-set ~600-server scenario, and submitted for AWS approval.",
           "Audited ~100 customer engagements for pipeline hygiene, surfacing that ~10% carried no CRM record and roughly half no supporting documentation.",
+          "Time from opportunity creation to solutions-architect engagement on supported opportunities improved ~42% across tenure (median ~17 days to ~10), with same-day engagement rising from ~15% to ~35%.",
         ],
       },
       {
@@ -90,7 +92,9 @@ export const jobs: Job[] = [
         startDate: "May 2024",
         endDate: "July 2025",
         responsibilities: [
-          "Owned end-to-end AWS delivery for customer engagements: assessment, architecture design, landing zone build, migration execution, and operational handoff. Ran discovery and design workshops, authored architecture design guides, and presented final readouts to customer stakeholders.",
+          "Led technical workshops and advised customers on architectural and strategic IT decisions, translating business and application requirements into technical requirements and designing highly scalable, flexible, and resilient cloud architectures.",
+          "Owned end-to-end AWS delivery: assessment, architecture design, landing zone build, migration execution, and operational handoff, authoring architecture design guides and presenting final readouts to stakeholders.",
+          "Provided pre-sales architecture support alongside delivery work, per the role remit, which is what led to the move into the pre-sales practice.",
           "Designed and deployed AWS infrastructure across compute, networking, storage, identity, and security. Implemented infrastructure as code in AWS CDK, CloudFormation, and Terraform, and hardened environments against the AWS Well-Architected Framework.",
           "Delivered 17 AWS engagements across 11 industries covering landing zones, MAP migrations, modernization, security posture, and cost optimization. Ran up to 5 concurrently, typically 3 to 6 months, the largest spanning 14 months and 4+ workstreams.",
           "Assessed a global mining enterprise's Azure estate for AWS migration: ~320 VMs across 8 regions, ~30 subscriptions, ~400 TB allocated storage, and ~200 GB per day of log ingestion under 24-month retention.",
