@@ -88,6 +88,10 @@ const css = `
   }
   h3 { break-after: avoid-page; }
   li { break-inside: avoid-page; }
+  /* Keep a role title glued to its first bullets. Without this a "**Title** ·
+     dates" line can strand at the bottom of a page with its bullets overleaf.
+     Not currently triggering, but content shifts every time metrics change. */
+  p:has(strong) { break-after: avoid-page; }
   /* SINGLE COLUMN THROUGHOUT — do not reintroduce column-count.
      This used to two-column the Skills list. Applicant tracking systems
      commonly read straight across the page and interleave columns, which
