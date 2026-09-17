@@ -28,7 +28,7 @@ export const heroStatuses: HeroStatus[] = [
     tone: "available",
     lead: "",
     emphasis: "Open to new roles",
-    tail: " — AWS architecture & platform work.",
+    tail: ": AWS architecture & platform work.",
   },
   {
     id: "open-conversations",
@@ -49,7 +49,7 @@ export const heroStatuses: HeroStatus[] = [
     tone: "settled",
     lead: "Heads-down at ",
     emphasis: "AllCloud",
-    tail: " — not currently looking.",
+    tail: "; not currently looking.",
   },
 ];
 

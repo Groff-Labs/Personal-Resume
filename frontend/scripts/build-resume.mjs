@@ -20,14 +20,18 @@ const css = `
   /* Reset — we pass stylesheet:[] to skip md-to-pdf's default markdown.css
      so there are no surprise paddings/margins fighting ours. */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @page { size: Letter; margin: 0; }
+  /* Margins MUST live on @page, not on body padding. Body padding only wraps
+     the outside of the content box, so it yields a top margin on page 1 and a
+     bottom margin on the last page while content runs to the physical edge at
+     every intermediate page break. @page repeats on every sheet, which is what
+     printing actually needs. 0.5in is the conventional printer-safe minimum. */
+  @page { size: Letter; margin: 0.5in 0.55in; }
   html, body { margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 9pt;
-    line-height: 1.32;
+    line-height: 1.27;
     color: #111827;
-    padding: 0.4in 0.55in;
   }
   h1 {
     font-size: 19pt;
@@ -48,7 +52,7 @@ const css = `
     letter-spacing: 0.1em;
     border-bottom: 0.75pt solid #d1d5db;
     padding-bottom: 2pt;
-    margin: 10pt 0 5pt;
+    margin: 8pt 0 4pt;
   }
   h3 {
     font-size: 10pt;
@@ -66,11 +70,11 @@ const css = `
     font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
     letter-spacing: -0.01em;
   }
-  p { margin: 0 0 5pt; }
+  p { margin: 0 0 4pt; }
   ul { margin: 1pt 0 0; padding-left: 12pt; }
   li { margin-bottom: 1.5pt; }
   li::marker { color: #0891b2; }
-  hr { border: 0; border-top: 0.75pt solid #e5e7eb; margin: 7pt 0 3pt; }
+  hr { border: 0; border-top: 0.75pt solid #e5e7eb; margin: 5pt 0 2pt; }
   strong { color: #111827; }
   a { color: #0891b2; text-decoration: none; }
   code {
@@ -89,8 +93,16 @@ const css = `
 `;
 
 const started = Date.now();
+
+// Markdown treats "~" as a strikethrough delimiter, so a line like
+// "~340 of ~590 person-hours (~58%)" renders struck through. Escape tildes for
+// RENDERING ONLY: resume.md is itself published as a download, so the source
+// keeps clean "~340" text rather than carrying backslashes for a PDF quirk.
+const raw = await fs.readFile(SRC, "utf8");
+const content = raw.replace(/~/g, "\\~");
+
 const pdf = await mdToPdf(
-  { path: SRC },
+  { content },
   {
     dest: DEST,
     // Sets the <title> tag, which Chromium embeds as the PDF's

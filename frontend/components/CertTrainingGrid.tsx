@@ -29,7 +29,7 @@ export default function CertTrainingGrid() {
         Training &amp; micro-credentials
       </p>
       <p className="text-center text-xs text-ink-subtle mb-6 max-w-xl mx-auto">
-        AWS Partner and AWS Knowledge badges. Completion-based, not proctored —
+        AWS Partner and AWS Knowledge badges. Completion-based, not proctored;
         included for completeness.
       </p>
 
