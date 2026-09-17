@@ -80,9 +80,12 @@ const css = `
   }
   h3 { break-after: avoid-page; }
   li { break-inside: avoid-page; }
-  /* Skills block becomes two columns in print — last UL in document */
-  body > ul:last-of-type { column-count: 2; column-gap: 18pt; }
-  body > ul:last-of-type li { break-inside: avoid-column; }
+  /* SINGLE COLUMN THROUGHOUT — do not reintroduce column-count.
+     This used to two-column the Skills list. Applicant tracking systems
+     commonly read straight across the page and interleave columns, which
+     scrambles exactly the section they keyword-match against. The Skills
+     list has since been replaced by the Core Competencies block near the
+     top, where ATS weights keywords more heavily anyway. */
 `;
 
 const started = Date.now();
@@ -119,4 +122,15 @@ console.log(
   `✓ Built ${path.relative(REPO_ROOT, DEST)} — ${(size / 1024).toFixed(1)} KB in ${
     Date.now() - started
   } ms`,
+);
+
+// Also publish the Markdown source itself. Some applicant tracking systems and
+// recruiters prefer plain text over a PDF's extracted text layer, and it's the
+// cleanest thing to paste into an application form. Copied rather than
+// symlinked so `next build`'s static export picks it up.
+const MD_DEST = path.resolve(__dirname, "../public/resume.md");
+await fs.copyFile(SRC, MD_DEST);
+const { size: mdSize } = await fs.stat(MD_DEST);
+console.log(
+  `✓ Copied ${path.relative(REPO_ROOT, MD_DEST)} — ${(mdSize / 1024).toFixed(1)} KB`,
 );

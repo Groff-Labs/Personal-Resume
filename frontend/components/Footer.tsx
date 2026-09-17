@@ -1,4 +1,4 @@
-import { Github, Linkedin, Twitter, Mail, Phone, UserPlus } from "lucide-react";
+import { Github, Linkedin, Twitter, Mail, Phone, UserPlus, FileText } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -73,6 +73,16 @@ export default function Footer() {
             >
               <UserPlus className="w-4 h-4" />
               Save contact (.vcf)
+            </a>
+            {/* Markdown alongside the PDF: some ATS and application forms take
+                plain text more reliably than a PDF's extracted text layer. */}
+            <a
+              href="/resume.md"
+              download
+              className="mt-2 inline-flex items-center gap-2 text-sm text-ink-muted hover:text-accent transition-colors"
+            >
+              <FileText className="w-4 h-4" />
+              Résumé (Markdown)
             </a>
           </div>
 

@@ -26,6 +26,7 @@ out/
 
 # Generated artifacts (rebuilt on every `npm run build` from resume.md)
 frontend/public/resume.pdf
+frontend/public/resume.md
 
 # CDK
 cdk.out/

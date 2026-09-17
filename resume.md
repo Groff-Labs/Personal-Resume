@@ -3,13 +3,30 @@
 # Michael Groff
 
 **AWS Sr. Solutions Architect** · San Antonio, TX
+(830) 688-2830 · mg1459.mg@gmail.com
 [michaelgroff.info](https://michaelgroff.info) · [LinkedIn](https://www.linkedin.com/in/michael-groff-8b367489) · [GitHub](https://github.com/mgroff2)
 
 ---
 
-## Summary
+## Professional Summary
 
-AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructure. Serverless-first, IaC everything, security by default. Career arc runs Rackspace Windows Admin → AWS Cloud Support Engineer → AWS Architect, which shapes how I design for production: it has to run at 2 a.m. on a Sunday without anyone waking up.
+AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastructure, spanning hands-on delivery and pre-sales leadership. Delivered 17 AWS engagements across 11 industries — landing zones, enterprise migrations, and multi-tenant SaaS modernization — then technically influenced **$10.3M in closed-won services across 144 opportunities** at a **61.7% win rate**, roughly 10 points above team average, while carrying the **highest technical request volume of 37 solution architects globally**. Attained **126% of a $4M booking quota** in FY2026. Serverless-first, IaC everything, security by default.
+
+---
+
+## Core Competencies
+
+**Cloud Architecture & Migration:** AWS enterprise architecture · Landing Zone Accelerator (LZA) · Control Tower · AWS Organizations · IAM Identity Center · Service Control Policies · AWS Migration Acceleration Program (MAP) · Azure-to-AWS · Rackspace-to-AWS · on-premises-to-AWS · 6R migration strategy · Migration Evaluator · Cloudamize · RVTools · blue/green cutover · disaster recovery · Well-Architected Framework
+
+**Pre-Sales & Technical Advisory:** discovery · requirements analysis · reference architecture · proofs of concept · SOW authoring · LOE estimation · TCO modeling · executive presentations · technical qualification · AWS partner funding programs · FinOps and cloud cost optimization
+
+**Platform & Application Engineering:** EKS · Karpenter · ECS · Fargate · EC2 · Lambda · API Gateway · Step Functions · EventBridge · SQS/SNS · multi-tenant SaaS · microservices · CI/CD · ArgoCD · Helm · Istio · Kubernetes · AppStream 2.0 · WorkSpaces
+
+**Data & AI:** RDS (PostgreSQL) · Aurora · DocumentDB · ElastiCache · DynamoDB · Neptune · S3 · Glue · EMR · MSK · OpenSearch · Snowflake · Amazon Bedrock · Anthropic Claude · Model Context Protocol (MCP) · agentic workflows · Textract
+
+**Networking & Security:** VPC · Transit Gateway · Direct Connect · PrivateLink · VPC endpoints · Route 53 · ALB/NLB · CloudFront · WAF · GuardDuty · Security Hub · Inspector · Config · CloudTrail · KMS · Secrets Manager · Cognito · Managed Microsoft AD · M-21-31 logging · IL4/IL5 · DISA SRG · HIPAA · GxP
+
+**Infrastructure as Code & Operations:** AWS CDK (TypeScript, Python) · Terraform · CloudFormation · Systems Manager · CloudWatch · AWS Backup · Elastic Disaster Recovery · Prometheus · Grafana · New Relic · Datadog · PowerShell · Python · Bash
 
 ---
 
@@ -20,24 +37,29 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 
 **Sr. Pre-Sales Solutions Architect / Team Lead** · *July 2026 – Present*
 
-- Lead the pre-sales solutions-architecture team, setting the bar for technical qualification, reference-architecture quality, and how engagements get scoped before they reach delivery.
-- Mentor solutions architects on discovery technique, sizing, and executive communication.
-- Lead pre-sales discovery, reference-architecture design, and executive presentations that translate business outcomes into buildable systems and help close engagements.
-- Run cost-optimization engagements across CloudWatch, Trusted Advisor, Cost Explorer, and third-party tools; surface right-sizing, Savings Plans, and anomaly remediation.
+- One of three practice team leads; guide three solutions architects and own a **$4M annual booking quota, attained 126% ($5.03M)** in FY2026.
+- Built and lead an internal AI tooling library of **13 skills covering the full engagement lifecycle** — SOW review, architecture design guides, MAP readouts, licensing assessments, Jira task generation, change orders — authoring 9 net-new and contributing **91% of commits and 21,000+ lines in three weeks**.
+- Lead AllCloud North America's **AWS One OLA (Optimization and Licensing Assessment) partner certification**: completed the Microsoft enablement track, produced the full deliverable set against an AWS-set ~600-server scenario, and submitted for AWS approval.
+- Audited 102 customer engagements for pipeline hygiene, surfacing that 11% carried no CRM record and roughly half no supporting documentation.
 
 **Sr. Pre-Sales Solutions Architect** · *July 2025 – July 2026*
 
-- Owned pre-sales discovery and reference-architecture design across the AWS portfolio, translating business outcomes into buildable systems and defensible estimates.
-- Partnered with account teams on technical qualification, scoping, and executive presentations through to close.
-- Built proofs of concept and architecture narratives that de-risked the technical decision before customers committed budget.
-- Carried delivery experience into the sales motion, so what was scoped matched what delivery could actually build.
+- Technical solutions architect on **144 opportunities**, closing **71 at $10.3M in services revenue** and influencing **$23.1M** in total pipeline.
+- Carried the **highest technical request volume of 37 solution architects globally** — 143 requests, 54% more than the next-highest — sustained at ~9.5 opportunities per month over 15 months.
+- **61.7% win rate by count, 79.5% by value** — roughly 10 points above the solutions-architect team average. Median 39 days from opportunity creation to close.
+- Registered **$1.2M+ across 16 AWS MAP programs** (Assess and Mobilize).
+- Produced **32 LOE and estimate packages in four months**, 10 named SOWs and proposals, and 5 proofs of concept — all five closed won.
+- Quantified that **343 of 587 person-hours (58%) of pre-sales effort on non-converting deals was artifact production**, then helped build and tune the AI assistant that now automates it.
+- Established AllCloud's first standardized pre-sales artifact set — handover-doc template, discovery questionnaire, SOW input structure, and an estimation workbook used 12+ times.
 
 **Sr. Cloud Solutions Architect** · *May 2024 – July 2025*
 
-- Architected AWS platforms for customers from startups to enterprise, defaulting to serverless (Lambda, API Gateway, EventBridge, SQS/SNS, DynamoDB, Step Functions) when the workload allowed.
-- Owned end-to-end cloud migrations — assessment through blue/green cutover — using CI/CD pipelines and CloudFormation / Terraform to shorten downtime windows.
-- Integrated generative-AI services (Bedrock, SageMaker) into customer workflows for document processing, decision automation, and predictive analytics.
-- Hardened customer environments against AWS Well-Architected pillars (IAM boundaries, VPC segmentation, GuardDuty / WAF).
+- Delivered **17 AWS engagements across 11 industries** — landing zones, MAP migrations, modernization, security posture, and cost optimization — running **up to 5 concurrently**, typically 3–6 months, the largest spanning 14 months and 4+ workstreams.
+- Assessed a global mining enterprise's Azure estate for AWS migration: **319 VMs across 8 regions, 31 subscriptions, ~412 TB allocated storage**, and ~200 GB/day of log ingestion under 24-month retention.
+- Architected a **multi-tenant SaaS platform: 7 products / 64 microservices on EKS**, one dedicated AWS account per tenant, replacing in-cluster PostgreSQL, MongoDB, Redis, and RabbitMQ with managed AWS services; implemented US federal M-21-31 logging controls.
+- Deployed **Landing Zone Accelerator across 6 engagements**; delivered Azure-to-AWS, Rackspace-to-AWS, and on-premises-to-AWS migrations.
+- Authored or co-authored **architecture design guides for 9 engagements**, plus the SaaS design-guide template reused on 4+ engagements since.
+- **4 delivery engagements converted into follow-on or expansion work.**
 
 ### Sr. Solutions Architect — Vivsoft Technologies
 *September 2023 – December 2024 · Remote (San Antonio, TX)*
@@ -84,7 +106,7 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 
 ### Earlier Experience
 
-- **Unique Digital (UDI)** — Solutions Architect / Solutions Engineer · *Apr 2017 – May 2019 · San Antonio, TX.* Dell EMC and partner-technology solution design, pre-sales technical lead across multiple verticals.
+- **Unique Digital (UDI)** — Solutions Architect / Systems Engineer · *Apr 2017 – May 2019 · San Antonio, TX.* Dell EMC and partner-technology solution design, pre-sales technical lead across multiple verticals.
 - **Rackspace** — Windows Administrator I → II · *Jan 2015 – Apr 2017 · San Antonio, TX.* 24×7 managed Windows workloads on bare metal and Hyper-V / VMware; AD, MSSQL, Exchange, IIS; PowerShell automation for repeat admin tasks.
 - **R & K Specialized Homes** — IT / Network Administrator · *Jul 2013 – Jan 2015 · San Antonio, TX.* Owned IT for 200+ employees across sites; led office-remodel network refresh (81 data drops, T1→fiber); HIPAA-compliant employee account lifecycle.
 
@@ -104,17 +126,3 @@ AWS Sr. Solutions Architect with 12+ years across cloud and hybrid infrastructur
 - **Legacy:** Dell EMC PowerEdge Associate + Implementation Engineer Specialist (2018) · VMware VSP / VTSP partner accreditations, BC / HCI / MA / MO / NV / SV (2017–2018) · Microsoft MTA Networking Fundamentals (2017)
 
 *Live verification links at [michaelgroff.info](https://michaelgroff.info).*
-
----
-
-## Skills
-
-- **AWS:** Lambda · API Gateway · S3 · CloudFront · DynamoDB · EventBridge · SQS/SNS · Step Functions · ECS/Fargate · EC2 · VPC · IAM · Route 53 · ACM · WAF · CloudWatch · Cost Explorer
-- **Infrastructure as Code:** AWS CDK (TypeScript) · SST · Pulumi · Terraform · CloudFormation
-- **Languages:** TypeScript · Python · Bash · PowerShell
-- **CI/CD & GitOps:** GitHub Actions · GitLab CI · CircleCI · ArgoCD · FluxCD · Helm · Kustomize
-- **Patterns:** Serverless-first · Event-driven · Microservices · Blue/green deploys · Well-Architected · Cost optimization · DR
-- **Platforms:** Linux · Windows Server · VMware · Hyper-V · KVM · Docker · Kubernetes · CloudFlare
-- **Observability:** CloudWatch · Datadog · New Relic · Prometheus · Grafana
-- **Config Mgmt:** Ansible · Chef · Puppet
-- **Specializations:** On-prem → cloud · Greenfield AWS · Hybrid (AWS + Azure + on-prem) · DoD/Federal (IL4, FedRAMP) · Generative AI integration
