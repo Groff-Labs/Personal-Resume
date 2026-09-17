@@ -70,8 +70,8 @@ AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastruc
 - Authored or co-authored **architecture design guides for 9 engagements**, plus the SaaS design guide template reused on 4+ engagements since.
 - **4 delivery engagements converted into follow-on or expansion work.**
 
-### Sr. Solutions Architect · Vivsoft Technologies
-*September 2023 – December 2024 · Remote (San Antonio, TX)*
+### Vivsoft Technologies
+**Sr. Solutions Architect** · *September 2023 – December 2024 · Remote (San Antonio, TX)*
 
 - Led cloud architecture for DoD and federal programs, designing secure, multi-tenant systems against IL4 and IL5 accreditation requirements and DISA SRG controls.
 - Drove end-to-end migrations for mission-critical applications, including blue/green deployments that preserved uptime across cutover windows.
@@ -99,8 +99,8 @@ AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastruc
 - Built AWS infrastructure across EC2, VPC, RDS, IAM, and WAF, automating provisioning in CloudFormation and Terraform.
 - Stood up customer CI/CD on CodePipeline, CodeBuild, and CodeDeploy, replacing manual release processes with repeatable pipelines.
 
-### Cloud Migration Architect · Accenture Federal Services
-*December 2019 – May 2021 · Remote (San Antonio, TX)*
+### Accenture Federal Services
+**Cloud Migration Architect** · *December 2019 – May 2021 · Remote (San Antonio, TX)*
 
 - Designed cross-cloud architectures for federal customers on Azure and AWS, spanning IaaS, PaaS, and SaaS layers.
 - Built network and application topology: VPC / VNet, subnets, load balancers, EC2 / VMs, RDS, Azure SQL, Elastic Beanstalk, and App Service Environment.
@@ -108,8 +108,8 @@ AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastruc
 - Produced Azure and AWS cost comparisons that informed cloud service provider selection for new workloads.
 - Held an Active Security Clearance (type available upon request).
 
-### Cloud Support Engineer · AWS (Amazon Web Services)
-*May 2019 – December 2019 · Dallas, TX*
+### AWS (Amazon Web Services)
+**Cloud Support Engineer** · *May 2019 – December 2019 · Dallas, TX*
 
 - Supported Windows-focused AWS workloads across 15+ services including EC2, VPC, ASG, SSM, Directory Services, CloudEndure, WorkSpaces, ECS, ELB, EBS, S3, RDS, and AWS Backup.
 - Resolved customer incidents spanning Active Directory, MSSQL, Exchange, IIS, Terminal Server, and remote-access issues.

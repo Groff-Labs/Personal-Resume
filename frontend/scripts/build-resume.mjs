@@ -54,16 +54,20 @@ const css = `
     padding-bottom: 2pt;
     margin: 8pt 0 4pt;
   }
+  /* h3 is ALWAYS the employer. Sized well above the 9pt role titles so the
+     employer/role distinction is obvious at a glance; they used to be 10pt vs
+     9pt bold and blended together. */
   h3 {
-    font-size: 10pt;
+    font-size: 12pt;
     font-weight: 700;
-    margin: 6pt 0 0;
+    letter-spacing: -0.01em;
+    margin: 9pt 0 1pt;
     color: #111827;
   }
   h3 + p {
     margin: 0 0 2pt;
     color: #6b7280;
-    font-size: 8.5pt;
+    font-size: 9pt;
   }
   h3 + p em {
     font-style: normal;

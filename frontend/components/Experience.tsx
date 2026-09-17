@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ExternalLink, MapPin } from "lucide-react";
@@ -16,6 +16,41 @@ export default function Experience() {
   // Expand the most recent role. Tracks jobs[0] rather than a hardcoded id so
   // this keeps working when the current role changes.
   const [expandedJob, setExpandedJob] = useState<string>(jobs[0]?.id ?? "");
+
+  // Opening a card collapses whichever one was open. When that card sits ABOVE
+  // the one just clicked, its collapse removes height above the click point, so
+  // the page slides up under an unchanged scroll offset and the reader gets
+  // dumped into Education or Certifications.
+  //
+  // Fix: pin the clicked header where it was. The collapse is a 250ms height
+  // animation, so a single post-render correction only catches the first frame;
+  // this re-pins every frame until the animation settles.
+  const anchor = useRef<{ el: HTMLElement; top: number } | null>(null);
+
+  useEffect(() => {
+    const a = anchor.current;
+    if (!a) return;
+    let raf = 0;
+    const until = performance.now() + 350; // 250ms animation + headroom
+    const pin = () => {
+      const delta = a.el.getBoundingClientRect().top - a.top;
+      // "instant" matters: globals.css sets scroll-behavior:smooth, which would
+      // otherwise animate each correction and fight the pinning.
+      if (delta !== 0) window.scrollBy({ top: delta, behavior: "instant" });
+      if (performance.now() < until) {
+        raf = requestAnimationFrame(pin);
+      } else {
+        anchor.current = null;
+      }
+    };
+    raf = requestAnimationFrame(pin);
+    return () => cancelAnimationFrame(raf);
+  }, [expandedJob]);
+
+  const toggle = (id: string, open: boolean, el: HTMLElement) => {
+    anchor.current = { el, top: el.getBoundingClientRect().top };
+    setExpandedJob(open ? "" : id);
+  };
 
   return (
     <section id="experience" className="section-container bg-surface-1">
@@ -70,7 +105,7 @@ export default function Experience() {
                     {/* Collapsed header (always visible) */}
                     <button
                       type="button"
-                      onClick={() => setExpandedJob(isOpen ? "" : job.id)}
+                      onClick={(e) => toggle(job.id, isOpen, e.currentTarget)}
                       className="w-full text-left flex items-center gap-4 p-5 group"
                       aria-expanded={isOpen}
                     >
