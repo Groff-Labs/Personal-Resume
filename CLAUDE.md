@@ -24,13 +24,23 @@ WordPress → Next.js refactor and apex-migration work is already done.
 `resume.md` is the source of truth for the downloadable PDF (auto-built
 by `npm run resume`, which runs as a `prebuild` hook).
 
-**Scheduled change — 1 Oct 2026:** the AllCloud role changes from *Sr.
-Pre-Sales Solutions Architect / Team Lead* to *Sr. Cloud Solutions Architect /
-Team Lead* (moving back to delivery). In `frontend/lib/data/jobs.ts`, prepend
-the ready-to-uncomment role to the AllCloud `roles` array, set the previous
-role's `endDate` to `"October 2026"`, and update the card's top-level `title`
-(it mirrors `roles[0]`). Mirror all of it in `resume.md`. Deliberately not
-published early — the site shouldn't claim a role that hasn't started.
+**Role change applied 2 Oct 2026.** The AllCloud role became *Sr. Solutions
+Architect / Manager of Platforms Solutions Architects*, effective Oct 2026.
+The real title differed from the one staged here in Sep 2026 ("Sr. Cloud
+Solutions Architect / Team Lead"), so don't trust a staged future title:
+confirm it with the user when it lands.
+
+Two conventions set at the same time, both worth keeping:
+
+- **Duties live on the current role; achievements stay with the role that
+  earned them.** The Jul–Oct 2026 Team Lead entry keeps its five metric
+  bullets and none of its duty bullets, because those duties continue into
+  the Manager role and repeating them cost a whole page.
+- **The resume is a full 3 pages.** Adding a role without trimming pushes it
+  to 4, with a stranded `CERTIFICATIONS` heading. After any Experience edit,
+  run `npm run resume && pdfinfo frontend/public/resume.pdf | grep Pages`.
+  `h2 { break-after: avoid-page }` in `build-resume.mjs` stops a section
+  heading being orphaned at a page foot, but it can't invent space.
 
 **LinkedIn is the source of truth for dates and titles.** Sep 2026: the site and
 LinkedIn disagreed by a full *year* on Innovative and Vivsoft, and the site was
@@ -81,9 +91,16 @@ tenure while each role carries its own dates. `Experience.tsx` also expands
 
 ## Analytics
 
-Two independent systems. Neither was documented before Aug 2026.
+Two live systems (Plausible and CloudFlare) plus one removed. None was
+documented before Aug 2026.
 
 ### 1. CloudFlare Web Analytics (visitor counts) — since April 2026
+
+Kept as a cross-check against Plausible, not as the primary. **Expect Plausible
+to report higher numbers**, because it's proxied first-party while
+`static.cloudflareinsights.com` is itself commonly blocked. A divergence is
+the proxy working, not a bug. Safe to retire by clearing
+`CLOUDFLARE_ANALYTICS_TOKEN` in both environments once Plausible is trusted.
 
 Beacon injected in `frontend/app/layout.tsx`, gated on
 `NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN`; empty value disables the tag.
@@ -102,7 +119,54 @@ CloudFlare → Analytics & Logs → Web Analytics (two sites listed).
 Cookieless and anonymous by design: pageviews, referrers, countries, paths — no
 visitor identity. Being a JS beacon, ad blockers suppress it, so it undercounts.
 
-### 2. Company-level visitor identification — TRIED AND REMOVED (Aug 2026)
+### 2. Plausible Analytics (primary, paid) — since Oct 2026
+
+Script injected in `frontend/app/layout.tsx`, gated on
+`NEXT_PUBLIC_PLAUSIBLE_SRC` (empty value disables the tag). Two
+environment-scoped GitHub variables, same per-stage pattern as the CloudFlare
+token above, so dev traffic doesn't pollute prod numbers:
+
+| Variable | Value |
+|---|---|
+| `PLAUSIBLE_SRC` | `/js/pa-XXXXX.js` — first-party, proxied |
+| `PLAUSIBLE_DOMAIN` | `michaelgroff.info` / `dev.michaelgroff.info` |
+
+**The script filename is per-site.** Plausible issues `/js/pa-XXXXX.js` rather
+than a fixed `script.js`, which is why the URL is a variable instead of a
+constant, and why the CloudFront behaviour is a `/js/*` wildcard.
+
+**`data-domain` is emitted only when `PLAUSIBLE_DOMAIN` is set.** Plausible's
+newer per-site scripts already carry the domain; the classic `script.js`
+snippet needs the attribute. Supporting both keeps the code agnostic to
+whichever snippet the dashboard hands you.
+
+**It is proxied first-party through CloudFront** — the `/js/*` and `/api/event`
+behaviours in `cv-website-stack.ts`. Two reasons, both load-bearing:
+
+1. `plausible.io` sits on common blocklists; a first-party path does not.
+   Recovering those blocked measurements is the entire point of the proxy.
+2. Plausible needs the real visitor IP in `X-Forwarded-For` or its bot filter
+   **drops the event silently** — no error, no data, nothing in the dashboard.
+   CloudFront appends the viewer IP on every custom-origin request, so this
+   works with no extra configuration. Don't restructure the origin request
+   policy in a way that disturbs it.
+
+Proxying also makes the event POST same-origin, so there's no CORS preflight.
+Cookies and query strings are deliberately not forwarded (Plausible is
+cookieless and this is a third-party origin); `User-Agent` is allow-listed
+because Plausible derives the visitor id from its raw value, and
+`Content-Type` because the script POSTs JSON.
+
+**Debugging trap:** `errorResponses` is distribution-wide, so a 404 from
+plausible.io (usually a mistyped script filename) comes back as this site's
+`/404.html`. If `curl -I https://michaelgroff.info/js/pa-XXXXX.js` returns
+HTML, the filename is wrong — CloudFront is not broken.
+
+Plausible discards events for domains not registered in the account, so the
+dev stage can verify the plumbing (200 on the script, 202 on the event) even
+without a registered dev site.
+
+### 3. Company-level visitor identification — TRIED AND REMOVED (Aug 2026)
 
 **Don't rebuild this.** A full Glue + Athena pipeline over the CloudFront
 access logs (joined to the free IPinfo Lite IP→org database) was built,
@@ -365,7 +429,8 @@ Config lives in `infrastructure/cdk.json` → `context`. Edit that one block:
 Then, outside the repo:
 
 - Repo **variables**: `AWS_ACCOUNT_ID`, `AWS_ROLE_ARN`
-- Environment **variables** (`production` + `dev`): `CLOUDFLARE_ANALYTICS_TOKEN`
+- Environment **variables** (`production` + `dev`): `CLOUDFLARE_ANALYTICS_TOKEN`,
+  `PLAUSIBLE_SRC`, `PLAUSIBLE_DOMAIN` (all three optional; empty disables that tag)
 - GitHub environments named `production` and `dev` must exist — the OIDC trust
   policy matches on `repo:ORG/REPO:environment:NAME`, so a workflow without an
   `environment:` cannot assume the role

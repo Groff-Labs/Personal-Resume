@@ -64,6 +64,8 @@ jobs:
         working-directory: frontend
         env:
           NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN: ${{ vars.CLOUDFLARE_ANALYTICS_TOKEN }}
+          NEXT_PUBLIC_PLAUSIBLE_SRC: ${{ vars.PLAUSIBLE_SRC }}
+          NEXT_PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.PLAUSIBLE_DOMAIN }}
         run: npm run build
 
       - name: Fetch bucket + distribution from CDK stack

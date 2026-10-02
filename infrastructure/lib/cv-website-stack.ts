@@ -118,6 +118,50 @@ export class CvWebsiteStack extends cdk.Stack {
       `),
     });
 
+    // Plausible Analytics, proxied first-party. Two reasons this goes through
+    // CloudFront rather than loading plausible.io directly from the page:
+    //   1. `plausible.io` sits on common blocklists; a first-party path does not,
+    //      so proxying is what actually recovers the blocked measurements.
+    //   2. Plausible needs the real visitor IP in `X-Forwarded-For` or its bot
+    //      filter drops the event *silently* (no error, no data). CloudFront
+    //      appends the viewer IP to that header on every custom-origin request,
+    //      so this works without extra configuration -- but don't "optimise" it
+    //      away.
+    // Proxying also makes the event POST same-origin, so there's no CORS
+    // preflight at all.
+    //
+    // Neither `/js/*` nor `/api/event` exists in the site's own output (Next
+    // emits its chunks under `/_next/static/`), so there's no path collision.
+    // The `/js/*` pattern is a wildcard because Plausible issues a *per-site*
+    // script filename (`/js/pa-XXXXX.js`) rather than a fixed `script.js`.
+    //
+    // DEBUGGING TRAP: `errorResponses` below is distribution-wide, so a 404
+    // from plausible.io (e.g. a mistyped script filename) comes back as this
+    // site's `/404.html`. If `curl -I https://<domain>/js/pa-XXXXX.js` returns
+    // HTML, the filename is wrong -- CloudFront is not broken.
+    const plausibleOrigin = new origins.HttpOrigin('plausible.io', {
+      protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
+    });
+
+    // `User-Agent` is required (Plausible derives the visitor id from its raw
+    // value) and `Content-Type` has to survive (the script POSTs JSON).
+    // Cookies and query strings are deliberately dropped: Plausible is
+    // cookieless and has no use for either, and this is a third-party origin.
+    const plausibleEventOriginRequestPolicy = new cloudfront.OriginRequestPolicy(
+      this,
+      'PlausibleEventOriginRequestPolicy',
+      {
+        originRequestPolicyName: `cv-website-plausible-event-${stage}`,
+        comment: 'Forward only what the Plausible events API needs',
+        headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
+          'User-Agent',
+          'Content-Type',
+        ),
+        cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
+        queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.none(),
+      },
+    );
+
     // Access logs. Hoisted out of the Distribution props (where it used to be
     // constructed inline) so it can be referenced and exported. The construct
     // id stays 'LogBucket' — renaming it would replace the bucket.
@@ -161,6 +205,27 @@ export class CvWebsiteStack extends cdk.Stack {
             eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
           },
         ],
+      },
+      // Note: the rewriteFunction above is attached to defaultBehavior only,
+      // so these proxy behaviours deliberately don't inherit it.
+      additionalBehaviors: {
+        '/js/*': {
+          origin: plausibleOrigin,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+          // Plausible serves the script with its own cache headers; let
+          // CloudFront honour them rather than the site's 1-day default.
+          cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+          compress: true,
+        },
+        '/api/event': {
+          origin: plausibleOrigin,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          // POST is the whole point; GET/HEAD alone would silently 403 events.
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+          originRequestPolicy: plausibleEventOriginRequestPolicy,
+        },
       },
       errorResponses: [
         {

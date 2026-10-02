@@ -149,6 +149,25 @@ const themeInitScript = `(function(){try{var s=localStorage.getItem('theme');var
 const CLOUDFLARE_ANALYTICS_TOKEN =
   process.env.NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN ?? "";
 
+// Plausible Analytics. Both values are public site identifiers, not secrets,
+// and both are GitHub Actions *environment*-scoped variables so dev traffic
+// doesn't land in the prod site's numbers (same pattern as the CloudFlare
+// token above). An empty NEXT_PUBLIC_PLAUSIBLE_SRC disables the tag entirely.
+//
+// SRC is a full URL rather than a constant because Plausible issues a
+// per-site script filename (`/js/pa-XXXXX.js`) that can't be hardcoded here.
+// Point it at the first-party path (`/js/pa-XXXXX.js`) to go through the
+// CloudFront proxy behaviours in `infrastructure/lib/cv-website-stack.ts`,
+// which is what dodges ad blockers; `https://plausible.io/js/pa-XXXXX.js`
+// also works and skips the proxy.
+//
+// DOMAIN is emitted as `data-domain` only when set: Plausible's newer
+// per-site scripts already carry the domain, while the classic `script.js`
+// snippet requires the attribute. Supporting both keeps this agnostic to
+// whichever snippet the dashboard hands you.
+const PLAUSIBLE_SRC = process.env.NEXT_PUBLIC_PLAUSIBLE_SRC ?? "";
+const PLAUSIBLE_DOMAIN = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ?? "";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -172,6 +191,13 @@ export default function RootLayout({
             src="https://static.cloudflareinsights.com/beacon.min.js"
             strategy="afterInteractive"
             data-cf-beacon={`{"token":"${CLOUDFLARE_ANALYTICS_TOKEN}"}`}
+          />
+        )}
+        {PLAUSIBLE_SRC && (
+          <Script
+            src={PLAUSIBLE_SRC}
+            strategy="afterInteractive"
+            {...(PLAUSIBLE_DOMAIN ? { "data-domain": PLAUSIBLE_DOMAIN } : {})}
           />
         )}
       </body>
