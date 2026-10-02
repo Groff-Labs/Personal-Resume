@@ -86,6 +86,8 @@ const css = `
     font-size: 8.25pt;
     color: #374151;
   }
+  /* Never leave a section/employer heading stranded at the foot of a page. */
+  h2 { break-after: avoid-page; }
   h3 { break-after: avoid-page; }
   li { break-inside: avoid-page; }
   /* Keep a role title glued to its first bullets. Without this a "**Title** ·
