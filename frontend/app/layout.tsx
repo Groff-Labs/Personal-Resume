@@ -161,12 +161,35 @@ const CLOUDFLARE_ANALYTICS_TOKEN =
 // which is what dodges ad blockers; `https://plausible.io/js/pa-XXXXX.js`
 // also works and skips the proxy.
 //
-// DOMAIN is emitted as `data-domain` only when set: Plausible's newer
-// per-site scripts already carry the domain, while the classic `script.js`
-// snippet requires the attribute. Supporting both keeps this agnostic to
-// whichever snippet the dashboard hands you.
+// DOMAIN is emitted as `data-domain` only when set. The per-site script bakes
+// its domain in and ignores the attribute entirely; the classic `script.js`
+// snippet requires it. Emitting it conditionally supports both.
 const PLAUSIBLE_SRC = process.env.NEXT_PUBLIC_PLAUSIBLE_SRC ?? "";
 const PLAUSIBLE_DOMAIN = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ?? "";
+
+// Events go to whichever host serves the script, so a proxied script keeps its
+// events first-party and a direct one doesn't half-proxy by accident.
+const PLAUSIBLE_ENDPOINT = PLAUSIBLE_SRC.startsWith("http")
+  ? "https://plausible.io/api/event"
+  : "/api/event";
+
+// MUST run before the Plausible script. Two non-obvious reasons, both verified
+// by reading the delivered script rather than the docs:
+//
+//  1. The per-site script does NOT auto-start. Its bootstrap is
+//     `window.plausible = window.plausible || {}; plausible.o && S(plausible.o)`,
+//     so without a pre-existing `plausible.o` it loads, defines `init`, and
+//     tracks precisely nothing. Silently: no console warning, no failed
+//     request, an empty dashboard that looks like "no traffic yet".
+//  2. The default endpoint is the absolute `https://plausible.io/api/event`,
+//     so events bypass the CloudFront proxy even when the script is proxied.
+//     That leaves the measurement blockable, which defeats the point.
+//
+// `domain` is deliberately not passed: the script applies its baked-in value
+// last (`Object.assign(defaults, opts, { domain })`), so it cannot be overridden.
+const plausibleInitScript = `window.plausible={o:{endpoint:${JSON.stringify(
+  PLAUSIBLE_ENDPOINT,
+)}}};`;
 
 export default function RootLayout({
   children,
@@ -181,6 +204,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+        {PLAUSIBLE_SRC && (
+          <script dangerouslySetInnerHTML={{ __html: plausibleInitScript }} />
+        )}
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <Navigation />

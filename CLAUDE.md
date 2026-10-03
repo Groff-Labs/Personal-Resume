@@ -139,10 +139,26 @@ token above, so dev traffic doesn't pollute prod numbers:
 than a fixed `script.js`, which is why the URL is a variable instead of a
 constant, and why the CloudFront behaviour is a `/js/*` wildcard.
 
-**`data-domain` is emitted only when `PLAUSIBLE_DOMAIN` is set.** Plausible's
-newer per-site scripts already carry the domain; the classic `script.js`
-snippet needs the attribute. Supporting both keeps the code agnostic to
-whichever snippet the dashboard hands you.
+**The per-site script does NOT auto-start, and this is silent.** Its bootstrap
+is `window.plausible = window.plausible || {}; plausible.o && S(plausible.o)`,
+so unless `window.plausible.o` already exists when it loads, it defines `init`
+and tracks nothing: no console warning, no failed request, just an empty
+dashboard that reads as "no traffic yet". `layout.tsx` therefore emits an
+inline config script in `<head>` ahead of it. **Don't remove it**, and don't
+assume a 200 on the script means tracking works.
+
+**It also reads no `data-*` attributes at all** (verified by reading the
+delivered file, not the docs: `grep -c 'data-' pa-XXXXX.js` is 0). The domain
+is baked in and cannot be overridden, because the script applies it last:
+`Object.assign(defaults, opts, { domain })`. `data-domain` is still emitted
+when `PLAUSIBLE_DOMAIN` is set, purely so the classic `script.js` snippet keeps
+working if you ever switch back; the per-site script ignores it.
+
+**The default endpoint is absolute** (`https://plausible.io/api/event`), so a
+proxied *script* still sends its *events* third-party unless you override it.
+`layout.tsx` derives the endpoint from `PLAUSIBLE_SRC`: a relative src gets
+`/api/event`, an absolute one gets the plausible.io URL. Proxying the script
+alone leaves the measurement blockable and defeats the point.
 
 **It is proxied first-party through CloudFront** — the `/js/*` and `/api/event`
 behaviours in `cv-website-stack.ts`. Two reasons, both load-bearing:
