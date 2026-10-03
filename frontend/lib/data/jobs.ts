@@ -39,7 +39,7 @@ export const jobs: Job[] = [
   {
     id: "allcloud",
     company: "AllCloud",
-    title: "Sr. Solutions Architect / Manager of Platforms Solutions Architects",
+    title: "Sr. Solutions Architect / Manager of Platform Solutions Architects",
     location: "Remote, based in San Antonio, TX",
     startDate: "May 2024",
     endDate: "Present",
@@ -47,13 +47,15 @@ export const jobs: Job[] = [
     logo: "/images/companies/allcloud.webp",
     roles: [
       {
-        title: "Sr. Solutions Architect / Manager of Platforms Solutions Architects",
+        title: "Sr. Solutions Architect / Manager of Platform Solutions Architects",
         startDate: "October 2026",
         endDate: "Present",
         responsibilities: [
           "Manage the platform solutions architecture team: coverage allocation against pipeline and delivery priority, hiring and onboarding, performance and career development, and the technical standards the team designs to.",
           "Own technical quality of the team's customer-facing output, approving architecture designs, level-of-effort estimates, and proposals before they reach the customer, and maintaining the reference architectures and estimation models the team builds from.",
-          "Remain hands-on as a senior architect on the most complex platform engagements, spanning multi-account AWS foundations, migrations, and modernization.",
+          "Remain hands-on as a senior architect on the most complex platform engagements, roughly half the week, spanning multi-account AWS foundations, migrations, and modernization.",
+          "Built and lead an internal AI tooling library of 13 skills spanning the full engagement lifecycle, from SOW review and architecture design guides through MAP readouts, licensing assessments, Jira task generation, and change orders. Authored 9 net-new and contributed ~90% of commits and ~21,000 lines in three weeks.",
+          "Lead AllCloud North America's AWS One OLA (Optimization and Licensing Assessment) partner certification: completed the Microsoft enablement track, produced the full deliverable set against an AWS-set ~600-server scenario, and submitted for AWS approval.",
         ],
       },
       {
@@ -62,8 +64,6 @@ export const jobs: Job[] = [
         endDate: "October 2026",
         responsibilities: [
           "One of three practice team leads; guide three solutions architects and own a $4M annual booking quota, attained ~125% (~$5M) in FY2026.",
-          "Built and lead an internal AI tooling library of 13 skills spanning the full engagement lifecycle, from SOW review and architecture design guides through MAP readouts, licensing assessments, Jira task generation, and change orders. Authored 9 net-new and contributed ~90% of commits and ~21,000 lines in three weeks.",
-          "Lead AllCloud North America's AWS One OLA (Optimization and Licensing Assessment) partner certification: completed the Microsoft enablement track, produced the full deliverable set against an AWS-set ~600-server scenario, and submitted for AWS approval.",
           "Audited ~100 customer engagements for pipeline hygiene, surfacing that ~10% carried no CRM record and roughly half no supporting documentation.",
           "Time from opportunity creation to solutions-architect engagement on supported opportunities improved ~42% across tenure (median ~17 days to ~10), with same-day engagement rising from ~15% to ~35%.",
         ],

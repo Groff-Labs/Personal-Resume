@@ -25,17 +25,21 @@ WordPress → Next.js refactor and apex-migration work is already done.
 by `npm run resume`, which runs as a `prebuild` hook).
 
 **Role change applied 2 Oct 2026.** The AllCloud role became *Sr. Solutions
-Architect / Manager of Platforms Solutions Architects*, effective Oct 2026.
+Architect / Manager of Platform Solutions Architects*, effective Oct 2026.
 The real title differed from the one staged here in Sep 2026 ("Sr. Cloud
 Solutions Architect / Team Lead"), so don't trust a staged future title:
 confirm it with the user when it lands.
 
 Two conventions set at the same time, both worth keeping:
 
-- **Duties live on the current role; achievements stay with the role that
-  earned them.** The Jul–Oct 2026 Team Lead entry keeps its five metric
-  bullets and none of its duty bullets, because those duties continue into
-  the Manager role and repeating them cost a whole page.
+- **Duties and ongoing initiatives live on the current role; completed
+  achievements stay with the role that earned them.** The Jul–Oct 2026 Team
+  Lead entry kept its three closed-out metric bullets (quota attainment,
+  pipeline-hygiene audit, time-to-engagement) and gave up its duty bullets
+  plus the two initiatives still in flight as of Oct 2026 (the internal AI
+  tooling library, and the AWS One OLA certification submitted Sep 2026 and
+  still awaiting an AWS decision). Repeating any of them cost a whole page.
+  Metrics move *with* their bullet; don't strand them in a closed role.
 - **The resume is a full 3 pages.** Adding a role without trimming pushes it
   to 4, with a stranded `CERTIFICATIONS` heading. After any Experience edit,
   run `npm run resume && pdfinfo frontend/public/resume.pdf | grep Pages`.
