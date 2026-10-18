@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import AboutMe from "@/components/AboutMe";
+import Chat from "@/components/Chat";
 import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import Testimonials from "@/components/Testimonials";
@@ -12,6 +13,7 @@ export default function Home() {
     <>
       <Hero />
       <AboutMe />
+      <Chat />
       <Skills />
       <Experience />
       <Testimonials />

@@ -3,10 +3,15 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Download, Mail } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import { showChat } from "@/lib/data/chat";
 
 const navLinks = [
   { href: "#home", label: "Home", sectionId: "home" },
   { href: "#about", label: "About", sectionId: "about" },
+  // Conditional on the same flag as the section itself: the IntersectionObserver
+  // tolerates an id with no element, but the link would still render and scroll
+  // nowhere, so it is omitted rather than left dead.
+  ...(showChat ? [{ href: "#chat", label: "Ask", sectionId: "chat" }] : []),
   { href: "#skills", label: "Skills", sectionId: "skills" },
   { href: "#experience", label: "Experience", sectionId: "experience" },
   { href: "#education", label: "Education", sectionId: "education" },

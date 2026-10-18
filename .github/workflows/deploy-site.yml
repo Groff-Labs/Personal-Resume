@@ -66,6 +66,9 @@ jobs:
           NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN: ${{ vars.CLOUDFLARE_ANALYTICS_TOKEN }}
           NEXT_PUBLIC_PLAUSIBLE_SRC: ${{ vars.PLAUSIBLE_SRC }}
           NEXT_PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.PLAUSIBLE_DOMAIN }}
+          # Any non-empty value shows the chat section. Environment-scoped, so
+          # it can be live on dev while still hidden in prod.
+          NEXT_PUBLIC_CHAT_ENABLED: ${{ vars.CHAT_ENABLED }}
         run: npm run build
 
       - name: Fetch bucket + distribution from CDK stack
