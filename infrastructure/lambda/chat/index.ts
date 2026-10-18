@@ -20,6 +20,22 @@ const MAX_HISTORY_TURNS = 6;
 const MAX_USER_CHARS = 500;
 const MAX_BODY_BYTES = 16 * 1024;
 
+/**
+ * Nova sometimes emits its reasoning as literal <thinking> XML in the text
+ * block, and on at least one real question it returned a thinking block and
+ * nothing else — so the visitor would have seen raw markup and no answer.
+ * Stripping server-side rather than trusting a prompt rule, because the failure
+ * is user-visible and prompt adherence is not guaranteed.
+ */
+function stripReasoning(text: string): string {
+  return text
+    .replace(/<thinking>[\s\S]*?<\/thinking>/gi, '')
+    .replace(/<\/?thinking>/gi, '')
+    .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 const FALLBACK_BLOCKED =
   "I can only answer questions about Michael's CV. For anything else, email him directly.";
 
@@ -287,6 +303,31 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
     if (toolResults.length === 0) break;
     messages.push({ role: 'user', content: toolResults });
     answer = '';
+  }
+
+  answer = stripReasoning(answer);
+
+  // If reasoning was all there was, ask once more with tools withheld so the
+  // model has to produce prose. Cheap (one short call) and only on the rare
+  // turn where it happens.
+  if (!answer) {
+    const forced = await bedrock.send(
+      new ConverseCommand({
+        modelId: MODEL_ID,
+        system: [{ text: systemPrompt() }],
+        messages,
+        inferenceConfig: { maxTokens: 400, temperature: 0.2, topP: 0.9 },
+      }),
+    );
+    inputTokens += forced.usage?.inputTokens ?? 0;
+    outputTokens += forced.usage?.outputTokens ?? 0;
+    answer = stripReasoning(
+      (forced.output?.message?.content ?? []).map((b) => b.text ?? '').join(''),
+    );
+  }
+
+  if (!answer) {
+    answer = `I could not find that on the CV. The full resume is at /resume.pdf.`;
   }
 
   /* ---------------- output guardrail ---------------- */

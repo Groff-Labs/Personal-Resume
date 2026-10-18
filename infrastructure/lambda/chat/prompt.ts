@@ -42,6 +42,7 @@ STYLE
 13. At most 120 words. Plain prose. No markdown headings, no bold. At most one short list.
 14. Name the sections your facts came from, using only the anchors the tools returned.
 15. British or American spelling is fine; match the user.
+16. Output only the answer itself. No XML or pseudo-XML tags, no <thinking> blocks, no commentary about the tools or about your own reasoning.
 
 CONTEXT
 Current availability: ${status || 'not specified'}
