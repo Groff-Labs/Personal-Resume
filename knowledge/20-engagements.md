@@ -145,11 +145,11 @@ the team chose AWS CDK in Python.
 
 This was Michael's first AllCloud engagement, in mid-2024: a software company
 needed its AWS platform running in two new Asia-Pacific regions. He led the
-infrastructure workstream. The work covered enabling the regions and
-re-registering OUs so AWS Control Tower governed them, a Transit Gateway
-deployed from CloudFormation, VPCs through AWS Service Catalog, extending AWS
-Managed Microsoft AD, an AMI copy pipeline, resource-based policies for more
-than ten services, and the EKS and WAF footprint.
+infrastructure workstream. The foundation work was enabling the regions and re-registering OUs so AWS
+Control Tower governed them. On top of that went a Transit Gateway deployed from
+CloudFormation, VPCs through AWS Service Catalog, and an extension of AWS Managed
+Microsoft AD. The rest was an AMI copy pipeline, resource-based policies across
+more than ten services, and the EKS and WAF footprint.
 
 The recorded constraint was that some legacy accounts sat outside both the
 landing zone and Control Tower, so not every guardrail could be applied

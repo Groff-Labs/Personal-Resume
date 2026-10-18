@@ -134,9 +134,10 @@ against the same policies.
 ### Customer foundations: Identity Center federation and Transit Gateway networking
 
 His customer foundation work covers AWS Organizations OU design, Control Tower
-region governance, IAM Identity Center federated to the customer's identity
-provider (Azure AD Domain Services, Microsoft Entra ID over SAML, and Okta
-migrations), AWS Security Hub baselines, and centralised networking. His
+region governance, AWS Security Hub baselines and centralised networking. The
+identity side is IAM Identity Center federated to whatever the customer already
+runs: Azure AD Domain Services, Microsoft Entra ID over SAML, and Okta
+migrations. His
 default network design is central ingress and egress VPCs on an AWS Transit
 Gateway, with subnets shared to workload accounts through AWS RAM. He has
 argued against an SD-WAN mesh over the internet when the Transit Gateway on the

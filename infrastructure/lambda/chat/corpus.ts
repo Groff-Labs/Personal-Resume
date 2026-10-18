@@ -182,6 +182,24 @@ const STOP = new Set([
   'his', 'her', 'their', 'what', 'which', 'does', 'did', 'has', 'have', 'had',
   'was', 'were', 'are', 'any', 'all', 'you', 'michael', 'groff', 'about', 'can',
   'tell', 'more', 'work', 'worked', 'experience', 'how', 'much', 'many', 'who',
+  // Achievement verbs. These are how people phrase a BROAD question ("what has
+  // he shipped", "what has he built") and they also occur incidentally in
+  // prose, which is the dangerous combination.
+  //
+  // Concretely: "shipped" appeared exactly once in the corpus, in "it is the
+  // inverse of what he shipped here" — a sentence about tenancy cost. Being
+  // rare gave it a high IDF, so "what has he shipped on AWS" reduced to that
+  // one token, matched it fully, scored coverage 1.00, and the broad-query
+  // guard stopped firing. The assistant then answered the single most common
+  // opening question with a passage about cluster-per-tenant cost trade-offs.
+  //
+  // Coverage measures whether the query's rare words were matched, not whether
+  // the passage is about what was asked, so it cannot catch this on its own.
+  // Stopwording the verb can: the query now reduces to nothing, is reported
+  // tooBroad, and routes to the curated get_highlights instead. No real search
+  // term is lost, because nobody searches for "shipped" as a technology.
+  'shipped', 'ship', 'built', 'build', 'delivered', 'deliver', 'done', 'achieved',
+  'accomplished', 'good', 'best', 'impressive', 'actually',
 ]);
 
 export function tokenize(s: string): string[] {
