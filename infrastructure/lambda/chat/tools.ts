@@ -1,7 +1,10 @@
 import type { Tool } from '@aws-sdk/client-bedrock-runtime';
 import type { DocumentType } from '@smithy/types';
+import { highlightSections } from './knowledge';
 import {
   ANCHORS,
+  MIN_USEFUL_SCORE,
+  isBroadQuery,
   type Citation,
   certifications,
   contact,
@@ -35,6 +38,19 @@ export interface ToolResult {
  * ------------------------------------------------------------------ */
 
 export const toolSpecs = [
+  {
+    name: 'get_highlights',
+    description:
+      "His most significant accomplishments, curated and ordered. USE THIS FIRST for broad or opening questions -- 'what has he done', 'what has he shipped', 'tell me about his experience', 'is he any good' -- where keyword search cannot rank results because every passage mentions AWS. Prefer this over search_experience whenever the question does not name a specific technology, employer or metric.",
+    inputSchema: {
+      json: {
+        type: 'object',
+        properties: {
+          limit: { type: 'integer', minimum: 1, maximum: 8, description: 'Default 5.' },
+        },
+      },
+    },
+  },
   {
     name: 'get_role',
     description:
@@ -143,6 +159,22 @@ export const converseTools: Tool[] = toolSpecs.map((spec) => ({
  * Implementations
  * ------------------------------------------------------------------ */
 
+function getHighlights(input: Record<string, unknown>): ToolResult {
+  const raw = Number(input.limit ?? 5);
+  const limit = Number.isFinite(raw) ? Math.min(Math.max(raw, 1), 8) : 5;
+  const items = highlightSections().slice(0, limit);
+
+  return {
+    data: {
+      note: 'Curated and ordered, most significant first. Report these; do not rank or editorialise.',
+      count: items.length,
+      highlights: items.map((h) => ({ headline: h.title, detail: h.body })),
+    },
+    citations: [{ anchor: ANCHORS.experience, label: 'Experience' }],
+    summary: `${items.length} curated highlights`,
+  };
+}
+
 function getRole(input: Record<string, unknown>): ToolResult {
   const company = String(input.company ?? '');
   const job = findJob(company);
@@ -177,6 +209,21 @@ function searchExperience(input: Record<string, unknown>): ToolResult {
   const query = String(input.query ?? '');
   const rawLimit = Number(input.limit ?? 4);
   const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(rawLimit, 1), 6) : 4;
+
+  // A question with no distinctive term cannot be ranked by keyword search.
+  // Say so and point at the curated list rather than returning a grab-bag.
+  if (isBroadQuery(query)) {
+    return {
+      data: {
+        matches: [],
+        tooBroad: true,
+        note: `"${query}" has no distinctive search term -- every passage mentions AWS. Call get_highlights instead.`,
+      },
+      citations: [],
+      summary: `too broad: "${query}"`,
+    };
+  }
+
   const hits = searchPassages(query, limit);
 
   if (hits.length === 0) {
@@ -184,6 +231,20 @@ function searchExperience(input: Record<string, unknown>): ToolResult {
       data: { matches: [], note: `Nothing on the CV matches "${query}".` },
       citations: [],
       summary: `0 matches for "${query}"`,
+    };
+  }
+
+  // One rare-but-incidental word can rescue an otherwise broad query and
+  // produce a confident non-answer. Flag it rather than pretending.
+  if (hits[0].score < MIN_USEFUL_SCORE) {
+    return {
+      data: {
+        matches: hits.map((h) => ({ text: h.text, source: h.source })),
+        lowConfidence: true,
+        note: 'Weak keyword match; these may not answer the question. Call get_highlights as well, and say plainly if the CV does not cover it.',
+      },
+      citations: [],
+      summary: `weak match for "${query}"`,
     };
   }
 
@@ -370,6 +431,8 @@ export function runTool(
   ctx: { jobDescription?: string },
 ): ToolResult {
   switch (name) {
+    case 'get_highlights':
+      return getHighlights(input);
     case 'get_role':
       return getRole(input);
     case 'search_experience':

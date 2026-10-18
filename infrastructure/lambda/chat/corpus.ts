@@ -20,6 +20,7 @@ import { certifications } from '../../../frontend/lib/data/certifications';
 import { activeHeroStatus } from '../../../frontend/lib/data/status';
 import { contact } from '../../../frontend/lib/data/contact';
 import resumeMarkdown from '../../../resume.md';
+import { knowledgeDocs, splitSections, windowed } from './knowledge';
 
 /** Anchors must match the `id` attributes the page actually renders. */
 export const ANCHORS = {
@@ -141,13 +142,29 @@ function skillPassages(): Passage[] {
   }));
 }
 
+function knowledgePassages(): Passage[] {
+  const out: Passage[] = [];
+  for (const doc of knowledgeDocs) {
+    for (const section of splitSections(doc.content)) {
+      for (const chunk of windowed(`${section.heading}. ${section.body}`)) {
+        out.push({
+          text: chunk,
+          source: `${doc.label} -> ${section.heading}`,
+          anchor: doc.anchor as Anchor,
+        });
+      }
+    }
+  }
+  return out;
+}
+
 /**
  * Job bullets are the authoritative phrasing, so they come first and resume.md
  * lines that merely restate them are dropped. Dedupe is on a normalized prefix
  * rather than exact text, because resume.md rewords bullets slightly for print.
  */
 export const passages: Passage[] = (() => {
-  const all = [...jobPassages(), ...skillPassages(), ...resumeSections()];
+  const all = [...jobPassages(), ...skillPassages(), ...knowledgePassages(), ...resumeSections()];
   const seen = new Set<string>();
   const kept: Passage[] = [];
 
@@ -187,6 +204,54 @@ const idf: Map<string, number> = (() => {
   return m;
 })();
 
+/**
+ * Terms appearing in more than this share of passages are discarded from a
+ * query entirely rather than merely down-weighted.
+ *
+ * Measured on dev: "AWS" scored a top hit of 0.35 against 1.21 for "landing
+ * zone", and the top result for "what has he shipped on AWS" was a CI/CD skills
+ * line. The term appears in nearly every passage, so its tiny IDF still decided
+ * the ranking once every other term had been stopworded away. Dropping such
+ * terms means a query made only of them scores nothing, which is honest: it is
+ * a broad question, and `isBroadQuery` routes it to curated highlights instead
+ * of a grab-bag.
+ */
+const UBIQUITOUS_SHARE = 0.25;
+
+function usefulQueryTokens(query: string): string[] {
+  return tokenize(query).filter((t) => {
+    const score = idf.get(t);
+    // Unknown terms are kept: they may be a rare technology worth matching on
+    // prefix. Known-but-ubiquitous terms are dropped.
+    if (score === undefined) return true;
+    return score > Math.log(1 + 1 / UBIQUITOUS_SHARE);
+  });
+}
+
+/**
+ * True when a question carries no distinctive term to search on — "what has he
+ * done", "tell me about his AWS experience". Keyword retrieval cannot rank
+ * these, so the assistant is told to use get_highlights instead.
+ */
+export function isBroadQuery(query: string): boolean {
+  return usefulQueryTokens(query).length === 0;
+}
+
+/**
+ * Below this, a result set is noise rather than an answer.
+ *
+ * Calibrated against measured scores on the real corpus: solid matches land
+ * around 1.04-1.13 ("landing zone", "multi-tenant SaaS"), looser but genuinely
+ * relevant ones around 0.70 ("kubernetes" -> the EKS skill groups), and the
+ * known-bad case at 0.38 ("what has he shipped on AWS" -> a CI/CD skills line,
+ * which slips past the token filter because "shipped" prefix-matches "ship").
+ * 0.55 separates those cleanly.
+ *
+ * Token filtering alone was not enough: one rare-but-incidental word is enough
+ * to rescue an otherwise broad query and produce a confidently wrong answer.
+ */
+export const MIN_USEFUL_SCORE = 0.55;
+
 export interface ScoredPassage extends Passage {
   score: number;
 }
@@ -198,7 +263,7 @@ export interface ScoredPassage extends Passage {
  * model. See the RAG note in CLAUDE.md.
  */
 export function searchPassages(query: string, limit = 4): ScoredPassage[] {
-  const qTokens = tokenize(query);
+  const qTokens = usefulQueryTokens(query);
   if (qTokens.length === 0) return [];
 
   const scored = passages.map((p) => {
