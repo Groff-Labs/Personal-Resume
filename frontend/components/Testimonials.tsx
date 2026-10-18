@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Quote, Linkedin } from "lucide-react";
+import { Quote } from "lucide-react";
+import { Linkedin } from "@/components/BrandIcons";
 import { showTestimonials, testimonials } from "@/lib/data/testimonials";
 
 export default function Testimonials() {

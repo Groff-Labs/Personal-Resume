@@ -1,4 +1,5 @@
-import { Github, Linkedin, Twitter, Mail, Phone, UserPlus, FileText } from "lucide-react";
+import { Mail, Phone, UserPlus, FileText } from "lucide-react";
+import { Github, Linkedin, Twitter } from "@/components/BrandIcons";
 import { contact } from "@/lib/data/contact";
 
 export default function Footer() {

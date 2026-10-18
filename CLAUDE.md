@@ -689,8 +689,16 @@ before merge.
   nothing about it.
 - **Intentional `ignore` rules** (each has a comment in `dependabot.yml`
   explaining why — don't "unblock" without checking the reason still holds):
-  - `lucide-react` major → 1.x drops the GitHub/LinkedIn/Twitter brand
-    icons the Footer needs. Stay on 0.x (minors like 0.577 are fine).
+  - ~~`lucide-react` major~~ **resolved Oct 2026, ignore removed.** 1.x does
+    drop every brand icon (verified against 1.59.0: `Github`, `Linkedin`,
+    `Twitter`, `Facebook`, `Instagram`, `Youtube`, `Slack` all absent from
+    6,470 exports, and not renamed). Rather than pin indefinitely and forgo
+    security updates, the three glyphs the site uses were lifted verbatim out of
+    0.577 into `frontend/components/BrandIcons.tsx`, so there is no visual
+    change, and lucide moved to 1.x. Brand icons were the only breaking change
+    that touched this repo: lint and build passed unaltered, all 60 SVGs render,
+    and the `lucide-*` class convention is unchanged. **Add any future brand
+    mark to `BrandIcons.tsx`** rather than taking a dependency for it.
   - `typescript` major (both projects) → TS 7 breaks ts-node (`cdk synth`)
     and typescript-eslint (`npm run lint`); tooling isn't ready.
   - `eslint` major → eslint-config-next 16 caps at ESLint 9 (its bundled

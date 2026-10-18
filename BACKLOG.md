@@ -42,22 +42,7 @@ Coordinate as a review, not a rewrite: take the recommendations, apply the ones
 that make the prose plainer, and reject anything that flattens a deliberate
 phrasing. Several passages are deliberately blunt and should stay that way.
 
-### 3. `lucide-react` is pinned to 0.x and cannot move
-
-`dependabot.yml` ignores the major, because 1.x drops the `Github`, `Linkedin`
-and `Twitter` brand icons that `Footer.tsx` imports. Minors (0.577 and up) are
-fine. The pin is correct but indefinite, so decide the exit:
-
-- replace the three brand icons with inline SVG (they are simple paths) and
-  unpin, or
-- add `simple-icons` for brand marks only and keep `lucide-react` for UI icons,
-  or
-- document the pin as permanent.
-
-Check first whether 1.x has reintroduced brand icons; the reason for the pin may
-have expired.
-
-### 4. Update the Lucid architecture diagram for the chat feature
+### 3. Update the Lucid architecture diagram for the chat feature
 
 Existing diagram: <https://lucid.app/lucidchart/aef5844e-526a-4261-9fb8-258ca20973c8/edit>
 
@@ -84,7 +69,7 @@ SCP carve-out), and the corpus is bundled at synth time rather than fetched.
 site renders, and it is in the image-optimiser exclusion list so it keeps full
 resolution for the lightbox. Re-export to the same path.
 
-### 5. Wire up AgentTeam for this repo
+### 4. Wire up AgentTeam for this repo
 
 Configured for the `Vaultry-*` repos but not here. Decide which role agents
 earn their place in a mature static site plus one Lambda — probably
@@ -95,6 +80,23 @@ production services with Sentry and ECS, which do not exist here.
 ---
 
 ## Closed
+
+### `lucide-react` unpinned by inlining three brand glyphs
+
+The pin was real and still is: verified against 1.59.0 that `Github`,
+`Linkedin`, `Twitter`, `Facebook`, `Instagram`, `Youtube` and `Slack` are all
+absent from 6,470 exports, and genuinely removed rather than renamed.
+
+Rather than keep an indefinite pin that also blocks security updates, the three
+glyphs the site actually uses were lifted verbatim from the installed 0.577
+package into `frontend/components/BrandIcons.tsx` — same paths, same props, so
+no visual change — and lucide went to 1.59.0. Brand icons turned out to be the
+only breaking change touching this repo: lint and build passed with no other
+edit, all 60 SVGs render, and the `lucide-*` class convention is unchanged.
+
+The dependabot ignore is gone, so lucide now takes routine majors like anything
+else. Add any future brand mark to `BrandIcons.tsx` rather than taking a
+dependency for it.
 
 ### Bedrock spend limit of $10/month — not possible as asked, and not wanted
 

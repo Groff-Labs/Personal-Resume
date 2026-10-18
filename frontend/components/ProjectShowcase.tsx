@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Github, ExternalLink, Archive, X } from "lucide-react";
+import { ExternalLink, Archive, X } from "lucide-react";
+import { Github } from "@/components/BrandIcons";
 
 const COMPARISON = [
   {
