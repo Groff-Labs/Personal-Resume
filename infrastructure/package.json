@@ -5,8 +5,8 @@
     "infrastructure": "bin/infrastructure.js"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "tsc --noEmit",
+    "watch": "tsc --noEmit -w",
     "test": "jest",
     "cdk": "cdk"
   },

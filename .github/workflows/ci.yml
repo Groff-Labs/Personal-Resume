@@ -71,3 +71,11 @@ jobs:
       - name: CDK synth
         working-directory: infrastructure
         run: npx cdk synth
+
+      # Synth-time guards for the failure modes that are otherwise invisible
+      # until production breaks: an origin reordering stripping OAC (the whole
+      # site becomes /404.html), or a Lambda-backed custom resource that LZA's
+      # DenyLambdaWithoutVPC rejects at deploy rather than at synth.
+      - name: Assert stack invariants
+        working-directory: infrastructure
+        run: npm test

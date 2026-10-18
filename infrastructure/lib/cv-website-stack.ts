@@ -3,7 +3,6 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
-import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
 export interface CvWebsiteStackProps extends cdk.StackProps {
@@ -44,7 +43,13 @@ export class CvWebsiteStack extends cdk.Stack {
       ],
     });
 
-    // Origin Access Control (OAC) for CloudFront
+    // Origin Access Control (OAC) for CloudFront.
+    //
+    // This stays an L1 `CfnOriginAccessControl` purely so the existing resource
+    // (and its name) survives: it predates `S3BucketOrigin.withOriginAccessControl`,
+    // and letting the L2 mint a fresh one would replace it. The L2 origin below
+    // imports it by id instead, which is what removed the index-based property
+    // overrides this file used to carry. See the comment on `defaultBehavior`.
     const oac = new cloudfront.CfnOriginAccessControl(this, 'OAC', {
       originAccessControlConfig: {
         name: `cv-website-oac-${stage}`,
@@ -53,6 +58,12 @@ export class CvWebsiteStack extends cdk.Stack {
         signingProtocol: 'sigv4',
       },
     });
+
+    const importedS3Oac = cloudfront.S3OriginAccessControl.fromOriginAccessControlId(
+      this,
+      'ImportedS3Oac',
+      oac.attrId,
+    );
 
     // ACM Certificate for CloudFront (must be in us-east-1)
     // Note: This assumes the certificate is already created or will be validated via DNS
@@ -194,7 +205,16 @@ export class CvWebsiteStack extends cdk.Stack {
       logBucket: this.logBucket,
       logFilePrefix: 'cloudfront-logs/',
       defaultBehavior: {
-        origin: new origins.S3Origin(this.websiteBucket),
+        // `S3BucketOrigin.withOriginAccessControl` wires OAC natively and adds
+        // the bucket policy itself. This replaced a pair of
+        // `addPropertyOverride('DistributionConfig.Origins.0....')` calls, which
+        // were a live footgun: CDK orders `Origins` by bind order, so adding a
+        // third origin could shift the S3 bucket off index 0 and silently strip
+        // its OAC — turning the entire site into `/404.html`. Index-by-position
+        // is now index-by-construct, and a jest assertion guards it.
+        origin: origins.S3BucketOrigin.withOriginAccessControl(this.websiteBucket, {
+          originAccessControl: importedS3Oac,
+        }),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: cachePolicy,
         responseHeadersPolicy: responseHeadersPolicy,
@@ -243,22 +263,11 @@ export class CvWebsiteStack extends cdk.Stack {
       ],
     });
 
-    // Update CloudFront distribution to use OAC
-    const cfnDistribution = this.distribution.node.defaultChild as cloudfront.CfnDistribution;
-    cfnDistribution.addPropertyOverride('DistributionConfig.Origins.0.OriginAccessControlId', oac.attrId);
-    cfnDistribution.addPropertyOverride('DistributionConfig.Origins.0.S3OriginConfig.OriginAccessIdentity', '');
-
-    // Grant CloudFront OAC access to S3 bucket
-    this.websiteBucket.addToResourcePolicy(new iam.PolicyStatement({
-      actions: ['s3:GetObject'],
-      resources: [this.websiteBucket.arnForObjects('*')],
-      principals: [new iam.ServicePrincipal('cloudfront.amazonaws.com')],
-      conditions: {
-        StringEquals: {
-          'AWS:SourceArn': `arn:aws:cloudfront::${this.account}:distribution/${this.distribution.distributionId}`,
-        },
-      },
-    }));
+    // NOTE: the OAC property overrides and the manual `s3:GetObject` bucket
+    // policy that used to live here are gone. `S3BucketOrigin.withOriginAccessControl`
+    // above does both, and keeping a hand-written copy of the bucket policy
+    // alongside the generated one would leave two equivalent statements to drift
+    // apart forever.
 
     // CloudFormation Outputs
     new cdk.CfnOutput(this, 'WebsiteBucketName', {
