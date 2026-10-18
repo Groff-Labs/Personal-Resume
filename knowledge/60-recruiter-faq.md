@@ -9,7 +9,8 @@ San Antonio, Texas. Recent roles have been remote with San Antonio as the base.
 
 ## Remote, hybrid or onsite
 
-<!-- TODO: remote/hybrid/onsite preference. -->
+Remote only. He is comfortable with some travel, in the range of 5 to 20%, but
+not with a hybrid or onsite requirement.
 
 ## Travel
 
@@ -25,9 +26,19 @@ under the headshot. Change it there, not here.
 
 ## What he is looking for next
 
-<!-- TODO: the most useful thing on this page for a recruiter deciding whether
-     to call. Be specific about scope, team size, industry, and what you would
-     decline. -->
+A people and business leadership role where the technical and commercial
+knowledge both get used — Manager, Director or VP scope. He is interested in
+product and software companies, and in organisations still adopting cloud that
+need someone cloud-native on their side of the table rather than only on the
+vendor's. He particularly enjoys building the internal tooling a delivery or
+pre-sales team runs on, and wants to be somewhere he can visibly move the needle
+rather than be one more cog.
+
+Industry is open: professional services, software, logistics, oil and gas,
+healthcare have all appealed. The one real filter is that the company has to
+genuinely value technology and invest in it. He would rather not work for a
+private-equity or venture-capital-owned business, though he recognises that
+narrows the field.
 
 ## Compensation
 
@@ -47,12 +58,15 @@ years only, with no status or expiry labels, by deliberate decision.
 Held an Active Security Clearance during Accenture Federal Services
 (December 2019 to May 2021); type available on request.
 
-<!-- TODO: current status, if you want it stated. -->
+He does not hold an active clearance today. He is a US citizen and held Secret
+at Accenture Federal and an interim Top Secret at Vivsoft, so a sponsoring
+employer has a straightforward path to reinstating one.
 
 ## Education
 
 Bachelor of Arts, Texas State University, San Marcos — School of Journalism &
 Mass Communication.
 
-<!-- TODO: optional. The non-CS degree is sometimes asked about and a one-line
-     answer defuses it. -->
+He learned the engineering on the job. The degree in mass communication and
+journalism turns out to be useful in a customer-facing architecture role, where
+most of the work is explaining a design to people who have to fund it.

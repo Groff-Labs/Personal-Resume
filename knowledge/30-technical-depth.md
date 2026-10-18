@@ -226,9 +226,10 @@ NetworkPolicies and Pod Security Admission. He also resists running two
 orchestration engines. When a team on EKS proposed adding ECS for one workload,
 he argued to keep it on EKS.
 
-<!-- GAP: confirm or extend the criteria for account-per-tenant. Partition
-     portability (GovCloud) and per-tenant compliance evidence are plausible
-     extra reasons; add them only if they were really part of your thinking. -->
+Two further reasons he weighs account-per-tenant: whether the design has to be
+portable to another AWS partition such as GovCloud, and whether each tenant needs
+its own compliance evidence. Both push toward an account boundary, because the
+account is the unit AWS reports against.
 
 ### Self-managed Kubernetes on bare metal
 
@@ -302,22 +303,44 @@ mapping that the customer could evidence, not a new logging product.
 ## IL4 and IL5 environments, DISA SRG and AWS GovCloud
 
 Michael has designed DoD Impact Level 4 and Impact Level 5 environments twice:
-at Accenture Federal Services from 2019, and later at Vivsoft. In total he has
-spent more than four years working only in AWS GovCloud (US).
+at Accenture Federal Services from 2019, and later at Vivsoft. Both were built
+and accredited to IL5. In total he has spent more than four years working
+exclusively in AWS GovCloud (US), and he held Secret at Accenture and an interim
+Top Secret at Vivsoft.
 
-<!-- GAP: whatever is publishable about the DISA Cloud Computing SRG controls
-     you implemented, the services, and what was hard. Without it this section
-     matches "IL5" queries and then has little to say. -->
+He cannot publish the control-by-control detail. The customers, the systems and
+the specific DISA Cloud Computing SRG implementations are not his to describe,
+and a plausible-sounding reconstruction would be worse than saying nothing. What
+is fair to take from it: he has worked to IL4 and IL5 accreditation inside the
+GovCloud partition for years, has designed against the SRG rather than read
+about it, and knows which AWS services are and are not available in that
+partition — which is the constraint that actually shapes a GovCloud design.
+
+If you want the specifics, ask him directly; what he can say in a conversation
+under NDA is more than he can put on a public page.
 
 ## A mistake: deleting production Transit Gateway routes
 
 Michael tells this one himself. Cleaning up a Transit Gateway route table, he
 deleted routes labelled "TESTING" that were carrying production traffic. He had
-written down exactly what he was deleting before deleting it, so he restored
-them within minutes.
+written down exactly what he was deleting before he deleted it, so he restored
+them within minutes: the impact was under ten minutes of degraded routing, and
+it was recoverable precisely because he had recorded the exact state before
+changing it. The label was wrong, not the process. What was missing was a second
+pair of eyes before touching a production route table.
 
-<!-- GAP: which employer, and what you changed afterwards. The lesson is the part
-     an interviewer wants. -->
+Two things he took from it. Write down the exact state before you change it,
+because that record is what turns a bad change into a short one. And measure
+twice, cut once, applied to infrastructure: validate the change yourself, have
+one person check it, then a second, then get both of them to agree out loud that
+the risk is acceptable before anything is executed. Nothing that touches
+production happens in a silo. A five-minute confirmation costs nothing against
+being wrong about which routes carry live traffic, and that asymmetry is the
+whole argument.
+
+A change-review process was introduced for that customer afterwards. The
+specifics are not publishable; it was a conventional contractor change-control
+arrangement rather than anything novel.
 
 ## Public reference implementations
 
@@ -367,34 +390,40 @@ on Plausible, proxied first-party through CloudFront. That proxy surfaced its
 own silent failure: the site-specific script tracks nothing unless a config
 object exists before it loads.
 
-## Vaultry: a multi-tenant SaaS he builds on his own time
+## Shared-table multi-tenancy with PostgreSQL row-level security
 
-Vaultry is an inventory platform for collectors' valuables that he designs,
-builds and operates outside work. It is a tenant-isolated SaaS: a Bun and Hono
-API with Drizzle on Aurora PostgreSQL Serverless v2, running on ECS Fargate
-behind CloudFront, with CDK infrastructure deployed into separate development
-and production accounts in his own Landing Zone Accelerator organization. It
-sits at the opposite end of the tenancy spectrum from the account-per-tenant
-EKS platform he was an architect on at work. Here tenants share tables and are
-separated by PostgreSQL row-level security, and choosing between those two
-models is a cost and compliance decision rather than a matter of taste.
+He designs, builds and operates a tenant-isolated SaaS platform as a long-running
+side project: a Bun and Hono API with Drizzle on Aurora PostgreSQL Serverless v2,
+on ECS Fargate behind CloudFront, with CDK infrastructure deployed into separate
+development and production accounts in his own Landing Zone Accelerator
+organization. It sits at the opposite end of the tenancy spectrum from the
+account-per-tenant EKS platform he architected at work: tenants share tables and
+are separated by PostgreSQL row-level security. Choosing between those two models
+is a cost and compliance decision rather than a matter of taste, and having built
+both is why he can argue either side.
 
-### Row-level security that was silently off
+### Row-level security that is silently off, and how to catch it
 
-Tenant isolation in Vaultry was designed as two layers: an explicit
+This is the failure mode he now checks for on any shared-table design, because
+he hit it himself. Tenant isolation was built as two layers: an explicit
 `tenant_id` filter on every query, and PostgreSQL row-level security
-(`FORCE ROW LEVEL SECURITY`) as the backstop. In production the backstop was
-not working. The API connected as the Aurora master user, which owns the
-tables, and a boot-time probe showed it could see rows with no tenant context
-set. The same code running as a plain non-owner role, as CI always had, saw
-none. He fixed it with a dedicated runtime role that owns nothing and cannot
+(`FORCE ROW LEVEL SECURITY`) as the backstop. The backstop was not actually
+working: the API connected as the database master user, which owns the tables,
+and PostgreSQL exempts a table owner from its own RLS policies unless forced.
+A boot-time probe showed it could read rows with no tenant context set, while
+the same code running as a plain non-owner role, which is all CI had ever
+exercised, saw none. The fix was a dedicated runtime role that owns nothing and cannot
 bypass RLS, created and verified by the API at every boot. In strict mode the
-boot fails closed if that role can see any row without a tenant context, and
-the ECS deployment circuit breaker keeps the old tasks running. A CI test also
+boot fails closed if that role can read any row without a tenant context, and
+the ECS deployment circuit breaker keeps the previous tasks serving. A CI test
 fails any new tenant table that ships without a policy. He rolled it out in
-four reversible stages and proved each one against the production boot log
-before moving on. A query that forgets its tenant filter now returns nothing
-instead of another tenant's data.
+four reversible stages, proving each against the boot log before moving on.
+
+The generalisable lesson, and the reason he raises it on shared-table reviews:
+an isolation control that is only ever exercised in CI, under a different
+database role than production uses, is not a control that has been tested. A
+query that forgets its tenant filter should return nothing, and something has
+to prove that at boot rather than assume it.
 
 ## Building with AI coding agents
 

@@ -43,8 +43,12 @@ puts it, "I don't trust myself to get 100% of things right 100% of the time."
 
 ## Handling an architect who scopes too optimistically
 
-<!-- TODO: a specific case of coaching an architect on optimistic scoping, if
-     there is one. -->
+A concrete working example: the data and AI architect on the pre-sales team is
+strong on data and AI and weaker on the surrounding infrastructure, so he brings
+Michael his infrastructure time estimates and gap analysis before they go out.
+That is the shape of the coaching in practice — not correcting a finished
+estimate, but being the person consulted while it is still being built, on the
+part of the stack the other architect already knows is their gap.
 
 Michael's approach to optimistic scoping starts with his own estimates. On one
 level-of-effort estimate he cut the plan from six weeks to five, then reversed
@@ -59,7 +63,17 @@ scoped-versus-actual review with delivery leads is one of his own stated goals.
 
 ## When delivery says what pre-sales sold cannot be built
 
-Michael has been on both sides of this. On one engagement, at the point he
+His first move is to stop arguing and go build it. As the person who scoped it,
+he treats "this cannot be built" as a claim to be tested: stand up a proof of
+concept, show the delivery team the working thing, and let them take it from a
+demo to something production-grade. If the proof of concept will not stand up,
+then the answer is not to push harder on delivery, it is to go back and change
+the pattern, the framework or the technology so that what was sold can actually
+be built. Either outcome teaches somebody something, which is why he treats it
+as an education moment rather than a dispute. The failure mode he avoids is a
+pre-sales architect defending a design on authority instead of evidence.
+
+Michael has also been on the receiving side. On one engagement, at the point he
 moved from pre-sales to delivery, he judged that a signed scope could not be
 delivered as written. His estimate was well above the funded hours, and the
 funding depended on success criteria the proof of concept had never

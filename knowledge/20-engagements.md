@@ -36,8 +36,9 @@ Cutover and DNS cutover completed in January 2025, and AllCloud recognised the
 cutover internally. The customer went on to sign a managed-services contract
 with AllCloud.
 
-<!-- GAP: the constraint (downtime window, contract end date, a system that
-     couldn't move), and "what I'd do differently" if there is something. -->
+The binding constraints were the cutover downtime window and the overall time to
+reach cutover, which is what drove a rehost with a written runbook rather than a
+replatform.
 
 ## Multi-tenant EKS platform with an AWS account per tenant for a public-sector software vendor
 
@@ -69,9 +70,13 @@ reading stale secret values, because a deployment script overwrote secrets on
 every run. The engagement was signed off and the customer went on to a second phase and a
 managed-services contract.
 
-<!-- GAP: "what I'd do differently". Candidate, only if it is genuinely your
-     view: roll strict mTLS out namespace by namespace with observability
-     checked first. -->
+What he would do differently: consolidate tenants into a single EKS cluster
+rather than a cluster each, enforce strict mTLS per tenant namespace, and carry
+tenant identity in metadata with row-level security at the data layer. Same
+isolation guarantees at materially lower cost. It is the inverse of what he
+shipped here, and the reason is cost: an account and cluster per tenant is the
+strongest boundary AWS offers, but it is also the most expensive way to buy it,
+and not every tenant needed that much.
 
 ## Azure-to-AWS migration assessment for a global mining enterprise
 
@@ -97,18 +102,20 @@ accepted as complete in August 2026. During Mobilize the customer chose
 Databricks on AWS rather than the AWS-native lakehouse in the original scope,
 and Michael wrote the change order that re-scoped the work.
 
-<!-- GAP: "what I'd do differently". -->
+What he would do differently: go deeper on the networking and file-system detail
+during Assess. Both were where the Mobilize phase had to fill in gaps the
+assessment left.
 
-## Landing Zone Accelerator without Control Tower, and shared-cluster EKS cost attribution, for an HR-tech SaaS company
+## Control Tower controls implemented outside Control Tower, and shared-cluster EKS cost attribution, for an HR-tech SaaS company
 
 An HR-tech SaaS company came to AllCloud through MAP. Michael led the
 assessment workshops and then the Mobilize engagement. The Mobilize foundation
-was a Landing Zone Accelerator deployment without AWS Control Tower: an
+was a Landing Zone Accelerator deployment without AWS Control Tower itself: an
 organizational unit (OU) strategy, preventive service control policies (SCPs),
 and backup policies managed through LZA. Michael wrote AllCloud's internal "LZA
 Config Settings Explained" guide during this engagement.
 
-<!-- GAP: why LZA without Control Tower here. An interviewer will ask. -->
+
 
 The interesting decision was about tenancy. The alternative on the table was a
 separate EKS cluster, or a separate account, for each of the company's own
@@ -118,7 +125,19 @@ Spark jobs, and isolating each customer would have meant a dedicated MongoDB
 per customer, so per-customer clusters would have multiplied the bill without a
 matching security requirement. What the customer actually needed to know was
 what each of its customers cost, so he built proportional per-customer cost
-attribution in CloudZero. For infrastructure as code, he ran an options session
+attribution in CloudZero.
+
+The reason Control Tower was left out is worth stating, because it was the
+customer's call and a considered one: they wanted Control Tower's controls, but
+implemented directly so each one could be tuned to them rather than accepted as
+Control Tower presents it. So the equivalent guardrails were built natively in
+LZA — the OU strategy, preventive SCPs and backup policies above — which keeps
+the governance and gives up the managed convenience in exchange for per-control
+precision. It is the right trade when a customer has a specific reason to
+deviate, and the wrong one when they do not, because somebody then owns those
+controls by hand.
+
+For infrastructure as code, he ran an options session
 covering CloudFormation, Terraform, CDK, CDK for Terraform, Pulumi and SST, and
 the team chose AWS CDK in Python.
 
