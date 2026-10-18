@@ -95,5 +95,11 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      # pdfinfo/pdftotext are not on ubuntu-latest. Without them the two resume
+      # checks skip rather than fail, which would quietly mean no CI coverage of
+      # the page count or the em-dash rule.
+      - name: Install poppler-utils
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+
       - name: Repo gate
         run: ./scripts/check.sh

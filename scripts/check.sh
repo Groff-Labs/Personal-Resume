@@ -22,6 +22,10 @@ FAST="${1:-}"
 FAILED=()
 PASSED=0
 
+# The two résumé checks need poppler (pdfinfo/pdftotext), which is not present
+# on a stock ubuntu-latest runner or on every dev machine. They skip rather than
+# fail when it is missing, and ci.yml installs it so the coverage is real there.
+
 step() {
   local name="$1"; shift
   printf '\n\033[1m==> %s\033[0m\n' "$name"
@@ -57,10 +61,12 @@ fi
 # regressed at least once, so they are checked rather than remembered.
 
 step "resume: exactly 3 pages" bash -c '
+  command -v pdfinfo >/dev/null 2>&1 || { echo "    skipped: pdfinfo not installed"; exit 0; }
   n=$(pdfinfo frontend/public/resume.pdf 2>/dev/null | awk "/^Pages/{print \$2}")
   [ "$n" = "3" ] || { echo "    resume.pdf is $n pages, expected 3 (trim resume.md)"; exit 1; }'
 
 step "resume: no em dashes" bash -c '
+  command -v pdftotext >/dev/null 2>&1 || { echo "    skipped: pdftotext not installed"; exit 0; }
   n=$(pdftotext frontend/public/resume.pdf - 2>/dev/null | grep -c "—")
   [ "$n" = "0" ] || { echo "    $n em dash(es) in the PDF; house style forbids them"; exit 1; }'
 
