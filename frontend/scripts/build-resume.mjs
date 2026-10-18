@@ -150,8 +150,38 @@ console.log(
 // recruiters prefer plain text over a PDF's extracted text layer, and it's the
 // cleanest thing to paste into an application form. Copied rather than
 // symlinked so `next build`'s static export picks it up.
+//
+// Strip HTML comments on the way out. `resume.md` carries build instructions and
+// the no-em-dash house style note at the top, which are useful in the source and
+// absurd in a file a recruiter downloads -- it opened with a note telling them
+// not to use em dashes. The PDF never showed them (the renderer drops comments)
+// and nor does the chat corpus (`splitSections` strips them), so this published
+// copy was the only leak.
 const MD_DEST = path.resolve(__dirname, "../public/resume.md");
-await fs.copyFile(SRC, MD_DEST);
+const mdSource = await fs.readFile(SRC, "utf8");
+const published = mdSource
+  .replace(/<!--[\s\S]*?-->/g, "")
+  // Collapse the blank lines the comments leave behind, and drop any leading
+  // whitespace so the file starts on the `# Michael Groff` heading.
+  .replace(/\n{3,}/g, "\n\n")
+  .replace(/^\s+/, "");
+await fs.writeFile(MD_DEST, published, "utf8");
+
+// Fail the build rather than publish editor notes to the public site. Cheap
+// guard: this leaked for months precisely because nothing checked it.
+if (published.includes("<!--")) {
+  throw new Error(
+    `${path.relative(REPO_ROOT, MD_DEST)} still contains an HTML comment. ` +
+      `The comment stripper above did not match it -- fix the regex rather ` +
+      `than shipping build notes to anyone who downloads the resume.`,
+  );
+}
+if (!published.startsWith("# ")) {
+  throw new Error(
+    `${path.relative(REPO_ROOT, MD_DEST)} should open on the top-level ` +
+      `heading, not "${published.slice(0, 40).replace(/\n/g, "\\n")}".`,
+  );
+}
 const { size: mdSize } = await fs.stat(MD_DEST);
 console.log(
   `✓ Copied ${path.relative(REPO_ROOT, MD_DEST)} — ${(mdSize / 1024).toFixed(1)} KB`,

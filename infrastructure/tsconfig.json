@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    // Explicit so an editor attributing test/ to lambda/tsconfig.json (which
+    // sets types: ["node"]) stops reporting phantom "Cannot find name 'describe'".
+    // `tsc --noEmit` was always clean; this is for the LSP.
+    "types": ["node", "jest"],
     "isolatedModules": true,
     "target": "ES2022",
     "module": "NodeNext",
