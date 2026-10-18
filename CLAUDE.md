@@ -85,6 +85,10 @@ tenure while each role carries its own dates. `Experience.tsx` also expands
   - `main` → `michaelgroff.info` (prod bucket, prod distribution)
 - **Standard flow:** commit + push `dev` → verify on `dev.michaelgroff.info`
   → `git checkout main && git merge dev --ff-only && git push origin main`.
+- **Check `main` is actually an ancestor of `dev` before promoting:**
+  `git merge-base --is-ancestor origin/main origin/dev`. It periodically is
+  not, and the `--ff-only` promote then fails. See *main and dev drift apart*
+  under Dependency management for why and how to repair it.
 - **`cv.michaelgroff.info`** is not a CloudFront alias — it's a CloudFlare
   Redirect Rule that 301s to apex. Don't re-add it as a CDK alias.
 - **`www.michaelgroff.info`** is NXDOMAIN by choice. If a user ever
@@ -338,6 +342,38 @@ before merge.
 - **Security updates ignore `target-branch`** and open against the
   default branch (`main`). With no auto-merge, they get manual review
   before reaching prod — fine.
+- **`main` and `dev` drift apart, and it silently breaks the promote.**
+  Security updates open against the default branch (`main`) while version
+  updates target `dev`, so each branch accumulates commits the other lacks and
+  neither stays an ancestor of the other. Two consequences: `git merge dev
+  --ff-only` fails, and `dev` can sit on a vulnerability `main` has already
+  patched. Oct 2026: `dev` ran next 16.3.3 with a critical RCE
+  (GHSA-vcvr-r3jv-pc5j) for ~2 weeks while `main` was already on 16.3.8.
+
+  Repair by merging `main` into `dev` and **regenerating both lockfiles from
+  the reconciled `package.json`** rather than hand-merging lock conflicts
+  (resolve `package.json` by keeping the higher range, `git checkout --ours`
+  the locks, then `npm install` in each project).
+
+  **Do not squash-merge that reconcile PR.** A squash brings the content across
+  but discards the ancestry: the tip ends up with one parent, `main` is still
+  not an ancestor, and `--ff-only` still fails. This happened with PR #54. If
+  it has already been squashed, record the ancestry without touching the tree:
+
+  ```
+  git checkout dev && git merge -s ours origin/main
+  ```
+
+  `-s ours` keeps `dev`'s tree byte-for-byte and adds `main` as a second
+  parent, restoring the `main == dev` invariant after the next promote. Only
+  safe once you have confirmed `dev` is a strict superset of `main` — check
+  `git diff origin/main origin/dev` shows nothing but equal-or-higher
+  versions, because `-s ours` discards the other side's changes outright.
+- **`sprintf-js` (GHSA-hp3w-g68c-fv3c) is unfixable and is dismissed.** Latest
+  published is 1.1.3 and the advisory covers `<= 1.1.3`, so there is no version
+  to upgrade to. Build-time only, via `md-to-pdf` → `gray-matter` → `js-yaml`
+  → `argparse` parsing `resume.md` in CI. Dismissed as `tolerable_risk`
+  (Oct 2026, both manifests). Reopen if a patched release ever ships.
 - **If the alert count never drops, the dependency graph is stuck — don't wait
   it out.** In Sep 2026 this repo showed 65 alerts while `npm audit` was 0/0.
   It was not lag: GitHub's graph was frozen on a *July* lockfile snapshot, and
@@ -378,6 +414,24 @@ before merge.
   migration (JS config → CSS `@theme`, remap the color tokens + dark
   mode). Do it in a focused session with dev visual verification, not a
   drive-by merge.
+
+  **Dependabot will try to land this as a "security update" — don't let it.**
+  Oct 2026, PR #51 was titled as a `postcss-selector-parser` fix
+  (GHSA-rj75-hqrm-r3gf, medium) and its actual change was Tailwind 3→4, since
+  Tailwind 4 drops that dependency entirely. It broke the build, because
+  Tailwind 4 moved its PostCSS plugin to `@tailwindcss/postcss` while
+  `postcss.config.mjs` still loads `tailwindcss` directly. Both #51 and #12
+  fail with exactly that error.
+
+  Fixed instead with `overrides: { "postcss-selector-parser": "^7.1.6" }`,
+  which reaches the patched version while staying on tailwindcss 3.4.19 even
+  though `tailwindcss` declares `^6.1.2` and `postcss-nested` declares
+  `^6.1.1`. Generated CSS verified byte-identical before and after.
+
+  A medium build-time advisory is not a reason to force the migration:
+  `tailwindcss` is a `devDependency`, so the parser never reaches a browser,
+  and the advisory is CPU exhaustion on a pathological flat selector
+  (`.a.a.a...`) that would have to be in your own `globals.css`.
 
 ---
 
