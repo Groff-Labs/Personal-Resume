@@ -1,6 +1,11 @@
 *.js
 !jest.config.js
 *.d.ts
+# ...but lambda/ declarations are hand-written source, not build output.
+# md.d.ts declares `*.md` for the esbuild text loader, and without it the Lambda
+# typecheck fails on every markdown import. It was silently untracked until CI
+# ran and could not find it.
+!lambda/**/*.d.ts
 node_modules
 
 # CDK asset staging directory
