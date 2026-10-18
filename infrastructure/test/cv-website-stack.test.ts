@@ -138,6 +138,13 @@ describe('ChatApi (chat enabled)', () => {
     expect(fns[0].Properties.FunctionName).toMatch(/^cv-chat-/);
     // Must run OUTSIDE a VPC: that is the whole point of the carve-out.
     expect(fns[0].Properties.VpcConfig).toBeUndefined();
+    // No reserved concurrency: the account quota is 10 and AWS requires 10 to
+    // stay unreserved, so any value here fails the deploy. The quota is the cap
+    // instead. If the quota is raised, set this explicitly and update the test.
+    expect(
+      (fns[0].Properties as { ReservedConcurrentExecutions?: number })
+        .ReservedConcurrentExecutions,
+    ).toBeUndefined();
   });
 
   it('tags the table, log group and role with LZA:EXC:NET', () => {

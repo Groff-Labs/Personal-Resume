@@ -301,10 +301,29 @@ export class ChatApi extends Construct {
       architecture: lambda.Architecture.ARM_64,
       memorySize: 512,
       timeout: cdk.Duration.seconds(60),
-      // The most load-bearing line in the file. It caps a flood, and it bounds
-      // the overshoot on the eventually-consistent budget check to a fraction
-      // of a cent.
-      reservedConcurrentExecutions: 5,
+      //
+      // NO reservedConcurrentExecutions, and this is a constraint rather than a
+      // choice: this account's Lambda concurrency quota is 10 (not the default
+      // 1000), and AWS requires at least 10 to remain UNRESERVED, so any
+      // reservation at all fails with
+      //   "decreases account's UnreservedConcurrentExecution below its minimum
+      //    value of [10]"
+      //
+      // That quota is itself the cap, which is most of what the reservation was
+      // for: the chat function can reach at most 10 concurrent executions, so a
+      // flood is bounded, and the overshoot on the eventually-consistent budget
+      // check is bounded to ~10 in-flight turns -- a fraction of a cent.
+      //
+      // The pool is NOT exclusive, though: this account also holds ~15
+      // AWSAccelerator-* custom-resource Lambdas belonging to LZA itself. They
+      // are idle except during an LZA pipeline run, so in practice they do not
+      // contend. The honest caveat is that a chat flood concurrent with an LZA
+      // deployment could throttle LZA's custom resources (they retry), and
+      // vice versa. Acceptable at this traffic; worth knowing.
+      //
+      // *** If the account concurrency quota is ever raised, that implicit cap
+      // disappears and `reservedConcurrentExecutions` must be set explicitly.
+      // Raising the quota without doing so silently removes the flood limit. ***
       logGroup,
       role: execRole,
       depsLockFilePath: path.join(__dirname, '../package-lock.json'),
