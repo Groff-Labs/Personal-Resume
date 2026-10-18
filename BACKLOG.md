@@ -38,9 +38,46 @@ SCP carve-out), and the corpus is bundled at synth time rather than fetched.
 site renders, and it is in the image-optimiser exclusion list so it keeps full
 resolution for the lightbox. Re-export to the same path.
 
+### 2. Reconcile the chat spend counter against Cost Explorer
+
+**Do this on or after 20 Oct 2026.** `PRICES` in
+`infrastructure/lambda/chat/limits.ts` is hand-maintained from the pricing page,
+and the $0.10/day cap is only as correct as those constants are. More than ~20%
+divergence means they are wrong and the cap is not where it is thought to be.
+
+Attempted 18 Oct and it proved nothing, which is the expected answer rather
+than a failure: Cost Explorer showed Bedrock absent from the service list
+entirely, while the counters held $0.0159 over 24 turns on dev. Those do not
+conflict. Every measured turn had happened that same day, so nothing was old
+enough to have landed, and CE was resolving other services to eight decimal
+places at the time (CloudFront at $0.0000000083), so the absence was missing
+data and not a $0 reading.
+
+The counter's own arithmetic is at least self-consistent: $0.000661/turn on dev
+over 24 turns and $0.000756 on the first prod turn, against the ~$0.00068
+recorded in `CLAUDE.md`. That checks the division, not the price constants,
+which is exactly what Cost Explorer is needed for.
+
 ---
 
 ## Closed
+
+### The assistant went live in prod, after a config gap hid it
+
+Promoting the code was not enough. `CHAT_ENABLED` is an environment-scoped
+GitHub variable and it was set on `dev` only, so prod built the site with the
+whole section stripped: no `#chat` element, no nav entry, no reference to
+`/api/chat`. The backend had deployed fine (`cv-chat-api-prod`,
+`cv-chat-counters-prod`, `cv-chat-guardrail-prod` all existed), and cost nothing
+while unreachable, which is the two-kill-switch design behaving correctly rather
+than a fault.
+
+Worth knowing because the failure is silent in both directions: a green deploy
+on `main` tells you nothing about whether the section renders, and the only
+reliable check is grepping the live HTML for `id="chat"`. Verified end to end on
+the apex afterwards, with a real browser rather than curl: the trace rendered
+`list_certifications(vendor: "AWS")`, the answer streamed, the citation chip
+appeared, and the certifications came back as earn years with no status labels.
 
 ### `resume.md` download no longer leaks editor comments
 

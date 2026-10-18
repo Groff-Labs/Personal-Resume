@@ -258,6 +258,22 @@ element, no nav entry, no reference to `/api/chat`. They are deliberately
 separate: the UI can ship to dev before the backend, or the backend can be
 removed without a site rebuild.
 
+**`CHAT_ENABLED` is environment-scoped, so promoting the code does not turn the
+assistant on.** Oct 2026: `main` deployed green, `cv-chat-api-prod` and its table
+and guardrail all existed, and the apex still served no chat section, because the
+variable was set on `dev` only. Nothing fails and nothing warns. Live as of
+18 Oct 2026, both stages. The check that actually answers the question:
+
+```
+curl -s https://michaelgroff.info/ | grep -c 'id="chat"'    # 1 = rendered, 0 = hidden
+gh api repos/:owner/:repo/environments/production/variables -q '.variables[].name'
+```
+
+A manual site redeploy needs an explicit stage, because `workflow_dispatch`
+declares the input required: pass `-f stage=prod` to `gh workflow run
+"Deploy site" --ref main`, or the API returns `HTTP 422: Required input 'stage'
+not provided`.
+
 ### The SCP carve-out the function depends on
 
 LZA's `DenyLambdaWithoutVPC` was narrowed (grofflabs-lza#15) from
