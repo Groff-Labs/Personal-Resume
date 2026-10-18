@@ -1,0 +1,26 @@
+{
+  // The Lambda bundle is type-checked separately from the CDK app: it targets a
+  // bundler (esbuild) rather than Node's own resolver, and it imports across
+  // into frontend/ and a .md file, neither of which the infra tsconfig should
+  // know about. esbuild does not type-check, so this is where that happens --
+  // run it with `npm run typecheck:lambda`.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["node"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": ["chat/**/*.ts"]
+}

@@ -1,37 +1,20 @@
 import { Github, Linkedin, Twitter, Mail, Phone, UserPlus, FileText } from "lucide-react";
+import { contact } from "@/lib/data/contact";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
+  // Values come from lib/data/contact.ts so the chat assistant and this footer
+  // cannot disagree about how to reach him.
   const socialLinks = [
-    {
-      name: "LinkedIn",
-      icon: Linkedin,
-      url: "https://www.linkedin.com/in/michael-groff-8b367489",
-    },
-    {
-      name: "GitHub",
-      icon: Github,
-      url: "https://github.com/mgroff2",
-    },
-    {
-      name: "Twitter",
-      icon: Twitter,
-      url: "https://twitter.com/Groffskiii",
-    },
+    { name: "LinkedIn", icon: Linkedin, url: contact.linkedIn },
+    { name: "GitHub", icon: Github, url: contact.github },
+    { name: "Twitter", icon: Twitter, url: contact.twitter },
   ];
 
   const contactInfo = [
-    {
-      icon: Phone,
-      text: "(830) 688-2830",
-      href: "tel:+1-830-688-2830",
-    },
-    {
-      icon: Mail,
-      text: "mg1459.mg@gmail.com",
-      href: "mailto:mg1459.mg@gmail.com?Subject=Career%20Opportunity",
-    },
+    { icon: Phone, text: contact.phone, href: contact.phoneHref },
+    { icon: Mail, text: contact.email, href: contact.emailHref },
   ];
 
   return (
@@ -45,9 +28,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="font-semibold text-ink mb-2">Michael Groff</h3>
+            <h3 className="font-semibold text-ink mb-2">{contact.name}</h3>
             <p className="text-sm text-ink-muted">
-              AWS Sr. Solutions Architect · San Antonio, TX
+              {contact.headline} · {contact.location}
             </p>
           </div>
 
@@ -67,7 +50,7 @@ export default function Footer() {
               ))}
             </ul>
             <a
-              href="/michael-groff.vcf"
+              href={contact.vcf}
               download
               className="mt-3 inline-flex items-center gap-2 text-sm text-ink-muted hover:text-accent transition-colors"
             >
@@ -77,7 +60,7 @@ export default function Footer() {
             {/* Markdown alongside the PDF: some ATS and application forms take
                 plain text more reliably than a PDF's extracted text layer. */}
             <a
-              href="/resume.md"
+              href={contact.resumeMd}
               download
               className="mt-2 inline-flex items-center gap-2 text-sm text-ink-muted hover:text-accent transition-colors"
             >
@@ -106,7 +89,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-line flex flex-col sm:flex-row justify-between gap-2 text-xs text-ink-subtle">
-          <p>&copy; {currentYear} Michael Groff. All rights reserved.</p>
+          <p>&copy; {currentYear} {contact.name}. All rights reserved.</p>
           <p className="font-mono">
             Next.js · AWS · CDK · CloudFront · S3
           </p>

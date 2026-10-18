@@ -42,6 +42,12 @@ new CvWebsiteStack(app, `CvWebsite-${stage}`, {
     ...commonTags,
     Stage: stage,
   },
+  // Chat backend config. `chatModelId: ""` (or absent) disables the feature.
+  chatModelId: app.node.tryGetContext('chatModelId') ?? '',
+  chatDailyUsdCap: app.node.tryGetContext('chatDailyUsdCap') ?? '0.10',
+  chatIpTurnsPerHour: app.node.tryGetContext('chatIpTurnsPerHour') ?? '8',
+  chatIpBurstPerMinute: app.node.tryGetContext('chatIpBurstPerMinute') ?? '3',
+  chatIpJdPerDay: app.node.tryGetContext('chatIpJdPerDay') ?? '3',
 });
 
 new GitHubOidcStack(app, 'CvWebsite-OIDC', {

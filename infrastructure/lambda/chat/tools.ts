@@ -1,0 +1,375 @@
+import type { DocumentType } from '@smithy/types';
+import {
+  ANCHORS,
+  type Citation,
+  certifications,
+  contact,
+  employerIds,
+  findJob,
+  inventory,
+  rolesOf,
+  searchPassages,
+  skillGroups,
+  activeHeroStatus,
+  tokenize,
+} from './corpus';
+
+export const MAX_JD_CHARS = 6000;
+
+export interface ToolResult {
+  /**
+   * Returned to the model. Typed as the SDK's recursive DocumentType because
+   * that is what Converse's `toolResult.content[].json` accepts — `unknown` or
+   * `Record<string, unknown>` both fail to assign.
+   */
+  data: DocumentType;
+  /** Rendered as chips in the UI and required by the system prompt. */
+  citations: Citation[];
+  /** One line for the UI's tool trace. */
+  summary: string;
+}
+
+/* ------------------------------------------------------------------ *
+ * Schemas
+ * ------------------------------------------------------------------ */
+
+export const toolSpecs = [
+  {
+    name: 'get_role',
+    description:
+      "Look up one employer from the CV: tenure, location, every title held there, and the responsibility bullets for each. Use for 'what did he do at X'.",
+    inputSchema: {
+      json: {
+        type: 'object',
+        properties: {
+          company: {
+            type: 'string',
+            enum: employerIds,
+            description: 'Employer id from the CV.',
+          },
+        },
+        required: ['company'],
+      },
+    },
+  },
+  {
+    name: 'search_experience',
+    description:
+      'Keyword search across every responsibility bullet, skill group and resume line. Use when the question names a technology, metric or activity rather than an employer. Returns ranked snippets with their source.',
+    inputSchema: {
+      json: {
+        type: 'object',
+        properties: {
+          query: { type: 'string', description: 'Keywords, not a sentence.' },
+          limit: { type: 'integer', minimum: 1, maximum: 6 },
+        },
+        required: ['query'],
+      },
+    },
+  },
+  {
+    name: 'list_certifications',
+    description:
+      'List certifications. Filter by vendor substring or by kind. proctored = exam-based, partner = partner-program accreditation, training = completion badge.',
+    inputSchema: {
+      json: {
+        type: 'object',
+        properties: {
+          vendor: { type: 'string' },
+          kind: { type: 'string', enum: ['proctored', 'partner', 'training', 'other'] },
+        },
+      },
+    },
+  },
+  {
+    name: 'get_skills',
+    description:
+      'Read the skills matrix. With no arguments returns the categories and their summaries. With `item` answers whether one specific technology appears on the CV, and where.',
+    inputSchema: {
+      json: {
+        type: 'object',
+        properties: {
+          category: { type: 'string' },
+          item: { type: 'string', description: 'A single technology, e.g. Terraform.' },
+        },
+      },
+    },
+  },
+  {
+    name: 'match_job_description',
+    description:
+      'Compare the job description the user pasted against the CV. The comparison is computed by code, not inferred: it returns exact matched terms with their evidence, the requirements with no match, and a coverage count. Call once, only when a job description was supplied.',
+    inputSchema: {
+      json: {
+        type: 'object',
+        properties: {
+          acknowledge: {
+            type: 'string',
+            description: "Always the literal string 'pasted'. The text is supplied out-of-band.",
+          },
+        },
+        required: ['acknowledge'],
+      },
+    },
+  },
+  {
+    name: 'get_availability_and_contact',
+    description:
+      'Current availability signal plus how to reach him. Use to close a conversation, and whenever the answer is not in the CV.',
+    inputSchema: { json: { type: 'object', properties: {} } },
+  },
+] as const;
+
+export type ToolName = (typeof toolSpecs)[number]['name'];
+
+/* ------------------------------------------------------------------ *
+ * Implementations
+ * ------------------------------------------------------------------ */
+
+function getRole(input: Record<string, unknown>): ToolResult {
+  const company = String(input.company ?? '');
+  const job = findJob(company);
+
+  if (!job) {
+    return {
+      data: { found: false, note: `No employer matching "${company}" on the CV.`, employerIds },
+      citations: [],
+      summary: `no match for "${company}"`,
+    };
+  }
+
+  const roles = rolesOf(job);
+  return {
+    data: {
+      found: true,
+      company: job.company,
+      location: job.location,
+      tenure: `${job.startDate} - ${job.endDate}`,
+      roles: roles.map((r) => ({
+        title: r.title,
+        dates: `${r.startDate} - ${r.endDate}`,
+        responsibilities: r.responsibilities,
+      })),
+    },
+    citations: [{ anchor: ANCHORS.experience, label: `Experience -> ${job.company}` }],
+    summary: `${job.company}: ${roles.length} title${roles.length === 1 ? '' : 's'}`,
+  };
+}
+
+function searchExperience(input: Record<string, unknown>): ToolResult {
+  const query = String(input.query ?? '');
+  const rawLimit = Number(input.limit ?? 4);
+  const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(rawLimit, 1), 6) : 4;
+  const hits = searchPassages(query, limit);
+
+  if (hits.length === 0) {
+    return {
+      data: { matches: [], note: `Nothing on the CV matches "${query}".` },
+      citations: [],
+      summary: `0 matches for "${query}"`,
+    };
+  }
+
+  const citations: Citation[] = [];
+  for (const h of hits) {
+    if (!citations.some((c) => c.anchor === h.anchor)) {
+      citations.push({ anchor: h.anchor, label: h.source.split(' -> ')[0] });
+    }
+  }
+
+  return {
+    data: { matches: hits.map((h) => ({ text: h.text, source: h.source })) },
+    citations,
+    summary: `${hits.length} match${hits.length === 1 ? '' : 'es'} for "${query}"`,
+  };
+}
+
+function listCertifications(input: Record<string, unknown>): ToolResult {
+  const vendor = input.vendor ? String(input.vendor).toLowerCase() : undefined;
+  const kind = input.kind ? String(input.kind) : undefined;
+
+  let list = certifications;
+  if (vendor) list = list.filter((c) => c.vendor.toLowerCase().includes(vendor));
+  if (kind) list = list.filter((c) => c.type === kind);
+
+  return {
+    data: {
+      count: list.length,
+      certifications: list.map((c) => ({
+        name: c.name,
+        vendor: c.vendor,
+        kind: c.type,
+        // Earn year only. CLAUDE.md: deliberately no status or expiry labels.
+        earned: c.issueDate.slice(0, 4),
+      })),
+    },
+    citations: [{ anchor: ANCHORS.certifications, label: 'Certifications' }],
+    summary: `${list.length} cert${list.length === 1 ? '' : 's'}${kind ? ` (${kind})` : ''}`,
+  };
+}
+
+function getSkills(input: Record<string, unknown>): ToolResult {
+  const item = input.item ? String(input.item).toLowerCase().trim() : undefined;
+  const category = input.category ? String(input.category).toLowerCase() : undefined;
+
+  if (item) {
+    const hits = skillGroups
+      .filter((g) => g.items.some((i) => i.toLowerCase().includes(item)))
+      .map((g) => ({
+        category: g.category,
+        matched: g.items.filter((i) => i.toLowerCase().includes(item)),
+      }));
+
+    return {
+      data:
+        hits.length > 0
+          ? { present: true, item, found: hits }
+          : { present: false, item, note: `"${item}" does not appear in the skills matrix.` },
+      citations: hits.length > 0 ? [{ anchor: ANCHORS.skills, label: 'Skills' }] : [],
+      summary: hits.length > 0 ? `"${item}" found in ${hits.length}` : `"${item}" not listed`,
+    };
+  }
+
+  const groups = category
+    ? skillGroups.filter((g) => g.category.toLowerCase().includes(category))
+    : skillGroups;
+
+  return {
+    data: {
+      categories: groups.map((g) => ({
+        category: g.category,
+        summary: g.summary,
+        items: g.items,
+      })),
+    },
+    citations: [{ anchor: ANCHORS.skills, label: 'Skills' }],
+    summary: `${groups.length} skill group${groups.length === 1 ? '' : 's'}`,
+  };
+}
+
+/**
+ * The JD matcher.
+ *
+ * The job description is NOT a tool argument — it arrives in the HTTP body and
+ * is closed over here. Three reasons: model-generated arguments would cost
+ * output tokens for 6 KB of text, the model could paraphrase or truncate it,
+ * and inline guardrails do not evaluate tool arguments (so routing user text
+ * through them would skip the input check).
+ *
+ * The matching itself is deterministic. The model narrates the result; it
+ * cannot add a skill Michael doesn't have.
+ */
+function matchJobDescription(jobDescription: string | undefined): ToolResult {
+  if (!jobDescription || jobDescription.trim().length < 40) {
+    return {
+      data: {
+        matched: [],
+        missing: [],
+        note: 'No job description was supplied. Ask the user to paste one into the job-description box.',
+      },
+      citations: [],
+      summary: 'no job description supplied',
+    };
+  }
+
+  const jd = jobDescription.slice(0, MAX_JD_CHARS).toLowerCase();
+  const jdTokens = new Set(tokenize(jd));
+
+  const matched: Array<{ term: string; evidence: string; anchor: string }> = [];
+  for (const entry of inventory) {
+    // Multi-word terms match as substrings; single words must match a whole
+    // token so "go" doesn't match "governance".
+    const hit = entry.term.includes(' ')
+      ? jd.includes(entry.term)
+      : jdTokens.has(entry.term);
+
+    if (hit && !matched.some((m) => m.term === entry.display)) {
+      matched.push({ term: entry.display, evidence: entry.source, anchor: entry.anchor });
+    }
+  }
+
+  // Requirement-shaped lines with no inventory hit, so gaps are explicit rather
+  // than silently omitted.
+  const missing = jobDescription
+    .slice(0, MAX_JD_CHARS)
+    .split('\n')
+    .map((l) => l.replace(/^[\s•*\-–]+/, '').trim())
+    .filter((l) => l.length > 25 && l.length < 180)
+    .filter((l) => {
+      const lt = new Set(tokenize(l));
+      return !matched.some((m) => {
+        const mt = tokenize(m.term);
+        return mt.length > 0 && mt.every((t) => lt.has(t));
+      });
+    })
+    .slice(0, 8);
+
+  const citations: Citation[] = [];
+  for (const m of matched) {
+    if (!citations.some((c) => c.anchor === m.anchor)) {
+      citations.push({ anchor: m.anchor as Citation['anchor'], label: m.evidence.split(' -> ')[0] });
+    }
+  }
+
+  return {
+    data: {
+      note: 'Computed by code against the CV data, not inferred. Report these verbatim; do not add terms.',
+      matchedCount: matched.length,
+      matched: matched.slice(0, 25),
+      unmatchedRequirements: missing,
+    },
+    citations,
+    summary: `${matched.length} matched, ${missing.length} unmatched`,
+  };
+}
+
+function getAvailabilityAndContact(): ToolResult {
+  const status = [activeHeroStatus.lead, activeHeroStatus.emphasis, activeHeroStatus.tail]
+    .filter(Boolean)
+    .join('')
+    .trim();
+
+  return {
+    data: {
+      availability: status,
+      tone: activeHeroStatus.tone,
+      email: contact.email,
+      phone: contact.phone,
+      linkedIn: contact.linkedIn,
+      resumePdf: contact.resumePdf,
+    },
+    citations: [{ anchor: ANCHORS.contact, label: 'Contact' }],
+    summary: 'availability + contact',
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * Dispatch
+ * ------------------------------------------------------------------ */
+
+export function runTool(
+  name: string,
+  input: Record<string, unknown>,
+  ctx: { jobDescription?: string },
+): ToolResult {
+  switch (name) {
+    case 'get_role':
+      return getRole(input);
+    case 'search_experience':
+      return searchExperience(input);
+    case 'list_certifications':
+      return listCertifications(input);
+    case 'get_skills':
+      return getSkills(input);
+    case 'match_job_description':
+      return matchJobDescription(ctx.jobDescription);
+    case 'get_availability_and_contact':
+      return getAvailabilityAndContact();
+    default:
+      return {
+        data: { error: `Unknown tool "${name}".` },
+        citations: [],
+        summary: `unknown tool ${name}`,
+      };
+  }
+}

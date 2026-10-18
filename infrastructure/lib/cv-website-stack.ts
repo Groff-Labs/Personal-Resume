@@ -4,12 +4,22 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { Construct } from 'constructs';
+import { ChatApi } from './chat-api';
 
 export interface CvWebsiteStackProps extends cdk.StackProps {
   stage: string;
   domainName: string;
   /** Prefix for globally-unique S3 bucket names. Set from cdk.json context. */
   resourcePrefix: string;
+  /**
+   * "Ask my CV" chat backend. An empty `chatModelId` disables the whole
+   * feature, so a fork without the LZA SCP carve-out can still deploy the site.
+   */
+  chatModelId?: string;
+  chatDailyUsdCap?: string;
+  chatIpTurnsPerHour?: string;
+  chatIpBurstPerMinute?: string;
+  chatIpJdPerDay?: string;
 }
 
 export class CvWebsiteStack extends cdk.Stack {
@@ -21,6 +31,9 @@ export class CvWebsiteStack extends cdk.Stack {
     super(scope, id, props);
 
     const { stage, domainName, resourcePrefix } = props;
+
+    // Empty model id means the chat feature is off and no chat resources exist.
+    const chatEnabled = !!props.chatModelId;
 
     // S3 Bucket for static website hosting.
     // Note: we deliberately do NOT use `autoDeleteObjects: true` because that
@@ -194,6 +207,19 @@ export class CvWebsiteStack extends cdk.Stack {
       ],
     });
 
+    // Chat backend. Instantiated before the Distribution because its
+    // behaviour options are spread into additionalBehaviors below.
+    const chat = chatEnabled
+      ? new ChatApi(this, 'ChatApi', {
+          stage,
+          modelId: props.chatModelId!,
+          dailyUsdCap: props.chatDailyUsdCap ?? '0.10',
+          ipTurnsPerHour: props.chatIpTurnsPerHour ?? '8',
+          ipBurstPerMinute: props.chatIpBurstPerMinute ?? '3',
+          ipJdPerDay: props.chatIpJdPerDay ?? '3',
+        })
+      : undefined;
+
     // CloudFront Distribution
     this.distribution = new cloudfront.Distribution(this, 'Distribution', {
       comment: `CV Website - ${stage}`,
@@ -229,6 +255,7 @@ export class CvWebsiteStack extends cdk.Stack {
       // Note: the rewriteFunction above is attached to defaultBehavior only,
       // so these proxy behaviours deliberately don't inherit it.
       additionalBehaviors: {
+        ...(chat ? { '/api/chat': chat.behaviorOptions } : {}),
         '/js/*': {
           origin: plausibleOrigin,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -258,7 +285,12 @@ export class CvWebsiteStack extends cdk.Stack {
           httpStatus: 403,
           responseHttpStatus: 404,
           responsePagePath: '/404.html',
-          ttl: cdk.Duration.minutes(5),
+          // TTL zero, unlike the 404 below. A Lambda OAC signature failure
+          // returns 403, which this rewrites to the site's HTML 404 page -- and
+          // caching that for 5 minutes means it keeps returning HTML after you
+          // fix the client, so the fix looks like it didn't work. Costs only a
+          // few extra origin requests for genuinely missing S3 keys.
+          ttl: cdk.Duration.seconds(0),
         },
       ],
     });

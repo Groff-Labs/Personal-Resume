@@ -76,6 +76,12 @@ jobs:
       # until production breaks: an origin reordering stripping OAC (the whole
       # site becomes /404.html), or a Lambda-backed custom resource that LZA's
       # DenyLambdaWithoutVPC rejects at deploy rather than at synth.
+      # esbuild does not type-check, so the Lambda bundle is checked separately
+      # against lambda/tsconfig.json (bundler resolution, reaches into frontend/).
+      - name: Typecheck chat Lambda
+        working-directory: infrastructure
+        run: npm run typecheck:lambda
+
       - name: Assert stack invariants
         working-directory: infrastructure
         run: npm test

@@ -17,6 +17,11 @@ on:
     branches: [dev, main]
     paths:
       - 'infrastructure/**'
+      # The chat Lambda bundles the site's own data, so an edit to either of
+      # these changes the Lambda asset and must redeploy the backend. This is
+      # the trade for having no codegen step and no duplicated resume copy.
+      - 'frontend/lib/data/**'
+      - 'resume.md'
       - '.github/workflows/deploy-infra.yml'
   workflow_dispatch:
     inputs:
