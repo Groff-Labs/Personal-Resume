@@ -184,12 +184,16 @@ describe('ChatApi (chat enabled)', () => {
 
     expect(chatPolicy).toBeDefined();
     const headers = chatPolicy!.HeadersConfig.Headers.map((h) => h.toLowerCase());
-    // Lambda OAC rejects unsigned payloads, so the viewer's body hash must survive.
-    expect(headers).toContain('x-amz-content-sha256');
     // The only client IP CloudFront will not let a viewer forge.
     expect(headers).toContain('cloudfront-viewer-address');
     // Authorization would collide with the OAC signature.
     expect(headers).not.toContain('authorization');
+    // x-amz-content-sha256 must NOT be listed. CloudFront rejects it at deploy
+    // time ("that is not allowed") because it manages the header itself when
+    // signing to a Lambda OAC origin. The viewer still sends it; naming it here
+    // fails the stack. This assertion exists because an earlier version did
+    // name it and the deploy rolled back.
+    expect(headers).not.toContain('x-amz-content-sha256');
     expect(chatPolicy!.CookiesConfig.CookieBehavior).toBe('none');
   });
 

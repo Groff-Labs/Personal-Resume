@@ -363,14 +363,20 @@ export class ChatApi extends Construct {
     const originRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'OriginRequestPolicy', {
       originRequestPolicyName: `cv-chat-origin-${stage}`,
       comment: 'Chat API: viewer IP, content type, and the OAC payload hash. Nothing else.',
+      // `x-amz-content-sha256` is deliberately NOT listed here, and must not be:
+      // CloudFront rejects it outright ("The parameter Headers contains
+      // x-amz-content-sha256 that is not allowed"), verified by creating a
+      // throwaway policy against the API. It is a reserved header that
+      // CloudFront manages itself when signing to a Lambda OAC origin.
+      //
+      // The VIEWER still has to send it. Lambda does not accept unsigned
+      // payloads, so Chat.tsx computes the SHA-256 of the request body with
+      // crypto.subtle and sets the header; CloudFront consumes it as the
+      // payload hash. Listing it here is not redundant, it is a deploy failure.
       headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
         'content-type',
-        // Required by Lambda OAC for POST: the viewer must send the SHA256 of
-        // the body, and CloudFront uses it as the payload hash when signing.
-        // Lambda does not accept unsigned payloads.
-        'x-amz-content-sha256',
-        // CloudFront generates this itself and overwrites any viewer value, so
-        // it is the one client IP we can trust.
+        // CloudFront generates this itself and overwrites any viewer-supplied
+        // value, so it is the one client IP we can trust for rate limiting.
         'cloudfront-viewer-address',
       ),
       // Deliberately no cookies on the path that reaches a model.
