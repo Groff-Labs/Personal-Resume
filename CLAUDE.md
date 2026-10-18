@@ -390,9 +390,13 @@ before merge.
   65 open → 2 open within 30 seconds, and auto-close has worked since.
   **Diagnostic that tells lag from stuck:** if `state=="fixed"` count is 0
   while open alerts persist after a real fix, it's stuck, not lagging.
-- **`npm audit` alone is NOT sufficient.** npm's advisory DB and GitHub's GHSA
-  disagree. `browserslist` GHSA-73wf-gq98-2v4g was a real, current high that
-  GitHub flagged and `npm audit` reported nothing about. Check both.
+- **`npm audit` and GHSA disagree in *both* directions.** `browserslist`
+  GHSA-73wf-gq98-2v4g was a real, current high that GitHub flagged and
+  `npm audit` reported nothing about, so npm audit alone is not sufficient.
+  The converse also holds: `npm audit` reports ~12 findings in `/frontend`
+  that Dependabot does not flag at all, and none of them is fixable. Check
+  both, and read the `npm audit` entry under *Known non-issues* before acting
+  on that output.
 - GitHub counts each advisory×package *instance*, so a scary "65 alerts" was
   really a handful of packages.
 - **`brace-expansion` in `/infrastructure` can't be fixed by `npm audit fix`.**
@@ -464,6 +468,36 @@ Both are byte-preserved from the source WP installs. Do not try to
 
 ## Known non-issues (don't "fix" without asking)
 
+- **`npm audit` in `/frontend` reports ~12 findings that cannot be fixed.
+  Accepted Oct 2026; don't go chasing them.** The count (roughly 8 high /
+  4 moderate) is inflated because npm audit lists every dependent along the
+  chain. It is really **two** advisories, and neither has a patched release in
+  existence:
+
+  - **`braces` `<=3.0.3`** (high, stack-exhaustion DoS). The latest published
+    version *is* 3.0.3 — 37 releases and the newest one is the vulnerable one.
+    There is nothing to upgrade to, so the `overrides` trick that fixed
+    `postcss-selector-parser` cannot work here.
+  - **`sprintf-js` `<=1.1.3`** (moderate). Latest published is 1.1.3. Already
+    dismissed in Dependabot for the same reason.
+
+  **npm's own `fixAvailable` suggestions are both wrong.** For `braces` it
+  says `tailwindcss@4.3.3`, but there are *two* paths to braces:
+  `tailwindcss → micromatch → braces` **and**
+  `md-to-pdf → chokidar@3.6.0 → braces`. Tailwind 4 removes only the first, so
+  the deferred migration would not even clear this finding. For `sprintf-js`
+  it suggests `md-to-pdf@2.2.0`, which is a *downgrade* from the current 5.2.5.
+
+  The second path has no room either: `md-to-pdf` is already at the latest
+  published 5.2.5 and pins `chokidar: ^3.5.2`. Chokidar 5.x carries no braces
+  dependency but dropped glob support entirely, so forcing it would likely
+  break PDF generation. **Don't pin chokidar to "fix" this.**
+
+  Both are `devDependencies`: build-time only, never shipped to a browser, and
+  the braces advisory needs a deeply nested brace pattern in a glob you wrote
+  yourself in your own CI. **Dependabot flags neither** (0 open as of
+  Oct 2026) — that is consistent with the above, not a gap in coverage.
+  Revisit only if `braces` publishes a patched release.
 - **AWS certifications: earn years only, no status labels.** All three
   proctored AWS certs carry earn dates older than the 3-year validity window
   (SA Pro 2022-01, SA Associate 2021-04, SysOps 2023-04). Raised again in
