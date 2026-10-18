@@ -17,9 +17,16 @@ on:
     branches: [dev, main]
     paths:
       - 'infrastructure/**'
-      # The chat Lambda bundles the site's own data, so an edit to either of
-      # these changes the Lambda asset and must redeploy the backend. This is
-      # the trade for having no codegen step and no duplicated resume copy.
+      # The chat Lambda bundles the site's own data and the knowledge corpus, so
+      # an edit to any of these changes the Lambda asset and must redeploy the
+      # backend. This is the trade for having no codegen step and no duplicated
+      # copy of the resume.
+      #
+      # knowledge/** is the one people will actually edit -- it is plain markdown
+      # and the whole point is that changing it needs no code change. Leave it
+      # out of this list and a corpus edit deploys nothing, the assistant keeps
+      # serving the previous text, and nothing anywhere says so.
+      - 'knowledge/**'
       - 'frontend/lib/data/**'
       - 'resume.md'
       - '.github/workflows/deploy-infra.yml'

@@ -5,6 +5,8 @@ is where detail goes that would bloat a 3-page résumé: per-engagement stories,
 technical depth, the career narrative, recruiter FAQs.
 
 **Edit these as plain markdown. No code changes needed to change the content.**
+Pushing a change to `dev` redeploys the assistant: `deploy-infra.yml` watches
+`knowledge/**`, because the corpus is bundled into the Lambda at synth time.
 Adding a *new file* needs one line in
 `infrastructure/lambda/chat/knowledge.ts`; editing an existing one needs
 nothing.
