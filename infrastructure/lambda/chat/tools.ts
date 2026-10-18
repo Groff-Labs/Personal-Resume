@@ -1,3 +1,4 @@
+import type { Tool } from '@aws-sdk/client-bedrock-runtime';
 import type { DocumentType } from '@smithy/types';
 import {
   ANCHORS,
@@ -121,6 +122,22 @@ export const toolSpecs = [
 ] as const;
 
 export type ToolName = (typeof toolSpecs)[number]['name'];
+
+/**
+ * Converse wants every entry wrapped: `{ toolSpec: { name, description,
+ * inputSchema } }`, not the bare spec. Getting this wrong fails at runtime with
+ *   "The value at toolConfig.tools.0 must set one of the following keys:
+ *    toolSpec, systemTool, modelTool or cachePoint"
+ * and an `as unknown as Tool[]` cast at the call site will happily hide it, so
+ * the wrapping and the typing live together here instead.
+ */
+export const converseTools: Tool[] = toolSpecs.map((spec) => ({
+  toolSpec: {
+    name: spec.name,
+    description: spec.description,
+    inputSchema: { json: spec.inputSchema.json as DocumentType },
+  },
+}));
 
 /* ------------------------------------------------------------------ *
  * Implementations

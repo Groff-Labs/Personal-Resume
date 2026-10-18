@@ -3,14 +3,13 @@ import {
   ConverseCommand,
   type ContentBlock,
   type Message,
-  type Tool,
 } from '@aws-sdk/client-bedrock-runtime';
 
 import { type Citation } from './corpus';
 import { applyGuardrail } from './guardrail';
 import { checkJdLimit, checkLimits, estimateMicroUsd, hashIp, recordSpend } from './limits';
 import { systemPrompt } from './prompt';
-import { MAX_JD_CHARS, runTool, toolSpecs } from './tools';
+import { MAX_JD_CHARS, converseTools, runTool } from './tools';
 import { encodeEvent, type ChatEvent, type ChatRequest, type ChatRequestMessage } from './types';
 
 const bedrock = new BedrockRuntimeClient({});
@@ -220,7 +219,7 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
     content: [{ text: m.content }],
   }));
 
-  const toolConfig = { tools: toolSpecs as unknown as Tool[] };
+  const toolConfig = { tools: converseTools };
   const citations: Citation[] = [];
   let inputTokens = 0;
   let outputTokens = 0;
