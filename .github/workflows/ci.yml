@@ -85,3 +85,15 @@ jobs:
       - name: Assert stack invariants
         working-directory: infrastructure
         run: npm test
+
+      # The repo gate, which also covers the artifact invariants that have each
+      # regressed at least once: resume page count, no em dashes, no leaked
+      # comments in the published Markdown, no HTML comments left in knowledge/,
+      # retrieval still separating broad from narrow queries, and no customer or
+      # colleague name in published prose. Needs the frontend's deps too.
+      - name: Install frontend deps for the gate
+        working-directory: frontend
+        run: npm ci
+
+      - name: Repo gate
+        run: ./scripts/check.sh

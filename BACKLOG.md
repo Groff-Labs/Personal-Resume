@@ -11,38 +11,7 @@ decided no" is worth more than silence.
 
 ## Open
 
-### 1. `resume.md` download exposes editor comments
-
-The footer's "Résumé (Markdown)" link serves a file whose first two lines are
-build instructions:
-
-```
-<!-- Edit this file, then run `cd frontend && npm run resume` to rebuild resume.pdf -->
-<!-- House style: no em dashes. Use commas, semicolons, colons, or "·". -->
-```
-
-A recruiter downloading the Markdown gets a note telling them not to use em
-dashes. The PDF is unaffected (the renderer drops comments) and so is the chat
-corpus (`splitSections` strips comments), so this is only the published `.md`.
-
-Fix: strip HTML comments in the copy step in
-`frontend/scripts/build-resume.mjs`, where `resume.md` is copied to
-`frontend/public/resume.md`. Keep the comments in the source file — they are
-useful there. Two lines, no behaviour change elsewhere. Verify with
-`curl -s https://michaelgroff.info/resume.md | head -3`.
-
-### 2. Run `/unslop` across the repo
-
-Pass over prose a human reads: `README.md`, `CLAUDE.md`, this file, the
-`knowledge/` corpus, UI copy, and recent commit messages. The `knowledge/`
-corpus is the highest-value target, since it is published under his name and
-was partly machine-drafted.
-
-Coordinate as a review, not a rewrite: take the recommendations, apply the ones
-that make the prose plainer, and reject anything that flattens a deliberate
-phrasing. Several passages are deliberately blunt and should stay that way.
-
-### 3. Update the Lucid architecture diagram for the chat feature
+### 1. Update the Lucid architecture diagram for the chat feature
 
 Existing diagram: <https://lucid.app/lucidchart/aef5844e-526a-4261-9fb8-258ca20973c8/edit>
 
@@ -69,17 +38,54 @@ SCP carve-out), and the corpus is bundled at synth time rather than fetched.
 site renders, and it is in the image-optimiser exclusion list so it keeps full
 resolution for the lightbox. Re-export to the same path.
 
-### 4. Wire up AgentTeam for this repo
-
-Configured for the `Vaultry-*` repos but not here. Decide which role agents
-earn their place in a mature static site plus one Lambda — probably
-`roles:cloud-iac-engineer` and `roles:devops-sre`, possibly
-`roles:fullstack-engineer` for the chat UI. The `ops:*` agents assume
-production services with Sentry and ECS, which do not exist here.
-
 ---
 
 ## Closed
+
+### `resume.md` download no longer leaks editor comments
+
+The published Markdown opened with build instructions and the no-em-dash style
+note, so a recruiter downloading it read those before his name. `build-resume.mjs`
+now strips HTML comments on the way to `frontend/public/resume.md`, and throws
+if any survive or the file does not open on a heading. The source keeps its
+comments. Fixed on prod.
+
+### `/unslop` sweep run across the repo
+
+The gate came back with one hit, a false positive (rule 19 flagged "Landing Zone
+Accelerator and Service Control Policies", which are proper nouns and exempt).
+Every ungated tell was absent, and the corpus has zero bold.
+
+Two rule 15 density fixes applied by splitting sentences, not by bulleting —
+recorded why in `CLAUDE.md`: `splitSections` strips the leading `-` and joins
+lines with spaces, so a bullet list reaches the model as one unsplittable run of
+jammed words. The rule's diagnosis was right and its prescribed fix was wrong
+for a corpus a retriever reads first.
+
+The sweep also caught a silent regression it was not looking for: "what has he
+shipped on AWS" had started passing the broad-query guard, because the word
+"shipped" occurred exactly once in the corpus and so carried a high IDF. Fixed
+by stopwording the achievement verbs people use to phrase broad questions.
+
+### AgentTeam wired up for this repo
+
+The role agents were never the missing piece — they come from the `roles`
+plugin and were already available here. What the team charter actually reads was
+missing: a `check` script (it blocks a role agent whose run leaves the gate
+failing) and a `CONTEXT.md` (it takes names from one).
+
+Added `./scripts/check.sh`, a shell script rather than a root npm script because
+this repo is two independent npm projects and a root manifest would imply a
+workspace that does not exist. It runs lint, both typechecks, the stack
+assertions, `cdk synth`, and the artifact invariants that have each regressed at
+least once. Verified the harness reports every failure and exits 1, not just the
+first.
+
+Added `CONTEXT.md` as the vocabulary, and recorded in `CLAUDE.md` which three
+roles apply (`cloud-iac-engineer`, `devops-sre`, `fullstack-engineer`) and which
+are deliberately unused, with the reason for each — the `ops:*` agents assume
+Sentry and ECS, `data-ml-engineer` assumes a data platform, `business:*` assumes
+a commercial product.
 
 ### `lucide-react` unpinned by inlining three brand glyphs
 

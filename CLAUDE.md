@@ -24,7 +24,10 @@ WordPress → Next.js refactor and apex-migration work is already done.
 | Chat behaviour / tone / refusals | `infrastructure/lambda/chat/prompt.ts` |
 | Chat caps and model | `infrastructure/cdk.json` context (`chatModelId`, `chatDailyUsdCap`, `chatIpTurnsPerHour`, …) |
 
-Parked work and decided-against items live in `BACKLOG.md`.
+Parked work and decided-against items live in `BACKLOG.md`. The repo's
+vocabulary is `CONTEXT.md` — use the names in it rather than inventing
+synonyms. `./scripts/check.sh` is the one command that proves the tree is
+green.
 
 `resume.md` is the source of truth for the downloadable PDF (auto-built
 by `npm run resume`, which runs as a `prebuild` hook).
@@ -845,6 +848,58 @@ Then, outside the repo:
 - Bootstrap `CvWebsite-OIDC` **manually** (`npx cdk deploy CvWebsite-OIDC`);
   `deploy-infra.yml` deliberately skips it, since it's the stack that grants the
   workflow its own credentials
+
+---
+
+## The agent team
+
+Role agents come from the `roles` plugin and are available in any repo, so
+nothing here registers them. What a repo has to supply is the two things the
+team charter actually reads, and both were missing until Oct 2026.
+
+**`./scripts/check.sh` is the gate.** The charter blocks a role agent whose run
+leaves it failing. It is a shell script rather than a root `package.json` script
+on purpose: this repo is two independent npm projects (`dependabot.yml` scans
+`/frontend` and `/infrastructure` as separate ecosystems) and a root manifest
+would imply a workspace that does not exist.
+
+It runs lint, both typechecks, the stack assertions, `cdk synth`, and the
+artifact invariants that have each regressed at least once — résumé page count,
+no em dashes, the published Markdown having no leaked comments, no HTML comments
+left in `knowledge/`, retrieval still separating broad from narrow queries, and
+no customer or colleague name in published prose. `./scripts/check.sh fast`
+skips the Next build and `cdk synth` for a quick loop.
+
+It reports every failure rather than stopping at the first, and exits 1.
+
+**`CONTEXT.md` is the vocabulary.** The charter says "names from `CONTEXT.md`",
+so a role agent that writes `bot` where the repo says `assistant`, or `relevance`
+where it says `coverage`, is working from the wrong glossary. Add a term there
+when you introduce one.
+
+### Which roles apply here
+
+| Role | Use it for |
+|---|---|
+| `roles:cloud-iac-engineer` | the CDK stacks, CloudFront, the chat backend, anything touching LZA policy |
+| `roles:devops-sre` | the three workflows, the OIDC trust, the deploy and promote flow |
+| `roles:fullstack-engineer` | `frontend/` components, and the chat UI in particular |
+
+Deliberately **not** used, so nobody wires them up later and wonders why they
+return nothing useful:
+
+- the `ops:*` agents assume a running production service with Sentry and ECS.
+  This is a static site plus one Lambda; there is no Sentry project and no
+  cluster.
+- `roles:data-ml-engineer` — there is no data platform. The chat assistant is
+  keyword search over a few hundred passages, by deliberate decision.
+- the `business:*` agents are for a commercial product with pricing and
+  channels. This is a CV.
+- `roles:product-architect` is available if a feature ever needs shaping from
+  scratch again, but the site is mature and most work is content.
+
+`.agent-team/plans/` is where a role agent's plan artifacts go, committed, the
+same convention as the Vaultry repos. The directory is created on first use.
 
 ---
 
