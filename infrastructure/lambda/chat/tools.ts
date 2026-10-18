@@ -166,7 +166,11 @@ function getHighlights(input: Record<string, unknown>): ToolResult {
 
   return {
     data: {
-      note: 'Curated and ordered, most significant first. Report these; do not rank or editorialise.',
+      note:
+        'Curated and ordered, most significant first. Report these; do not rank or editorialise. ' +
+        'SCOPE: these are highlights, not a career summary, and not exhaustive. All but the last are ' +
+        'from AllCloud (May 2024 onward) and twelve-plus years precede them. Each entry states its own ' +
+        'timeframe -- carry that into the answer, and say plainly that this is a selection.',
       count: items.length,
       highlights: items.map((h) => ({ headline: h.title, detail: h.body })),
     },
