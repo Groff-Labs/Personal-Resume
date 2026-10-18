@@ -35,12 +35,22 @@ exactly where they creep back in:
 - **The "Business Impact at a Glance" percentages** (43% time-to-market, 69%
   unplanned downtime, 45% security incidents). They are labelled "(AWS
   benchmark)" in a vendor deck — marketing, not delivered results.
-- **Inflated figures.** AWS MAP funding is **~$1.2M**, not $1.5M. Every number
-  here should survive someone asking you to show the source.
+- **Inflated figures.** Every number here should survive someone asking you to
+  show the source. Specifically: **do not put a dollar figure on AWS MAP
+  funding.** A records search in Oct 2026 could not substantiate the ~$1.2M the
+  résumé used to carry — the closest figures found were *budgets*, not
+  approvals, and the approval emails were not searchable. The programme **count**
+  is defensible and the dollar amount is not, so the résumé now says "16+ AWS
+  MAP programs" and nothing more. Restore a figure only against approval
+  emails you could produce on request.
 - **Delivery-phase cost savings.** Confirmed Sep 2026 that no delivery-phase TCO
   workbook exists for any of the 17 engagements. The category is absent from the
   résumé on purpose. Do not reintroduce it here.
 - **Anything under NDA**, or internal pricing, margins, pipeline or named deals.
+- **Review notes in `<!-- -->` comments.** The bot never sees them, but git
+  publishes them. A note like "check the NDA" or "this figure is unverified"
+  discloses the very thing it is worried about. Keep those in your head or in
+  a private file, and leave only neutral TODOs here.
 
 ### Also worth remembering
 

@@ -42,23 +42,29 @@ Multi-account AWS foundations with Control Tower, AWS Organizations, IAM
 Identity Center and Service Control Policies. Also delivered Azure-to-AWS,
 Rackspace-to-AWS and on-premises-to-AWS migrations.
 
-## Assessed a ~320-VM Azure estate for migration to AWS
+## Assessed a large Azure estate for migration to AWS
 
-A global mining enterprise: ~320 VMs across 8 regions, ~30 subscriptions, ~400
-TB of allocated storage, and ~200 GB per day of log ingestion under a 24-month
-retention requirement.
+A global mining enterprise: a few hundred VMs across multiple regions and dozens
+of subscriptions, with hundreds of terabytes of data and high-volume log
+ingestion under a multi-year retention requirement. Lead solutions architect on
+the MAP Assess, which led directly into a Mobilize engagement.
 
-## Built the AI tooling library his team runs on
+## Helped build the AI tooling his team runs on
 
-Thirteen skills spanning the full engagement lifecycle — SOW review,
-architecture design guides, MAP readouts, licensing assessments, Jira task
-generation, change orders. Authored 9 of the 13 net-new, and contributed ~90% of
-commits and ~21,000 lines in three weeks.
+Assisted in creating and enhancing roughly 15 internal AI assistant skills
+spanning the full engagement lifecycle — SOW review, architecture design guides,
+MAP readouts, licensing assessments, Jira task generation, change orders. Used
+by North America delivery teams, around 30 solutions architects and engineers.
 
-## Attained ~125% of a $4M booking quota
+## Attained ~125% of booking quota
 
-~$5M against a $4M annual target in FY2026, as one of three pre-sales practice
-team leads guiding three solutions architects.
+In FY2026, as pre-sales team lead working alongside the delivery practice leads
+and guiding three solutions architects.
+
+## Registered 16+ AWS MAP programs
+
+Assess and Mobilize engagements registered through the AWS Migration
+Acceleration Program.
 
 ## Leading AllCloud North America through AWS One OLA certification
 

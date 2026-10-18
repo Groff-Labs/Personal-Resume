@@ -238,22 +238,33 @@ export function isBroadQuery(query: string): boolean {
 }
 
 /**
- * Below this, a result set is noise rather than an answer.
+ * Confidence threshold, expressed as the share of the query's IDF mass a
+ * passage actually matched. Scale-invariant by construction.
  *
- * Calibrated against measured scores on the real corpus: solid matches land
- * around 1.04-1.13 ("landing zone", "multi-tenant SaaS"), looser but genuinely
- * relevant ones around 0.70 ("kubernetes" -> the EKS skill groups), and the
- * known-bad case at 0.38 ("what has he shipped on AWS" -> a CI/CD skills line,
- * which slips past the token filter because "shipped" prefix-matches "ship").
- * 0.55 separates those cleanly.
+ * An earlier version thresholded the raw ranking score at 0.55, calibrated on a
+ * 146-passage corpus. Growing the corpus to 228 moved every score: "landing
+ * zone" fell 1.13 -> 0.95 and "kubernetes" 0.74 -> 0.62, while the known-bad
+ * "what has he shipped on AWS" rose 0.38 -> 0.41. The cutoff still separated
+ * them, but the margin collapsed from 0.36 to 0.21 and would have kept closing
+ * as the knowledge base grew, eventually flagging good answers as weak with no
+ * sign that anything had changed.
  *
- * Token filtering alone was not enough: one rare-but-incidental word is enough
- * to rescue an otherwise broad query and produce a confidently wrong answer.
+ * The raw score is still the right thing for *ranking* (relative order within
+ * one query). It is the wrong thing for *confidence*, because IDF depends on
+ * corpus size and the length divisor penalises longer knowledge passages. The
+ * fraction of the query matched does not move when the corpus grows.
+ *
+ * At 0.5: a single-token query that matches scores 1.0; "landing zone" with
+ * both terms matched scores 1.0; "shipped" earning only a prefix match scores
+ * 0.4 and is correctly rejected.
  */
-export const MIN_USEFUL_SCORE = 0.55;
+export const MIN_COVERAGE = 0.5;
 
 export interface ScoredPassage extends Passage {
+  /** Ranking score. Comparable within one query, not across corpus sizes. */
   score: number;
+  /** Share of the query's IDF mass matched, 0..1. Use this for confidence. */
+  coverage: number;
 }
 
 /**
@@ -266,25 +277,37 @@ export function searchPassages(query: string, limit = 4): ScoredPassage[] {
   const qTokens = usefulQueryTokens(query);
   if (qTokens.length === 0) return [];
 
+  // Total IDF the query could possibly match, for the coverage denominator.
+  const queryMass = qTokens.reduce((sum, q) => sum + (idf.get(q) ?? 1), 0);
+
   const scored = passages.map((p) => {
     const pTokens = new Set(tokenize(p.text));
     let score = 0;
+    let matched = 0;
     for (const q of qTokens) {
+      const qIdf = idf.get(q) ?? 1;
       if (pTokens.has(q)) {
-        score += idf.get(q) ?? 1;
+        score += qIdf;
+        matched += qIdf;
       } else {
         // Partial credit for prefix matches so "kubernetes" finds "kubernetes-based"
-        // and "terraform" finds "terraformed".
+        // and "terraform" finds "terraformed". Weighted the same in coverage, so
+        // a query rescued only by a prefix match scores 0.4 and is rejected.
         for (const t of pTokens) {
           if (t.startsWith(q) || q.startsWith(t)) {
             score += (idf.get(t) ?? 1) * 0.4;
+            matched += qIdf * 0.4;
             break;
           }
         }
       }
     }
-    // Favour shorter passages at equal overlap: they're denser and cost fewer tokens.
-    return { ...p, score: score / Math.log(12 + p.text.length) };
+    return {
+      ...p,
+      // Favour shorter passages at equal overlap: denser, and fewer input tokens.
+      score: score / Math.log(12 + p.text.length),
+      coverage: queryMass > 0 ? matched / queryMass : 0,
+    };
   });
 
   return scored

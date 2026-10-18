@@ -11,7 +11,7 @@
 
 ## Professional Summary
 
-AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastructure, spanning hands-on delivery and pre-sales leadership. At AllCloud since 2024: delivered 17 AWS engagements across 11 industries covering landing zones, enterprise migrations, and multi-tenant SaaS modernization, then technically influenced **~$10.5M in closed-won services across ~150 opportunities** at a **~62% win rate**, roughly 10 points above the team average, while carrying the **highest technical request volume of 37 solution architects globally** and attaining **~125% of a $4M booking quota** in FY2026. Serverless-first, IaC everything, security by default.
+AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastructure, spanning hands-on delivery and pre-sales leadership. At AllCloud since 2024: delivered 17 AWS engagements across 11 industries covering landing zones, enterprise migrations, and multi-tenant SaaS modernization, then technically influenced **~$10.5M in closed-won services across ~150 opportunities** at a **~62% win rate**, roughly 10 points above the team average, while carrying the **highest technical request volume of 37 solution architects globally** and attaining **~125% of booking quota** in FY2026. Serverless-first, IaC everything, security by default.
 
 ---
 
@@ -41,12 +41,12 @@ AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastruc
 - Manage the platform solutions architecture team: coverage allocation against pipeline and delivery priority, hiring and onboarding, performance and career development, and the technical standards the team designs to.
 - Own technical quality of the team's customer-facing output, approving architecture designs, level-of-effort estimates, and proposals before they reach the customer, and maintaining the reference architectures and estimation models the team builds from.
 - Remain hands-on as a senior architect on the most complex platform engagements, roughly half the week, spanning multi-account AWS foundations, migrations, and modernization.
-- Built and lead an internal AI tooling library of 13 skills spanning the full engagement lifecycle, from SOW review and architecture design guides through MAP readouts, licensing assessments, Jira task generation, and change orders. Authored 9 net-new and contributed **~90% of commits and ~21,000 lines in three weeks**.
+- Assisted in creating and enhancing ~15 internal AI assistant skills across the engagement lifecycle, from SOW review and estimates through MAP readouts, licensing assessments, and change orders. Used by North America delivery teams: **~30 solutions architects and engineers**.
 - Lead AllCloud North America's **AWS One OLA (Optimization and Licensing Assessment) partner certification**: completed the Microsoft enablement track, produced the full deliverable set against an AWS-set ~600-server scenario, and submitted for AWS approval.
 
 **Sr. Pre-Sales Solutions Architect / Team Lead** · *July 2026 – October 2026*
 
-- One of three practice team leads; guide three solutions architects and own a $4M annual booking quota, attained **~125% (~$5M)** in FY2026.
+- Pre-sales team lead working alongside delivery practice leads; guided three solutions architects and attained **~125% of booking quota** in FY2026.
 - Audited **~100 customer engagements** for pipeline hygiene, surfacing that ~10% carried no CRM record and roughly half no supporting documentation.
 - Time from opportunity creation to solutions-architect engagement on supported opportunities improved **~42% across tenure** (median ~17 days to ~10), with same-day engagement rising from ~15% to ~35%.
 
@@ -57,7 +57,7 @@ AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastruc
 - Technical solutions architect on **~150 opportunities**, closing **~70 at ~$10.5M in services revenue** and influencing **~$23M** in total pipeline.
 - Carried the **highest technical request volume of 37 solution architects globally**, roughly 145 requests and ~55% more than the next-highest, sustained at ~10 opportunities per month over 15 months.
 - **~62% win rate by count, ~80% by value**, roughly 10 points above the solutions architect team average. Median ~40 days from opportunity creation to close.
-- Registered **~$1.2M across 16 AWS MAP programs** (Assess and Mobilize).
+- Registered **16+ AWS MAP programs** (Assess and Mobilize).
 - Produced ~30 level-of-effort and estimate packages in four months, ~10 named SOWs and proposals, and 5 proofs of concept, all five closed won.
 - Quantified that **~340 of ~590 person-hours (~58%)** of pre-sales effort on non-converting deals was artifact production, then helped build and tune the AI assistant that now automates it.
 - Established AllCloud's first standardized pre-sales artifact set: handover document template, discovery questionnaire, SOW input structure, and an estimation workbook used 12+ times.
@@ -69,7 +69,7 @@ AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastruc
 - Designed and deployed AWS infrastructure across compute, networking, storage, identity, and security. Implemented infrastructure as code in AWS CDK, CloudFormation, and Terraform, and hardened environments against the AWS Well-Architected Framework.
 - Provided pre-sales architecture support alongside delivery work, per the role remit, which is what led to the move into the pre-sales practice.
 - Delivered **17 AWS engagements across 11 industries** covering landing zones, MAP migrations, modernization, security posture, and cost optimization. Ran **up to 5 concurrently**, typically 3 to 6 months, the largest spanning 14 months and 4+ workstreams.
-- Assessed a global mining enterprise's Azure estate for AWS migration: **~320 VMs across 8 regions, ~30 subscriptions, ~400 TB allocated storage**, and ~200 GB per day of log ingestion under 24-month retention.
+- Assessed a global mining enterprise's Azure estate for AWS migration: **a few hundred VMs across multiple regions and dozens of subscriptions**, hundreds of terabytes of data, and high-volume log ingestion under multi-year retention.
 - Architected a **multi-tenant SaaS platform of 7 products and ~65 microservices on EKS**, one dedicated AWS account per tenant, replacing in-cluster PostgreSQL, MongoDB, Redis, and RabbitMQ with managed AWS services and implementing US federal M-21-31 logging controls.
 - Deployed **Landing Zone Accelerator across 6 engagements**; delivered Azure-to-AWS, Rackspace-to-AWS, and on-premises-to-AWS migrations.
 - Authored or co-authored **architecture design guides for 9 engagements**, plus the SaaS design guide template reused on 4+ engagements since.

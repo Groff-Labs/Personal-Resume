@@ -9,7 +9,12 @@ San Antonio, Texas. Recent roles have been remote with San Antonio as the base.
 
 ## Remote, hybrid or onsite
 
-<!-- TODO: and travel tolerance, which is a real question for a consulting role. -->
+<!-- TODO: remote/hybrid/onsite preference. -->
+
+## Travel
+
+He prefers roles with little travel. Travel-heavy work is not for him, though
+he travels occasionally when a customer engagement needs it.
 
 ## Current availability
 

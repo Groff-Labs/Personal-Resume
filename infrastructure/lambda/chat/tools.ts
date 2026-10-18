@@ -3,7 +3,7 @@ import type { DocumentType } from '@smithy/types';
 import { highlightSections } from './knowledge';
 import {
   ANCHORS,
-  MIN_USEFUL_SCORE,
+  MIN_COVERAGE,
   isBroadQuery,
   type Citation,
   certifications,
@@ -236,7 +236,7 @@ function searchExperience(input: Record<string, unknown>): ToolResult {
 
   // One rare-but-incidental word can rescue an otherwise broad query and
   // produce a confident non-answer. Flag it rather than pretending.
-  if (hits[0].score < MIN_USEFUL_SCORE) {
+  if (hits[0].coverage < MIN_COVERAGE) {
     return {
       data: {
         matches: hits.map((h) => ({ text: h.text, source: h.source })),

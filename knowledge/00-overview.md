@@ -22,13 +22,32 @@ architecture on the most complex platform engagements.
 
 ## What he is unusually good at
 
-<!-- TODO: your own words. What do colleagues come to you for specifically?
-     What can you do that the next architect on the bench cannot? Be concrete:
-     "estimation on ambiguous scope" beats "communication". -->
+Turning ambiguous scope into an estimate and a SOW boundary that delivery can
+live with. The requests colleagues send him most often are cost estimates and
+reviews of handover documents, levels of effort and SOWs, from a wide range of
+account executives, architects and engineers. He built AllCloud's first
+handover-document template and discovery questionnaire, and his "adversarial
+review" exists to find, before signature, the change order a scope is going to
+need.
+
+He is also the person delivery engineers bring a broken Landing Zone
+Accelerator pipeline to, usually when an SCP is the cause. And he turns his own
+practice into tools the team uses: he helped build and extend the team's
+internal library of AI-assistant skills that encode its SOW, estimate,
+design-guide and staffing workflows. In his own projects the same habit shows
+as written decision records: commit messages on this site's public repository
+state the residual risk of a change and the alternatives he rejected.
 
 ## What he does not claim to be
 
-<!-- TODO: worth writing honestly. A bot that says "he is not a data engineer,
-     and he would tell you that himself" reads as far more credible than one
-     that claims everything. Candidates for this list: deep data/ML
-     engineering, frontend, anything you would decline rather than wing. -->
+Michael is not a data engineer, and he'll say so himself. He routes
+data-platform and analytics work (Spark and Glue rewrites, lakehouse design,
+tenant isolation for data stores) to data and AI architects. He doesn't scope
+application development: he has said that estimating it himself would be
+"shooting from the hip". He stops at the database line: he designs around
+managed databases but doesn't claim database administration or tuning. He
+hands payments standards, SAP and penetration testing to specialists. He is a
+new people manager, managing since October 2026, not a long-tenured
+engineering leader. And he doesn't quote cost savings from his engagements,
+because none of them measured savings after cutover. An assessment's projected
+run-rate is a projection, not a result.
