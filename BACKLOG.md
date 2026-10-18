@@ -38,25 +38,45 @@ SCP carve-out), and the corpus is bundled at synth time rather than fetched.
 site renders, and it is in the image-optimiser exclusion list so it keeps full
 resolution for the lightbox. Re-export to the same path.
 
-### 2. Reconcile the chat spend counter against Cost Explorer
+### 2. Confirm the chat spend constants against an actual bill
 
-**Do this on or after 20 Oct 2026.** `PRICES` in
-`infrastructure/lambda/chat/limits.ts` is hand-maintained from the pricing page,
-and the $0.10/day cap is only as correct as those constants are. More than ~20%
-divergence means they are wrong and the cap is not where it is thought to be.
+**The price-list half of this is done (18 Oct 2026). What is left needs billing
+data, so it cannot be finished before ~20 Oct.**
 
-Attempted 18 Oct and it proved nothing, which is the expected answer rather
-than a failure: Cost Explorer showed Bedrock absent from the service list
-entirely, while the counters held $0.0159 over 24 turns on dev. Those do not
-conflict. Every measured turn had happened that same day, so nothing was old
-enough to have landed, and CE was resolving other services to eight decimal
-places at the time (CloudFront at $0.0000000083), so the absence was missing
-data and not a $0 reading.
+Every rate in `PRICES` was checked against the AWS Price List API rather than
+the pricing page, and the SKU names are now recorded in a comment above the
+constants so a re-check is a lookup. Four rates were right; one line was
+missing entirely.
 
-The counter's own arithmetic is at least self-consistent: $0.000661/turn on dev
-over 24 turns and $0.000756 on the first prod turn, against the ~$0.00068
-recorded in `CLAUDE.md`. That checks the division, not the price constants,
-which is exactly what Cost Explorer is needed for.
+Found and fixed: sensitive-information units were not counted at all. The price
+list carries both a free and a paid SKU for them ($0 and $0.10/1K), and a live
+`ApplyGuardrail` reports the units in the non-free counter on both INPUT and
+OUTPUT. That was a **20.9% undercount** of the true per-turn cost, which is over
+the 20% threshold that defines these constants as wrong. Per turn moved from
+$0.000756 to $0.000956, so the $0.10/day cap now stops at ~104 turns rather
+than appearing to allow ~132.
+
+What remains, and why the Price List cannot settle it: it says what a SKU costs,
+not which SKU an account is billed under. Two things to confirm against real
+billing data, once Cost Explorer has any:
+
+1. **Whether `sensitiveInformationPolicyUnits` really bills at the paid rate.**
+   AWS documents neither the free/paid split nor what makes a unit free. The
+   code takes the paid reading deliberately, so the risk is only that the cap
+   trips ~20% early.
+2. **Whether the account bills the policy-level SKUs or the newer per-check
+   ones.** Both exist in the price list:
+   `Guardrail-ContentPolicyUnitsConsumed` at $0.15/1K, and
+   `GuardrailChecks-ContentFilterCheckUnitsConsumed` at $0.00007/unit plus
+   `GuardrailChecks-PromptAttackCheckUnitsConsumed` at $0.00008/unit. For this
+   guardrail those sum to exactly $0.00015/unit, the same as the policy-level
+   rate, so the estimate holds either way. Worth confirming rather than relying
+   on the coincidence.
+
+Cost Explorer is the blocker. See the Cost section of `CLAUDE.md` for why its
+$0 is not a zero, and check that `Amazon Bedrock` appears in
+`GetDimensionValues` for SERVICE before trusting any figure from it. A CUR query
+would answer both questions properly if CE stays unhelpful.
 
 ---
 

@@ -197,6 +197,7 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
 
   let guardrailContentUnits = 0;
   let guardrailTopicUnits = 0;
+  let guardrailPiiUnits = 0;
 
   send({ type: 'status', message: 'Checking your question' });
 
@@ -206,6 +207,7 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
   );
   guardrailContentUnits += inputCheck.contentUnits;
   guardrailTopicUnits += inputCheck.topicUnits;
+  guardrailPiiUnits += inputCheck.piiUnits;
 
   if (inputCheck.blocked) {
     log({ outcome: 'guardrail_blocked', source: 'INPUT', policies: inputCheck.policies });
@@ -221,6 +223,7 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
         outputTokens: 0,
         guardrailContentUnits,
         guardrailTopicUnits,
+        guardrailPiiUnits,
       }),
     );
     send({ type: 'done', hops: 0, usage: { inputTokens: 0, outputTokens: 0, microUsd: 0 } });
@@ -335,6 +338,7 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
   const outputCheck = await applyGuardrail(answer, 'OUTPUT');
   guardrailContentUnits += outputCheck.contentUnits;
   guardrailTopicUnits += outputCheck.topicUnits;
+  guardrailPiiUnits += outputCheck.piiUnits;
 
   if (outputCheck.blocked) {
     log({ outcome: 'guardrail_blocked', source: 'OUTPUT', policies: outputCheck.policies });
@@ -350,6 +354,7 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
     outputTokens,
     guardrailContentUnits,
     guardrailTopicUnits,
+    guardrailPiiUnits,
   });
   await recordSpend(microUsd);
 

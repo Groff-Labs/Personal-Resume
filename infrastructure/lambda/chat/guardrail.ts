@@ -16,6 +16,18 @@ export interface GuardrailOutcome {
   policies: string[];
   contentUnits: number;
   topicUnits: number;
+  /**
+   * Sensitive-information units, from the NON-free counter.
+   *
+   * Counted because the price list carries two separate SKUs,
+   * `Guardrail-SensitiveInformationPolicyFreeUnitsConsumed` at $0 and
+   * `...PaidUnitsConsumed` at $0.10 per 1K, and a real `ApplyGuardrail` call
+   * against this guardrail reports `sensitiveInformationPolicyUnits: 1` with
+   * `sensitiveInformationPolicyFreeUnits: 0`. AWS does not document which
+   * counter maps to which SKU, so this is the conservative reading: if the
+   * units are free after all, the cap simply trips marginally early.
+   */
+  piiUnits: number;
 }
 
 /**
@@ -43,7 +55,7 @@ export async function applyGuardrail(
   source: 'INPUT' | 'OUTPUT',
 ): Promise<GuardrailOutcome> {
   if (!text.trim()) {
-    return { blocked: false, policies: [], contentUnits: 0, topicUnits: 0 };
+    return { blocked: false, policies: [], contentUnits: 0, topicUnits: 0, piiUnits: 0 };
   }
 
   const res = await client.send(
@@ -82,5 +94,6 @@ export async function applyGuardrail(
     // Not `res.usage ?? {}` — that widens to `{}` and loses the field types.
     contentUnits: res.usage?.contentPolicyUnits ?? 0,
     topicUnits: res.usage?.topicPolicyUnits ?? 0,
+    piiUnits: res.usage?.sensitiveInformationPolicyUnits ?? 0,
   };
 }

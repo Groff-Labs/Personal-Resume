@@ -150,11 +150,45 @@ export async function recordSpend(microUsd: number): Promise<void> {
  * $0.06/1M input tokens. That is why the guardrail is applied explicitly twice
  * per turn rather than inline on every Converse hop.
  */
+/*
+ * Every rate below was verified against the AWS Price List API on 18 Oct 2026
+ * (price list version 20261016210806, rates effective 2026-10-01), us-east-1,
+ * not read off a blog or inferred from a bill:
+ *
+ *   USE1-NovaLite-input-tokens ............................ $0.00006 /1K  = $0.06 /1M
+ *   USE1-NovaLite-output-tokens ........................... $0.00024 /1K  = $0.24 /1M
+ *   USE1-Guardrail-ContentPolicyUnitsConsumed ............. $0.15    /1K
+ *   USE1-Guardrail-TopicPolicyUnitsConsumed ............... $0.15    /1K
+ *   USE1-Guardrail-SensitiveInformationPolicyPaidUnits .... $0.10    /1K
+ *
+ * Deliberately absent, each because the SKU is $0 and the policy that would
+ * make it billable is not configured. Any of these becomes a real charge the
+ * moment the guardrail changes, so check here when editing it:
+ *
+ *   WordPolicyUnitsConsumed ............ $0, and only the managed PROFANITY
+ *                                        list is configured (0 custom words)
+ *   SensitiveInformationPolicyFreeUnits  $0
+ *   ContextualGroundingPolicyUnits ..... no grounding policy (there is no RAG)
+ *   AutomatedReasoningPolicyUnits ...... $0.17/1K, no policy configured
+ *   ContentPolicyImageUnitsConsumed .... $0.75/1K images, text only
+ *
+ * Reconcile against Cost Explorer periodically: more than ~20% divergence from
+ * the `budget#<date>` item means a rate here has moved.
+ */
 export const PRICES = {
   novaLiteInputPerMillion: 0.06,
   novaLiteOutputPerMillion: 0.24,
   guardrailContentPerThousandUnits: 0.15,
   guardrailTopicPerThousandUnits: 0.15,
+  /**
+   * The PAID sensitive-information SKU. The guardrail configures eight PII
+   * entities, and a live `ApplyGuardrail` reports those units in
+   * `sensitiveInformationPolicyUnits` while `...FreeUnits` stays 0. AWS does
+   * not document which counter bills against which of the two SKUs, so this
+   * takes the paid one: over-counting trips the cap early, under-counting
+   * means the cap is not where it says it is.
+   */
+  guardrailPiiPerThousandUnits: 0.1,
 } as const;
 
 export function estimateMicroUsd(args: {
@@ -162,11 +196,13 @@ export function estimateMicroUsd(args: {
   outputTokens: number;
   guardrailContentUnits: number;
   guardrailTopicUnits: number;
+  guardrailPiiUnits: number;
 }): number {
   const usd =
     (args.inputTokens / 1_000_000) * PRICES.novaLiteInputPerMillion +
     (args.outputTokens / 1_000_000) * PRICES.novaLiteOutputPerMillion +
     (args.guardrailContentUnits / 1000) * PRICES.guardrailContentPerThousandUnits +
-    (args.guardrailTopicUnits / 1000) * PRICES.guardrailTopicPerThousandUnits;
+    (args.guardrailTopicUnits / 1000) * PRICES.guardrailTopicPerThousandUnits +
+    (args.guardrailPiiUnits / 1000) * PRICES.guardrailPiiPerThousandUnits;
   return usd * 1_000_000;
 }

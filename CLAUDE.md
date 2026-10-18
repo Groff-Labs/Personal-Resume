@@ -394,8 +394,18 @@ a test asserting it is called.
 `BLOCK` both ways. But `EMAIL`/`PHONE`/`ADDRESS` are **input-only ANONYMIZE**:
 filtering them on output would redact the contact handoff, which is the one
 answer the assistant exists to give. Get this backwards and the bot says
-"contact him at {EMAIL}" and nothing fails loudly. Entity filtering bills at
-$0.00, so there is no cost reason to omit it.
+"contact him at {EMAIL}" and nothing fails loudly.
+
+**Entity filtering is not free, which an earlier note here got wrong.** The
+price list carries two sensitive-information SKUs,
+`SensitiveInformationPolicyFreeUnitsConsumed` at $0 and `...PaidUnitsConsumed`
+at $0.10/1K, and a live `ApplyGuardrail` against this guardrail reports
+`sensitiveInformationPolicyUnits: 1` with `sensitiveInformationPolicyFreeUnits:
+0` on both INPUT and OUTPUT. AWS documents neither which counter maps to which
+SKU nor what makes a unit free, so `limits.ts` bills it at the paid rate: if it
+turns out to be free the cap just trips marginally early, whereas the reverse
+error means the cap is not where it claims to be. Keep the entities regardless;
+$0.0002 a turn is not a reason to redact nothing.
 
 **Guardrail versioning uses a config hash.** A CFN-created guardrail is `DRAFT`,
 and inference against `DRAFT` throws `ValidationException` during updates — but a
@@ -476,15 +486,43 @@ esbuild resolves relative to the importing file.
 
 ### Cost
 
-Measured, not estimated: **~$0.00068 per turn**, against a $0.10/day cap
-(~$3.10/month ceiling). Guardrails cost roughly twice the model, which is why
-they are applied twice rather than on every hop.
+Measured, not estimated: **~$0.00096 per turn**, against a $0.10/day cap, so
+the cap stops at ~104 turns a day (~$3.10/month ceiling). Guardrails cost
+roughly twice the model, which is why they are applied twice rather than on
+every hop.
 
-`PRICES` in `lambda/chat/limits.ts` is hand-maintained from the pricing page and
-**the daily cap is only as correct as those constants**. Reconcile periodically:
-compare the `budget#<date>` item in `cv-chat-counters-<stage>` against Cost
-Explorer. More than ~20% divergence means the constants are wrong. Note Cost
-Explorer lags 8–24h, so a same-day comparison shows $0 and proves nothing.
+A turn's unit counts are not symmetric, and the asymmetry is load-bearing in the
+arithmetic. Measured against the live guardrail: `contentPolicyUnits` is 1 on
+both INPUT and OUTPUT, `sensitiveInformationPolicyUnits` likewise, but
+**`topicPolicyUnits` is 1 on INPUT and 0 on OUTPUT** because denied topics only
+evaluate input. So a turn is 2 content + 1 topic + 2 PII units, not 2/2/2.
+
+`PRICES` in `lambda/chat/limits.ts` is hand-maintained and **the daily cap is
+only as correct as those constants**. Every rate was verified against the AWS
+Price List API on 18 Oct 2026 (list version `20261016210806`, rates effective
+2026-10-01); the SKU names are listed in a comment above `PRICES`, so a re-check
+is a lookup rather than an investigation. That pass found a real 20.9%
+undercount: the sensitive-information units had no term at all.
+
+Verify a rate without waiting for a bill:
+
+```
+# authoritative, and answers in seconds
+aws pricing get-products --service-code AmazonBedrock --region us-east-1 \
+  --filters 'Type=TERM_MATCH,Field=usagetype,Value=USE1-Guardrail-TopicPolicyUnitsConsumed'
+```
+
+Still reconcile against actuals periodically, because the Price List says what a
+SKU costs and not which SKU an account is billed under: compare the
+`budget#<date>` item in `cv-chat-counters-<stage>` against Cost Explorer. More
+than ~20% divergence means a constant has moved.
+
+**Cost Explorer lags far longer than the 8–24h usually quoted, and its zero is
+not a zero.** On 18 Oct, hours after the first real traffic, `Amazon Bedrock` was
+absent from `GetDimensionValues` for SERVICE entirely while the counters held
+$0.0159 — and CE was resolving CloudFront to $0.0000000083 in the same response,
+so this was missing data, not a $0 reading. Reading it as "spend is zero" is the
+trap. Confirm Bedrock appears as a dimension value *before* trusting a figure.
 
 The uncapped tail, accepted knowingly: once limits trip, rejected requests still
 cost CloudFront requests, a Lambda invocation and a conditional write — roughly
