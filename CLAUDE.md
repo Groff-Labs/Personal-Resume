@@ -20,6 +20,11 @@ WordPress → Next.js refactor and apex-migration work is already done.
 | Contact info (phone / email / socials) | `frontend/components/Footer.tsx` **+** `frontend/public/michael-groff.vcf` **+** `resume.md` (all three hold canonical copies) |
 | New headshot | Replace `frontend/public/images/profile/michael-groff.jpg` → prebuild regenerates `.webp` |
 | Resume bullets / layout | `resume.md` — PDF regenerates on next build |
+| What the chat assistant knows | `knowledge/*.md` — plain markdown, no code change needed. A new *file* needs one line in `infrastructure/lambda/chat/knowledge.ts` |
+| Chat behaviour / tone / refusals | `infrastructure/lambda/chat/prompt.ts` |
+| Chat caps and model | `infrastructure/cdk.json` context (`chatModelId`, `chatDailyUsdCap`, `chatIpTurnsPerHour`, …) |
+
+Parked work and decided-against items live in `BACKLOG.md`.
 
 `resume.md` is the source of truth for the downloadable PDF (auto-built
 by `npm run resume`, which runs as a `prebuild` hook).
@@ -235,6 +240,285 @@ Traces left behind, all harmless and deliberately kept:
   revert only if you want Glue fully closed again.
 - The log bucket's expiry rule is prefix-scoped to `cloudfront-logs/` rather
   than bucket-wide.
+
+## The chat assistant (`/api/chat`)
+
+Added Oct 2026. An agentic Bedrock loop answering questions about the CV, at
+`/api/chat` on the same CloudFront distribution. Frontend `Chat.tsx`, backend
+`infrastructure/lib/chat-api.ts` + `infrastructure/lambda/chat/`.
+
+**Two independent kill switches.** `chatModelId: ""` in `cdk.json` context tears
+the backend down entirely (the construct becomes a no-op, so a fork without the
+SCP carve-out can still deploy the site). The environment variable
+`CHAT_ENABLED`, unset, hides the whole section from the built HTML — no `#chat`
+element, no nav entry, no reference to `/api/chat`. They are deliberately
+separate: the UI can ship to dev before the backend, or the backend can be
+removed without a site rebuild.
+
+### The SCP carve-out the function depends on
+
+LZA's `DenyLambdaWithoutVPC` was narrowed (grofflabs-lza#15) from
+`Resource: "*"` to `NotResource: ["arn:aws:lambda:*:*:function:cv-chat-*"]`. So:
+
+- **The function name prefix `cv-chat-` is load-bearing.** Rename it and the
+  deploy is denied.
+- **CDK custom-resource Lambdas are still denied**, because their generated
+  names do not match. Never use `logRetention` (pass an explicit `LogGroup`),
+  `autoDeleteObjects`, or `BucketDeployment`. A jest assertion fails the build
+  if any `Custom::` resource appears, turning a deploy-time denial into a
+  synth-time failure.
+
+To check whether the carve-out is live **without creating anything**, exploit
+the fact that AWS authorises before validating parameters — a deliberately bogus
+role ARN distinguishes the two outcomes:
+
+```
+# matches the carve-out -> InvalidParameterValueException (SCP allowed it)
+aws lambda create-function --function-name cv-chat-probe --runtime nodejs22.x \
+  --handler index.handler --role arn:aws:iam::ACCT:role/does-not-exist \
+  --zip-file fileb:///tmp/probe.zip --region us-east-1
+
+# does not match -> AccessDeniedException ... explicit deny in a service control policy
+aws lambda create-function --function-name zz-probe ...   # same args otherwise
+```
+
+### Three tags, two policies, and one shot to get them right
+
+- **The execution role needs the *principal* tag `LZA:EXC:NET=true`** for SCP
+  `DenyAccessFromUntrustedNetworks` (`Action:"*" Resource:"*"`).
+- **The DynamoDB table and the log group each need the same tag as a *resource*
+  tag**, for the Root-attached RCP `DenyResourceAccessFromUntrustedNetworks`,
+  whose action list includes `dynamodb:*` and `logs:*`. Tagging the role does
+  nothing for the RCP. Without these the Lambda `AccessDeniedException`s on its
+  first `UpdateItem` — at runtime, not at deploy.
+- **All three must be created with their tags.** SCP
+  `DenyUnauthorizedLZATagModification` denies `dynamodb:TagResource` and
+  `iam:TagRole` for `LZA:*` keys, while `CreateTable`/`CreateRole`/`CreateFunction`
+  are not in that list. Adding the tag in a later stack update calls
+  `TagResource` and is denied.
+
+### `reservedConcurrentExecutions` cannot be set here
+
+This account's Lambda concurrency quota is **10**, not the default 1000, and AWS
+requires 10 to remain *unreserved*. Any reservation fails with *"decreases
+account's UnreservedConcurrentExecution below its minimum value of [10]"*.
+
+The quota is the cap instead. The pool is shared with ~15 `AWSAccelerator-*`
+custom-resource Lambdas, which are idle outside pipeline runs, so a chat flood
+concurrent with an LZA deployment could throttle LZA's custom resources and
+vice versa. Acceptable at this traffic.
+
+**If the quota is ever raised, the implicit flood cap disappears** and
+`reservedConcurrentExecutions` must be set explicitly.
+
+### `x-amz-content-sha256`: required from the viewer, forbidden in the policy
+
+A POST through a Lambda Function URL with OAC needs the viewer to send the
+SHA-256 of the request body in `x-amz-content-sha256`; Lambda rejects unsigned
+payloads. `Chat.tsx` computes it with `crypto.subtle`.
+
+**But the header must not be named in the origin request policy.** CloudFront
+rejects it outright — *"The parameter Headers contains x-amz-content-sha256
+that is not allowed"* — because it manages the header itself. Listing it is a
+hard deploy failure, not a harmless redundancy. The first attempt rolled back on
+exactly this.
+
+Validate a header allow-list in seconds instead of a ten-minute deploy cycle by
+creating a throwaway policy against the API:
+
+```
+aws cloudfront create-origin-request-policy --origin-request-policy-config '{...}'
+# then delete it
+```
+
+Also: `aws:PrincipalARN`-style managed policies are wrong here.
+`ALL_VIEWER_EXCEPT_HOST_HEADER` forwards `Authorization`, which collides with
+the OAC signature. Use a custom allow-list: `content-type` plus
+`cloudfront-viewer-address` (CloudFront generates the latter itself and
+overwrites any viewer value, so it is the one client IP that cannot be spoofed —
+it is what the rate limiter keys on).
+
+### The 403-cached-as-404 trap
+
+`errorResponses` is distribution-wide, so a 403 from the chat origin is
+rewritten to the site's HTML `/404.html`. An OAC signature failure returns 403.
+That mapping's TTL is therefore set to **zero**, because at the previous 5
+minutes a wrong payload hash kept returning HTML after the client was fixed, so
+the fix looked like it had not worked.
+
+Diagnostic: **if `curl /api/chat` returns HTML with `x-cache: Error from
+cloudfront`, the payload hash is wrong or OAC is misconfigured, and the Lambda
+was never invoked.** The handler therefore never returns 403 or 404 — rate
+limits are 429, budget exhaustion is a 200 carrying an error event.
+
+### Guardrails are applied explicitly, not inline — and that is deliberate
+
+`ApplyGuardrail` is called twice per turn (`INPUT` before any model call,
+`OUTPUT` on the final answer) rather than passing `guardrailConfig` to
+`Converse`. AWS documents that with tool use, an inline guardrail does **not**
+evaluate tool results, tool definitions, or model-generated tool arguments —
+incomplete coverage, while re-scanning the system prompt and growing history on
+every hop: up to 8 chargeable evaluations per turn instead of 2.
+
+Input-first also means abusive traffic costs one guardrail text unit and
+**zero model tokens**. Verified: salary and prompt-injection probes return
+`in=0 out=0`.
+
+The trade-off, recorded honestly: the guardrail is not structurally
+unskippable. The IAM pattern that makes it so (deny `bedrock:InvokeModel` unless
+`bedrock:GuardrailIdentifier` matches) requires inline `guardrailConfig` on
+every call, which is the cost being avoided. Mitigated by a single code path and
+a test asserting it is called.
+
+**PII direction matters more than it looks.** Secrets (`SSN`,
+`CREDIT_DEBIT_CARD_NUMBER`, `PASSWORD`, `AWS_ACCESS_KEY`, `AWS_SECRET_KEY`)
+`BLOCK` both ways. But `EMAIL`/`PHONE`/`ADDRESS` are **input-only ANONYMIZE**:
+filtering them on output would redact the contact handoff, which is the one
+answer the assistant exists to give. Get this backwards and the bot says
+"contact him at {EMAIL}" and nothing fails loudly. Entity filtering bills at
+$0.00, so there is no cost reason to omit it.
+
+**Guardrail versioning uses a config hash.** A CFN-created guardrail is `DRAFT`,
+and inference against `DRAFT` throws `ValidationException` during updates — but a
+naive `CfnGuardrailVersion` pins v1 forever and policy edits never take effect.
+The version resource's *logical id* carries a hash of the policy config, so an
+edit creates the new version before retiring the old one, with no manual step
+and no window where the referenced version is missing.
+
+### Retrieval: why confidence is coverage, not score
+
+The corpus is `knowledge/*.md` plus `resume.md` plus the `frontend/lib/data`
+modules, searched by IDF-weighted keyword overlap. No embeddings, no vector
+store, no Knowledge Base, and that was costed rather than assumed (below).
+
+Two problems were measured and fixed, and the second is the instructive one:
+
+1. **Ubiquitous terms destroyed ranking.** "AWS" appears in nearly every
+   passage, so its IDF is ~0 and ranking became arbitrary: `"what has he shipped
+   on AWS"` returned a CI/CD *skills* line at 0.36 while `"landing zone"` scored
+   1.21. Query terms appearing in more than 25% of passages are now discarded
+   outright, and a query left with nothing is reported `tooBroad`, which routes
+   the model to the curated `get_highlights` tool.
+2. **An absolute score threshold drifts with corpus size.** A 0.55 cutoff was
+   calibrated at 146 passages. At 228, every score had moved — "landing zone"
+   1.13 → 0.95, "kubernetes" 0.74 → 0.62, while the known-bad case *rose* 0.38 →
+   0.41. The cutoff still separated them but the margin had collapsed from 0.36
+   to 0.21 and would have kept closing, eventually flagging good answers as weak
+   with nothing to indicate anything had changed.
+
+So **confidence is now `coverage`** — the share of the query's IDF mass a passage
+matched — which does not move when the corpus grows. The raw score still does
+the *ranking*, which is what it is good at. At `MIN_COVERAGE = 0.5`: every
+genuine query measured scores 1.00 despite raw scores spanning 0.62–1.15, and the
+known-bad case scores 0.40.
+
+**Do not replace coverage with an absolute score threshold again.** If retrieval
+needs tuning, tune `UBIQUITOUS_SHARE` or the chunk size in `knowledge.ts`.
+
+Re-measure after a significant corpus change:
+
+```
+cd infrastructure && cat > /tmp/cov.mjs <<'EOF'
+import { build } from 'esbuild';
+const r = await build({ entryPoints: ['lambda/chat/corpus.ts'], bundle: true,
+  write: false, format: 'esm', platform: 'node', target: 'node22',
+  loader: { '.md': 'text' } });
+const m = await import('data:text/javascript;base64,' +
+  Buffer.from(r.outputFiles[0].text).toString('base64'));
+for (const q of ['landing zone','kubernetes','what has he shipped on AWS']) {
+  const h = m.searchPassages(q, 1)[0];
+  console.log(m.isBroadQuery(q) ? 'BROAD' : h.coverage >= m.MIN_COVERAGE ? 'OK' : 'WEAK', q);
+}
+EOF
+cp /tmp/cov.mjs ./cov.mjs && node cov.mjs; rm cov.mjs
+```
+
+### No codegen, and the path filters that depend on it
+
+The Lambda imports `frontend/lib/data/*.ts`, `resume.md` and `knowledge/*.md`
+**directly**; esbuild inlines them (`loader: { '.md': 'text' }`). There is no
+generated context file, because a snapshot is a third copy that drifts, and
+`CLAUDE.md` requires the site and the résumé never to disagree. `cdk synth` *is*
+the build step: verified that editing `jobs.ts` changes the Lambda asset hash.
+
+**The consequence is that content lives outside `infrastructure/` while still
+being an input to the Lambda asset, so every such path must be listed in
+`deploy-infra.yml`:** `knowledge/**`, `frontend/lib/data/**`, `resume.md`. Both
+`frontend/lib/data/**` and `knowledge/**` were omitted at first, and the failure
+is silent — the edit deploys nothing and the assistant keeps serving the previous
+text. **Add a path here whenever the Lambda starts importing from a new
+location.**
+
+`projectRoot` on the `NodejsFunction` is `infrastructure/`, **not** the repo
+root: CDK runs the bundler with `cwd = projectRoot` and invokes
+`npx --no-install esbuild`, which only walks up from cwd, and esbuild lives in
+`infrastructure/node_modules`. The cross-project imports still resolve because
+esbuild resolves relative to the importing file.
+
+### Cost
+
+Measured, not estimated: **~$0.00068 per turn**, against a $0.10/day cap
+(~$3.10/month ceiling). Guardrails cost roughly twice the model, which is why
+they are applied twice rather than on every hop.
+
+`PRICES` in `lambda/chat/limits.ts` is hand-maintained from the pricing page and
+**the daily cap is only as correct as those constants**. Reconcile periodically:
+compare the `budget#<date>` item in `cv-chat-counters-<stage>` against Cost
+Explorer. More than ~20% divergence means the constants are wrong. Note Cost
+Explorer lags 8–24h, so a same-day comparison shows $0 and proves nothing.
+
+The uncapped tail, accepted knowingly: once limits trip, rejected requests still
+cost CloudFront requests, a Lambda invocation and a conditional write — roughly
+$2.70 per million rejected requests. The correct control is a WAF rate-based
+rule at $6/month minimum, which costs more than everything it protects. See
+`BACKLOG.md` for why AWS Settings spend limits are not the answer either.
+
+### Why there is no Knowledge Base, with the numbers
+
+Costed in Oct 2026 before building, so it does not get revisited:
+
+| Option | Monthly floor |
+|---|---|
+| OpenSearch Serverless (classic, 2 OCU minimum) | **~$350** |
+| OpenSearch Serverless (dev/test, 1 OCU) | ~$88 |
+| S3 Vectors | ~$0.01 |
+| Bedrock Managed KB | $5/GB raw + **$1.00 per 1,000 retrievals** |
+| **No RAG — search locally, send the hit** | **$0** |
+
+The decisive number is not the storage floor, it is the retrieval fee. Managed
+KB retrieval is **$0.001 per query**, against **~$0.00018** to put the relevant
+passages in the prompt with Nova Lite at $0.06/1M input tokens. **Retrieval
+alone would cost ~5x the entire no-RAG approach**, before any storage.
+
+The corpus is a few hundred short passages. Keyword search over it in-process
+costs nothing, adds no infrastructure, and has no cold start. If the corpus ever
+reaches the point where keyword retrieval genuinely fails — not "returns a
+mediocre hit", but misses answers that are present — revisit **S3 Vectors**,
+which has no OCU floor, and not OpenSearch.
+
+### Content rules for `knowledge/`
+
+`knowledge/README.md` is the authority and should be read before editing the
+corpus. The short version: it is a **public** GitHub repo, git keeps every
+revision, and the assistant quotes it verbatim to anyone. "Not rendered on the
+page" is not "not public".
+
+Established while writing it, and worth not relearning:
+
+- **No customer or client names**, and watch re-identification — industry plus
+  region plus headcount plus dates can name a company with no name present.
+- **No colleague names.**
+- **Do not put a dollar figure on AWS MAP funding.** An Oct 2026 records search
+  could not substantiate the ~$1.2M the résumé carried; the closest figures were
+  *budgets*, not approvals. The programme **count** is defensible, the amount is
+  not, so it reads "16+ AWS MAP programs".
+- **Anonymise by making a number vaguer, never larger.** Rounding ~320 VMs up to
+  "~500" de-identifies and overstates; "a few hundred" does the first without
+  the second.
+- **No review notes in HTML comments.** The bot never sees them, but git
+  publishes them, and "check the NDA" discloses the thing it worries about.
+- The résumé is a full 3 pages. Any Experience edit needs
+  `npm run resume && pdfinfo frontend/public/resume.pdf | grep Pages`.
 
 ## Infra quirks (learned the hard way)
 
@@ -538,7 +822,15 @@ Then, outside the repo:
 
 - Repo **variables**: `AWS_ACCOUNT_ID`, `AWS_ROLE_ARN`
 - Environment **variables** (`production` + `dev`): `CLOUDFLARE_ANALYTICS_TOKEN`,
-  `PLAUSIBLE_SRC`, `PLAUSIBLE_DOMAIN` (all three optional; empty disables that tag)
+  `PLAUSIBLE_SRC`, `PLAUSIBLE_DOMAIN`, `CHAT_ENABLED` (all optional; empty
+  disables that feature). `CHAT_ENABLED` is per-environment on purpose, so the
+  chat section can be live on dev while still hidden in prod
+- **The chat backend needs more than config.** `chatModelId: ""` in `cdk.json`
+  leaves it out entirely, which is the right default for a fork. To enable it you
+  also need Amazon Nova model access in the target region, and — if you are under
+  an LZA/SCP regime — a carve-out for `cv-chat-*` in any `DenyLambdaWithoutVPC`
+  statement, plus `LZA:EXC:NET=true` on the table and log group if an RCP covers
+  `dynamodb:*`/`logs:*`. See *The chat assistant* above
 - GitHub environments named `production` and `dev` must exist — the OIDC trust
   policy matches on `repo:ORG/REPO:environment:NAME`, so a workflow without an
   `environment:` cannot assume the role

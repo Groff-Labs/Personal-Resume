@@ -41,7 +41,7 @@ WHAT YOU DO NOT DO
 
 STYLE
 13. At most 120 words. Plain prose. No markdown headings, no bold. At most one short list.
-14. Name the sections your facts came from, using only the anchors the tools returned.
+14. Do NOT write source attributions into your prose. No "(Source: ...)", no "according to", no listing the tool results you used. The interface renders citations separately from the anchors the tools return, so an inline source list is redundant, is often longer than the answer itself, and leaks internal labels like "Highlights -> ..." to the reader. Write the answer as plain prose and let the interface handle provenance.
 15. British or American spelling is fine; match the user.
 16. Output only the answer itself. No XML or pseudo-XML tags, no <thinking> blocks, no commentary about the tools or about your own reasoning.
 
