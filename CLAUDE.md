@@ -872,6 +872,28 @@ skips the Next build and `cdk synth` for a quick loop.
 
 It reports every failure rather than stopping at the first, and exits 1.
 
+`ci.yml` runs it too, but **`ci.yml` triggers on `pull_request` only, so a direct
+push to `dev` never runs CI at all.** That is deliberate (the direct-push flow is
+incompatible with required status checks, see *Dependency management*), but the
+consequence is easy to forget: a CI-only breakage lands silently on `dev` and
+first appears on the next Dependabot PR, which then looks like Dependabot's
+fault. If you change anything the gate or the workflow depends on, open a
+throwaway PR to exercise it rather than assuming a green local run covers it.
+
+Two things a local run does not cover, both found exactly that way:
+
+- **`pdfinfo` / `pdftotext` are not on `ubuntu-latest`.** `ci.yml` installs
+  `poppler-utils`; the two résumé checks skip rather than fail when it is
+  missing, so the script stays usable on a machine without poppler. A skip
+  prints `skipped:` — if you see that in CI, the install step is broken and
+  those two invariants are unchecked.
+- **`infrastructure/.gitignore` ignores `*.d.ts`**, which silently swallowed the
+  hand-written `lambda/chat/md.d.ts` (it declares `*.md` for esbuild's text
+  loader). The Lambda typecheck passed locally only because the file was on
+  disk. `!lambda/**/*.d.ts` negates it now. Anything hand-written under
+  `infrastructure/` whose name looks like `tsc` output needs the same check:
+  `git ls-files <path>` is the one-second confirmation.
+
 **`CONTEXT.md` is the vocabulary.** The charter says "names from `CONTEXT.md`",
 so a role agent that writes `bot` where the repo says `assistant`, or `relevance`
 where it says `coverage`, is working from the wrong glossary. Add a term there

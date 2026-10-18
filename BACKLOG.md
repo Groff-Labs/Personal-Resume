@@ -87,6 +87,18 @@ are deliberately unused, with the reason for each — the `ops:*` agents assume
 Sentry and ECS, `data-ml-engineer` assumes a data platform, `business:*` assumes
 a commercial product.
 
+Proving the gate runs in CI, rather than only on this laptop, found two real
+problems. `pdfinfo` and `pdftotext` are not on a stock `ubuntu-latest`, so
+`ci.yml` now installs `poppler-utils` and the two résumé checks skip rather than
+fail when it is absent, which keeps the gate usable on a dev machine without
+poppler. And `ci.yml` triggers on `pull_request` only, so direct pushes to `dev`
+never exercise it; a throwaway PR was the only way to run it, and it immediately
+caught `infrastructure/lambda/chat/md.d.ts` being swallowed by
+`infrastructure/.gitignore`'s `*.d.ts` rule. That file is hand-written source,
+not `tsc` output, and without it the Lambda typecheck fails on every markdown
+import. It worked locally purely because the file was on disk. All 12 checks now
+pass on a clean runner.
+
 ### `lucide-react` unpinned by inlining three brand glyphs
 
 The pin was real and still is: verified against 1.59.0 that `Github`,
