@@ -293,3 +293,81 @@ describe('ChatApi (chat disabled)', () => {
     expect(patterns).toEqual(['/js/*', '/api/event']);
   });
 });
+
+describe('chat alarms', () => {
+  /*
+   * These exist because a chat throwing on every request is indistinguishable
+   * from a chat nobody used: the spend counter stays empty and the logs stay
+   * quiet. Prod only, because dev exists to be broken while testing and
+   * alarming on it would train everyone to ignore the emails.
+   */
+  // `synth()` does not pass chatModelId, and chatEnabled is derived from it,
+  // so without this override the whole chat construct is absent and every
+  // assertion below would pass for the wrong reason.
+  const prod = synth('prod', { chatModelId: 'amazon.nova-lite-v1:0' });
+
+  it('creates three alarms, all with an action', () => {
+    prod.resourceCountIs('AWS::CloudWatch::Alarm', 3);
+    // An alarm with no action is visible only in a console nobody opens. If
+    // this count ever drops, someone has created monitoring theatre.
+    const alarms = prod.findResources('AWS::CloudWatch::Alarm');
+    for (const [name, res] of Object.entries(alarms)) {
+      // Name included in the object so a failure says which alarm.
+      expect({ name, hasAction: !!res.Properties.AlarmActions }).toEqual({
+        name,
+        hasAction: true,
+      });
+      expect(res.Properties.AlarmActions.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('treats missing data as not breaching', () => {
+    // At this traffic most five-minute windows have no datapoints, and the
+    // default would leave every alarm permanently INSUFFICIENT_DATA, which
+    // looks the same as broken monitoring.
+    const alarms = prod.findResources('AWS::CloudWatch::Alarm');
+    for (const [name, res] of Object.entries(alarms)) {
+      expect({ name, treat: res.Properties.TreatMissingData }).toEqual({
+        name,
+        treat: 'notBreaching',
+      });
+    }
+  });
+
+  it('subscribes an email to a topic, natively', () => {
+    prod.resourceCountIs('AWS::SNS::Topic', 1);
+    prod.hasResourceProperties('AWS::SNS::Subscription', { Protocol: 'email' });
+  });
+
+  it('does not tag the SNS topic with an LZA key', () => {
+    /*
+     * SNS is absent from the DenyResourceAccessFromUntrustedNetworks RCP action
+     * list, so unlike the counters table and the log group this topic needs no
+     * LZA:EXC:NET tag. Adding one would also be denied: `sns:TagResource` with
+     * an `LZA:*` key is covered by DenyUnauthorizedLZATagModification. This
+     * asserts nobody "fixes" it by copying the table's tag.
+     */
+    const topics = prod.findResources('AWS::SNS::Topic');
+    for (const [, res] of Object.entries(topics)) {
+      const tags = (res.Properties?.Tags ?? []) as Array<{ Key: string }>;
+      expect(tags.some((t) => t.Key.startsWith('LZA:'))).toBe(false);
+    }
+  });
+
+  it('keeps alarm and topic names clear of the AWSAccelerator prefix', () => {
+    // DenyLZASNSChanges and DenyLZACloudWatchAlarmChanges are scoped to
+    // AWSAccelerator-* ARNs. Naming anything with that prefix would make our
+    // own resources undeletable by our own deploy role.
+    const json = JSON.stringify(prod.toJSON());
+    expect(json).not.toMatch(/"AWSAccelerator-/);
+  });
+
+  it('creates none of it on dev', () => {
+    // The override matters: without it this passes because there is no chat at
+    // all, which proves nothing about the stage check.
+    const dev = synth('dev', { chatModelId: 'amazon.nova-lite-v1:0' });
+    dev.resourceCountIs('AWS::Lambda::Function', 1); // chat IS enabled here
+    dev.resourceCountIs('AWS::CloudWatch::Alarm', 0);
+    dev.resourceCountIs('AWS::SNS::Topic', 0);
+  });
+});

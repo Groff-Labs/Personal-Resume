@@ -298,50 +298,56 @@ hundred turns. That is enough to see a shape and not enough for statistics; if
 December's logs are thin, the honest move is to wait longer rather than to read
 tea leaves.
 
-### 8. No CloudWatch alarms exist, so a broken chat looks like an unused one
-
-Found Oct 2026 while auditing observability. There are **zero** alarms and zero
-dashboards in the CDK. Lambda publishes `Invocations`, `Errors`, `Duration` and
-`Throttles` free and automatically, and nothing watches any of them.
-
-The failure this allows is specific: if the assistant started throwing on every
-request, the symptom would be an empty `budget#<date>` counter and quiet logs,
-which is indistinguishable from a day when nobody used it. The feature would be
-dead and the evidence would look like disinterest.
-
-Three alarms would cover it, at $0.10 each a month:
-
-- `Errors >= 1` over five minutes. A single unhandled exception is already
-  worth knowing about at this traffic.
-- `Throttles >= 1`. The account concurrency quota is 10 and is shared with
-  about fifteen `AWSAccelerator-*` custom-resource Lambdas, so an LZA pipeline
-  run concurrent with chat traffic can throttle either side. Documented as
-  accepted, never instrumented.
-- `Invocations` above a few hundred an hour, as the flood signal. The daily
-  spend cap already bounds the Bedrock cost, but rejected requests still cost
-  CloudFront, Lambda and a DynamoDB write, and that tail is uncapped.
-
-**The blocker is notification, not the alarms.** An alarm with no action is
-visible in the console and queryable by the ops agents, and is read by nobody,
-which is theatre. Making it real needs an SNS topic and an email subscription,
-and an email subscription requires clicking a confirmation link. That is a
-manual step, which `CLAUDE.md` otherwise forbids, so it needs a deliberate
-decision rather than being slipped in:
-
-1. Accept one manual confirmation, once, and get real notifications. The topic
-   itself is CDK; only the subscription confirmation is by hand.
-2. Alarms with no action, and rely on asking the ops agent. Cheap, honest about
-   being passive, and worth little.
-3. Nothing, and accept that the chat breaking is discovered by someone trying
-   it. Defensible for a personal site, and should be a decision rather than the
-   default.
-
-Recommendation is option 1. The manual step is one click in a lifetime against
-a feature that is otherwise unmonitored.
-
 ---
 
 ## Closed
+
+### Chat alarms, with SNS email
+
+There were zero alarms and zero dashboards, so a chat throwing on every request
+looked exactly like a chat nobody used: empty spend counter, quiet logs, feature
+dead and the evidence resembling disinterest.
+
+Three alarms, prod only, each wired to an SNS topic with an email subscription:
+
+| Alarm | Threshold | Why |
+|---|---|---|
+| `cv-chat-errors-prod` | `Errors >= 1` / 5 min | One unhandled exception is worth knowing at this traffic |
+| `cv-chat-throttles-prod` | `Throttles >= 1` / 5 min | Account concurrency quota is 10, shared with ~15 `AWSAccelerator-*` Lambdas. Documented as accepted, never instrumented until now |
+| `cv-chat-flood-prod` | `Invocations >= 300` / hour | The daily cap bounds Bedrock, but rejected requests still cost ~$2.70 per million. A smoke detector, not a circuit breaker |
+
+Prod only on purpose: dev exists to be broken while testing, and alarming on it
+would train everyone to ignore the emails. A test asserts dev creates none of
+them *with chat otherwise fully enabled*, so it cannot pass for the wrong
+reason.
+
+`treatMissingData: NOT_BREACHING` on all three, because at this traffic most
+five-minute windows have no datapoints and the default would leave every alarm
+permanently INSUFFICIENT_DATA, which looks identical to broken monitoring. A
+test asserts every alarm has an action, since an alarm without one is visible
+only in a console nobody opens.
+
+**The LZA pre-flight was done against the live policy JSON before writing any
+CDK**, which is the step that would otherwise have cost a rolled-back deploy:
+
+- `sns:*` appears in the org SCP only under `DenyExternalSNS`, which fires when
+  `aws:ResourceOrgID` differs from the principal's org. An in-account topic does
+  not match.
+- **SNS is absent from the `DenyResourceAccessFromUntrustedNetworks` RCP action
+  list** (s3, kms, sqs, secretsmanager, ecr, aoss, sts, dynamodb, logs,
+  cognito-identity), so unlike the counters table and the log group this topic
+  needs no `LZA:EXC:NET` tag. A test asserts nobody adds one by copying the
+  table, because `sns:TagResource` with an `LZA:*` key is separately denied.
+- `DenyLZASNSChanges` and `DenyLZACloudWatchAlarmChanges` are scoped to
+  `AWSAccelerator-*` ARNs. A test asserts that prefix appears nowhere in the
+  template, since using it would make our own resources undeletable by our own
+  deploy role.
+- `EmailSubscription` renders a native `AWS::SNS::Subscription`, so the standing
+  jest assertion that no `Custom::` resource exists still holds.
+
+**One manual step, once:** AWS emails a confirmation link and SNS delivers
+nothing until it is followed. That is the only hand step in this repo and it was
+an explicit decision, because the alternative was alarms with no action.
 
 ### The assistant denied its own page, and three defects were behind it
 

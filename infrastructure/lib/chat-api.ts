@@ -8,6 +8,10 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as logs from 'aws-cdk-lib/aws-logs';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as cwActions from 'aws-cdk-lib/aws-cloudwatch-actions';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
 import { Construct } from 'constructs';
 import { createHash } from 'crypto';
 // The guardrail's blocked messages are the assistant's last word on a
@@ -430,6 +434,125 @@ export class ChatApi extends Construct {
       // Edge gzip buffers chunks, which would defeat response streaming.
       compress: false,
     };
+
+    /* ---------------- alarms (prod only) ---------------- */
+
+    /*
+     * Without these, a chat throwing on every request looks exactly like a
+     * chat nobody used: the spend counter stays empty and the logs stay quiet,
+     * and the feature is dead while the evidence resembles disinterest.
+     *
+     * Prod only, deliberately. Dev exists to be broken while testing, so
+     * alarming on it would train everyone to ignore the emails.
+     *
+     * LZA pre-flight, checked against the live policy JSON before writing this
+     * rather than after a rolled-back deploy:
+     *
+     *  - `sns:*` appears in the org SCP only under `DenyExternalSNS`, which
+     *    fires when `aws:ResourceOrgID` differs from the principal's org. This
+     *    topic is in-account, so it does not apply.
+     *  - SNS is NOT in the `DenyResourceAccessFromUntrustedNetworks` RCP action
+     *    list (s3, kms, sqs, secretsmanager, ecr, aoss, sts, dynamodb, logs,
+     *    cognito-identity), so unlike the table and the log group this needs no
+     *    `LZA:EXC:NET` resource tag. Do not add one: `sns:TagResource` with an
+     *    `LZA:*` key is separately denied.
+     *  - `DenyLZASNSChanges` and `DenyLZACloudWatchAlarmChanges` are scoped to
+     *    `AWSAccelerator-*` names, so `cv-chat-*` is unaffected. Keep the
+     *    prefix off anything named AWSAccelerator.
+     *  - `EmailSubscription` renders a native `AWS::SNS::Subscription`, not a
+     *    custom resource, so it survives `DenyLambdaWithoutVPC`. The jest
+     *    assertion that no `Custom::` resource exists still passes.
+     */
+    if (stage === 'prod') {
+      const alarmTopic = new sns.Topic(this, 'AlarmTopic', {
+        topicName: `cv-chat-alarms-${stage}`,
+        displayName: 'CV chat assistant alarms',
+      });
+
+      /*
+       * The subscription needs one manual click, once: AWS emails a
+       * confirmation link and SNS will not deliver until it is followed. That
+       * is the single hand step in this repo and it is deliberate, because the
+       * alternative is alarms with no action, which are visible only in a
+       * console nobody opens.
+       *
+       * Address comes from `contact.ts` rather than a new config key, so it
+       * cannot drift from the address on the site.
+       */
+      alarmTopic.addSubscription(new subs.EmailSubscription(contact.email));
+
+      const action = new cwActions.SnsAction(alarmTopic);
+
+      /*
+       * `treatMissingData: NOT_BREACHING` on all three. At this traffic most
+       * five-minute windows have no datapoints at all, and the default
+       * (MISSING) would leave every alarm permanently INSUFFICIENT_DATA, which
+       * is indistinguishable from broken monitoring.
+       */
+      const alarm = (
+        id: string,
+        name: string,
+        metric: cloudwatch.Metric,
+        threshold: number,
+        description: string,
+      ) => {
+        const a = new cloudwatch.Alarm(this, id, {
+          alarmName: `cv-chat-${name}-${stage}`,
+          alarmDescription: description,
+          metric,
+          threshold,
+          evaluationPeriods: 1,
+          comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+          treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
+        });
+        a.addAlarmAction(action);
+        return a;
+      };
+
+      // One unhandled exception is worth knowing about at this traffic. There
+      // is no acceptable error rate for a feature nobody is paging about.
+      alarm(
+        'ErrorsAlarm',
+        'errors',
+        fn.metricErrors({ period: cdk.Duration.minutes(5) }),
+        1,
+        'Chat Lambda threw at least once in five minutes.',
+      );
+
+      // The account concurrency quota is 10 and AWS requires 10 unreserved, so
+      // no reservation is possible here. The pool is shared with roughly
+      // fifteen AWSAccelerator-* custom-resource Lambdas, which are idle except
+      // during pipeline runs. That contention is documented as accepted and was
+      // never instrumented, so a throttle has until now been invisible.
+      alarm(
+        'ThrottlesAlarm',
+        'throttles',
+        fn.metricThrottles({ period: cdk.Duration.minutes(5) }),
+        1,
+        'Chat Lambda was throttled: concurrency contention, quota is 10 account-wide.',
+      );
+
+      /*
+       * Flood signal. The daily spend cap already bounds Bedrock, but rejected
+       * requests still cost a CloudFront request, a Lambda invocation and a
+       * conditional write, and that tail is uncapped at roughly $2.70 per
+       * million. 300 an hour is far above any plausible organic traffic here
+       * and far below a bill worth caring about, so it is a smoke detector
+       * rather than a circuit breaker.
+       */
+      alarm(
+        'FloodAlarm',
+        'flood',
+        fn.metricInvocations({ period: cdk.Duration.hours(1) }),
+        300,
+        'Chat Lambda invoked over 300 times in an hour: likely abuse, not traffic.',
+      );
+
+      new cdk.CfnOutput(this, 'ChatAlarmTopic', {
+        value: alarmTopic.topicArn,
+        description: 'SNS topic for chat alarms. The email subscription needs one manual confirmation.',
+      });
+    }
 
     new cdk.CfnOutput(this, 'ChatFunctionUrl', {
       value: this.functionUrl.url,

@@ -457,9 +457,27 @@ bundle on a site that scores 97-99 on PageSpeed, for a signal the
 still, since Lambda exceptions already land in CloudWatch as structured JSON.
 Revisit if the site ever grows interactive features beyond the chat.
 
-**What is actually missing is alarms, not another tool.** There are none, so a
-chat that is throwing on every request looks exactly like a chat nobody used.
-See `BACKLOG.md`.
+**Alarms exist on prod only**, wired to an SNS topic with an email
+subscription: `Errors >= 1`, `Throttles >= 1` and `Invocations >= 300`/hour. Dev
+has none, deliberately, because dev exists to be broken while testing.
+
+Two things about them that are easy to undo by accident:
+
+- **`treatMissingData` must stay `NOT_BREACHING`.** At this traffic most
+  five-minute windows have no datapoints, and the default leaves every alarm
+  permanently INSUFFICIENT_DATA, which looks exactly like broken monitoring.
+- **The SNS topic must NOT carry an `LZA:*` tag.** SNS is absent from the
+  `DenyResourceAccessFromUntrustedNetworks` RCP action list, so it does not need
+  the `LZA:EXC:NET` tag the counters table and log group do, and adding one is
+  separately denied by `DenyUnauthorizedLZATagModification`. Do not "fix" it by
+  copying the table. Equally, keep `AWSAccelerator-` out of every alarm and
+  topic name: `DenyLZASNSChanges` and `DenyLZACloudWatchAlarmChanges` are scoped
+  to that prefix and would make our own resources undeletable by our own deploy
+  role. Tests assert both.
+
+**The email subscription needs one manual confirmation**, and it is the only
+hand step in this repo. AWS sends a link and SNS delivers nothing until it is
+followed, so a fresh account, or a re-created topic, means confirming again.
 
 ### Retrieval: why confidence is coverage, not score
 
