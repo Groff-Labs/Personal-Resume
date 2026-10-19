@@ -132,6 +132,38 @@ For scale: LZA's security tooling (KMS $6.97 + Macie $0.60 + GuardDuty $0.27)
 was 89% of September's $8.77 bill. The CV site itself was S3 $0.31 and
 CloudFront $0.0000. **The landing zone is the cost; the website is free.**
 
+### 4. Retrieval has no typo tolerance
+
+Found in the Oct 2026 edge-case sweep and deliberately left. Measured: `kubernets`,
+`terrafrom` and `aws lamda` all return **nothing at all**, while the correctly
+spelled terms score 1.00. Prefix matching covers word endings, and
+`prefixCredit`'s morphological tier now covers verb and noun forms, but neither
+helps a transposition or a dropped letter.
+
+Worth noting because visitors typo and a miss here is silent: the assistant says
+the CV does not cover it, which is indistinguishable from the honest version of
+that answer.
+
+The fix is small and known: Damerau-Levenshtein distance 1 against corpus tokens,
+for unknown query tokens of five characters or more. Distance 1 with
+transposition covers all three measured cases (`kubernets` is one deletion,
+`lamda` one deletion, `terrafrom` one transposition). About 25 lines, no
+dependency, and it runs over ~2,000 distinct tokens so cost is negligible.
+
+Not done yet for one reason: it widens matching, and that is the direction that
+produces confident wrong answers. Every retrieval defect found this month came
+from matching too eagerly rather than too little. It needs the same measured
+before-and-after that the morphology change got, with the negative cases checked
+first, so it is its own change rather than a rider on this one.
+
+Two smaller sweep findings, both lower value:
+
+- `CI/CD` reports broad, because `tokenize` splits on `/` and both halves are
+  two characters, which the length filter drops. Normalising `ci/cd` to `cicd`
+  before tokenising would fix it; the existing alias already maps `cicd`.
+- `node.js` scores 0.40. The tokeniser keeps the dot, so it never matches the
+  corpus's `node`.
+
 ---
 
 ## Closed
