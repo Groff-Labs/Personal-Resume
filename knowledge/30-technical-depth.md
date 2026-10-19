@@ -364,6 +364,49 @@ is an agentic Bedrock loop in Lambda with tool use, Bedrock Guardrails on input
 and output, and per-IP plus daily spend caps in DynamoDB. The repository is
 public.
 
+### Every AWS service hosting this site, and what each one does
+
+The short answer. The AWS services that host this site, and that this site
+runs on, are: Amazon S3, Amazon
+CloudFront with Origin Access Control and a CloudFront Function, AWS
+Certificate Manager, AWS Lambda, Amazon DynamoDB, Amazon Bedrock, Amazon
+CloudWatch Logs, AWS IAM and AWS Systems Manager Parameter Store. No server, no
+container, no database, no VPC. Infrastructure is AWS CDK in TypeScript,
+deployed by GitHub Actions through an IAM OIDC role. DNS is CloudFlare rather
+than Route 53, deliberately.
+
+That list is taken from the synthesized CloudFormation template rather than from
+memory. The hosting stack, and what each part of the stack does, front to back:
+
+- **Amazon S3** holds the built static site. Two buckets: one for the site, one
+  for CloudFront access logs. No public access; the bucket policy admits only
+  CloudFront.
+- **Amazon CloudFront** is the CDN and the only way in. It terminates TLS, serves
+  the static export, and routes `/api/chat` to the assistant and `/js/*` plus
+  `/api/event` to the analytics proxy.
+- **Origin Access Control** signs CloudFront's requests to both S3 and the
+  Lambda function URL, so neither origin is reachable directly. OAC rather than
+  the legacy OAI.
+- **AWS Certificate Manager** issues the TLS certificate, validated by DNS.
+- **CloudFront Functions** rewrites directory URLs to `index.html` at the edge,
+  which a static export needs and which costs a fraction of Lambda@Edge.
+- **AWS Lambda** runs the chat assistant on ARM64, Node 22, with a function URL
+  in response-streaming mode. It is the only compute in the system.
+- **Amazon DynamoDB** holds the per-IP rate-limit counters and the daily spend
+  budget, on-demand and TTL'd.
+- **Amazon Bedrock** serves the model (Amazon Nova Lite) and the guardrail that
+  screens both input and output.
+- **CloudWatch Logs** takes the Lambda's structured logs, with an explicit log
+  group and retention rather than a generated one.
+- **AWS IAM** provides the execution role and the GitHub OIDC role; there are no
+  long-lived access keys anywhere in the system.
+- **AWS Systems Manager Parameter Store** holds the distribution id so the
+  deploy workflow can invalidate the cache without hardcoding it.
+
+Everything is static or serverless, which is the point: the whole thing idles at
+effectively zero and the site costs cents a month. The repository is public, so
+the entire stack is readable rather than described.
+
 ### What building it under real guardrails surfaced
 
 The account's Lambda concurrency quota is 10, and AWS requires at least 10 to

@@ -314,3 +314,57 @@ describe('get_strengths returns a complete ordered list', () => {
     expect(r.citations.map((c) => c.anchor)).toEqual(['#about']);
   });
 });
+
+describe('recruiter screening questions, audited Oct 2026', () => {
+  /*
+   * A 49-question sweep across screening logistics, scope of role, depth
+   * probes, industry fit, compliance and ways of working found 16 misses. Most
+   * were vocabulary, not content: the answer existed but the corpus never used
+   * the word a recruiter types. These lock the fixes in.
+   */
+  it.each([
+    'what AWS services do you use to host this site',
+    'how is this site hosted',
+    'what is the hosting stack',
+    'public sector experience',
+    'has he worked at enterprise scale',
+    'does he use AI coding tools',
+    'has he hired anyone',
+    'is he in an on-call rotation',
+    'what industries has he worked in',
+  ])('resolves %j', (q) => expectResolves(q));
+
+  it('names every service in the ONE passage that gets retrieved', () => {
+    /*
+     * Not just "somewhere in the section". `windowed` splits a long knowledge
+     * section into ~700-character chunks, and retrieval returns chunks, so a
+     * bulleted list spread over four of them answers "what services" with
+     * whichever chunk ranks first. The first attempt did exactly that and
+     * replied with S3 and CloudFront only. The complete list is therefore
+     * front-loaded into the opening sentence, and this asserts the retrieved
+     * passage is self-sufficient.
+     */
+    const top = searchPassages('What AWS services do you use to host this site', 1)[0];
+    expect(top).toBeDefined();
+    expect(top.source).toContain('Every AWS service hosting');
+    for (const svc of [
+      'S3',
+      'CloudFront',
+      'Lambda',
+      'DynamoDB',
+      'Bedrock',
+      'Certificate Manager',
+      'IAM',
+      'Parameter Store',
+    ]) {
+      expect(top.text).toContain(svc);
+    }
+  });
+
+  it.each([
+    'what are his salary expectations',
+    'does he need visa sponsorship',
+    'retail experience',
+    'manufacturing experience',
+  ])('still declines or misses %j, which is correct', (q) => expectWeakOrAbsent(q));
+});

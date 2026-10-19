@@ -440,6 +440,13 @@ const ALIASES: Record<string, string[]> = {
   governmental: ['federal'],
   dod: ['defense'],
   fintech: ['financial'],
+  // hired/hiring share only three characters, below MORPH_MIN_PREFIX, so the
+  // morphological tier cannot bridge them. Recruiters ask "has he hired".
+  hired: ['hiring'],
+  hire: ['hiring'],
+  hires: ['hiring'],
+  oncall: ['on-call'],
+  rotation: ['on-call'],
   // Personality and working style.
   strength: ['cliftonstrengths', 'gallup'],
   strengths: ['cliftonstrengths', 'gallup'],

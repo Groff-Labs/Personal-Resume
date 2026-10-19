@@ -164,6 +164,69 @@ Two smaller sweep findings, both lower value:
 - `node.js` scores 0.40. The tokeniser keeps the dot, so it never matches the
   corpus's `node`.
 
+### 5. Corpus content only Michael can supply
+
+From a 49-question recruiter audit, Oct 2026. Everything that was a *vocabulary*
+gap is already fixed; these are the ones where the fact genuinely is not written
+down anywhere, so they need him rather than a code change. Roughly in order of
+how often a recruiter asks.
+
+**1. The eleven industries, named.** The résumé claims "17 AWS engagements across
+11 industries" and the corpus can name six: security software, public sector,
+heavy industry, HR technology, healthcare, and software/SaaS. "Has he worked in
+<industry>" is a screening question, and today the honest answer for retail,
+manufacturing, energy, education, logistics and so on is silence. Needs the
+list, and the anonymisation rules in `knowledge/README.md` still apply: sector
+only, no customer, no re-identifying combination.
+
+**2. Compliance frameworks beyond the ones recorded.** HITRUST, IL4/IL5, DISA
+SRG and OMB M-21-31 are covered. SOC 2, PCI DSS, GDPR, ISO 27001 and NIST
+800-53 return nothing. Any of these is a hard filter on a job spec, so a yes
+worth claiming is worth writing down, and a no is worth saying plainly.
+
+**3. The hardest problem he has solved.** Scores 0.39. The corpus has failures
+(the TGW change, the Glue experiment) and engagement detail, but nothing framed
+as "the hardest thing", which is the single most common depth probe in a
+hiring-manager screen. One section, one problem, why it was hard and what the
+constraint was.
+
+**4. How he handles disagreement.** Scores 0.42. The adversarial review gate and
+the over-optimistic architect are both in the leadership notes, but neither is
+written as "here is how I disagree with someone senior and still ship". Common
+behavioural question and he clearly has the material.
+
+**5. Notice period and start availability.** Partly covered by the availability
+signal, but "when could you start" and "what is your notice" get a vague answer.
+Cheap to fix and asked in the first five minutes of every screen.
+
+Deliberately NOT to be filled, because the current behaviour is right:
+compensation (guardrail-denied), visa sponsorship and work authorisation (rule
+10, protected characteristics), references (not public), and whether he is
+interviewing elsewhere.
+
+### 6. Decided against: an unread badge on the chat launcher
+
+Raised Oct 2026 as "should we have it ding and show a notification like some
+sites do". **No**, and the reasoning is worth keeping so it is not revisited as
+an oversight.
+
+An unread count is a truth claim: it says something is waiting for you. On a
+support widget that is true, because a human replied. Here nothing is waiting,
+so the badge would be a fabricated signal on a site whose entire chat feature is
+built around not fabricating things. The assistant shows its tool calls and
+admits when it has no answer; a fake "1" beside the launcher contradicts that
+posture for a few extra clicks.
+
+A recruiter is also the wrong audience for it. They have come to evaluate
+someone's judgement, and growth-hacking patterns read as a tell.
+
+What is already in place and is the honest version: a one-time bubble that
+appears after a dwell or a scroll, says what the assistant is for, and never
+returns once dismissed. If more pull is wanted later, the next acceptable step
+is a permanent text pill reading "Ask my CV" instead of a bare icon, which was
+offered and declined when the widget was built. Sound or motion to attract
+attention is not on the table.
+
 ---
 
 ## Closed
