@@ -179,6 +179,17 @@ and the root cause is model behaviour, not a bug in the loop. The handler cannot
 stop the model inventing a lookup; it can stop the invention reaching a reader
 and stop the UI implying evidence that does not exist.
 
+**Verification status, stated precisely, because the two halves are not equally
+proven.** The strip is covered by unit tests against the exact observed string.
+The "No lookup" notice is reasoned and typechecked but has **not been seen
+firing in a browser**: producing it needs a turn that completes successfully
+with zero tool calls, and the model cannot be made to skip a lookup on demand.
+The same question that failed before the fix now calls `search_experience`
+correctly. The one case that does reliably finish without tools is a
+guardrail block, where the notice is suppressed by design, confirmed on dev.
+If a zero-tool success ever shows up in the logs
+(`filter outcome="ok" and toolsUsed=[]`), check that the notice rendered.
+
 ### Public-repo exposure reviewed: stays public, with the account id pulled
 
 Reviewed 18 Oct 2026 across all 118 commits. **Verdict: keep it public.** The
