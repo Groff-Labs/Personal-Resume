@@ -243,9 +243,28 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
         modelId: MODEL_ID,
         system: [{ text: systemPrompt() }],
         messages,
-        // On the final allowed hop drop the tools, forcing prose instead of
-        // another tool request we have no budget to service.
-        ...(hops < MAX_HOPS ? { toolConfig } : {}),
+        // Three different tool configurations, one per phase of the turn:
+        //
+        // First hop: `toolChoice: { any: {} }`, which Nova honours as "call at
+        // least one tool". This is a structural guard, not an optimisation. The
+        // prompt asking for a lookup was not enough twice in one day on dev:
+        // asked about his pets the model answered with no tool call and invented
+        // a dog's name, and asked for his CliftonStrengths it listed five
+        // plausible Gallup themes, three of them wrong, again with no tool call.
+        // Rule 2 enumerated the topics needing a lookup, so anything outside
+        // that list was fair game to answer from model priors. A forced first
+        // call removes the option instead of asking for it, and the tools are
+        // in-process keyword search, so the extra call costs nothing.
+        //
+        // Middle hops: `auto`, so the model can follow up or stop.
+        //
+        // Final hop: no tools at all, forcing prose rather than another tool
+        // request there is no budget left to service.
+        ...(hops >= MAX_HOPS
+          ? {}
+          : hops === 1
+            ? { toolConfig: { ...toolConfig, toolChoice: { any: {} } } }
+            : { toolConfig }),
         inferenceConfig: { maxTokens: 500, temperature: 0.2, topP: 0.9 },
       }),
     );
