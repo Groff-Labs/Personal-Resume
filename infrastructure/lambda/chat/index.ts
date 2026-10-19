@@ -5,7 +5,7 @@ import {
   type Message,
 } from '@aws-sdk/client-bedrock-runtime';
 
-import { contact, type Citation } from './corpus';
+import { contact, unknownQueryTerms, type Citation } from './corpus';
 import { applyGuardrail } from './guardrail';
 import { checkJdLimit, checkLimits, estimateMicroUsd, hashIp, recordSpend } from './limits';
 import { systemPrompt } from './prompt';
@@ -202,6 +202,19 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
   let guardrailTopicUnits = 0;
   let guardrailPiiUnits = 0;
 
+  /*
+   * Retrieval diagnostics, so the question "is keyword search still good
+   * enough" can be answered from real traffic instead of from someone noticing
+   * a bad answer.
+   *
+   * `unknownTerms` is the residue of a query after aliases and morphology have
+   * had their turn: the words nothing in the corpus could reach. In bulk it is
+   * both a content backlog and the evidence for or against buying embeddings.
+   * The question itself is deliberately NOT logged; see `unknownQueryTerms`.
+   */
+  const toolsCalled: string[] = [];
+  const unknownTerms = new Set<string>();
+
   send({ type: 'status', message: 'Checking your question' });
 
   const inputCheck = await applyGuardrail(
@@ -299,6 +312,12 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
       const input = (b.toolUse.input ?? {}) as Record<string, unknown>;
 
       send({ type: 'tool_call', id: b.toolUse.toolUseId!, name, input });
+      toolsCalled.push(name);
+      // Only search takes a free-text query, so it is the only one with a
+      // residue worth recording.
+      if (name === 'search_experience' && typeof input.query === 'string') {
+        for (const t of unknownQueryTerms(input.query)) unknownTerms.add(t);
+      }
 
       const started = Date.now();
       const result = runTool(name, input, { jobDescription });
@@ -386,7 +405,12 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
     inputTokens,
     outputTokens,
     microUsd: Math.round(microUsd),
-    toolsUsed: citations.map((c) => c.anchor),
+    // Previously named toolsUsed while actually holding citation anchors, which
+    // made the one field anyone would reach for to answer "which tools get
+    // used" quietly wrong.
+    toolsCalled,
+    citedAnchors: citations.map((c) => c.anchor),
+    unknownTerms: [...unknownTerms],
   });
 
   send({ type: 'done', hops, usage: { inputTokens, outputTokens, microUsd } });

@@ -99,7 +99,16 @@ export class ChatApi extends Construct {
 
     const logGroup = new logs.LogGroup(this, 'Logs', {
       logGroupName: `/aws/lambda/cv-chat-api-${stage}`,
-      retention: stage === 'prod' ? logs.RetentionDays.ONE_MONTH : logs.RetentionDays.TWO_WEEKS,
+      /*
+       * Three months on prod, not one. The retrieval diagnostics in these logs
+       * are meant to be read over a window of a month or two before deciding
+       * whether keyword search is still good enough, and at ONE_MONTH the
+       * start of that window expires before the end of it arrives. Dev stays
+       * short; nobody analyses dev traffic.
+       *
+       * Cost is immaterial: these are a few KB a day of structured JSON.
+       */
+      retention: stage === 'prod' ? logs.RetentionDays.THREE_MONTHS : logs.RetentionDays.TWO_WEEKS,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
     cdk.Tags.of(logGroup).add('LZA:EXC:NET', 'true');

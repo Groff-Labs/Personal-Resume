@@ -19,6 +19,7 @@
 import { runTool } from '../lambda/chat/tools';
 import {
   MIN_COVERAGE,
+  unknownQueryTerms,
   isBroadQuery,
   passages,
   searchPassages,
@@ -525,5 +526,41 @@ describe('depth probes, answered Oct 2026', () => {
     const all = passages.map((p) => p.text).join(' ');
     expect(all).not.toMatch(/sales oversold|sales team sold/i);
     expect(all).not.toMatch(/their fault|incompeten/i);
+  });
+});
+
+describe('unknownQueryTerms, the content-gap signal', () => {
+  /*
+   * This is what gets logged instead of the question. It has to report the
+   * residue nothing could reach, and it has to stay quiet about terms the
+   * aliases or the morphological tier already handle, or a month of logs is
+   * noise.
+   */
+  it('reports a word the corpus genuinely lacks', () => {
+    expect(unknownQueryTerms('how does he handle pressure')).toContain('pressure');
+  });
+
+  it('stays quiet about terms an alias already reaches', () => {
+    // dogs -> husky, k8s -> kubernetes, government -> federal.
+    expect(unknownQueryTerms('does he like dogs')).toEqual([]);
+    expect(unknownQueryTerms('k8s experience')).toEqual([]);
+    expect(unknownQueryTerms('federal government work')).toEqual([]);
+  });
+
+  it('stays quiet about a morphological variant', () => {
+    // hosted/hosting, mentor/mentoring: reachable via prefixCredit.
+    expect(unknownQueryTerms('how is this site hosted')).toEqual([]);
+    expect(unknownQueryTerms('does he mentor')).toEqual([]);
+  });
+
+  it('returns nothing for a query with no distinctive terms at all', () => {
+    // Broad queries have no useful tokens, so there is no residue to report.
+    expect(unknownQueryTerms('what has he shipped on AWS')).toEqual([]);
+  });
+
+  it('does not leak the question, only the terms', () => {
+    const terms = unknownQueryTerms('is he any good at underwater basketweaving');
+    expect(terms.join(' ')).not.toMatch(/is he any good/);
+    expect(terms.every((t) => !t.includes(' '))).toBe(true);
   });
 });

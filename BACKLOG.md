@@ -227,50 +227,76 @@ is a permanent text pill reading "Ask my CV" instead of a bare icon, which was
 offered and declined when the widget was built. Sound or motion to attract
 attention is not on the table.
 
-### 7. The alias map tripwire fired; decide on S3 Vectors
+### 7. Decide on S3 Vectors from two months of real traffic
 
-**This is now a decision, not a monitoring item.** The `ALIASES` map in
-`corpus.ts` exists to patch vocabulary gaps keyword search cannot bridge, and
-`retrieval.test.ts` asserted it stay under thirty entries on the explicit basis
-that growth is the evidence semantic search has become worth paying for.
+**Deliberately waiting until ~20 Dec 2026, with instrumentation added first.**
 
-It crossed the line in Oct 2026: **31 entries over 18 distinct target sets, 11
-of them singletons.** The shape matters more than the count. Thirty entries
-covering six concepts is a handful of morphological variants; thirty covering
-eighteen is drifting toward a hand-built thesaurus, and a thesaurus is precisely
-what embeddings do better, cheaper and without someone noticing each gap first.
+The alias map crossed its own tripwire in Oct 2026: 31 entries over 18 distinct
+target sets, 11 of them singletons. The map exists to patch vocabulary gaps
+keyword search cannot bridge, and `retrieval.test.ts` asserted it stay small on
+the explicit basis that growth is the evidence embeddings have become worth
+paying for. The threshold was replaced with a measure of distinct target sets
+rather than raised, because raising your own tripwire twice is how a recorded
+decision becomes a habit.
 
-The threshold was replaced with a measure of distinct target sets rather than
-raised, because raising your own tripwire twice is how a recorded decision
-quietly becomes a habit. The new limits are 40 entries and 20 target sets, so
-there is a little room and then it fails again.
+**The decision is now waiting on usage rather than on argument,** which is the
+right call: every gap found so far was found by someone asking, not by the
+retriever reporting low confidence, so the sample is whatever happened to be
+tried rather than what visitors actually want.
 
-What the aliases are patching, which is the honest case for and against:
+Three things had to be fixed before the clock could start, or the wait would
+have produced nothing:
 
-- **Genuinely semantic**, and embeddings would fix without being told:
-  `dogs` to `husky`, `pets` to `tabby`, `government` to `federal`, `conflict` to
-  `disagreement`, `fintech` to `financial`, `personality` to `cliftonstrengths`.
-- **Shorthand and acronyms**, which embeddings handle unevenly and a map handles
-  exactly: `k8s`, `iac`, `tf`, `cicd`, `lz`, `dod`.
-- **Morphology the prefix tier cannot reach**, which is a cheaper fix than
-  either: `hired` to `hiring` (three shared characters), `oncall` to `on-call`.
+1. **Nothing logged the query, the coverage or whether retrieval was weak.** The
+   log carried turn counts, tokens and cost. Useful for the spend reconciliation
+   and useless for this.
+2. **`toolsUsed` was holding citation anchors, not tool names.** The one field
+   anyone would reach for to answer "which tools actually get used" was quietly
+   wrong.
+3. **Prod log retention was one month.** A two-month window would have lost its
+   own first month. Now three.
 
-So a hybrid is the likely answer rather than a replacement: vectors for the
-first group, keep the map for the second, and the third is arguably a
-`prefixCredit` tuning question.
+What is logged per turn, as of Oct 2026: `toolsCalled` (real names),
+`citedAnchors`, and `unknownTerms`. That last one is the residue of a search
+query after aliases and morphology have had their turn, so it is the set of
+words nothing in the corpus could reach.
 
-Costs, re-verified Oct 2026 and unchanged: **S3 Vectors $0.000055 a query**,
-about +5.8% on a $0.00096 turn, with ~$0.00006/month of storage for roughly 1 MB
-of vectors and about $0.00075 to embed the whole corpus once. A **managed
-Knowledge Base is still $0.001 a query**, which more than doubles a turn, and
-that remains the disqualifying number.
+**The question itself is not logged, and that is a decision rather than an
+omission.** This site has no privacy policy, and storing visitor-entered free
+text in CloudWatch is a different class of exposure from storing a handful of
+derived nouns. `["pressure", "soc2"]` says what to write next without recording
+what anyone asked.
 
-Before committing either way, note the one thing the tests cannot tell you:
-every gap found this month was found by *someone asking*, not by the retriever
-reporting low confidence. Embeddings would reduce the gaps; they would not
-change that discovery is reactive. A small evaluation set of real questions with
-expected passages, run on every corpus change, is worth more than either option
-and costs nothing.
+What to look at in December, and what each answer implies:
+
+- **`unknownTerms`, by frequency.** A short head of repeated words is a content
+  backlog: write those sections, no vectors needed. A long flat tail of
+  near-synonyms for things the corpus already covers is the case for embeddings,
+  because that is the shape a map cannot keep up with.
+- **How often `lowConfidence` fires on questions that do have answers.** High
+  means retrieval is the bottleneck. Low means it is not, whatever the alias
+  count says.
+- **`toolsCalled` distribution.** If `get_highlights` dominates, the problem is
+  tool selection rather than retrieval, and that has already needed fixing
+  twice.
+
+Costs, unchanged and re-verified Oct 2026: **S3 Vectors $0.000055 a query**,
+about +5.8% on a $0.00096 turn, ~$0.00006/month of storage for roughly 1 MB of
+vectors, ~$0.00075 to embed the corpus once. A **managed Knowledge Base is
+$0.001 a query**, which more than doubles a turn and stays disqualified.
+
+A hybrid is the likely answer rather than a replacement: vectors for the
+genuinely semantic aliases (`dogs` to `husky`, `conflict` to `disagreement`),
+keep the map for acronyms embeddings handle unevenly (`k8s`, `iac`, `lz`,
+`dod`), and treat the morphological entries (`hired` to `hiring`) as a
+`prefixCredit` tuning question instead.
+
+**Caveat on sample size.** Prod chat had one real turn at the time of writing.
+CloudFlare reports roughly 87 daily uniques, and a new widget converts a small
+fraction of those, so two months might yield anywhere from dozens to a couple of
+hundred turns. That is enough to see a shape and not enough for statistics; if
+December's logs are thin, the honest move is to wait longer rather than to read
+tea leaves.
 
 ---
 

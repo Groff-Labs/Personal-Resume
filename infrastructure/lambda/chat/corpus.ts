@@ -642,6 +642,40 @@ export function isBroadQuery(query: string): boolean {
 }
 
 /**
+ * Query terms the corpus genuinely does not contain, for logging.
+ *
+ * This is the "what should I write next" signal, and it is deliberately the
+ * only part of a visitor's question that gets logged. The full question is not
+ * logged: this site has no privacy policy, and storing visitor-entered free
+ * text in CloudWatch is a different class of exposure from storing a handful of
+ * derived nouns. A list like `["pressure", "soc2"]` tells you what to add
+ * without recording what anyone asked.
+ *
+ * "Absent" means absent after every other mechanism has had its turn: aliases
+ * have been expanded, so a term with a working alias is not reported, and the
+ * morphological tier has been checked, so `hosted` is not reported while
+ * `hosting` exists. What comes back is the residue nothing could reach, which
+ * is exactly the set worth either writing about or, in bulk, buying embeddings
+ * for.
+ */
+export function unknownQueryTerms(query: string): string[] {
+  const out: string[] = [];
+  for (const t of usefulQueryTokens(query)) {
+    if (idf.has(t)) continue;
+    // A morphological or prefix relative counts as reachable.
+    let reachable = false;
+    for (const known of idf.keys()) {
+      if (prefixCredit(t, known) > 0) {
+        reachable = true;
+        break;
+      }
+    }
+    if (!reachable) out.push(t);
+  }
+  return out;
+}
+
+/**
  * Confidence threshold, expressed as the share of the query's IDF mass a
  * passage actually matched. Scale-invariant by construction.
  *
