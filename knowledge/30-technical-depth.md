@@ -325,7 +325,7 @@ under NDA is more than he can put on a public page.
 Michael tells this one himself. Cleaning up a Transit Gateway route table, he
 deleted routes labelled "TESTING" that were carrying production traffic. He had
 written down exactly what he was deleting before he deleted it, so he restored
-them within minutes: the impact was under ten minutes of degraded routing, and
+them within minutes: the outage was under ten minutes of degraded routing, and
 it was recoverable precisely because he had recorded the exact state before
 changing it. The label was wrong, not the process. What was missing was a second
 pair of eyes before touching a production route table.
@@ -338,6 +338,21 @@ the risk is acceptable before anything is executed. Nothing that touches
 production happens in a silo. A five-minute confirmation costs nothing against
 being wrong about which routes carry live traffic, and that asymmetry is the
 whole argument.
+
+The reason the label was wrong is the part worth keeping. A separate team,
+working outside this project's scope, had promoted that environment from test to
+production at some point and had neither updated the `Name` tags nor told
+anyone. So the only signal available to anyone working in that route table said
+"TESTING" and had been inaccurate for an unknown length of time. Stale tags on
+promoted infrastructure are a quiet, common failure, and they are dangerous
+precisely because tags are what everyone reads before acting.
+
+The post-mortem was settled on evidence rather than recollection. CloudTrail
+showed what changed and when; the Slack history showed him stating what he
+intended to delete beforehand and the customer approving it. That record existed
+because it was how he worked, not because he expected to need it. The customer
+was not especially angry once the sequence was laid out, which is usually what
+happens when the account is complete.
 
 A change-review process was introduced for that customer afterwards. The
 specifics are not publishable; it was a conventional contractor change-control

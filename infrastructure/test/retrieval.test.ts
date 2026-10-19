@@ -187,18 +187,31 @@ describe('no regressions on the queries the gate already relied on', () => {
 describe('alias map', () => {
   it('bridges k8s to kubernetes', () => expectResolves('k8s'));
 
-  it('stays small; growth here is the signal to adopt semantic search', () => {
-    // Not a correctness assertion. A curated map is the cheap answer for a few
-    // hundred passages over a known vocabulary; if it has to keep growing,
-    // that is the evidence that vectors have become worth paying for. S3
-    // Vectors at ~$0.000055/query is the option, not a managed Knowledge Base
-    // at $0.001. See the RAG note in CLAUDE.md.
-    const aliasLines = require('fs')
+  it('tracks how many distinct concepts the map is patching', () => {
+    /*
+     * The count that matters is distinct TARGET SETS, not entries. Thirty
+     * entries covering six concepts is a handful of morphological variants;
+     * thirty covering twenty-five concepts is a hand-built thesaurus, and a
+     * thesaurus is the thing embeddings do better and cheaper than people.
+     *
+     * At the time of writing: 31 entries over 18 target sets, 11 of them
+     * singletons. The first threshold (30 entries) fired in Oct 2026 and was
+     * replaced with this measure rather than simply raised, because raising
+     * your own tripwire twice is how a documented decision quietly becomes a
+     * habit. BACKLOG item 7 carries the numbers and the cost of the
+     * alternative.
+     *
+     * If this fails, do not bump it. Read the backlog item and decide whether
+     * S3 Vectors is now worth $0.000055 a query.
+     */
+    const block = require('fs')
       .readFileSync(require.resolve('../lambda/chat/corpus.ts'), 'utf8')
-      .match(/const ALIASES[\s\S]*?\n};/)![0]
-      .split('\n')
-      .filter((l: string) => /^\s{2}[a-z]+:/.test(l));
-    expect(aliasLines.length).toBeLessThanOrEqual(30);
+      .match(/const ALIASES[\s\S]*?\n};/)![0];
+    const entries = [...block.matchAll(/^\s{2}[a-z-]+:\s*\[(.*?)\]/gm)].map((mm) => mm[1].trim());
+    const targetSets = new Set(entries);
+
+    expect(entries.length).toBeLessThanOrEqual(40);
+    expect(targetSets.size).toBeLessThanOrEqual(20);
   });
 });
 
@@ -471,5 +484,46 @@ describe('industries and compliance, supplied Oct 2026', () => {
     // career list is longer. Saying so is what stops the two being read as a
     // discrepancy, or one being used to inflate the other.
     expect(text).toMatch(/AllCloud delivery period only/i);
+  });
+});
+
+describe('depth probes, answered Oct 2026', () => {
+  it.each([
+    'what is the hardest problem he has solved',
+    'what was his hardest problem',
+    'how does he handle disagreement',
+    'how does he handle conflict',
+    'what was his biggest mistake',
+    'does he admit mistakes',
+    'why does he have a review gate',
+  ])('resolves %j', (q) => expectResolves(q));
+
+  it('routes the hardest-problem question to the non-technical framing', () => {
+    const h = searchPassages('what is the hardest problem he has solved', 1)[0];
+    expect(h.source).toContain('hardest problems are not the technical ones');
+  });
+
+  it('routes disagreement to the disagreement section, not to availability', () => {
+    // It landed on "Current availability" at 0.85 while `handle` was wrongly
+    // stopworded: df=0 does not mean uninformative when the word shares a stem
+    // with one in the corpus, and `handles` is in that section's heading.
+    const h = searchPassages('how does he handle disagreement', 1)[0];
+    expect(h.source).toContain('How he handles disagreement');
+  });
+
+  it('keeps the outage account reachable and names the root cause', () => {
+    const tgw = passages.filter((p) => p.source.includes('A mistake'));
+    const text = tgw.map((p) => p.text).join(' ');
+    expect(text).toMatch(/outage/i);
+    // The stale tag is the point of the story; without it this reads as
+    // carelessness rather than as a labelling failure nobody owned.
+    expect(text).toMatch(/test to production/i);
+    expect(text).toMatch(/CloudTrail/);
+  });
+
+  it('does not name the other team or blame anyone', () => {
+    const all = passages.map((p) => p.text).join(' ');
+    expect(all).not.toMatch(/sales oversold|sales team sold/i);
+    expect(all).not.toMatch(/their fault|incompeten/i);
   });
 });

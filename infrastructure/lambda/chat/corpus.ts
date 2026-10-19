@@ -392,6 +392,23 @@ const STOP = new Set([
   // reduced to it and matched "How I like to build" at 0.83 confidence. `like`
   // is in the general list above now; these are its relatives.
   'likes', 'prefer', 'prefers', 'favorite', 'favourite', 'enjoy', 'enjoys',
+  // Question words that are absent from the corpus, where each was a pure
+  // coverage penalty on a question the corpus answers: "what was his biggest
+  // mistake" fell below the threshold because of one word meaning nothing on
+  // its own.
+  //
+  // df=0 is necessary but NOT sufficient. A word with no occurrences can still
+  // be informative if it morphologically matches one that does: `handle` has
+  // df=0 yet shares a six-character stem with `handles`, which appears in the
+  // heading "How he handles disagreement", so `prefixCredit` pays it 0.85 and
+  // it points straight at the right passage. Stopwording it threw that signal
+  // away and left the query resting on `disagreement` alone, which ranked a
+  // passage about availability instead.
+  //
+  // So the test for this list is: df=0 AND no morphological relative in the
+  // corpus. Earlier passes wrongly included `handle`, `handles`, `time` and
+  // `example`; the last three are simply real words here.
+  'biggest', 'admit', 'admitted', 'explain', 'examples',
 ]);
 
 /**
@@ -446,6 +463,10 @@ const ALIASES: Record<string, string[]> = {
   hire: ['hiring'],
   hires: ['hiring'],
   oncall: ['on-call'],
+  conflict: ['disagreement'],
+  conflicts: ['disagreement'],
+  disagree: ['disagreement'],
+  outages: ['outage'],
   rotation: ['on-call'],
   // Personality and working style.
   strength: ['cliftonstrengths', 'gallup'],

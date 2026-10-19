@@ -227,6 +227,51 @@ is a permanent text pill reading "Ask my CV" instead of a bare icon, which was
 offered and declined when the widget was built. Sound or motion to attract
 attention is not on the table.
 
+### 7. The alias map tripwire fired; decide on S3 Vectors
+
+**This is now a decision, not a monitoring item.** The `ALIASES` map in
+`corpus.ts` exists to patch vocabulary gaps keyword search cannot bridge, and
+`retrieval.test.ts` asserted it stay under thirty entries on the explicit basis
+that growth is the evidence semantic search has become worth paying for.
+
+It crossed the line in Oct 2026: **31 entries over 18 distinct target sets, 11
+of them singletons.** The shape matters more than the count. Thirty entries
+covering six concepts is a handful of morphological variants; thirty covering
+eighteen is drifting toward a hand-built thesaurus, and a thesaurus is precisely
+what embeddings do better, cheaper and without someone noticing each gap first.
+
+The threshold was replaced with a measure of distinct target sets rather than
+raised, because raising your own tripwire twice is how a recorded decision
+quietly becomes a habit. The new limits are 40 entries and 20 target sets, so
+there is a little room and then it fails again.
+
+What the aliases are patching, which is the honest case for and against:
+
+- **Genuinely semantic**, and embeddings would fix without being told:
+  `dogs` to `husky`, `pets` to `tabby`, `government` to `federal`, `conflict` to
+  `disagreement`, `fintech` to `financial`, `personality` to `cliftonstrengths`.
+- **Shorthand and acronyms**, which embeddings handle unevenly and a map handles
+  exactly: `k8s`, `iac`, `tf`, `cicd`, `lz`, `dod`.
+- **Morphology the prefix tier cannot reach**, which is a cheaper fix than
+  either: `hired` to `hiring` (three shared characters), `oncall` to `on-call`.
+
+So a hybrid is the likely answer rather than a replacement: vectors for the
+first group, keep the map for the second, and the third is arguably a
+`prefixCredit` tuning question.
+
+Costs, re-verified Oct 2026 and unchanged: **S3 Vectors $0.000055 a query**,
+about +5.8% on a $0.00096 turn, with ~$0.00006/month of storage for roughly 1 MB
+of vectors and about $0.00075 to embed the whole corpus once. A **managed
+Knowledge Base is still $0.001 a query**, which more than doubles a turn, and
+that remains the disqualifying number.
+
+Before committing either way, note the one thing the tests cannot tell you:
+every gap found this month was found by *someone asking*, not by the retriever
+reporting low confidence. Embeddings would reduce the gaps; they would not
+change that discovery is reactive. A small evaluation set of real questions with
+expected passages, run on every corpus change, is worth more than either option
+and costs nothing.
+
 ---
 
 ## Closed

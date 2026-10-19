@@ -90,6 +90,89 @@ qualification before any artifacts are produced, an assessment phase before a
 fixed-price migration, and delivery leads included in opportunity discussions
 from the start rather than at handover.
 
+## The hardest problems are not the technical ones
+
+Asked for the hardest problem he has solved, his own framing is the answer:
+almost any technical problem yields to the right approach, so the hard ones are
+the problems where the technology is fine and the people, the incentives or the
+expectations are not. Three he gives, in ascending order of difficulty.
+
+**A scope that was technically impossible as written.** Another pre-sales
+architect had scoped a SQL-to-Aurora migration restoring from pgBackRest, which
+neither Aurora nor AWS DMS supports as a restore source. It reached the
+statement of work that way. The fix was a pivot to a supported path, either a
+`pg_dump` and load or a restore to EC2 first and a migration from there, and it
+cost a conversation rather than a replan. He offers this as the *easy* kind of
+wrong: a factual error about a service limit, visible to anyone who checks the
+documentation, and cheap once someone does.
+
+**A customer deliberately going against prescriptive guidance, with a reason.**
+A customer wanted AWS Control Tower's controls without Control Tower, so they
+could tune each one rather than accept it as presented. That is a deviation from
+Well-Architected guidance, and cost is usually the honest motivation behind it,
+as it was here. Harder than the first case because nobody is factually wrong.
+His position is that the job is to make the deviation explicit rather than to
+win it: name which pillar is being traded away, say who will own the control by
+hand once the managed version is gone, and get that written down. A customer
+allowed to deviate without being told what they are giving up has been poorly
+served even if they got what they asked for.
+
+**A technology sold because the word sells.** The one he calls the worst: an
+EKS platform signed for a customer who did not know what Kubernetes was, where
+ECS would have met the requirement. Nothing about it was technically
+undeliverable, which is exactly what makes it the hardest of the three. The
+customer would have paid for a control plane they could not operate, and the
+mismatch was invisible on paper because every individual line of the design was
+defensible.
+
+He is careful about where he puts the blame for that one. It was not a bad
+intention, it was a missing step: nothing in the process forced a technical
+qualification of the requirement before the solution was named. **That gap is
+why the adversarial review gate above exists.** The review asks what the
+customer will have to operate after handover, not just whether the design is
+sound, and "could this be simpler" is a question the gate is obliged to ask out
+loud.
+
+## How he handles disagreement
+
+He does not argue from memory, and that is the whole method: make a record
+before the disagreement exists, so the conversation afterwards is about facts
+rather than recollection.
+
+The instance he uses is the Transit Gateway route deletion described in the
+technical notes. He deleted routes tagged "TESTING" that were carrying
+production traffic, and restored them inside ten minutes. The disagreement came
+after, not during, and it was the one that matters: whose mistake was it.
+
+The post-mortem settled it with evidence rather than argument. CloudTrail showed
+exactly what was changed and when. The Slack history showed him stating what he
+intended to delete beforehand and the customer approving it. And the root cause
+turned out to sit outside the project entirely: a separate team had promoted
+that environment from test to production at some point and had neither updated
+the `Name` tags nor told anyone, so the only label available to anyone working
+in that route table was wrong. The customer was not especially angry once the
+sequence was on the table.
+
+What he takes from it, and applies to disagreements generally:
+
+- **Write the change down before making it**, because that record is what turns
+  a bad change into a short one, and later it is also the only honest account of
+  what you intended.
+- **Announce intent in a channel that keeps history.** The Slack thread was not
+  created to win an argument; it was how he worked. It settled one anyway.
+- **Separate the error from the cause.** He deleted the routes and says so
+  plainly. The cause was a stale tag nobody owned. Both are true, and conflating
+  them produces either a scapegoat or no fix.
+- **Attack the condition, not the person.** The outcome was a change-review
+  process and a rule that nothing touching production happens in a silo, not a
+  finding against the team that mislabelled the environment.
+
+The pattern generalises to disagreements where he is the one being told he is
+wrong: test the claim, produce the evidence, and change the process so the same
+disagreement cannot recur. The failure mode he avoids is defending a position on
+authority rather than on evidence, which is the same rule he applies when
+delivery tells him something cannot be built.
+
 ## What he looks for when hiring solutions architects
 
 Michael wrote AllCloud's pre-sales solutions architect interview questions.
