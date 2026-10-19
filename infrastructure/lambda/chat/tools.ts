@@ -41,7 +41,7 @@ export const toolSpecs = [
   {
     name: 'get_highlights',
     description:
-      "His most significant accomplishments, curated and ordered. USE THIS FIRST for broad or opening questions -- 'what has he done', 'what has he shipped', 'tell me about his experience', 'is he any good' -- where keyword search cannot rank results because every passage mentions AWS. Prefer this over search_experience whenever the question does not name a specific technology, employer or metric.",
+      "His most significant professional accomplishments, curated and ordered. USE THIS FIRST for broad or opening questions about his CAREER -- 'what has he done', 'what has he shipped', 'tell me about his experience', 'why should we hire him', 'is he any good' -- where keyword search cannot rank results because every passage mentions AWS. It returns career achievements ONLY: it knows nothing about him personally, nothing about this website, and nothing about any specific technology. For anything specific, including personal details, use search_experience instead. Never answer from this tool a question it does not cover.",
     inputSchema: {
       json: {
         type: 'object',
@@ -72,7 +72,7 @@ export const toolSpecs = [
   {
     name: 'search_experience',
     description:
-      'Keyword search across every responsibility bullet, skill group and resume line. Use when the question names a technology, metric or activity rather than an employer. Returns ranked snippets with their source.',
+      "Keyword search across EVERYTHING on the site: responsibility bullets, skill groups, resume lines, the engagement write-ups, the About section (his hometown, where he lives, his pets, his interests, his Gallup CliftonStrengths) and how this website itself is built, including its architecture and design trade-offs. This is the default tool for any specific question. Use it whenever the question names a technology, a metric, an activity, a personal detail or this site. Returns ranked snippets with their source, or a note saying the CV does not cover it -- which is the answer, not a reason to guess.",
     inputSchema: {
       json: {
         type: 'object',
