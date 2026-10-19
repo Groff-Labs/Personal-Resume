@@ -62,12 +62,28 @@ export default function Experience() {
       >
         <h2 className="section-title">Experience</h2>
 
-        {/* Timeline rail container */}
-        <div className="max-w-4xl mx-auto relative pl-[72px] md:pl-[96px]">
+        {/*
+          * Timeline rail container. The rail -- line, year labels and dots --
+          * is DESKTOP ONLY, and the left padding that makes room for it goes
+          * with it.
+          *
+          * It cost 72px, which is 23% of a 320px viewport, and it was spending
+          * that to show a start year the card already states more precisely
+          * ("2024" in the gutter versus "May 2024 - Present" in the card). The
+          * knock-on was real: the meta column was left 82px, so a single
+          * 104px word like "Vivsoft Technologies" was clipped mid-glyph by the
+          * card's `overflow-hidden`. Dropping the rail takes that column to
+          * 154px at 320px and 224px at 390px.
+          *
+          * Every rail element is already `aria-hidden`, so hiding it below md
+          * costs a screen reader nothing — it was decoration at every width,
+          * and only desktop has the room to spare for it.
+          */}
+        <div className="max-w-4xl mx-auto relative md:pl-[96px]">
           {/* Vertical rail */}
           <div
             aria-hidden
-            className="absolute left-[60px] md:left-[80px] top-3 bottom-3 w-px bg-line"
+            className="hidden md:block absolute left-[60px] md:left-[80px] top-3 bottom-3 w-px bg-line"
           />
 
           <div className="space-y-4">
@@ -86,7 +102,7 @@ export default function Experience() {
                   {/* Year label in the gutter */}
                   <span
                     aria-hidden
-                    className={`absolute -left-[72px] md:-left-[96px] top-[18px] w-[48px] md:w-[64px] text-right font-mono text-xs tracking-wider ${
+                    className={`hidden md:block absolute -left-[72px] md:-left-[96px] top-[18px] w-[48px] md:w-[64px] text-right font-mono text-xs tracking-wider ${
                       isOpen ? "text-accent font-semibold" : "text-ink-subtle"
                     }`}
                   >
@@ -96,7 +112,7 @@ export default function Experience() {
                   {/* Rail dot */}
                   <span
                     aria-hidden
-                    className={`absolute -left-[17px] md:-left-[21px] top-5 w-3 h-3 rounded-full border-2 border-surface-1 transition-colors ${
+                    className={`hidden md:block absolute -left-[17px] md:-left-[21px] top-5 w-3 h-3 rounded-full border-2 border-surface-1 transition-colors ${
                       isOpen ? "bg-accent" : "bg-line"
                     }`}
                   />
@@ -126,7 +142,10 @@ export default function Experience() {
                       </div>
 
                       {/* Meta — stacked on sm, inline on md+ */}
-                      <div className="flex-1 min-w-0 md:grid md:grid-cols-[minmax(0,auto)_minmax(0,1fr)_auto] md:items-center md:gap-4">
+                      {/* `flex flex-col` on mobile purely so the date can be
+                          reordered; on md+ this is still the three-column grid
+                          and DOM order governs. */}
+                      <div className="flex-1 min-w-0 flex flex-col md:grid md:grid-cols-[minmax(0,auto)_minmax(0,1fr)_auto] md:items-center md:gap-4">
                         {/* `break-words` because wrapping alone is not enough: at
                             320px the timeline gutter leaves this column 82px, and
                             "Vivsoft Technologies" is one 104px word with nowhere to
@@ -153,7 +172,14 @@ export default function Experience() {
                             overflowed its box by up to 64px on three cards. It was
                             written for the desktop `md:grid` column, whose width is
                             `auto`; every sibling class here is already md-scoped. */}
-                        <div className="font-mono text-xs text-ink-subtle md:text-right md:whitespace-nowrap">
+                        {/* `order-first md:order-none`: on a phone the date
+                            leads the card, which is the chronological signpost
+                            the rail used to give and the order a CV is skimmed
+                            in -- when, then what. Reset at md, where the grid
+                            puts it back in the right-hand column and DOM order
+                            decides. Done with `order` rather than a second
+                            md:hidden copy so the date exists once. */}
+                        <div className="order-first md:order-none font-mono text-xs text-ink-subtle md:text-right md:whitespace-nowrap">
                           {job.startDate} – {job.endDate}
                         </div>
                       </div>
