@@ -78,7 +78,11 @@ export const toolSpecs = [
       json: {
         type: 'object',
         properties: {
-          query: { type: 'string', description: 'Keywords, not a sentence.' },
+          query: {
+            type: 'string',
+            description:
+              "The user's question, or all of its substantive words. Do NOT reduce it to one or two general terms. This search discards filler words itself, so there is nothing to gain by trimming, and trimming loses the words that discriminate: \"what AWS services do you use to host this site\" cut down to \"AWS Services\" returns a Rackspace job bullet with high confidence, while the full question returns the hosting section. Keep every distinctive noun the user typed.",
+          },
           limit: { type: 'integer', minimum: 1, maximum: 6 },
         },
         required: ['query'],

@@ -368,3 +368,26 @@ describe('recruiter screening questions, audited Oct 2026', () => {
     'manufacturing experience',
   ])('still declines or misses %j, which is correct', (q) => expectWeakOrAbsent(q));
 });
+
+describe('a trimmed query is worse than the whole question', () => {
+  /*
+   * `search_experience`'s input description used to say "Keywords, not a
+   * sentence", and the model obeyed: asked "what AWS Services do you use to
+   * host this infra/site?" it searched for "AWS Services", dropped the two
+   * words that discriminate, and then told the visitor the CV did not cover it.
+   *
+   * The retriever stopwords filler itself, so pre-trimming buys nothing and
+   * costs the specific terms. The description now says to keep the question
+   * intact. This asserts the asymmetry that makes that the right instruction.
+   */
+  it('keeps the hosting answer for the full question and loses it when trimmed', () => {
+    const full = searchPassages('What AWS Services do you use to host this infra/site?', 1)[0];
+    const trimmed = searchPassages('AWS Services', 1)[0];
+
+    expect(full.source).toContain('Every AWS service hosting');
+    expect(trimmed.source).not.toContain('Every AWS service hosting');
+    // And the trimmed form is not merely weak, it is confidently wrong, which
+    // is why the instruction matters rather than the threshold.
+    expect(trimmed.coverage).toBeGreaterThanOrEqual(MIN_COVERAGE);
+  });
+});
