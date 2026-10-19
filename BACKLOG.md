@@ -25,6 +25,8 @@ decided no" is worth more than silence.
 
 ### 1. Update the Lucid architecture diagram for the chat feature
 
+**Owner: Michael, targeted for the week of 19 Oct 2026.** Not a code change.
+
 Existing diagram: <https://lucid.app/lucidchart/aef5844e-526a-4261-9fb8-258ca20973c8/edit>
 
 Wanted: a **new page** cloning the current one, then the chat path added, so the
@@ -50,81 +52,9 @@ SCP carve-out), and the corpus is bundled at synth time rather than fetched.
 site renders, and it is in the image-optimiser exclusion list so it keeps full
 resolution for the lightbox. Re-export to the same path.
 
-### 2. KMS is 80% of the AWS bill, and it is all LZA keys
+### 2. Corpus content only Michael can supply
 
-Measured 18 Oct 2026. **This repo creates zero customer-managed keys**, so
-nothing here is the lever; the fix, if there is one, is in
-`~/repos/GitHub/grofflabs-lza/`.
-
-The charge is almost purely per-key rent, not usage. September: **$6.9708 for
-6.97 key-months and $0.0004 for 148 requests.** Seven customer-managed keys in
-us-east-1 at $1/month each, every one tagged `Accelerator: AWSAccelerator`,
-all created 2026-04-21. Other regions return `AccessDeniedException` from the
-region-lockdown SCP, so us-east-1 is the whole picture for this account.
-
-| Key | Alias |
-|---|---|
-| Lambda env var encryption | `alias/accelerator/kms/lambda/key` |
-| SQS queues | `alias/accelerator/kms/sqs/key` |
-| CloudWatch log groups | `alias/accelerator/kms/cloudwatch/key` |
-| EBS default encryption | `alias/accelerator/ebs/default-encryption/key` |
-| General-purpose S3 | `alias/accelerator/kms/s3/key` |
-| General-purpose S3 | **no alias** |
-| General-purpose S3 | **no alias** |
-
-**The lead worth chasing: three keys share the description "general-purpose S3
-buckets created by LZA" and two of them have no alias.** That is the shape of
-orphans from an LZA redeploy, where the alias moves to a new key and the old one
-is retained because LZA sets a retain policy on KMS keys on purpose. If so it is
-~$2/month, about 29% of the KMS bill, for nothing.
-
-**Do not delete them on that inference.** Deleting a key that still protects
-objects makes those objects permanently unreadable, and this was not verifiable
-from this account:
-
-- `s3:ListAllMyBuckets` is denied by the Root RCP, so bucket-to-key references
-  cannot be enumerated here.
-- A CloudTrail 90-day lookup on all three key ARNs returned **zero events for
-  all three, including the aliased key LZA certainly uses**. That proves the
-  lookup is blind to KMS data-plane events, not that any key is idle. Treating
-  that zero as evidence would have been the wrong call.
-
-Verify from the management or log-archive account instead, where bucket
-enumeration is permitted, or from a CloudTrail data-event trail if one is on.
-
-**On reducing it org-wide, the honest answer is mostly no.** Each key is
-per-account-per-region, so the bill is accounts x regions x enabled key
-features. The EBS and SQS keys cost $1/account/month whether or not any EC2
-instance or queue exists, and dropping them to save $1 each trades a security
-control for pocket change. The real lever is not adding accounts and regions
-that are not needed: at seven keys per account, a five-account org is $35/month
-of key rent. Worth knowing before the org grows, not worth optimising now.
-
-For scale: LZA's security tooling (KMS $6.97 + Macie $0.60 + GuardDuty $0.27)
-was 89% of September's $8.77 bill. The CV site itself was S3 $0.31 and
-CloudFront $0.0000. **The landing zone is the cost; the website is free.**
-
-### 3. Two tokeniser mismatches, both small
-
-What is left of the old "no typo tolerance" item after the typo work below
-landed. Neither of these is a typo: both are cases where the tokeniser and the
-corpus disagree about where a word ends, so no amount of fuzzy matching helps.
-
-- **`CI/CD` reports broad.** `tokenize` splits on `/` and both halves are two
-  characters, which the length filter drops, so the query has no tokens at all.
-  Normalising `ci/cd` to `cicd` before tokenising would fix it, and the alias
-  map already maps `cicd`.
-- **`node.js` scores 0.40.** The tokeniser keeps the dot, so the token is
-  `node.js` and it never matches the corpus's `node`.
-
-Both are deliberately parked rather than bundled into the typo change, for the
-same reason that change was kept separate from the morphology work: they alter
-what `tokenize` produces, and `tokenize` runs over the **corpus** as well as
-the query, so either one re-indexes all ~250 passages and moves scores that
-have nothing to do with the fix. That needs its own before-and-after, not a
-rider on someone else's.
-
-### 4. Corpus content only Michael can supply
+**Owner: Michael, targeted for end of week, 19 Oct 2026.**
 
 From a 49-question recruiter audit, Oct 2026. Everything that was a *vocabulary*
 gap is already fixed; these are the ones where the fact genuinely is not written
@@ -164,30 +94,7 @@ compensation (guardrail-denied), visa sponsorship and work authorisation (rule
 10, protected characteristics), references (not public), and whether he is
 interviewing elsewhere.
 
-### 5. Decided against: an unread badge on the chat launcher
-
-Raised Oct 2026 as "should we have it ding and show a notification like some
-sites do". **No**, and the reasoning is worth keeping so it is not revisited as
-an oversight.
-
-An unread count is a truth claim: it says something is waiting for you. On a
-support widget that is true, because a human replied. Here nothing is waiting,
-so the badge would be a fabricated signal on a site whose entire chat feature is
-built around not fabricating things. The assistant shows its tool calls and
-admits when it has no answer; a fake "1" beside the launcher contradicts that
-posture for a few extra clicks.
-
-A recruiter is also the wrong audience for it. They have come to evaluate
-someone's judgement, and growth-hacking patterns read as a tell.
-
-What is already in place and is the honest version: a one-time bubble that
-appears after a dwell or a scroll, says what the assistant is for, and never
-returns once dismissed. If more pull is wanted later, the next acceptable step
-is a permanent text pill reading "Ask my CV" instead of a bare icon, which was
-offered and declined when the widget was built. Sound or motion to attract
-attention is not on the table.
-
-### 6. Decide on S3 Vectors from two months of real traffic
+### 3. Decide on S3 Vectors from two months of real traffic
 
 **Deliberately waiting until ~20 Dec 2026, with instrumentation added first.**
 
@@ -261,6 +168,88 @@ tea leaves.
 ---
 
 ## Closed
+
+### KMS key rent: answered in the LZA repo, nothing to do here
+
+Investigated 18-19 Oct 2026 in `~/repos/GitHub/grofflabs-lza/` and closed from
+this side. **This repo creates zero customer-managed keys and all of its buckets
+use AES256, so there was never a lever here** — the original item said as much
+and the investigation confirmed it.
+
+The findings that matter to this account, with the identifiers left out because
+this repo is public:
+
+- **The two unaliased keys were orphans, and not from a redeploy.** They were
+  left by two failed CREATE attempts of the LZA logging stack on 21 Apr 2026,
+  the night the account was added to LZA. CloudFormation deleted the alias on
+  rollback and kept the key, because CDK retains KMS keys.
+- **Nothing had ever used them.** Zero cryptographic calls across the keys'
+  entire lifetime, from the org trail as well as recent lookups: 71 matching
+  records, all control-plane. No grants, no aliases, not a resource of any live
+  stack, and both predate every bucket in the account.
+- **Both were disabled on 19 Oct 2026.** A disabled key still bills $1/month, so
+  the saving only lands on deletion. **Deletion is scheduled to be requested on
+  or after 2 Nov 2026**, with the 30-day window, after a final check that
+  nothing failed against them. Worth $2/month. The commands are in the LZA
+  session's notes.
+- **The "$7 per account per month floor" was wrong.** It is about $2 once the
+  s3, sqs and lambda CMKs are dropped for workload OUs, which costs no
+  meaningful control; the cloudwatch and EBS-default keys are worth keeping.
+  Those are LZA config decisions and belong in that repo.
+- One correction worth carrying over, because it was wrong in the prompt this
+  repo wrote: **CloudTrail `LookupEvents` does see KMS `Decrypt` and
+  `GenerateDataKey`** — they are logged as management events. Filter on the
+  event source and parse `resources[]` rather than trusting `ResourceName`.
+
+The org-wide sweep found the larger levers sit in another workload account
+rather than here, and that a Control Tower key is deliberately kept until its
+logs expire around Feb 2028. Both are recorded in the repos that own them.
+
+### `CI/CD` was reported as a broad question; Node.js correctly is not
+
+The two leftovers from the typo-tolerance item, taken on 19 Oct 2026. One was a
+real bug and one was a proposal that measurement rejected.
+
+**`CI/CD` is fixed.** `tokenize` split on `/` and both halves are two
+characters, which the length filter drops, so the query had **no tokens at all**
+and `isBroadQuery` reported it broad — sending one of the more reasonable
+recruiter questions to curated highlights instead of to the CI/CD skills. The
+corpus lost the same tokens, so there was nothing to match even if the query had
+survived. Gluing `ci/cd` to `cicd` before the split fixes both sides at once,
+and the alias map already knew `cicd`. Now 0.97 on *Skills -> CI/CD & GitOps*,
+for that spelling and three phrasings around it.
+
+Measured across the 99-query harness, **exactly one result moved**, which is the
+point of doing it as its own change: a tokeniser edit re-indexes every passage,
+so the blast radius had to be shown rather than assumed.
+
+**`node.js` is not fixed, because the proposed fix was wrong.** The item said
+the tokeniser "keeps the dot, so it never matches the corpus's `node`". It does
+not, and it must not: **`node` and `nodes` in this corpus almost always mean
+Kubernetes nodes** — Karpenter node pools, EC2 rather than Fargate. Collapsing
+the dot was measured and scored *"what node.js experience does he have"* at
+**1.00 against a multi-tenant EKS platform passage**, which is a confident wrong
+answer of exactly the kind this subsystem is built to avoid. Normalising to
+`nodejs` instead does nothing at all, because the corpus has no such token.
+
+The only Node.js-adjacent fact on the CV is that the chat Lambda runs on "ARM64,
+Node 22" — a runtime detail, not a claimed skill. So **weak is the correct
+answer** and 0.40 stays. There is a test asserting it stays weak, so the item
+cannot be reopened and "fixed" by someone who reads the old wording without
+measuring it.
+
+### Decided against: an unread badge on the chat launcher
+
+Raised Oct 2026, declined, and **removed from the open list on 19 Oct 2026** at
+the owner's instruction — the decision is settled and does not need re-reading.
+
+An unread count is a truth claim: it says something is waiting for you. Here
+nothing is, so the badge would be a fabricated signal on a site whose chat
+feature is built around not fabricating things. A recruiter is also the wrong
+audience; growth-hacking patterns read as a tell. The honest version already
+ships: a one-time bubble after a dwell or scroll, dismissed for good. If more
+pull is ever wanted, the next acceptable step is a text pill reading "Ask my CV"
+rather than a bare icon. Sound and motion are not on the table.
 
 ### Retrieval tolerates typos, inside a window it cannot carry
 

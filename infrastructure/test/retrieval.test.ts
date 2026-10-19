@@ -529,6 +529,58 @@ describe('depth probes, answered Oct 2026', () => {
   });
 });
 
+describe('CI/CD is one term, and Node.js is deliberately still a miss', () => {
+  /*
+   * The two findings left over from BACKLOG.md item 3 after typo tolerance
+   * landed. Neither is a typo: both are places where the tokeniser and the
+   * corpus disagreed about where a word ends. Only one of them turned out to
+   * be a bug.
+   */
+  it('finds the CI/CD skills instead of reporting a broad question', () => {
+    // `tokenize` split on `/` and dropped both two-character halves, so this
+    // query had no tokens at all and routed to curated highlights.
+    for (const q of ['CI/CD', 'ci/cd', 'CI/CD experience', 'what is his CI/CD experience']) {
+      expect({ q, broad: isBroadQuery(q) }).toEqual({ q, broad: false });
+      const hit = top(q);
+      expect(hit.coverage).toBeGreaterThanOrEqual(MIN_COVERAGE);
+      expect(hit.source).toMatch(/CI\/CD/);
+    }
+  });
+
+  it('still matches CI/CD written as two words', () => {
+    // The glue must not be the only way in.
+    expect(top('ci cd pipelines')?.coverage).toBeGreaterThanOrEqual(MIN_COVERAGE);
+  });
+
+  it('keeps Node.js weak, because the CV does not claim it', () => {
+    /*
+     * The item proposed making `node.js` match the corpus's `node`. Measured,
+     * that is a confident WRONG answer and the proposal was rejected: `node`
+     * and `nodes` in this corpus almost always mean Kubernetes nodes --
+     * Karpenter node pools, EC2 rather than Fargate -- so collapsing the dot
+     * scored "what node.js experience does he have" at 1.00 against a
+     * multi-tenant EKS platform passage.
+     *
+     * The only Node.js-adjacent fact on the CV is that the chat Lambda runs on
+     * "ARM64, Node 22", which is a runtime detail and not a claimed skill.
+     * Weak is therefore the correct answer here, and this test exists to stop
+     * the item being "fixed" later by someone reading it without measuring.
+     */
+    const hit = top('what node.js experience does he have');
+    if (hit) expect(hit.coverage).toBeLessThan(MIN_COVERAGE);
+    // Normalising to `nodejs` does nothing either: the corpus has no such
+    // token, which is the same fact stated a different way.
+    const plain = top('nodejs');
+    if (plain) expect(plain.coverage).toBeLessThan(MIN_COVERAGE);
+  });
+
+  it('keeps Kubernetes node questions working', () => {
+    // The flip side: `node` must keep reaching the EKS material, which is
+    // what it legitimately refers to here.
+    expect(top('karpenter node pools')?.coverage).toBeGreaterThanOrEqual(MIN_COVERAGE);
+  });
+});
+
 describe('typo tolerance, and the words it must refuse to correct', () => {
   /*
    * Added after BACKLOG.md item 3. The entry is worth reading against this

@@ -507,6 +507,22 @@ function expandAliases(tokens: string[]): string[] {
 export function tokenize(s: string): string[] {
   return s
     .toLowerCase()
+    /*
+     * `ci/cd` is one term, so it is glued before the splitter can take it
+     * apart. Without this the split on `/` leaves `ci` and `cd`, both two
+     * characters, both dropped by the length filter below — so the query
+     * "CI/CD" had NO tokens at all and `isBroadQuery` reported it broad,
+     * routing one of the more reasonable recruiter questions to curated
+     * highlights instead of to the CI/CD skills. The corpus lost the same
+     * tokens, so there was nothing to match even if the query had survived.
+     *
+     * This runs over the corpus as well as the query, which is the reason it
+     * was kept out of the typo-tolerance change rather than ridden along with
+     * it: a tokeniser edit re-indexes every passage. Measured across 99
+     * queries, exactly one result moved — "CI/CD" from broad to the CI/CD
+     * skills passage at coverage 0.97 — and every other line was identical.
+     */
+    .replace(/\bci\s*\/\s*cd\b/g, 'cicd')
     .replace(/[^a-z0-9+#./ -]/g, ' ')
     .split(/[\s/]+/)
     .map((t) => t.replace(/^[-.]+|[-.]+$/g, ''))
