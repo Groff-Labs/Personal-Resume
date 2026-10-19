@@ -29,7 +29,16 @@ function ArchitectureDiagram({ onOpen }: { onOpen: () => void }) {
       type="button"
       onClick={onOpen}
       aria-label="Enlarge architecture diagram"
-      className="relative w-full aspect-[1500/810] bg-white rounded-md overflow-hidden block cursor-zoom-in focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      /*
+       * `aspect-[1912/1968]` matches the exported PNG exactly. It was
+       * `1500/810` for the pre-chat diagram, which was wide and short; the
+       * Oct 2026 export is nearly square because the chat path doubled the
+       * height. A stale ratio here does not crop -- `object-contain` prevents
+       * that -- it letterboxes, so the diagram would render at about 44% of
+       * the available width with white bars either side and be unreadable.
+       * **Re-measure this whenever the diagram is re-exported.**
+       */
+      className="relative w-full aspect-[1912/1968] bg-white rounded-md overflow-hidden block cursor-zoom-in focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       <Image
         src="/images/diagrams/cv_infra_diagram.png"
@@ -198,17 +207,26 @@ export default function ProjectShowcase() {
             <Image
               src="/images/diagrams/cv_infra_diagram.png"
               alt={DIAGRAM_ALT}
-              width={1500}
-              height={810}
+              width={1912}
+              height={1968}
               sizes="95vw"
-              className="w-[min(95vw,1500px)] max-h-[90vh] h-auto rounded-md shadow-2xl bg-white"
+              className="w-auto max-w-[95vw] max-h-[90vh] h-auto rounded-md shadow-2xl bg-white"
               priority
             />
             <button
               type="button"
               onClick={() => setLightboxOpen(false)}
               aria-label="Close"
-              className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-surface-0 text-ink shadow-lg flex items-center justify-center hover:bg-surface-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              /*
+               * Inside the frame and 44px on touch widths; outside and 36px
+               * from md up. Anchored outside at every width it hung 2px past
+               * the right edge of a 390px viewport, because the overlay
+               * padding leaves the image 370px wide and `-right-3` pushes a
+               * further 12px past that. Tapping the backdrop also closes the
+               * lightbox, so this was never a trap -- just a clipped control
+               * under the tap minimum.
+               */
+              className="absolute right-1 top-1 h-11 w-11 md:-right-3 md:-top-3 md:h-9 md:w-9 rounded-full bg-surface-0 text-ink shadow-lg flex items-center justify-center hover:bg-surface-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <X className="w-4 h-4" />
             </button>
