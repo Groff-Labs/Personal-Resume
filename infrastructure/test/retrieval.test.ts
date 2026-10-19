@@ -550,9 +550,29 @@ describe('typo tolerance, and the words it must refuse to correct', () => {
    */
   const CORRECTED: Array<[string, string]> = [
     // [query, a term that must appear in the passage it finds]
+    // The three cases the backlog item was opened on.
     ['terrafrom', 'terraform'],
     ['aws lamda', 'lambda'],
     ['clowdfront', 'cloudfront'],
+    /*
+     * And the class that actually justifies this tier, which the item did not
+     * anticipate. End-to-end against the deployed function, Nova Lite
+     * normalised `terrafrom`, `obsevrability` and even `Vivsfot` before it
+     * composed a tool call, so retrieval never saw the typo: the model is the
+     * first spelling corrector and this is the second.
+     *
+     * What the model cannot fix is a token it has no prior for. It will not
+     * turn `m-21-13` into `m-21-31`, because guessing which digit order is
+     * right would be inventing a federal memo number, and the same holds for
+     * this CV's proper nouns. Those are the queries that reach `searchPassages`
+     * misspelled, and before this tier every one of them returned nothing --
+     * which the assistant reports as "the CV does not mention it", the
+     * confident wrong denial this whole file is organised against.
+     */
+    ['m-21-13', 'm-21-31'],
+    ['vivsfot', 'vivsoft'],
+    ['allcoud', 'allcloud'],
+    ['self-assurnace', 'self-assurance'],
   ];
 
   it.each(CORRECTED)('resolves %j to the passage about %s', (query, term) => {

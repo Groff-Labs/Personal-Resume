@@ -315,6 +315,26 @@ work — `ships` scored 1.00 on the same passage before typo correction existed.
 The realistic slip, `shiped`, correctly stays a miss. The rule that would catch
 `shipd` has more surface than the problem.
 
+**Kept after a finding that argued against it.** Verified end to end on dev, the
+model normalises spelling before retrieval ever runs: `terrafrom` became a
+`get_skills` call for `Terraform`, `obsevrability and govenrance` became a
+`search_experience` query reading `"observability and governance work"`, and
+`Vivsfot` became `get_role` with `vivsoft`. Three turns, three query shapes,
+three corrections by the model rather than by this code.
+
+So the tier is unreachable in the ordinary chat flow, and the three cases the
+item was opened on — all product names — were the weakest possible argument for
+it. The case that holds is the one nobody had thought of: **tokens the model has
+no prior for and will not guess at.** It will not turn `m-21-13` into `m-21-31`,
+because that would be inventing a federal memo number, nor fix this CV's own
+proper nouns. Measured, `m-21-13`, `vivsfot`, `allcoud` and `self-assurnace` all
+returned nothing before this and the right passage at 1.00 after.
+
+Kept on that basis plus the cost, which is 0.26 ms and no measurable regression,
+and because `chatModelId` is a documented `cdk.json` knob — a cheaper model
+normalises less. Recorded here rather than left implied, because the obvious
+reading of the commit overstates what it does.
+
 ### Test sweep: 153 to 218, plus a deployment smoke script
 
 Asked to go bug hunting. **No bugs were found in the backend**, which is a

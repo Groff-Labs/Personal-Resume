@@ -625,6 +625,32 @@ asymmetry is in the `STOP` list and predates the typo tier — `ships` scored 1.
 on the same passage before it existed. The realistic slip, `shiped`, stays a
 miss.
 
+**The model is the first spelling corrector, and this tier is the second — know
+that before crediting it with much.** Verified end to end against the deployed
+function, three turns, three different query shapes: `terrafrom` became a
+`get_skills` call for `Terraform`, `obsevrability and govenrance` became
+`search_experience` with `"observability and governance work"`, and even
+`Vivsfot` became `get_role` with `vivsoft`, because that tool's schema
+enumerates the employers. `searchPassages` never sees the raw question — it only
+ever sees a query the model composed — so in the ordinary chat flow a typo is
+already gone by the time retrieval runs.
+
+What survives that is a token the model has no prior for, and this is the class
+the tier genuinely earns its place on. It will not turn `m-21-13` into
+`m-21-31`, because picking a digit order would be inventing a federal memo
+number, and the same is true of this CV's proper nouns: `vivsfot`, `allcoud`,
+`self-assurnace`. Measured, all four returned **nothing at all** before, which
+the assistant reports as "the CV does not mention it" — the confident wrong
+denial that the absent-term weighting was introduced to stop. `test/retrieval.test.ts`
+asserts them for that reason.
+
+The practical consequence for a future session: **if `chatModelId` changes, the
+value of this tier changes with it**, in either direction. A model that
+normalises less makes it load-bearing; a model that normalises more makes it
+dead weight. Do not conclude it is broken because a typo you tried in the UI got
+answered — that is probably the model, and the way to tell is to call
+`searchPassages` directly.
+
 Re-measure after a significant corpus change:
 
 ```
