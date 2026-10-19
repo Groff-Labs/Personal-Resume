@@ -24,6 +24,23 @@ reads it from `frontend/lib/data/status.ts` via the
 `get_availability_and_contact` tool, so it cannot disagree with the pill shown
 under the headshot. Change it there, not here.
 
+## References
+
+Available on request, and not published here. Ask Michael directly and he will
+arrange them; naming former colleagues and managers on a public page is their
+decision to make rather than his.
+
+Worth saying explicitly because "who are his references" otherwise matches the
+reference-architecture work scattered through this corpus, which is a different
+sense of the word entirely.
+
+## Notice period and start date
+
+He is not under a contractual notice requirement. He would give two weeks,
+because that is the industry standard at his level and leaving a team mid-sprint
+is not how he wants to be remembered. Anything shorter is worth asking about
+directly rather than assuming.
+
 ## What he is looking for next
 
 A people and business leadership role where the technical and commercial
@@ -40,28 +57,53 @@ genuinely value technology and invest in it. He would rather not work for a
 private-equity or venture-capital-owned business, though he recognises that
 narrows the field.
 
-## Industries and sectors he has delivered in
+## Industries and sectors he has worked in
 
 Asked as "has he worked in <industry>", which is a screening question, so it is
 answered in the words a recruiter uses rather than left implicit in the
 engagement write-ups.
 
-The résumé's figure is 17 AWS engagements across 11 industries at AllCloud. The
-ones documented in this corpus, by sector: security software, public sector and
-government (via a software vendor serving public-sector customers, with a
-GovCloud-deployable design and OMB M-21-31 logging controls), heavy industry,
-HR technology, healthcare, and software and SaaS generally. Earlier roles add
-federal and defense work at Accenture Federal Services and Vivsoft, including
-IL4 and IL5 accreditation requirements and DISA SRG controls, and managed
-hosting across many customer verticals at Rackspace.
+Industries, across his whole career:
 
-That list is shorter than eleven on purpose. The count comes from the résumé;
-the sector names are only written down where an engagement write-up records
-them, and the rest are not reconstructed from the count.
+SaaS and ISV software products · healthcare and health tech · financial
+services, regtech and compliance · capital markets and securities exchange ·
+life sciences and pharma · adtech, marketing and media · mining and natural
+resources · legal tech and professional services · transportation and logistics
+· HR tech, talent and recruitment · oil and gas · cybersecurity · education ·
+energy and utilities · AEC and engineering.
 
-If an industry is not named here, say so plainly rather than stretching an
-adjacent one. "He has not published work in that sector" is a better answer
-than a guess a hiring manager can check.
+Grouped as verticals: software and internet · healthcare and life sciences ·
+financial services · advertising, marketing and media · professional and
+business services · energy, utilities and natural resources · public sector and
+regulated workloads · transportation and logistics · manufacturing and
+industrial · telecommunications · retail and consumer goods.
+
+**The résumé's "17 AWS engagements across 11 industries" is a narrower figure on
+purpose: it counts the AllCloud delivery period only.** The list above is the
+whole career, so the two numbers are not in conflict and neither should be used
+to inflate the other. If someone asks how many industries, ask which they mean.
+
+Where an engagement is written up in detail, the sector is given but the
+customer never is. If an industry above is not backed by a write-up, the honest
+answer is that he has worked in the sector without a publishable example.
+
+## Compliance and regulatory frameworks he has worked against
+
+Named because each one is a hard filter on a job specification, so a defensible
+yes is worth stating and a silence reads as a no.
+
+HITRUST · DoD Impact Level 4 and Impact Level 5 · DISA Security Requirements
+Guide · SOC 2 Type I and Type II · PCI DSS · GDPR · ISO 27001 · NIST 800-53 ·
+NIST 800-171 · OMB M-21-31 logging controls.
+
+**The claim is architecture, not attestation**, and the distinction matters when
+a compliance lead is the one asking. He designs and delivers systems intended to
+satisfy these frameworks: the controls, the evidence a system has to produce,
+the logging and retention, the isolation boundaries. He is not an auditor or an
+assessor, does not issue or sign attestations, and has said he hands payments
+standards and penetration testing to specialists. For HITRUST specifically, he
+scoped an engagement around a customer keeping its certification through a
+migration rather than obtaining one.
 
 ## Enterprise scale, and what scale means here
 

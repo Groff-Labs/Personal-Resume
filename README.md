@@ -17,7 +17,7 @@ Plus two read-only archives parked alongside the site:
 
 | Layer | Tool |
 |---|---|
-| Framework | Next.js 15 (App Router, static export) |
+| Framework | Next.js 16 (App Router, static export) |
 | Language | TypeScript |
 | Styling | Tailwind CSS + custom tokens for dark mode |
 | Animation | Framer Motion |
@@ -26,6 +26,12 @@ Plus two read-only archives parked alongside the site:
 | TLS | AWS Certificate Manager (DNS-validated) |
 | DNS | CloudFlare (not Route 53 — keeps the project single-account) |
 | CI/CD | GitHub Actions with OIDC (no long-lived AWS keys) |
+| URL rewriting | CloudFront Functions (`/foo/` → `/foo/index.html`) |
+| Chat assistant | AWS Lambda (ARM64, Node 22, response streaming) |
+| Model | Amazon Nova Lite via Amazon Bedrock `Converse` tool-use loop |
+| Safety | Amazon Bedrock Guardrails, applied explicitly on input and output |
+| Rate limits + spend cap | DynamoDB, on-demand and TTL'd |
+| Retrieval | IDF-weighted keyword search in-process; no vector store, no Knowledge Base |
 
 ## Architecture
 
@@ -35,16 +41,33 @@ Highlights and trade-offs are documented on the site itself under **Project →
 WordPress → Next.js on AWS**. Short version: zero servers, pennies per month,
 `git push` → deploy.
 
+The diagram predates the chat assistant, which adds one path: `/api/chat` on the
+same distribution → a Lambda function URL fronted by OAC → Bedrock, with
+per-IP and daily spend counters in DynamoDB. There is still no VPC, no
+container and no database.
+
 ## Repo layout
 
 ```
 resume.md         # Source-of-truth résumé; regenerated to PDF on each build
+knowledge/        # What the chat assistant knows beyond the résumé. Plain
+                  # markdown; README.md there is the authority on what may go in
+CONTEXT.md        # The repo's vocabulary. Use these names, don't invent synonyms
+BACKLOG.md        # Parked work, and decided-against items with the reasoning
+LICENSE           # MIT on the code; personal content is all rights reserved
+scripts/
+  check.sh        # The gate. Lint, both typechecks, tests, synth, artifact
+                  # invariants. One command that proves the tree is green
 frontend/         # Next.js static site (the CV itself)
-  app/            # App Router pages
-  components/     # React components (Hero, Experience, Skills, etc.)
-  lib/data/       # Typed data: jobs, certifications, skills
+  app/            # App Router pages and layout
+  components/     # React components (Hero, Experience, Chat, ChatWidget, …)
+  lib/data/       # Typed data: jobs, certifications, skills, about, project,
+                  # contact, status, chat, testimonials. The page renders these
+                  # AND the assistant reads them, so they cannot disagree
+  lib/chatPanel.ts        # Open/closed state for the chat widget
   scripts/
     build-resume.mjs      # md-to-pdf → public/resume.pdf; runs as prebuild
+    optimize-images.mjs   # raster → WebP; runs as prebuild
   public/         # Static assets (images, favicon, OG, robots, sitemap)
     blog/                 # WordPress blog archive (2015–2020, read-only)
     legacy/               # WordPress CV archive (2015 The7 theme)
@@ -52,10 +75,15 @@ infrastructure/   # AWS CDK (TypeScript)
   bin/            # CDK app entry point
   lib/
     cv-website-stack.ts   # S3 + CloudFront + OAC + ACM per stage
+    chat-api.ts           # Lambda + DynamoDB + Bedrock guardrail + behaviour
     github-oidc-stack.ts  # One-time OIDC provider + deploy role
+  lambda/chat/            # The assistant: agent loop, tools, retrieval, limits
+  test/                   # Stack assertions, retrieval and sanitising tests
 .github/workflows/
+  ci.yml            # pull_request only: build, synth, and the repo gate
   deploy-site.yml   # frontend/** changes → build + sync + invalidate
-  deploy-infra.yml  # infrastructure/** changes → cdk deploy
+  deploy-infra.yml  # infrastructure/**, knowledge/**, frontend/lib/data/**,
+                    # resume.md → cdk deploy (the Lambda bundles that content)
 ```
 
 Stage → hostname mapping:
@@ -104,8 +132,11 @@ cd infrastructure && npx cdk bootstrap aws://<ACCOUNT_ID>/us-east-1
 npx cdk deploy CvWebsite-OIDC
 # → Copy GitHubActionsRoleArn output
 
-# 3. Add AWS_ACCOUNT_ID as a GitHub repo variable (not secret; account IDs
-#    aren't sensitive). The workflows construct the role ARN from it.
+# 3. Add AWS_ACCOUNT_ID as a GitHub repo variable. The workflows build the
+#    role ARN from it, and pass it as CDK_DEFAULT_ACCOUNT. It is deliberately
+#    NOT in cdk.json: an account id is not a credential, but it is the handle
+#    that makes the rest of a public repo targetable, and bin/infrastructure.ts
+#    throws without one rather than defaulting to someone else's account.
 
 # 4. Deploy the stage (first time is interactive — ACM validation)
 npx cdk deploy CvWebsite-dev
@@ -138,9 +169,19 @@ single-account simplicity.
 
 ## Running costs
 
-Fits well under the AWS Always-Free tier for a personal site (500
-page-views/month kind of traffic). Expect ~$0 plus Route 53 hosted zone
-if you use one (we don't).
+The site itself fits well under the AWS Always-Free tier for a personal site
+(500 page-views/month kind of traffic): S3 and CloudFront came to about $0.31
+and $0.00 in a recent month, with no Route 53 hosted zone because DNS is
+CloudFlare.
+
+The chat assistant is measured, not estimated, at **~$0.00096 per turn**
+against a `$0.10`/day cap enforced in-request before Bedrock is called, so
+~$3.10/month is the ceiling. Guardrails cost roughly twice the model, which is
+why they are applied twice per turn rather than on every hop.
+
+If you fork this, note that the bill is dominated by whatever governance sits
+around the account rather than by the site. In this one, KMS keys created by
+Landing Zone Accelerator were about 80% of the monthly total.
 
 ## Why this repo is public
 
@@ -148,6 +189,16 @@ The site tells people I do IaC and static-first AWS architecture. Hiding
 the CDK code would undercut the message. Everything sensitive is
 externalized: AWS identity is OIDC-based (nothing to leak), DNS is managed
 in CloudFlare, no API keys in the repo.
+
+That was audited rather than assumed. All 118 commits were scanned for
+credential patterns and the AWS account id was pulled out of the tree, since it
+is not a credential but it is the one handle that makes the rest targetable.
+`BACKLOG.md` records what was checked, what was deliberately kept and why.
+
+The engineering documentation is MIT. The personal content is not: the résumé,
+`knowledge/`, the data modules, the images and the WordPress archives describe
+one person's career and are published so the site and its assistant can serve
+them, not for reuse. See `LICENSE`.
 
 ---
 

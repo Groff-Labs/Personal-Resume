@@ -346,7 +346,7 @@ describe('recruiter screening questions, audited Oct 2026', () => {
      */
     const top = searchPassages('What AWS services do you use to host this site', 1)[0];
     expect(top).toBeDefined();
-    expect(top.source).toContain('Every AWS service hosting');
+    expect(top.source).toContain('every AWS service hosting it');
     for (const svc of [
       'S3',
       'CloudFront',
@@ -361,12 +361,22 @@ describe('recruiter screening questions, audited Oct 2026', () => {
     }
   });
 
+  // Retail and manufacturing used to belong here. They were a genuine content
+  // gap, Michael supplied the industry list in Oct 2026, and they now resolve;
+  // the assertions for them live in the industries block below. What remains
+  // here is what should NEVER resolve.
   it.each([
     'what are his salary expectations',
     'does he need visa sponsorship',
-    'retail experience',
-    'manufacturing experience',
   ])('still declines or misses %j, which is correct', (q) => expectWeakOrAbsent(q));
+
+  it('answers the references question instead of matching reference architecture', () => {
+    // It scored 0.85 against "reference architecture" passages, because
+    // reference and references differ by one character and so trip the
+    // morphological tier. Answering the question beats fighting the retriever.
+    const h = searchPassages('who are his references', 1)[0];
+    expect(h.source).toContain('References');
+  });
 });
 
 describe('a trimmed query is worse than the whole question', () => {
@@ -384,10 +394,82 @@ describe('a trimmed query is worse than the whole question', () => {
     const full = searchPassages('What AWS Services do you use to host this infra/site?', 1)[0];
     const trimmed = searchPassages('AWS Services', 1)[0];
 
-    expect(full.source).toContain('Every AWS service hosting');
-    expect(trimmed.source).not.toContain('Every AWS service hosting');
+    expect(full.source).toContain('every AWS service hosting it');
+    expect(trimmed.source).not.toContain('every AWS service hosting it');
     // And the trimmed form is not merely weak, it is confidently wrong, which
     // is why the instruction matters rather than the threshold.
     expect(trimmed.coverage).toBeGreaterThanOrEqual(MIN_COVERAGE);
+  });
+});
+
+describe('site technology questions, all phrasings', () => {
+  /*
+   * Two different questions came back with an identical, shallow answer and
+   * different citations. Cause: "hosted" was absent from the corpus (the
+   * section said host and hosting, which share only four characters with it,
+   * one below MORPH_MIN_PREFIX), and "technology" appeared nowhere in it. So
+   * both questions scraped the comparison rows instead.
+   *
+   * Suffix stemming was tried and rejected: collapsing hosted to host made a
+   * passage saying "run as host services" win at coverage 1.00, because host
+   * occurs in exactly one other passage and is therefore maximally
+   * informative. Confidently wrong is worse than weak. The fix is to use the
+   * word forms in the content, which is what these assert.
+   */
+  it.each([
+    "how's it hosted on AWS?",
+    'What is the technology behind this site?',
+    'what tech is this site built with',
+    'What AWS Services do you use to host this infra/site?',
+    'how is this site hosted',
+    'what model does the chatbot use',
+  ])('%j resolves to the site technology section', (q) => {
+    const h = searchPassages(q, 1)[0];
+    expect(h).toBeDefined();
+    expect(h.coverage).toBeGreaterThanOrEqual(MIN_COVERAGE);
+    expect(h.source).toContain('The technology behind this site');
+  });
+
+  it('answers "is there a knowledge base" from either the stack or the trade-offs', () => {
+    // Both are right: the technology section says retrieval is keyword search
+    // and not a Knowledge Base, and the design trade-offs say why, with the
+    // per-query numbers. Accept either rather than pinning the ranking.
+    const h = searchPassages('is there a knowledge base', 1)[0];
+    expect(h.coverage).toBeGreaterThanOrEqual(MIN_COVERAGE);
+    expect(h.source).toMatch(/technology behind this site|Design trade-offs/);
+  });
+});
+
+describe('industries and compliance, supplied Oct 2026', () => {
+  it.each([
+    'has he worked in retail',
+    'manufacturing experience',
+    'life sciences experience',
+    'capital markets',
+    'adtech experience',
+    'legal tech',
+    'oil and gas',
+    'telecommunications',
+  ])('resolves %j', (q) => expectResolves(q));
+
+  it.each(['SOC 2 experience', 'PCI DSS', 'ISO 27001', 'NIST 800-171', 'GDPR'])(
+    'resolves %j',
+    (q) => expectResolves(q),
+  );
+
+  it('does not claim he issues attestations', () => {
+    const compliance = passages.filter((p) => p.source.includes('Compliance and regulatory'));
+    expect(compliance.length).toBeGreaterThan(0);
+    const text = compliance.map((p) => p.text).join(' ');
+    expect(text).toMatch(/not an auditor|architecture, not attestation/i);
+  });
+
+  it('keeps the resume figure and the career list from contradicting', () => {
+    const industries = passages.filter((p) => p.source.includes('Industries and sectors'));
+    const text = industries.map((p) => p.text).join(' ');
+    // The resume says 11 industries; that is the AllCloud period only, and the
+    // career list is longer. Saying so is what stops the two being read as a
+    // discrepancy, or one being used to inflate the other.
+    expect(text).toMatch(/AllCloud delivery period only/i);
   });
 });

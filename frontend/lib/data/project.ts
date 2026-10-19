@@ -61,6 +61,8 @@ export const tradeoffs: string[] = [
   "No WAF; saves ~$5/mo and a portfolio site doesn't warrant managed-rules cost.",
   "OAC, not OAI; AWS's 2023+ recommended pattern for signed S3-origin access.",
   "Static export, not SSR; zero servers and no per-request logic. Fits a resume, not a SaaS.",
+  "No Bedrock Knowledge Base and no vector store for the assistant; retrieval is keyword search over a few hundred passages inside the Lambda. Managed KB retrieval bills $0.001 per query against ~$0.00096 for an entire turn, so RAG would have more than doubled the cost to buy semantic matching a corpus this small does not need. S3 Vectors at $0.000055 a query is the upgrade path if it ever does.",
+  "Guardrails applied by two explicit ApplyGuardrail calls rather than inline on every model call; with tool use an inline guardrail does not evaluate tool results or the model's own tool arguments, so it would cost up to four times more for strictly worse coverage.",
 ];
 
 /**

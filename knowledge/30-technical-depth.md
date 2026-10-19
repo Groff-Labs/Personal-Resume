@@ -364,16 +364,22 @@ is an agentic Bedrock loop in Lambda with tool use, Bedrock Guardrails on input
 and output, and per-IP plus daily spend caps in DynamoDB. The repository is
 public.
 
-### Every AWS service hosting this site, and what each one does
+### The technology behind this site, and every AWS service hosting it
 
-The short answer. The AWS services that host this site, and that this site
-runs on, are: Amazon S3, Amazon
-CloudFront with Origin Access Control and a CloudFront Function, AWS
+The short answer. This site is hosted on AWS. The AWS services that host it, and
+the technology stack behind it, are: Amazon S3, Amazon CloudFront with Origin
+Access Control and a CloudFront Function, AWS
 Certificate Manager, AWS Lambda, Amazon DynamoDB, Amazon Bedrock, Amazon
 CloudWatch Logs, AWS IAM and AWS Systems Manager Parameter Store. No server, no
 container, no database, no VPC. Infrastructure is AWS CDK in TypeScript,
 deployed by GitHub Actions through an IAM OIDC role. DNS is CloudFlare rather
 than Route 53, deliberately.
+
+The tech stack on the front end is Next.js, exported as static HTML with no
+server rendering, styled with Tailwind. The chat assistant's model is Amazon
+Nova Lite, served through Amazon Bedrock, with Bedrock Guardrails screening
+input and output. Retrieval is IDF-weighted keyword search over this corpus
+inside the Lambda, not a vector store and not a Bedrock Knowledge Base.
 
 That list is taken from the synthesized CloudFormation template rather than from
 memory. The hosting stack, and what each part of the stack does, front to back:
