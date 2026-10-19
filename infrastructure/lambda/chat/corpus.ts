@@ -50,7 +50,7 @@ export interface Citation {
   label: string;
 }
 
-export { jobs, skillGroups, certifications, activeHeroStatus, contact };
+export { jobs, skillGroups, certifications, activeHeroStatus, contact, strengths };
 
 /* ------------------------------------------------------------------ *
  * Employer lookup

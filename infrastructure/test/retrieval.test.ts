@@ -16,6 +16,7 @@
  * semantic search. The decision should come from a failing case here, not from
  * another round of cost estimates.
  */
+import { runTool } from '../lambda/chat/tools';
 import {
   MIN_COVERAGE,
   isBroadQuery,
@@ -263,5 +264,53 @@ describe('CliftonStrengths beyond the signature five', () => {
     // the assistant quotes the corpus verbatim to anyone.
     const all = passages.map((p) => p.text).join(' ');
     expect(all).not.toMatch(/People who are especially talented in the/i);
+  });
+});
+
+describe('get_strengths returns a complete ordered list', () => {
+  /*
+   * Relevance ranking cannot answer "list all of X". On dev the assistant
+   * answered "top ten" with four themes, out of order, because the eleven
+   * strengths passages all scored coverage 1.00 within 4% of each other and
+   * the tool returns four.
+   */
+  it('returns the signature five by default, in rank order', () => {
+    const r = runTool('get_strengths', {}, { jobDescription: undefined });
+    const data = r.data as { strengths: Array<{ rank: number; name: string; band: string }> };
+    expect(data.strengths.map((s) => s.rank)).toEqual([1, 2, 3, 4, 5]);
+    expect(data.strengths[0].name).toBe('Input');
+    expect(data.strengths.every((s) => s.band === 'signature five')).toBe(true);
+  });
+
+  it('returns all ten when asked, still in order', () => {
+    const r = runTool('get_strengths', { top: 10 }, { jobDescription: undefined });
+    const data = r.data as { strengths: Array<{ rank: number; name: string; band: string }> };
+    expect(data.strengths.map((s) => s.name)).toEqual([
+      'Input',
+      'Achiever',
+      'Adaptability',
+      'Learner',
+      'Positivity',
+      'Responsibility',
+      'Relator',
+      'Restorative',
+      'Intellection',
+      'Self-Assurance',
+    ]);
+    expect(data.strengths.slice(5).every((s) => s.band === 'top ten')).toBe(true);
+  });
+
+  it('clamps a silly argument rather than throwing', () => {
+    for (const top of [0, -3, 99, Number.NaN]) {
+      const r = runTool('get_strengths', { top }, { jobDescription: undefined });
+      const data = r.data as { strengths: unknown[] };
+      expect(data.strengths.length).toBeGreaterThanOrEqual(1);
+      expect(data.strengths.length).toBeLessThanOrEqual(10);
+    }
+  });
+
+  it('cites the About section', () => {
+    const r = runTool('get_strengths', {}, { jobDescription: undefined });
+    expect(r.citations.map((c) => c.anchor)).toEqual(['#about']);
   });
 });

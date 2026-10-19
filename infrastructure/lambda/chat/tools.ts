@@ -9,6 +9,7 @@ import {
   certifications,
   contact,
   employerIds,
+  strengths,
   findJob,
   inventory,
   rolesOf,
@@ -108,6 +109,24 @@ export const toolSpecs = [
         properties: {
           category: { type: 'string' },
           item: { type: 'string', description: 'A single technology, e.g. Terraform.' },
+        },
+      },
+    },
+  },
+  {
+    name: 'get_strengths',
+    description:
+      "His Gallup CliftonStrengths, complete and in rank order: the signature five and themes six through ten, each with a one-line summary. Use this for ANY question about his strengths, personality, working style or CliftonStrengths, including asking about one theme by name. Keyword search cannot answer this: the eleven strengths passages all score alike, so a search returns an arbitrary four of them and no complete list.",
+    inputSchema: {
+      json: {
+        type: 'object',
+        properties: {
+          top: {
+            type: 'integer',
+            minimum: 1,
+            maximum: 10,
+            description: 'How many to return, in rank order. Default 5, the signature five.',
+          },
         },
       },
     },
@@ -341,6 +360,45 @@ function getSkills(input: Record<string, unknown>): ToolResult {
  * The matching itself is deterministic. The model narrates the result; it
  * cannot add a skill Michael doesn't have.
  */
+/**
+ * Complete and ordered, which is why it is a tool rather than a search.
+ *
+ * Found on dev, Oct 2026: asked for his top ten, the assistant answered
+ * "Positivity, Input, Learner, and Achiever" -- four themes, out of order, six
+ * missing. The eleven strengths passages all score coverage 1.00 with raw
+ * scores within 4% of each other, so `search_experience` returned an arbitrary
+ * four, and the one passage that does list all ten ranked last because the
+ * length divisor penalises it. Relevance ranking cannot answer "list all of X";
+ * that is what `list_certifications` and `get_skills` already exist for.
+ */
+function getStrengths(input: Record<string, unknown>): ToolResult {
+  const rawTop = Number(input.top ?? 5);
+  const top = Number.isFinite(rawTop) ? Math.min(Math.max(Math.trunc(rawTop), 1), 10) : 5;
+  const picked = strengths.filter((st) => st.rank <= top);
+
+  return {
+    data: {
+      assessment: 'Gallup CliftonStrengths',
+      returned: picked.length,
+      ofTotalAssessed: 34,
+      // Stated rather than implied: "signature" means the top five, and six
+      // through ten is a weaker claim that should not be reported as one.
+      note:
+        top > 5
+          ? 'Ranks 1 to 5 are his signature themes; 6 to 10 are the rest of his top ten.'
+          : 'These are his signature five themes.',
+      strengths: picked.map((st) => ({
+        rank: st.rank,
+        name: st.name,
+        band: st.rank <= 5 ? 'signature five' : 'top ten',
+        summary: st.summary,
+      })),
+    },
+    citations: [{ anchor: ANCHORS.about, label: 'About' }],
+    summary: `${picked.length} strengths in rank order`,
+  };
+}
+
 function matchJobDescription(jobDescription: string | undefined): ToolResult {
   if (!jobDescription || jobDescription.trim().length < 40) {
     return {
@@ -445,6 +503,8 @@ export function runTool(
       return listCertifications(input);
     case 'get_skills':
       return getSkills(input);
+    case 'get_strengths':
+      return getStrengths(input);
     case 'match_job_description':
       return matchJobDescription(ctx.jobDescription);
     case 'get_availability_and_contact':

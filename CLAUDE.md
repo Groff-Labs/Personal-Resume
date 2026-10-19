@@ -490,6 +490,17 @@ never matches, so `pets` expanding to four aliases with one present would score
 ~0.25. Only aliases the corpus contains are added, and an absent original is
 dropped once an alias replaces it.
 
+**A "list all of X" question needs a tool, not retrieval, and that is not a
+tuning problem.** Oct 2026: asked for his top ten CliftonStrengths the assistant
+answered with four themes, out of order. The eleven strengths passages all
+scored coverage 1.00 with raw scores within 4% of each other, so
+`search_experience` returned an arbitrary four, and the one passage listing all
+ten ranked *last* because the length divisor penalises it. No threshold or alias
+fixes that. `get_strengths` was added for the same reason
+`list_certifications` and `get_skills` exist: structured, ordered, complete data
+belongs behind a deterministic accessor. **If a new section is an ordered or
+exhaustive list, give it a tool rather than hoping the ranker cooperates.**
+
 **Watch the length of `ALIASES`.** It exists to cover a handful of known
 mismatches, not to become a hand-built thesaurus. If it keeps growing, that is
 the evidence that semantic search has become worth paying for, and
