@@ -3,22 +3,31 @@
  *
  *   node scripts/mobile-check.mjs [base-url]
  *
- * These exist because three real defects survived 218 unit tests and 24 smoke
- * checks, and all three were invisible without measuring a rendered page:
+ * These exist because six real defects survived 218 unit tests and 24 smoke
+ * checks, and every one was invisible without measuring a rendered page:
  *
- *  1. The comparison table was 329px inside a 286px `overflow-hidden` card with
+ *  1. The comparison table was 332px inside a 286px `overflow-hidden` card with
  *     no scrollable ancestor, so the "Next.js + AWS (new)" column was cut off
- *     by 26px and unreachable. Silent content loss.
- *  2. An unqualified `whitespace-nowrap` made Experience dates overflow their
+ *     and unreachable. Silent content loss.
+ *  2. Company names were clipped mid-glyph at 320px: the timeline gutter leaves
+ *     that column 82px and "Vivsoft Technologies" is one 104px word with
+ *     nowhere to wrap. Also silent content loss, and the reason the clipping
+ *     check below is not written against the table alone.
+ *  3. An unqualified `whitespace-nowrap` made Experience dates overflow their
  *     container by up to 64px, because the class was written for the desktop
  *     grid column.
- *  3. The hamburger, theme toggle and resume download were 36x36, under the
+ *  4. The hamburger, theme toggle and resume download were 36x36, under the
  *     44px tap minimum, on a layout where the hamburger is the only way to
  *     navigate.
+ *  5. The chat panel's send and close buttons were 36x36 and 24x24, which is
+ *     why this script opens the panel rather than measuring the page at rest.
+ *  6. The certification filter pills were 34px, the only way to filter 36
+ *     certifications on a phone.
  *
- * Note what check 2 looks for: content wider than an ancestor that clips it,
- * with nothing scrollable in between. That shape is the bug class, not the
- * single instance, so a new clipped table anywhere on the page fails too.
+ * Note what the clipping check looks for: content wider than an ancestor that
+ * clips it, with nothing scrollable in between. That shape is the bug class,
+ * not the single instance, which is how it covers both 1 and 2 and would cover
+ * a third case nobody has written yet.
  *
  * ON THE DEPENDENCY, which is the honest caveat. This repo does NOT depend on
  * Playwright, and nothing installs it. The script therefore resolves it at
