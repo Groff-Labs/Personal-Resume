@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import ChatWidget from "@/components/ChatWidget";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -212,6 +213,11 @@ export default function RootLayout({
         <Navigation />
         <main>{children}</main>
         <Footer />
+        {/* Outside <main> and fixed-position: the launcher is page furniture,
+            not page content, and mounting it here rather than in page.tsx keeps
+            it available no matter what is on screen. Self-gates on
+            CHAT_ENABLED. */}
+        <ChatWidget />
         {CLOUDFLARE_ANALYTICS_TOKEN && (
           <Script
             src="https://static.cloudflareinsights.com/beacon.min.js"
