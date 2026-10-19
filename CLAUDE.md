@@ -584,6 +584,47 @@ the evidence that semantic search has become worth paying for, and
 `test/retrieval.test.ts` asserts it stays under 30 entries so the signal is not
 missed. See *Why there is no Knowledge Base* for what to reach for then.
 
+**Misspellings are handled in a window, and the window has two edges.** Four
+mechanisms now stand between a query token and a miss, and they are deliberately
+ordered weakest-claim-last: exact match, then `ALIASES`, then `prefixCredit`'s
+morphological tier, then Damerau-Levenshtein distance 1. The last one only ever
+sees tokens none of the others could reach, which is what makes it safe rather
+than merely tested — **every query that worked before it existed takes a path
+that never calls it**, so it cannot rescore one.
+
+The upper edge is that morphology already covers a shared prefix of
+`MORPH_MIN_PREFIX` (5) or more. That is not a theory: `kubernets` was recorded in
+`BACKLOG.md` as returning nothing and in fact returned 0.85, because the error is
+in the last two characters and the eight-character prefix survives. The gap was
+never "typos", it was **typos early enough in a word to destroy its prefix**.
+
+The lower edge is `TYPO_MIN_PREFIX` (3), and it is the load-bearing constant.
+**Derived from an adversarial sweep of plausible non-typo words, not chosen.**
+Distance 1 alone rewrites `equality` into `quality` and answers a question about
+equality with delivery-quality prose at coverage 1.00; `ghosts` reaches `hosts`,
+`minux` reaches `linux`. Adding the usual "first letter must match" heuristic
+still leaves `diving` scoring 1.00 on a Vivsoft role via `driving`. Three
+separates every measured typo from every measured real word.
+
+Two more rules worth not relaxing: **ambiguity is refused rather than guessed**
+(two distance-1 candidates that are not inflections of one word means there is no
+evidence for choosing, so the token stays unknown and the answer is correctly
+weak), and the minimum token length is 5, because at four, distance 1 relates
+node/code/mode and cost/cast/case.
+
+**If this needs tuning, tune it tighter.** A looser rule here does not return a
+worse answer, it returns a confident answer to a question nobody asked, which is
+the one failure mode this whole subsystem is organised against. Add the case to
+`test/retrieval.test.ts` first; the negative cases there are each a real
+confident-wrong-answer that a weaker version of the rule produced.
+
+One edge case left in deliberately: `shipd` corrects to `ships`, which is a real
+corpus word and is **not** stopworded even though `shipped` is, so a visitor who
+meant "shipped" gets a narrow answer rather than curated highlights. The
+asymmetry is in the `STOP` list and predates the typo tier — `ships` scored 1.00
+on the same passage before it existed. The realistic slip, `shiped`, stays a
+miss.
+
 Re-measure after a significant corpus change:
 
 ```

@@ -529,6 +529,145 @@ describe('depth probes, answered Oct 2026', () => {
   });
 });
 
+describe('typo tolerance, and the words it must refuse to correct', () => {
+  /*
+   * Added after BACKLOG.md item 3. The entry is worth reading against this
+   * suite, because measuring it corrected the entry itself: it recorded
+   * `kubernets`, `terrafrom` and `aws lamda` as all returning "nothing at
+   * all", and by the time the work was done `kubernets` returned 0.85. The
+   * morphological tier had landed in between, and it covers a typo in the last
+   * two characters because the eight-character prefix survives.
+   *
+   * So the real gap was narrower than the entry said: a typo early enough in a
+   * word to destroy its prefix. That is also why the correction window is
+   * bounded at both ends -- a shared prefix of at least three, which is what
+   * separates a misspelling from a different word, and no upper bound needed
+   * because morphology already owns five and above.
+   *
+   * The negative cases below are not padding. Every one of them was a real
+   * confident wrong answer produced by a weaker version of this rule, found by
+   * sweeping plausible non-typo words rather than by imagination.
+   */
+  const CORRECTED: Array<[string, string]> = [
+    // [query, a term that must appear in the passage it finds]
+    ['terrafrom', 'terraform'],
+    ['aws lamda', 'lambda'],
+    ['clowdfront', 'cloudfront'],
+  ];
+
+  it.each(CORRECTED)('resolves %j to the passage about %s', (query, term) => {
+    const hit = top(query);
+    expect(hit).toBeDefined();
+    expect(hit.coverage).toBeGreaterThanOrEqual(MIN_COVERAGE);
+    expect(hit.text.toLowerCase()).toContain(term);
+  });
+
+  it('answers a misspelling the same way as the correct spelling', () => {
+    // The point of the feature: the visitor should not be able to tell.
+    for (const [typo, correct] of [
+      ['terrafrom', 'terraform'],
+      ['clowdfront', 'cloudfront'],
+    ]) {
+      expect(top(typo).source).toBe(top(correct).source);
+    }
+  });
+
+  /*
+   * Each of these is a real English word that a weaker rule rewrote into an
+   * unrelated corpus term. `equality` became `quality` and answered a question
+   * about equality with delivery-quality prose at coverage 1.00; `diving`
+   * became `driving` and scored 1.00 on a Vivsoft role. A miss here is the
+   * correct answer, and a confident hit is the worst outcome this file exists
+   * to prevent.
+   */
+  const MUST_NOT_CORRECT = [
+    'equality', // -> quality, shares no prefix
+    'ghosts', // -> hosts
+    'minux', // -> linux
+    'rocker', // -> docker
+    'dicker', // -> docker
+    'diving', // -> driving, shares one character
+    'taxes', // -> takes, shares two
+  ];
+
+  it.each(MUST_NOT_CORRECT)('refuses to rewrite %j into a corpus term', (query) => {
+    const hit = top(query);
+    // Either nothing matched, or it matched weakly enough to be reported as
+    // low confidence. What it must never be is a confident answer.
+    if (hit) {
+      expect({ query, coverage: hit.coverage < MIN_COVERAGE }).toEqual({
+        query,
+        coverage: true,
+      });
+    }
+  });
+
+  it('leaves a word the corpus actually contains alone', () => {
+    // Correction never second-guesses a real corpus token, which is what keeps
+    // short common words out of its reach entirely.
+    for (const q of ['node', 'code', 'cost', 'scale']) {
+      expect(top(q)?.coverage).toBeGreaterThanOrEqual(MIN_COVERAGE);
+    }
+  });
+
+  it('does not correct a token under five characters', () => {
+    // At four, distance 1 relates half the dictionary. `aws lamda` works at
+    // exactly five; nothing shorter is eligible.
+    expect(top('zqxj')).toBeUndefined();
+  });
+
+  it('does not rescue nonsense that is nowhere near a corpus term', () => {
+    // Distance 2 or more must stay a miss, or the gate below is meaningless.
+    for (const q of ['xyzzyplugh', 'qwertyuiop', 'zzzzzplan']) {
+      const hit = top(q);
+      if (hit) expect(hit.coverage).toBeLessThan(MIN_COVERAGE);
+    }
+  });
+
+  it('still reports a corrected term as reachable, not as a content gap', () => {
+    // unknownQueryTerms is the "what should I write next" signal, and a
+    // misspelling of something already written is not a gap.
+    expect(unknownQueryTerms('terrafrom')).toEqual([]);
+    expect(unknownQueryTerms('clowdfront')).toEqual([]);
+  });
+
+  it('keeps reporting a genuine gap that merely looks like a typo', () => {
+    // `pressure` is absent and is not a misspelling of anything present, so it
+    // must still reach the log.
+    expect(unknownQueryTerms('how does he handle pressure')).toContain('pressure');
+  });
+
+  it('leaves a misspelling of a deliberately stopworded verb as a miss', () => {
+    /*
+     * `shipped` is in STOP because "what has he shipped" is a broad question
+     * that must route to curated highlights, and it occurred once in prose
+     * about tenancy cost, which made it a confident wrong answer. A typo of it
+     * must not reopen that path. `shiped` is the realistic slip and it stays
+     * unreachable: no corpus token starting `shi` is within one edit of it.
+     */
+    expect(top('shiped')).toBeUndefined();
+    expect(unknownQueryTerms('what has he shiped')).toContain('shiped');
+  });
+
+  it('gives a corrected typo exactly the behaviour of the word it fixes', () => {
+    /*
+     * The contract, and the bound on how much damage a correction can do: a
+     * corrected token is the real token, so it can only ever produce an answer
+     * the correctly-spelled query already produced.
+     *
+     * `shipd` is the honest edge case. It corrects to `ships`, which is a real
+     * corpus word and is NOT stopworded even though `shipped` is, so a visitor
+     * who meant "shipped" lands on a narrow answer rather than on highlights.
+     * That asymmetry is in the STOP list and predates this tier: `ships`
+     * scored 1.00 on this same passage before typo correction existed. Recorded
+     * rather than special-cased, because the rule that would catch it has more
+     * surface than the problem.
+     */
+    expect(top('shipd').source).toBe(top('ships').source);
+    expect(top('terrafrom').source).toBe(top('terraform').source);
+  });
+});
+
 describe('unknownQueryTerms, the content-gap signal', () => {
   /*
    * This is what gets logged instead of the question. It has to report the

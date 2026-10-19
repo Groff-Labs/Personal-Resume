@@ -606,6 +606,169 @@ function prefixCredit(q: string, t: string): number {
   return 0;
 }
 
+/* ------------------------------------------------------------------ *
+ * Typo tolerance
+ * ------------------------------------------------------------------ */
+
+/**
+ * Minimum length for a token to be eligible for typo correction.
+ *
+ * At four characters, distance 1 relates half the dictionary: node/code/mode,
+ * cost/cast/case, team/teal/tram. Those are all different words, and correcting
+ * one to another is a confident wrong answer, which is the failure this whole
+ * file is organised against. Five is the shortest length where distance 1 is
+ * usually a typo rather than a different word, and it is long enough to cover
+ * the measured cases (`lamda` is exactly five).
+ */
+const MIN_TYPO_LEN = 5;
+
+/**
+ * How much of the word's opening must survive for a distance-1 neighbour to
+ * count as a misspelling of it rather than a different word.
+ *
+ * This is the constraint that makes typo correction safe, and it was derived
+ * from an adversarial sweep rather than chosen: distance 1 alone, and distance
+ * 1 plus a matching first character, both admitted real words being rewritten
+ * into unrelated corpus terms. Measured, with the prefix each pair shares:
+ *
+ *   terrafrom -> terraform   6   a typo
+ *   lamda     -> lambda      3   a typo
+ *   clowdfront-> cloudfront  3   a typo
+ *   diving    -> driving     1   NOT a typo: scored 1.00 on a Vivsoft role
+ *   dicker    -> docker      1   NOT a typo
+ *   taxes     -> takes       2   NOT a typo
+ *   equality  -> quality     0   NOT a typo: answered an equality question
+ *                                with delivery-quality prose at 1.00
+ *   ghosts    -> hosts       0   NOT a typo
+ *   minux     -> linux       0   NOT a typo
+ *
+ * Three separates them completely on this corpus. It also explains where this
+ * tier belongs relative to the others, which is the part worth remembering:
+ * `prefixCredit`'s morphological tier already covers a shared prefix of
+ * MORPH_MIN_PREFIX or more, so typo correction only has to cover the window
+ * below it. A misspelling that keeps five characters is already reachable --
+ * which is exactly why `kubernets`, listed in BACKLOG.md as returning nothing,
+ * in fact returned 0.85 when this was measured.
+ *
+ * It is a heuristic and it will be wrong eventually. When it is, the fix is a
+ * case in `test/retrieval.test.ts` and a tighter rule, not a looser one.
+ */
+const TYPO_MIN_PREFIX = 3;
+
+/**
+ * True when `a` and `b` are within one insertion, deletion, substitution or
+ * transposition of each other — Damerau-Levenshtein distance <= 1, decided
+ * directly rather than by filling a matrix, because at distance 1 there are
+ * only four shapes to check.
+ *
+ * Transposition is included because it is the error a keyboard produces most
+ * often and plain Levenshtein scores it 2: `terrafrom` for `terraform` is one
+ * swap and would otherwise be unreachable.
+ */
+function withinOneEdit(a: string, b: string): boolean {
+  if (a === b) return true;
+  const la = a.length;
+  const lb = b.length;
+  if (Math.abs(la - lb) > 1) return false;
+
+  if (la === lb) {
+    let i = 0;
+    while (i < la && a[i] === b[i]) i++;
+    if (i === la) return true;
+    // One substitution: equal from here on.
+    if (a.slice(i + 1) === b.slice(i + 1)) return true;
+    // One transposition of adjacent characters.
+    return a[i] === b[i + 1] && a[i + 1] === b[i] && a.slice(i + 2) === b.slice(i + 2);
+  }
+
+  // One insertion or deletion: walk to the first difference, then check that
+  // skipping one character of the longer string makes the rest equal.
+  const [short, long] = la < lb ? [a, b] : [b, a];
+  let i = 0;
+  while (i < short.length && short[i] === long[i]) i++;
+  return short.slice(i) === long.slice(i + 1);
+}
+
+/** Corpus tokens bucketed by length, so a lookup compares only three buckets. */
+const tokensByLength: Map<number, string[]> = (() => {
+  const m = new Map<number, string[]>();
+  for (const t of idf.keys()) {
+    const bucket = m.get(t.length);
+    if (bucket) bucket.push(t);
+    else m.set(t.length, [t]);
+  }
+  return m;
+})();
+
+/**
+ * The corpus token a misspelling was probably meant to be, or undefined.
+ *
+ * Deliberately the LAST mechanism consulted, after exact match, aliases and the
+ * morphological tier, and it only ever sees tokens none of those could reach.
+ * That ordering is not a detail, it is what makes the change safe: every query
+ * that worked before this existed takes a path that never calls this function,
+ * so it cannot be rescored by it. Measured consequence below.
+ *
+ * It also explains why the three cases in BACKLOG.md measured the way they did.
+ * `kubernets` was listed there as returning nothing, and by the time this was
+ * written it returned 0.85, because `prefixCredit`'s morphological tier had
+ * since landed and the error is in the last two characters, so the eight-char
+ * shared prefix survives. The gap is not "typos", it is **typos early enough in
+ * a word to destroy its prefix**: `terrafrom` (transposition at 6 of 9, which
+ * fails the MORPH_MIN_SHARE test), `lamda` (deletion at 3) and `clowdfront`
+ * (substitution at 3) all returned nothing at all.
+ *
+ * AMBIGUITY IS REFUSED, not guessed. If distance 1 reaches two corpus tokens
+ * that are not inflections of one word, there is no evidence for choosing
+ * between them, and choosing anyway is how a typo becomes a confident wrong
+ * answer about something the visitor never asked. The token is left unknown
+ * instead, which already has the right effect: `UNKNOWN_TERM_WEIGHT` drags
+ * coverage down and the answer is reported weak.
+ *
+ * Inflections of one word are not ambiguous in the sense that matters, because
+ * `prefixCredit` scores them almost identically anyway. `clusterz` reaching
+ * both `cluster` and `clusters` resolves to the more frequent of the two and
+ * loses nothing.
+ */
+function typoCorrection(token: string): string | undefined {
+  if (token.length < MIN_TYPO_LEN) return undefined;
+
+  const candidates: string[] = [];
+  for (const len of [token.length - 1, token.length, token.length + 1]) {
+    for (const t of tokensByLength.get(len) ?? []) {
+      if (commonPrefixLength(token, t) < TYPO_MIN_PREFIX) continue;
+      if (withinOneEdit(token, t)) candidates.push(t);
+    }
+  }
+  if (candidates.length === 0) return undefined;
+  if (candidates.length === 1) return candidates[0];
+
+  // Several candidates: accept only if they are all one word family, and then
+  // return the most frequent, which is the lowest IDF.
+  const family = candidates.every(
+    (a) => commonPrefixLength(a, candidates[0]) >= MORPH_MIN_PREFIX,
+  );
+  if (!family) return undefined;
+  return candidates.reduce((best, t) => ((idf.get(t) ?? 0) < (idf.get(best) ?? 0) ? t : best));
+}
+
+/**
+ * Replaces unreachable misspellings with the corpus token they were meant to
+ * be. Every other token is returned untouched.
+ */
+function correctTypos(tokens: string[]): string[] {
+  return tokens.map((t) => {
+    // Never second-guess a word the corpus actually contains.
+    if (idf.has(t)) return t;
+    // Nor one the morphological or prefix tier can already reach, which is what
+    // keeps this from rescoring queries that already work.
+    for (const known of idf.keys()) {
+      if (prefixCredit(t, known) > 0) return t;
+    }
+    return typoCorrection(t) ?? t;
+  });
+}
+
 /**
  * Terms appearing in more than this share of passages are discarded from a
  * query entirely rather than merely down-weighted.
@@ -622,8 +785,11 @@ const UBIQUITOUS_SHARE = 0.25;
 
 function usefulQueryTokens(query: string): string[] {
   // Aliases first, so a translated token is then subject to the same ubiquity
-  // filter as one the visitor typed.
-  return expandAliases(tokenize(query)).filter((t) => {
+  // filter as one the visitor typed, and so a curated alias always beats a
+  // guess: typo correction only ever sees what aliases left unresolved.
+  // Correction before the filter too, so a typo of a ubiquitous term is dropped
+  // like the term itself rather than surviving as a rare unknown.
+  return correctTypos(expandAliases(tokenize(query))).filter((t) => {
     const score = idf.get(t);
     // Unknown terms are kept: they may be a rare technology worth matching on
     // prefix. Known-but-ubiquitous terms are dropped.

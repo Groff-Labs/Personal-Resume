@@ -104,37 +104,25 @@ For scale: LZA's security tooling (KMS $6.97 + Macie $0.60 + GuardDuty $0.27)
 was 89% of September's $8.77 bill. The CV site itself was S3 $0.31 and
 CloudFront $0.0000. **The landing zone is the cost; the website is free.**
 
-### 3. Retrieval has no typo tolerance
+### 3. Two tokeniser mismatches, both small
 
-Found in the Oct 2026 edge-case sweep and deliberately left. Measured: `kubernets`,
-`terrafrom` and `aws lamda` all return **nothing at all**, while the correctly
-spelled terms score 1.00. Prefix matching covers word endings, and
-`prefixCredit`'s morphological tier now covers verb and noun forms, but neither
-helps a transposition or a dropped letter.
+What is left of the old "no typo tolerance" item after the typo work below
+landed. Neither of these is a typo: both are cases where the tokeniser and the
+corpus disagree about where a word ends, so no amount of fuzzy matching helps.
 
-Worth noting because visitors typo and a miss here is silent: the assistant says
-the CV does not cover it, which is indistinguishable from the honest version of
-that answer.
+- **`CI/CD` reports broad.** `tokenize` splits on `/` and both halves are two
+  characters, which the length filter drops, so the query has no tokens at all.
+  Normalising `ci/cd` to `cicd` before tokenising would fix it, and the alias
+  map already maps `cicd`.
+- **`node.js` scores 0.40.** The tokeniser keeps the dot, so the token is
+  `node.js` and it never matches the corpus's `node`.
 
-The fix is small and known: Damerau-Levenshtein distance 1 against corpus tokens,
-for unknown query tokens of five characters or more. Distance 1 with
-transposition covers all three measured cases (`kubernets` is one deletion,
-`lamda` one deletion, `terrafrom` one transposition). About 25 lines, no
-dependency, and it runs over ~2,000 distinct tokens so cost is negligible.
-
-Not done yet for one reason: it widens matching, and that is the direction that
-produces confident wrong answers. Every retrieval defect found this month came
-from matching too eagerly rather than too little. It needs the same measured
-before-and-after that the morphology change got, with the negative cases checked
-first, so it is its own change rather than a rider on this one.
-
-Two smaller sweep findings, both lower value:
-
-- `CI/CD` reports broad, because `tokenize` splits on `/` and both halves are
-  two characters, which the length filter drops. Normalising `ci/cd` to `cicd`
-  before tokenising would fix it; the existing alias already maps `cicd`.
-- `node.js` scores 0.40. The tokeniser keeps the dot, so it never matches the
-  corpus's `node`.
+Both are deliberately parked rather than bundled into the typo change, for the
+same reason that change was kept separate from the morphology work: they alter
+what `tokenize` produces, and `tokenize` runs over the **corpus** as well as
+the query, so either one re-indexes all ~250 passages and moves scores that
+have nothing to do with the fix. That needs its own before-and-after, not a
+rider on someone else's.
 
 ### 4. Corpus content only Michael can supply
 
@@ -273,6 +261,59 @@ tea leaves.
 ---
 
 ## Closed
+
+### Retrieval tolerates typos, inside a window it cannot carry
+
+Done. `kubernets`, `terrafrom` and `aws lamda` were the three cases this item
+was opened on, and measuring them first corrected the item itself.
+
+**The entry was stale, and that mattered.** It recorded all three as returning
+"nothing at all". By the time the work started `kubernets` returned **0.85**,
+because `prefixCredit`'s morphological tier had landed in between and the error
+is in the last two characters, so the eight-character prefix survives. Same for
+`dynamodv`, `bedrok`, `cloudfrnot` and `guardrial`, all already working.
+
+So the real gap was much narrower than "no typo tolerance": **a typo early
+enough in a word to destroy its prefix.** Confirmed by measurement — only
+`terrafrom` (transposition at 6 of 9, which fails the morphological share
+test), `lamda` (deletion at 3) and `clowdfront` (substitution at 3) returned
+nothing.
+
+The implementation is Damerau-Levenshtein distance 1, as the item predicted,
+but the constraints around it are the part worth keeping:
+
+- **It runs last**, after exact match, aliases and the morphological tier, and
+  only ever sees tokens none of those could reach. That is what makes it safe
+  rather than merely tested: every query that worked before takes a code path
+  that never calls it.
+- **A shared prefix of at least three is required**, which is the constraint
+  that does the real work. This was derived from an adversarial sweep, not
+  chosen. Distance 1 alone rewrote `equality` into `quality` and answered a
+  question about equality with delivery-quality prose at coverage **1.00**;
+  `ghosts` reached `hosts`, `minux` reached `linux`, `rocker` reached `docker`.
+  Adding the usual "first letter must match" heuristic killed most of those and
+  left `diving` scoring 1.00 on a Vivsoft role via `driving`. Three separates
+  every measured typo from every measured real word, and it has a reason rather
+  than just a fit: morphology already owns a shared prefix of five and above,
+  so this tier only has to cover the window beneath it.
+- **Ambiguity is refused, not guessed.** Two distance-1 candidates that are not
+  inflections of one word means there is no evidence for choosing, so the token
+  is left unknown and the answer is correctly reported weak.
+- **Minimum five characters.** At four, distance 1 relates node/code/mode and
+  cost/cast/case.
+
+Measured against 65 positive and 17 negative queries: **exactly three results
+changed**, all three from a miss to the right passage at coverage 1.00, every
+other line byte-identical. Latency is unchanged, +0.26 ms in the worst case of
+three unknown tokens. 18 new assertions, most of them negative.
+
+One honest edge case, recorded rather than special-cased: `shipd` corrects to
+`ships`, which is a real corpus word and is **not** stopworded even though
+`shipped` is, so a visitor who meant "shipped" gets a narrow answer instead of
+curated highlights. That asymmetry lives in the STOP list and predates this
+work — `ships` scored 1.00 on the same passage before typo correction existed.
+The realistic slip, `shiped`, correctly stays a miss. The rule that would catch
+`shipd` has more surface than the problem.
 
 ### Test sweep: 153 to 218, plus a deployment smoke script
 
