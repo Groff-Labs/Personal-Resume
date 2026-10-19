@@ -417,6 +417,50 @@ The version resource's *logical id* carries a hash of the policy config, so an
 edit creates the new version before retiring the old one, with no manual step
 and no window where the referenced version is missing.
 
+### Observability: what sees what
+
+Three systems watch this site and none of them overlaps the others, so a
+question about "metrics" has to start with which one would know.
+
+| Signal | Where | Notes |
+|---|---|---|
+| Pageviews, referrers, countries | Plausible (primary), CloudFlare (cross-check) | Cookieless. Plausible is proxied first-party, so it is not blocked |
+| Chat funnel: opened, asked, answered, errored | Plausible custom events | Added Oct 2026. `frontend/lib/trackChat.ts` |
+| Per-turn detail: tools called, cost, unknown terms | CloudWatch Logs, `/aws/lambda/cv-chat-api-<stage>` | Structured JSON, three-month retention on prod |
+| Lambda health: invocations, errors, duration, throttles | CloudWatch metrics | Free and automatic. **No alarms exist** |
+| Rate limits and daily spend | DynamoDB `cv-chat-counters-<stage>` | TTL'd, so transient by design |
+
+**CloudWatch cannot see the funnel and Plausible cannot see the turn.** A visitor
+who opens the widget and closes it never reaches the Lambda, so CloudWatch has
+no record of them; the tools a turn called never reach the browser, so Plausible
+has no record of that. Both are needed, and that is why the chat fires events
+rather than relying on the logs it already writes.
+
+**Custom events need the queue shim in `layout.tsx`, not a plain object.**
+Verified by reading the delivered script: after init it does
+`window.plausible=m` and drains `window.plausible.q`. An init that assigns
+`{o:{...}}` leaves no `.q`, so any event fired before the script loads throws on
+a non-function and is lost. The shim is callable, keeps `.o` for the bootstrap
+to find, and buffers until the real function replaces it.
+
+**Event names only, never content.** No question text, no answer text. `props`
+carry bounded enumerations: the error code, the turn number, the hop count. A
+question is visitor-entered free text and this site has no privacy policy.
+
+**Sentry was considered and is not used.** The gap it would fill is client-side
+JavaScript errors, which today are invisible: `ChatPanel` catches a failed fetch
+and tells the visitor, and reports nowhere. That gap is real but small, because
+the chat is the only interactive JavaScript that can fail and its failure is
+already visible to the person it happened to. Against it: a second analytics
+bundle on a site that scores 97-99 on PageSpeed, for a signal the
+`Chat: error` event now approximates at zero cost. The backend case is weaker
+still, since Lambda exceptions already land in CloudWatch as structured JSON.
+Revisit if the site ever grows interactive features beyond the chat.
+
+**What is actually missing is alarms, not another tool.** There are none, so a
+chat that is throwing on every request looks exactly like a chat nobody used.
+See `BACKLOG.md`.
+
 ### Retrieval: why confidence is coverage, not score
 
 The corpus is `knowledge/*.md` plus `resume.md` plus the `frontend/lib/data`

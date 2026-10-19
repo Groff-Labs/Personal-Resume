@@ -188,9 +188,17 @@ const PLAUSIBLE_ENDPOINT = PLAUSIBLE_SRC.startsWith("http")
 //
 // `domain` is deliberately not passed: the script applies its baked-in value
 // last (`Object.assign(defaults, opts, { domain })`), so it cannot be overridden.
-const plausibleInitScript = `window.plausible={o:{endpoint:${JSON.stringify(
+//
+//  3. Custom events need a queue, and the object form silently drops them.
+//     Verified by reading the delivered script: after init it does
+//     `window.plausible=m` and drains `window.plausible.q`, so anything fired
+//     before the script loads is lost unless a queue already exists. Assigning
+//     a plain `{o:{...}}` leaves no `.q`, so an early `plausible("Chat: ...")`
+//     would throw on a non-function. The shim below is callable, keeps `.o` for
+//     the bootstrap to find, and buffers until the real function replaces it.
+const plausibleInitScript = `window.plausible=function(){(window.plausible.q=window.plausible.q||[]).push(arguments)};window.plausible.o={endpoint:${JSON.stringify(
   PLAUSIBLE_ENDPOINT,
-)}}};`;
+)}};`;
 
 export default function RootLayout({
   children,

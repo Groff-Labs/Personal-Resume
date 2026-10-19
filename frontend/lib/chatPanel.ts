@@ -18,6 +18,7 @@
  * cross-component fact and because opening the panel must dismiss it.
  */
 import { useSyncExternalStore } from "react";
+import { trackChat } from "./trackChat";
 
 const NUDGE_KEY = "cv-chat-nudge-dismissed";
 
@@ -55,6 +56,10 @@ export function openChatPanel() {
   dismissNudge();
   if (open) return;
   open = true;
+  // Fired here rather than in each caller, so the launcher, the inline band
+  // and the nudge are all counted once and cannot drift apart. Guarded by the
+  // `if (open) return` above, so reopening an open panel is not double-counted.
+  trackChat("Chat: opened");
   emit();
 }
 

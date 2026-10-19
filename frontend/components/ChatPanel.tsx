@@ -38,6 +38,7 @@ import {
   suggestedPrompts,
 } from "@/lib/data/chat";
 import { contact } from "@/lib/data/contact";
+import { trackChat } from "@/lib/trackChat";
 
 interface ToolTrace {
   id: string;
@@ -116,6 +117,14 @@ export default function ChatPanel() {
     setDraft("");
     setPhase("working");
     setStatus("Sending");
+
+    // Turn number, not the question. Tells us whether people ask once and
+    // leave or hold a conversation, which is the engagement signal the Lambda
+    // logs cannot see.
+    trackChat("Chat: question asked", {
+      turn: turns.length + 1,
+      withJd: jd.trim().length >= 40,
+    });
 
     const index = turns.length;
     setTurns((prev) => [...prev, { question: text, answer: "", tools: [], citations: [] }]);
@@ -202,14 +211,23 @@ export default function ChatPanel() {
               break;
             case "error":
               patch((t) => ({ ...t, error: { code: event.code, message: event.message } }));
+              // The code is a bounded enum, never the message. Distinguishing
+              // rate_limited from guardrail_blocked from internal is the whole
+              // point: one is popularity, one is abuse, one is a bug.
+              trackChat("Chat: error", { code: event.code });
               break;
             case "done":
               patch((t) => ({ ...t, complete: true }));
+              // Tool count, not tool names: enough to see whether answers are
+              // grounded without enumerating the toolbox in an analytics
+              // dashboard. CloudWatch has the names.
+              trackChat("Chat: answered", { hops: event.hops });
               break;
           }
         }
       }
     } catch {
+      trackChat("Chat: error", { code: "network" });
       patch((t) => ({
         ...t,
         error: {

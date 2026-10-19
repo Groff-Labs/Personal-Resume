@@ -298,6 +298,47 @@ hundred turns. That is enough to see a shape and not enough for statistics; if
 December's logs are thin, the honest move is to wait longer rather than to read
 tea leaves.
 
+### 8. No CloudWatch alarms exist, so a broken chat looks like an unused one
+
+Found Oct 2026 while auditing observability. There are **zero** alarms and zero
+dashboards in the CDK. Lambda publishes `Invocations`, `Errors`, `Duration` and
+`Throttles` free and automatically, and nothing watches any of them.
+
+The failure this allows is specific: if the assistant started throwing on every
+request, the symptom would be an empty `budget#<date>` counter and quiet logs,
+which is indistinguishable from a day when nobody used it. The feature would be
+dead and the evidence would look like disinterest.
+
+Three alarms would cover it, at $0.10 each a month:
+
+- `Errors >= 1` over five minutes. A single unhandled exception is already
+  worth knowing about at this traffic.
+- `Throttles >= 1`. The account concurrency quota is 10 and is shared with
+  about fifteen `AWSAccelerator-*` custom-resource Lambdas, so an LZA pipeline
+  run concurrent with chat traffic can throttle either side. Documented as
+  accepted, never instrumented.
+- `Invocations` above a few hundred an hour, as the flood signal. The daily
+  spend cap already bounds the Bedrock cost, but rejected requests still cost
+  CloudFront, Lambda and a DynamoDB write, and that tail is uncapped.
+
+**The blocker is notification, not the alarms.** An alarm with no action is
+visible in the console and queryable by the ops agents, and is read by nobody,
+which is theatre. Making it real needs an SNS topic and an email subscription,
+and an email subscription requires clicking a confirmation link. That is a
+manual step, which `CLAUDE.md` otherwise forbids, so it needs a deliberate
+decision rather than being slipped in:
+
+1. Accept one manual confirmation, once, and get real notifications. The topic
+   itself is CDK; only the subscription confirmation is by hand.
+2. Alarms with no action, and rely on asking the ops agent. Cheap, honest about
+   being passive, and worth little.
+3. Nothing, and accept that the chat breaking is discovered by someone trying
+   it. Defensible for a personal site, and should be a decision rather than the
+   default.
+
+Recommendation is option 1. The manual step is one click in a lifetime against
+a feature that is otherwise unmonitored.
+
 ---
 
 ## Closed
