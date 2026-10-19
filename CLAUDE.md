@@ -276,6 +276,27 @@ element, no nav entry, no reference to `/api/chat`. They are deliberately
 separate: the UI can ship to dev before the backend, or the backend can be
 removed without a site rebuild.
 
+**The assistant is live on prod only, as of 19 Oct 2026.** The `dev`
+environment variable was deleted once the feature was finished being tested, so
+dev builds the site without the section at all. Re-enable by recreating
+`CHAT_ENABLED` on the `dev` environment with any truthy value and redeploying
+(`gh workflow run "Deploy site" --ref dev -f stage=dev` — a variable change
+triggers nothing by itself). The dev *backend* is deliberately still deployed:
+`chatModelId` in `cdk.json` is a single stage-independent value, so emptying it
+would tear down prod too, and an idle Lambda, on-demand table and guardrail
+cost nothing at rest.
+
+**The client-side switch failed open until 19 Oct 2026, and the fix is worth
+keeping.** `showChat` was `(env ?? "") !== ""`, so any non-empty value enabled
+the feature — including `CHAT_ENABLED=0`, which is exactly what someone would
+set to turn it off. Combined with GitHub refusing empty values, the documented
+"empty disables" state was unreachable. `chatEnabled()` in
+`frontend/lib/data/chat.ts` now treats `0`/`false`/`off`/`no` as off as well as
+unset, and it is a pure exported function so
+`infrastructure/test/kill-switch.test.ts` can assert it without environment
+gymnastics. A kill switch that only works when set to the one value nobody
+guesses is not a kill switch.
+
 **`CHAT_ENABLED` is environment-scoped, so promoting the code does not turn the
 assistant on.** Oct 2026: `main` deployed green, `cv-chat-api-prod` and its table
 and guardrail all existed, and the apex still served no chat section, because the
@@ -1146,8 +1167,11 @@ Then, outside the repo:
 
 - Repo **variables**: `AWS_ACCOUNT_ID`, `AWS_ROLE_ARN`
 - Environment **variables** (`production` + `dev`): `CLOUDFLARE_ANALYTICS_TOKEN`,
-  `PLAUSIBLE_SRC`, `PLAUSIBLE_DOMAIN`, `CHAT_ENABLED` (all optional; empty
-  disables that feature). `CHAT_ENABLED` is per-environment on purpose, so the
+  `PLAUSIBLE_SRC`, `PLAUSIBLE_DOMAIN`, `CHAT_ENABLED` (all optional). **To turn
+  one off, delete it — you cannot blank it.** The GitHub API rejects an empty
+  variable value with `422 Variable value cannot be empty`. `CHAT_ENABLED` also
+  accepts `0`/`false`/`off`/`no` as off; the analytics tags are still
+  empty-or-absent only. `CHAT_ENABLED` is per-environment on purpose, so the
   chat section can be live on dev while still hidden in prod
 - **The chat backend needs more than config.** `chatModelId: ""` in `cdk.json`
   leaves it out entirely, which is the right default for a fork. To enable it you

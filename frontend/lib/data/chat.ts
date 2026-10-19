@@ -1,18 +1,40 @@
 // "Ask my CV" assistant.
 //
-// Hidden entirely unless NEXT_PUBLIC_CHAT_ENABLED is non-empty at build time,
-// injected in deploy-site.yml from the environment-scoped GitHub variable
-// CHAT_ENABLED. Same "empty value disables the feature" convention as the
-// analytics tags in layout.tsx, and the same role as `showTestimonials` in
-// testimonials.ts.
+// Hidden unless NEXT_PUBLIC_CHAT_ENABLED is set to something truthy at build
+// time, injected in deploy-site.yml from the environment-scoped GitHub variable
+// CHAT_ENABLED. Same role as `showTestimonials` in testimonials.ts.
 //
 // An env var rather than a committed boolean, deliberately: it lets the section
 // be live on dev while still hidden in prod, so promoting the code doesn't
 // publish the feature. There is an independent server-side kill switch too
 // (`chatModelId: ""` in infrastructure/cdk.json), which tears down the backend
 // without a site rebuild.
+//
+// THE FALSY LIST IS NOT DECORATION, and the comment here used to be wrong.
+// It said the convention was "empty value disables the feature", which is not
+// reachable: the GitHub API rejects an empty variable value outright with
+// `422 Variable value cannot be empty`, so the only way to clear one is to
+// delete it. Anyone who instead did the obvious thing and set CHAT_ENABLED=0
+// got a non-empty string, and a kill switch that failed OPEN -- the chat
+// shipped. Found Oct 2026 while disabling the assistant on dev.
+//
+// So an unset variable still disables (deleting it is what GitHub supports),
+// and the values a person would reach for to mean "off" now also disable.
+// Anything else non-empty enables, so the existing "1" is unaffected.
+const OFF = new Set(["0", "false", "off", "no"]);
 
-export const showChat = (process.env.NEXT_PUBLIC_CHAT_ENABLED ?? "") !== "";
+/**
+ * Exported and pure so the kill switch can be asserted directly. `showChat`
+ * itself is a module-scope const read from the environment, which a test can
+ * only vary through `resetModules` gymnastics; this takes the value as an
+ * argument instead.
+ */
+export function chatEnabled(raw: string | undefined): boolean {
+  const v = (raw ?? "").trim();
+  return v !== "" && !OFF.has(v.toLowerCase());
+}
+
+export const showChat = chatEnabled(process.env.NEXT_PUBLIC_CHAT_ENABLED);
 
 export const chatEndpoint = "/api/chat";
 
