@@ -158,8 +158,13 @@ to be one.
 Never a merge commit, and `main` is never committed to directly.
 
 **The gate** — `./scripts/check.sh`. One command that proves the tree is green:
-lint, both typechecks, stack assertions, synth, and the artifact invariants.
-`fast` skips the Next build and `cdk synth`.
+lint, both typechecks, the test suite, synth, and the artifact invariants.
+`fast` skips the Next build and `cdk synth`. Runs offline, with no credentials.
+
+**Smoke** — `./scripts/smoke.sh [base-url]`. The other half: it tests the
+deployment rather than the code, against a live stage. The gate catches a bad
+commit; smoke catches a bad environment variable. Not part of the gate, because
+the gate must work with no network.
 
 **Landmine** — a documented trap in `CLAUDE.md` that cost someone a debug cycle.
 Each one names the symptom, not just the rule, so it is recognisable when hit.

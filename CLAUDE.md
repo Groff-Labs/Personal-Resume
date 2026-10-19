@@ -1082,6 +1082,20 @@ because the model believes it.
 
 It reports every failure rather than stopping at the first, and exits 1.
 
+**`./scripts/smoke.sh [base-url]` is the other half, and tests the deployment
+rather than the code.** It defaults to prod and takes a stage URL. The gate
+runs offline and proves the tree is green; smoke proves the thing that shipped
+works, which is a different class of failure and the one this project keeps
+hitting: a wrong Plausible filename served as `/404.html` with a 200,
+`CHAT_ENABLED` unset so the section silently vanished, an OAC signature failure
+rewritten to HTML.
+
+It costs nothing to run. The `/api/chat` check sends a correctly hashed but
+invalid body, which exercises the entire signed path and returns a JSON error
+without a model call. **Deliberately not part of `check.sh`**, which must keep
+working with no network and no credentials.
+
+
 `ci.yml` runs it too, but **`ci.yml` triggers on `pull_request` only, so a direct
 push to `dev` never runs CI at all.** That is deliberate (the direct-push flow is
 incompatible with required status checks, see *Dependency management*), but the

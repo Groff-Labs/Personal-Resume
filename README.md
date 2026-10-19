@@ -32,6 +32,8 @@ Plus two read-only archives parked alongside the site:
 | Safety | Amazon Bedrock Guardrails, applied explicitly on input and output |
 | Rate limits + spend cap | DynamoDB, on-demand and TTL'd |
 | Retrieval | IDF-weighted keyword search in-process; no vector store, no Knowledge Base |
+| Analytics | Plausible (primary, proxied first-party) + CloudFlare Web Analytics as a cross-check. Both cookieless |
+| Monitoring | CloudWatch Logs and metrics, with three prod alarms to SNS email |
 
 ## Architecture
 
@@ -119,6 +121,44 @@ npm run build
 npx serve out
 ```
 
+## Tests and checks
+
+```bash
+./scripts/check.sh            # the gate: everything, offline
+./scripts/check.sh fast       # skips the Next build and cdk synth
+./scripts/smoke.sh            # prod, against the live deployment
+./scripts/smoke.sh https://dev.michaelgroff.info
+```
+
+**`check.sh` is the gate** and runs with no AWS credentials: lint, both
+typechecks, the test suite, `cdk synth`, and the artifact invariants that have
+each regressed at least once. It reports every failure rather than stopping at
+the first.
+
+The suite is 200-odd assertions in `infrastructure/test/`, and what it covers
+says something about where the bugs have been:
+
+| File | Covers |
+|---|---|
+| `cv-website-stack.test.ts` | Synthesized template: the OAC origin index, that no `Custom::` resource exists (an LZA SCP denies the Lambda behind one), the alarms |
+| `retrieval.test.ts` | Keyword search: broad vs specific, the confident-wrong cases, aliases, morphology, and the content gaps that only a person can fill |
+| `limits.test.ts` | The cost arithmetic and IP hashing. Rates verified against a real Cost Explorer bill |
+| `tools.test.ts` | All seven tool handlers, hostile and wrong-typed arguments, and that every citation points at a real page anchor |
+| `wire.test.ts` | The NDJSON contract between Lambda and browser, and the chunker that strips HTML comments before the model can quote one |
+| `sanitize.test.ts` | Stripping model scaffolding: invented tool transcripts and inline source attributions |
+
+**`smoke.sh` tests the deployment rather than the code**, which is a different
+class of bug. Every check in it corresponds to something that has broken or
+that fails silently: a wrong Plausible filename returns the site's own
+`/404.html` with a 200, so the dashboard reads "no traffic yet" and nothing
+looks wrong; `CHAT_ENABLED` is environment-scoped, so a green deploy of the
+code is no evidence the chat rendered; an OAC signature failure on `/api/chat`
+is rewritten to HTML by the same distribution-wide mapping.
+
+It deliberately spends no money: the `/api/chat` check sends a correctly hashed
+but invalid body, which exercises the whole signed path and returns a JSON error
+without a model call.
+
 ## Deploying from scratch
 
 Requires AWS CLI authenticated to the target account (`us-east-1`, CloudFront
@@ -178,6 +218,12 @@ The chat assistant is measured, not estimated, at **~$0.00096 per turn**
 against a `$0.10`/day cap enforced in-request before Bedrock is called, so
 ~$3.10/month is the ceiling. Guardrails cost roughly twice the model, which is
 why they are applied twice per turn rather than on every hop.
+
+Those figures are reconciled rather than estimated: the per-turn cost is
+computed in the Lambda from hand-maintained rate constants, and those constants
+were checked per SKU against Cost Explorer. The reconciliation found a real
+20.9% undercount, because guardrail sensitive-information units bill at a paid
+rate that the estimate had omitted entirely.
 
 If you fork this, note that the bill is dominated by whatever governance sits
 around the account rather than by the site. In this one, KMS keys created by

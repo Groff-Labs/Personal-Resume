@@ -165,7 +165,18 @@ export default function ChatPanel() {
       const decoder = new TextDecoder();
       let buffer = "";
 
-      // NDJSON: one event per line, so split on newlines and keep the remainder.
+      /*
+       * NDJSON: one event per line, so split on newlines and keep the
+       * remainder as a partial line.
+       *
+       * Note the `break` on `done` discards whatever is still in `buffer`.
+       * That is correct ONLY because `encodeEvent` in the Lambda always
+       * appends a newline, so the final complete event is always followed by
+       * one and the remainder is always empty. If that newline ever goes away,
+       * the last event of every turn disappears here with no error: the `done`
+       * event never arrives, so the turn never marks itself complete and the
+       * caret keeps blinking forever. `test/wire.test.ts` pins the contract.
+       */
       for (;;) {
         const { done, value } = await reader.read();
         if (done) break;

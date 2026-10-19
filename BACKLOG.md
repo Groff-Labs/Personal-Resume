@@ -38,47 +38,7 @@ SCP carve-out), and the corpus is bundled at synth time rather than fetched.
 site renders, and it is in the image-optimiser exclusion list so it keeps full
 resolution for the lightbox. Re-export to the same path.
 
-### 2. Confirm the chat spend constants against an actual bill
-
-**The price-list half of this is done (18 Oct 2026). What is left needs billing
-data, so it cannot be finished before ~20 Oct.**
-
-Every rate in `PRICES` was checked against the AWS Price List API rather than
-the pricing page, and the SKU names are now recorded in a comment above the
-constants so a re-check is a lookup. Four rates were right; one line was
-missing entirely.
-
-Found and fixed: sensitive-information units were not counted at all. The price
-list carries both a free and a paid SKU for them ($0 and $0.10/1K), and a live
-`ApplyGuardrail` reports the units in the non-free counter on both INPUT and
-OUTPUT. That was a **20.9% undercount** of the true per-turn cost, which is over
-the 20% threshold that defines these constants as wrong. Per turn moved from
-$0.000756 to $0.000956, so the $0.10/day cap now stops at ~104 turns rather
-than appearing to allow ~132.
-
-What remains, and why the Price List cannot settle it: it says what a SKU costs,
-not which SKU an account is billed under. Two things to confirm against real
-billing data, once Cost Explorer has any:
-
-1. **Whether `sensitiveInformationPolicyUnits` really bills at the paid rate.**
-   AWS documents neither the free/paid split nor what makes a unit free. The
-   code takes the paid reading deliberately, so the risk is only that the cap
-   trips ~20% early.
-2. **Whether the account bills the policy-level SKUs or the newer per-check
-   ones.** Both exist in the price list:
-   `Guardrail-ContentPolicyUnitsConsumed` at $0.15/1K, and
-   `GuardrailChecks-ContentFilterCheckUnitsConsumed` at $0.00007/unit plus
-   `GuardrailChecks-PromptAttackCheckUnitsConsumed` at $0.00008/unit. For this
-   guardrail those sum to exactly $0.00015/unit, the same as the policy-level
-   rate, so the estimate holds either way. Worth confirming rather than relying
-   on the coincidence.
-
-Cost Explorer is the blocker. See the Cost section of `CLAUDE.md` for why its
-$0 is not a zero, and check that `Amazon Bedrock` appears in
-`GetDimensionValues` for SERVICE before trusting any figure from it. A CUR query
-would answer both questions properly if CE stays unhelpful.
-
-### 3. KMS is 80% of the AWS bill, and it is all LZA keys
+### 2. KMS is 80% of the AWS bill, and it is all LZA keys
 
 Measured 18 Oct 2026. **This repo creates zero customer-managed keys**, so
 nothing here is the lever; the fix, if there is one, is in
@@ -132,7 +92,7 @@ For scale: LZA's security tooling (KMS $6.97 + Macie $0.60 + GuardDuty $0.27)
 was 89% of September's $8.77 bill. The CV site itself was S3 $0.31 and
 CloudFront $0.0000. **The landing zone is the cost; the website is free.**
 
-### 4. Retrieval has no typo tolerance
+### 3. Retrieval has no typo tolerance
 
 Found in the Oct 2026 edge-case sweep and deliberately left. Measured: `kubernets`,
 `terrafrom` and `aws lamda` all return **nothing at all**, while the correctly
@@ -164,7 +124,7 @@ Two smaller sweep findings, both lower value:
 - `node.js` scores 0.40. The tokeniser keeps the dot, so it never matches the
   corpus's `node`.
 
-### 5. Corpus content only Michael can supply
+### 4. Corpus content only Michael can supply
 
 From a 49-question recruiter audit, Oct 2026. Everything that was a *vocabulary*
 gap is already fixed; these are the ones where the fact genuinely is not written
@@ -204,7 +164,7 @@ compensation (guardrail-denied), visa sponsorship and work authorisation (rule
 10, protected characteristics), references (not public), and whether he is
 interviewing elsewhere.
 
-### 6. Decided against: an unread badge on the chat launcher
+### 5. Decided against: an unread badge on the chat launcher
 
 Raised Oct 2026 as "should we have it ding and show a notification like some
 sites do". **No**, and the reasoning is worth keeping so it is not revisited as
@@ -227,7 +187,7 @@ is a permanent text pill reading "Ask my CV" instead of a bare icon, which was
 offered and declined when the widget was built. Sound or motion to attract
 attention is not on the table.
 
-### 7. Decide on S3 Vectors from two months of real traffic
+### 6. Decide on S3 Vectors from two months of real traffic
 
 **Deliberately waiting until ~20 Dec 2026, with instrumentation added first.**
 
@@ -301,6 +261,103 @@ tea leaves.
 ---
 
 ## Closed
+
+### Test sweep: 153 to 218, plus a deployment smoke script
+
+Asked to go bug hunting. **No bugs were found in the backend**, which is a
+result worth recording rather than a disappointment: 65 new assertions across
+three previously untested modules all passed first time.
+
+What had no coverage, and why each mattered:
+
+- **`limits.ts` had none at all**, and it holds the IP hashing, the rate limiter
+  and the spend cap. It is the only thing between this feature and a surprise
+  bill. The reconciliation against a real bill had verified the *constants*, not
+  the function that multiplies them.
+- **`tools.ts` had coverage for one handler of seven.** The model is the only
+  caller and a model will pass a string where a number belongs, so every
+  handler is now called with thirteen junk-argument shapes.
+- **`types.ts` and `knowledge.ts` had none.**
+
+The most useful new test is `estimateMicroUsd` **linearity**: doubling each
+input in turn and asserting the result moves. The PII term was missing for weeks
+and nothing caught it, because every existing test used the same shape. That
+class of bug cannot survive this test.
+
+Two properties now pinned that were previously only comments: every tool
+citation resolves to a real page anchor, and `list_certifications` never emits
+a currency or status word, which is a documented decision that contradicting
+would put the assistant at odds with both the site and the résumé.
+
+**One genuine latent bug, found by reading rather than by a failing test.**
+`ChatPanel`'s NDJSON reader breaks on `done` without flushing its buffer. That
+is correct *only* because `encodeEvent` always appends a newline, an invariant
+held across two files that do not import each other. Remove that newline and
+the last event of every turn vanishes with no error: the `done` event never
+arrives, the turn never marks itself complete, and the caret blinks forever.
+Now commented at the parser and pinned in `wire.test.ts`.
+
+**`scripts/smoke.sh` is new**, and tests the deployment rather than the code: 24
+checks, offline-safe to run, costing nothing. Every check corresponds to
+something that has broken or that fails silently, the three worst being a wrong
+Plausible filename served as the site's own `/404.html` with a 200, an unset
+`CHAT_ENABLED` silently removing the chat, and an OAC signature failure
+rewritten to HTML. The `/api/chat` check sends a correctly hashed but invalid
+body, so it exercises the whole signed path without a model call. Deliberately
+not part of `check.sh`, which has to keep working with no network.
+
+24/24 against both prod and dev at the time of writing.
+
+### Still untested, and deliberately so for now
+
+The frontend has no test harness. `ChatWidget`, `ChatPanel`, `chatPanel.ts` and
+`trackChat.ts` are covered only by the browser checks run by hand and by
+`smoke.sh` against the built output. Adding jsdom and a component-testing
+library is a real dependency decision for a site whose only interactive
+JavaScript is the chat widget, and the highest-risk piece of that code, the
+NDJSON parser, is now pinned from the Lambda side by `wire.test.ts`. Revisit if
+the frontend grows a second interactive feature.
+
+### Spend constants reconciled against a real bill
+
+Closed 19 Oct 2026, four days after the price-list half. Bedrock finally
+appeared in Cost Explorer with per-SKU detail, and **every rate in `PRICES` is
+exactly right**:
+
+| SKU | Actual, 18 Oct | Implied rate | Constant |
+|---|---|---|---|
+| `NovaLite-input-tokens` | $0.00547908 / 91.318k | $0.06/1M | `0.06` |
+| `NovaLite-output-tokens` | $0.000678 / 2.825k | $0.24/1M | `0.24` |
+| `Guardrail-ContentPolicyUnitsConsumed` | $0.00795 / 53 | $0.15/1K | `0.15` |
+| `Guardrail-TopicPolicyUnitsConsumed` | $0.0045 / 30 | $0.15/1K | `0.15` |
+| `Guardrail-SensitiveInformationPolicyPaidUnitsConsumed` | $0.0053 / 53 | $0.10/1K | `0.1` |
+| `Guardrail-WordPolicyUnitsConsumed` | $0 / 53 | free | omitted |
+
+**The open question is answered: sensitive-information units bill at the PAID
+rate.** AWS documents neither the free/paid split nor what makes a unit free, so
+the code took the paid reading on the grounds that over-counting trips the cap
+early while under-counting leaves it somewhere other than where it claims. That
+was correct rather than merely cautious, and the 20.9% undercount it fixed was
+real money.
+
+Two omissions also confirmed right: word policy bills $0 despite consuming 53
+units, and no contextual-grounding or automated-reasoning lines appear at all.
+
+**The unit model holds.** Content 53 units against 52 expected at two per turn,
+topic 30 against 26 expected at one per turn. That asymmetry, measured earlier
+from a live `ApplyGuardrail` call, is what the bill actually charges; the extras
+are consistent with guardrail-blocked turns, which spend input units and no
+output ones.
+
+Reconciliation on the one complete day: actual **$0.023907**, counters
+**$0.017458** over 26 turns, so the counter read 27% low. **$0.0052 of that
+$0.00645 gap is the PII term landing partway through that same day**, so early
+turns were recorded without it. Residual 5.2%, inside the ~20% tolerance.
+
+Only 18 Oct was usable. 19 Oct was still `Estimated` and in progress, and
+comparing a partial day against a full counter is how a reconciliation produces
+a confident wrong answer. Worth one re-check on a clean post-fix day, which
+should land within ~5% rather than 27%; if it does not, the constants moved.
 
 ### Chat alarms, with SNS email
 
