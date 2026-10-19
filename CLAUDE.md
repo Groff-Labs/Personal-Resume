@@ -1110,6 +1110,36 @@ invalid body, which exercises the entire signed path and returns a JSON error
 without a model call. **Deliberately not part of `check.sh`**, which must keep
 working with no network and no credentials.
 
+**`scripts/mobile-check.mjs` is the third, and it needs a real browser.**
+`smoke.sh` calls it last. Six mobile layout defects survived 218 unit tests and
+every `curl` check in `smoke.sh`, because all six were computed-layout problems:
+two of them were silent content loss, a table column and then company names
+clipped by an `overflow-hidden` ancestor with nothing scrollable in between. It
+asserts that shape rather than those instances, so a new clipped element
+anywhere on the page fails too.
+
+Three things about it that look like oversights and are not:
+
+- **`playwright-core` is a devDependency of `frontend/`, not of the repo root.**
+  There is no root `package.json` (see above) and `dependabot.yml` scans
+  `/frontend` and `/infrastructure` as separate ecosystems, so a root manifest
+  would leave the driver unscanned and never security-updated. The consequence
+  is that a bare `import('playwright-core')` from `scripts/` cannot resolve it —
+  node walks up from the script's own directory — so the script also tries a
+  `createRequire` anchored at `frontend/package.json`. **It added no new `npm
+  audit` findings**: the count stayed at the documented 8 high / 4 moderate.
+- **`playwright-core`, not `playwright`**, because it bundles no browsers and
+  drives the installed Chrome. The full package is hundreds of megabytes for a
+  handful of layout assertions. The flip side is that a machine with no Chrome
+  has no browser to launch, so the launch failure is a skip, not a failure.
+- **It opens the chat panel, and stubs `window.plausible` before doing it.** Two
+  of the six defects were the panel's own send and close buttons, so measuring
+  the page at rest misses them. But the script defaults to **prod**, and an
+  unstubbed run would fire a real `Chat: opened` event on every invocation —
+  corrupting the funnel the S3 Vectors decision is waiting on with synthetic
+  opens. Do not remove the stub to "verify analytics"; that is `smoke.sh`'s job,
+  over `curl`.
+
 
 `ci.yml` runs it too, but **`ci.yml` triggers on `pull_request` only, so a direct
 push to `dev` never runs CI at all.** That is deliberate (the direct-push flow is

@@ -29,30 +29,50 @@
  * not the single instance, which is how it covers both 1 and 2 and would cover
  * a third case nobody has written yet.
  *
- * ON THE DEPENDENCY, which is the honest caveat. This repo does NOT depend on
- * Playwright, and nothing installs it. The script therefore resolves it at
- * runtime and exits 0 with a skip when it is absent, the same way `check.sh`
- * skips the résumé checks without poppler, so it can never break a build.
+ * ON THE DEPENDENCY. `playwright-core` is a devDependency of `frontend/`, not
+ * of the repo root, for two reasons. There is no root `package.json` and adding
+ * one would imply a workspace this repo does not have (see *The agent team* in
+ * CLAUDE.md), and `dependabot.yml` scans `/frontend` and `/infrastructure` as
+ * separate ecosystems, so a root manifest would leave the package unscanned and
+ * never security-updated.
  *
- * It tries `playwright-core` first and falls back to `playwright`.
- * `playwright-core` is a few megabytes and downloads no browsers, driving the
- * Chrome already installed on the machine, which is why it is preferred: a full
- * `playwright` install pulls hundreds of megabytes of browsers for three
- * layout assertions. To enable this locally or in CI:
+ * `playwright-core` rather than `playwright`: it is a few megabytes and
+ * downloads no browsers, driving the Chrome already installed on the machine. A
+ * full `playwright` install pulls hundreds of megabytes of bundled browsers for
+ * a handful of layout assertions.
  *
- *   npm i -D playwright-core      # then it uses your installed Chrome
- *
- * Until someone does, running it prints a skip and does nothing.
+ * The resolution is still soft, and the skip path is still load-bearing: CI
+ * installs `frontend/` dependencies but a fresh clone or a `--omit=dev` install
+ * has no driver, and a machine with no Chrome cannot launch one. In either case
+ * this exits 0 with a skip, the same way `check.sh` skips the résumé checks
+ * without poppler, so it can never break a build it is not the point of.
  */
+import { createRequire } from 'node:module';
 
-/** Resolve a browser driver without making it a hard dependency. */
+/**
+ * Resolve a browser driver without making it a hard dependency of this script.
+ *
+ * A bare `import('playwright-core')` resolves against THIS file's directory and
+ * then the repo root, neither of which has a `node_modules`, so the install in
+ * `frontend/` is invisible to it. The `createRequire` anchored at
+ * `frontend/package.json` is what actually finds it; the bare imports are kept
+ * first so a global or root install still works.
+ */
 async function loadChromium() {
   for (const mod of ['playwright-core', 'playwright']) {
     try {
       const { chromium } = await import(mod);
       return { chromium, mod };
     } catch {
-      // Not installed; try the next.
+      // Not resolvable from here; try the next.
+    }
+  }
+  for (const mod of ['playwright-core', 'playwright']) {
+    try {
+      const req = createRequire(new URL('../frontend/package.json', import.meta.url));
+      return { chromium: req(mod).chromium, mod: `frontend/${mod}` };
+    } catch {
+      // Not installed there either.
     }
   }
   return null;
@@ -61,8 +81,8 @@ async function loadChromium() {
 const driver = await loadChromium();
 if (!driver) {
   console.log(
-    '\x1b[33mskip\x1b[0m  mobile layout checks: neither playwright-core nor ' +
-      'playwright is installed.\n        Enable with: npm i -D playwright-core',
+    '\x1b[33mskip\x1b[0m  mobile layout checks: no browser driver resolvable.' +
+      '\n        Enable with: cd frontend && npm i -D playwright-core',
   );
   process.exit(0);
 }
@@ -122,7 +142,20 @@ let browser;
 try {
   browser = await chromium.launch({ channel: 'chrome' });
 } catch {
-  browser = await chromium.launch();
+  try {
+    browser = await chromium.launch();
+  } catch (err) {
+    /*
+     * `playwright-core` bundles no browser, so this is reachable on a machine
+     * with no Chrome installed. Skip rather than fail: the driver being present
+     * is not a promise that a browser is.
+     */
+    console.log(
+      `\x1b[33mskip\x1b[0m  mobile layout checks: ${driver.mod} resolved but no ` +
+        `browser could be launched.\n        ${String(err).split('\n')[0]}`,
+    );
+    process.exit(0);
+  }
 }
 
 try {
