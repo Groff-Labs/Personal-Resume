@@ -18,6 +18,7 @@ import technicalDepth from '../../../knowledge/30-technical-depth.md';
 import leadership from '../../../knowledge/40-leadership.md';
 import careerNarrative from '../../../knowledge/50-career-narrative.md';
 import recruiterFaq from '../../../knowledge/60-recruiter-faq.md';
+import outreach from '../../../knowledge/70-outreach.md';
 
 export interface KnowledgeDoc {
   id: string;
@@ -36,6 +37,7 @@ export const knowledgeDocs: KnowledgeDoc[] = [
   { id: 'leadership', label: 'Leadership', anchor: '#experience', content: leadership },
   { id: 'career', label: 'Career narrative', anchor: '#experience', content: careerNarrative },
   { id: 'faq', label: 'Recruiter FAQ', anchor: '#contact', content: recruiterFaq },
+  { id: 'outreach', label: 'Outreach', anchor: '#about', content: outreach },
 ];
 
 /** The curated highlights list, in file order, for the get_highlights tool. */

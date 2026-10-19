@@ -200,3 +200,68 @@ describe('alias map', () => {
     expect(aliasLines.length).toBeLessThanOrEqual(30);
   });
 });
+
+describe('morphological variants (a verb must find its noun)', () => {
+  /*
+   * A one-token query rescued only by a prefix match used to score exactly
+   * 0.40 against a 0.50 threshold, so it could never pass. Measured: every
+   * exact word scored 1.00 and every stem 0.40, and "migrate" found nothing
+   * because it is not a prefix of "migration". `prefixCredit` now pays a
+   * morphological match 0.85.
+   */
+  it.each(['mentor', 'teach', 'responsible', 'migrate', 'automate', 'deploy'])(
+    '%j resolves to its noun form',
+    (q) => expectResolves(q),
+  );
+
+  it('does not treat a coincidental short prefix as a match', () => {
+    // plan/planet and test/testament share only four characters, under
+    // MORPH_MIN_PREFIX. These resolve on their own merits or not at all, but
+    // never via a bogus morphological match.
+    const credit = (q: string) => searchPassages(q, 1)[0];
+    expect(credit('zzzzzplan')).toBeUndefined();
+  });
+});
+
+describe('loaded questions must not match technical homonyms', () => {
+  it('does not answer "has he ever been fired" from policy prose', () => {
+    // The corpus says "the SCP fired", which matched at coverage 1.00.
+    expectWeakOrAbsent('has he ever been fired');
+  });
+});
+
+describe('outreach, added Oct 2026', () => {
+  it.each([
+    'does he do volunteer work',
+    'has he spoken at schools',
+    'career day',
+    'does he mentor',
+  ])('resolves %j', (q) => expectResolves(q));
+
+  it('names no school and no family member', () => {
+    const all = passages.map((p) => p.text).join(' ');
+    expect(all).not.toMatch(/Center Point/i);
+    expect(all).not.toMatch(/\bISD\b/);
+    expect(all).not.toMatch(/wife/i);
+  });
+});
+
+describe('CliftonStrengths beyond the signature five', () => {
+  it.each(['what is Restorative', 'does he have Intellection', 'self-assurance'])(
+    'resolves %j',
+    (q) => expectResolves(q),
+  );
+
+  it('distinguishes the signature five from six through ten', () => {
+    const top = passages.find((p) => p.source === 'About -> CliftonStrengths')!;
+    expect(top.text).toContain('signature five');
+    expect(top.text).toContain('six through ten');
+  });
+
+  it('uses original summaries, not Gallup boilerplate', () => {
+    // Gallup's own descriptions are copyrighted and identical in every report;
+    // the assistant quotes the corpus verbatim to anyone.
+    const all = passages.map((p) => p.text).join(' ');
+    expect(all).not.toMatch(/People who are especially talented in the/i);
+  });
+});

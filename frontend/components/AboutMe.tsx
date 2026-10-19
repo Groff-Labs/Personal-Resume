@@ -18,7 +18,10 @@ import {
 } from "lucide-react";
 import {
   offTheClock,
-  strengths as gallupStrengths,
+  // Only the signature five render: the grid is five cards plus a callout, and
+  // a sixth card would strand the callout on a new row. `strengths` holds all
+  // ten so the chat assistant can answer past the top five.
+  signatureStrengths as gallupStrengths,
   type AboutIcon,
   type StrengthIcon,
 } from "@/lib/data/about";

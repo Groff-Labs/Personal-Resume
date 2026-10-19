@@ -180,20 +180,30 @@ function aboutPassages(): Passage[] {
     });
   }
 
-  // Strengths get their own passage each, because the summaries are the
-  // substance and a visitor may ask about one theme by name.
+  // One passage per theme, because the summaries are the substance and a
+  // visitor may ask about a theme by name. The rank is stated rather than
+  // implied: "signature" means the top five, and six through ten are a
+  // different claim, so the passage says which it is.
   for (const st of strengths) {
+    const band =
+      st.rank <= 5
+        ? `number ${st.rank} of his signature five`
+        : `number ${st.rank}, in his top ten but outside the signature five`;
     out.push({
-      text: `CliftonStrengths theme ${st.name}, one of his Gallup top five strengths. ${st.summary}`,
+      text: `CliftonStrengths theme ${st.name}, ${band} on the Gallup assessment. ${st.summary}`,
       source: `About -> CliftonStrengths -> ${st.name}`,
       anchor: ANCHORS.about,
     });
   }
 
-  out.push({
-    text: `His top five Gallup CliftonStrengths, in order: ${strengths
+  const named = (from: number, to: number) =>
+    strengths
+      .filter((st) => st.rank >= from && st.rank <= to)
       .map((st) => st.name)
-      .join(', ')}.`,
+      .join(', ');
+
+  out.push({
+    text: `His signature five Gallup CliftonStrengths, in rank order: ${named(1, 5)}. Themes six through ten, also in order: ${named(6, 10)}.`,
     source: 'About -> CliftonStrengths',
     anchor: ANCHORS.about,
   });
@@ -354,6 +364,11 @@ const STOP = new Set([
   // Corpus-specific. Everything here is either the subject of every passage
   // (so it cannot discriminate) or a word people use to ask a broad question.
   'michael', 'groff', 'across', 'tell', 'work', 'worked', 'experience',
+  // Technical homonym. The corpus says "the SCP fired" and "the guard fired",
+  // so "has he ever been fired" matched a data-perimeter passage at coverage
+  // 1.00 -- a confident answer to a loaded question, from prose about policy
+  // evaluation. Nobody searches for "fired" as a term here.
+  'fired', 'fire', 'fires',
   // Achievement verbs. These are how people phrase a BROAD question ("what has
   // he shipped", "what has he built") and they also occur incidentally in
   // prose, which is the dangerous combination.
@@ -513,10 +528,54 @@ const idf: Map<string, number> = (() => {
  * `queryTermWeight`, so the two cannot drift apart. A prefix match still earns
  * its partial credit, which is what keeps "kubernet" finding "kubernetes".
  */
-const UNKNOWN_TERM_WEIGHT = Math.log(1 + passages.length);
+/*
+ * Note the 2x: this must be STRICTLY greater than the largest real IDF, which
+ * is `log(1 + N)` for a term in exactly one passage. At `log(1 + N)` the two
+ * were equal, so a query of one maximally-rare present term plus one absent
+ * term landed on coverage exactly 0.50 and was admitted by the `>=`
+ * comparison. Found by a test, not in production: adding
+ * knowledge/70-outreach.md made "speak" a one-passage term, and "does he speak
+ * Japanese" flipped from weak to confident on an outreach passage. Absence is
+ * stronger evidence than the rarest possible presence, so it has to outweigh
+ * it rather than tie with it.
+ */
+const UNKNOWN_TERM_WEIGHT = Math.log(1 + 2 * passages.length);
 
 function queryTermWeight(t: string): number {
   return idf.get(t) ?? UNKNOWN_TERM_WEIGHT;
+}
+
+/**
+ * Credit for a query token that did not match a passage token exactly.
+ *
+ * `MORPH_CREDIT` is high enough that a single-token query can clear
+ * MIN_COVERAGE on a morphological match alone, which is the point: "mentor"
+ * must be able to find "mentoring". `LOOSE_CREDIT` stays below it so a query
+ * rescued only by a coincidental shared prefix is still reported weak.
+ */
+const MORPH_MIN_PREFIX = 5;
+const MORPH_MIN_SHARE = 0.8;
+const MORPH_CREDIT = 0.85;
+const LOOSE_CREDIT = 0.4;
+
+function commonPrefixLength(a: string, b: string): number {
+  const n = Math.min(a.length, b.length);
+  let i = 0;
+  while (i < n && a[i] === b[i]) i++;
+  return i;
+}
+
+function prefixCredit(q: string, t: string): number {
+  if (q === t) return 1;
+  const lcp = commonPrefixLength(q, t);
+  const shorter = Math.min(q.length, t.length);
+  // Morphological variant: a long shared stem covering most of the shorter
+  // word. mentor/mentoring, migrate/migration, responsible/responsibility.
+  // Excludes plan/planet (lcp 4) and test/testament (lcp 4).
+  if (lcp >= MORPH_MIN_PREFIX && lcp / shorter >= MORPH_MIN_SHARE) return MORPH_CREDIT;
+  // The original rule, kept for things like "kubernetes" -> "kubernetes-based".
+  if (t.startsWith(q) || q.startsWith(t)) return LOOSE_CREDIT;
+  return 0;
 }
 
 /**
@@ -607,15 +666,36 @@ export function searchPassages(query: string, limit = 4): ScoredPassage[] {
         score += qIdf;
         matched += qIdf;
       } else {
-        // Partial credit for prefix matches so "kubernetes" finds "kubernetes-based"
-        // and "terraform" finds "terraformed". Weighted the same in coverage, so
-        // a query rescued only by a prefix match scores 0.4 and is rejected.
+        // Two tiers of partial credit, because one tier made a whole class of
+        // question unanswerable.
+        //
+        // A one-token query rescued only by a prefix match scored exactly 0.4,
+        // and MIN_COVERAGE is 0.5, so it could never pass however good the
+        // match was. Measured Oct 2026: "mentoring" scored 1.00 and "mentor"
+        // 0.40; same for teach/teaching, responsible/responsibility and
+        // automate/automation, and "migrate" found nothing at all because it is
+        // not a prefix of "migration". A visitor typing the verb instead of the
+        // noun got nothing.
+        //
+        // So a *morphological* match now earns most of the term's weight: a
+        // shared prefix of at least MORPH_MIN_PREFIX characters that covers at
+        // least MORPH_MIN_SHARE of the shorter word. That is what separates
+        // mentor/mentoring from plan/planet. A loose prefix match keeps the old
+        // 0.4, which is still deliberately below MIN_COVERAGE so a query
+        // rescued only by a weak coincidence is still reported low-confidence.
+        let bestCredit = 0;
+        let bestIdf = 0;
         for (const t of pTokens) {
-          if (t.startsWith(q) || q.startsWith(t)) {
-            score += (idf.get(t) ?? 1) * 0.4;
-            matched += qIdf * 0.4;
-            break;
+          const credit = prefixCredit(q, t);
+          if (credit > bestCredit) {
+            bestCredit = credit;
+            bestIdf = idf.get(t) ?? 0;
+            if (credit === MORPH_CREDIT) break;
           }
+        }
+        if (bestCredit > 0) {
+          score += bestIdf * bestCredit;
+          matched += qIdf * bestCredit;
         }
       }
     }

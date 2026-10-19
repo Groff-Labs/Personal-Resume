@@ -48,6 +48,14 @@ export const offTheClock: AboutFact[] = [
   },
   { icon: "briefcase", label: "Based in San Antonio, TX", inCorpus: true },
   { icon: "target", label: "Avid tech enthusiast", inCorpus: true },
+  // No school or district named, on purpose: a small rural district plus a
+  // date would identify a family member. knowledge/70-outreach.md has the
+  // longer version under the same constraint.
+  {
+    icon: "users",
+    label: "Speaks at elementary school career days about what cloud engineers do",
+    inCorpus: true,
+  },
 ];
 
 /** Keys map to lucide components in AboutMe.tsx. Keep them in step. */
@@ -55,16 +63,30 @@ export type StrengthIcon = "library" | "flame" | "waves" | "bookOpen" | "sun";
 
 export interface Strength {
   name: string;
+  /** 1-based rank from the assessment. The order is the whole point. */
+  rank: number;
   /** Hex, used for the card's top border and icon tint. */
   color: string;
   icon: StrengthIcon;
-  /** One sentence, adapted from Gallup's published CliftonStrengths themes. */
+  /**
+   * One sentence, written here rather than taken from Gallup.
+   *
+   * Gallup's own theme descriptions ("People who are especially talented in
+   * the Input theme have a craving to know more...") are the same copyrighted
+   * boilerplate in every report, stamped "Copyright (c) 2000, 2006-2012
+   * Gallup, Inc. All rights reserved." in the signature-themes PDF on this
+   * site. Theme names and his rank order are facts about him; that prose is
+   * not ours to republish, and the chat assistant quotes the corpus verbatim
+   * to anyone. These are original, and deliberately say how the theme shows up
+   * in his work, which is more use to a reader than the generic definition.
+   */
   summary: string;
 }
 
 export const strengths: Strength[] = [
   {
     name: "Input",
+    rank: 1,
     color: "#2563eb",
     icon: "library",
     summary:
@@ -72,6 +94,7 @@ export const strengths: Strength[] = [
   },
   {
     name: "Achiever",
+    rank: 2,
     color: "#0891b2",
     icon: "flame",
     summary:
@@ -79,6 +102,7 @@ export const strengths: Strength[] = [
   },
   {
     name: "Adaptability",
+    rank: 3,
     color: "#0d9488",
     icon: "waves",
     summary:
@@ -86,6 +110,7 @@ export const strengths: Strength[] = [
   },
   {
     name: "Learner",
+    rank: 4,
     color: "#7c3aed",
     icon: "bookOpen",
     summary:
@@ -93,8 +118,62 @@ export const strengths: Strength[] = [
   },
   {
     name: "Positivity",
+    rank: 5,
     color: "#ea580c",
     icon: "sun",
     summary: "Contagious enthusiasm; naturally upbeat, energizes others.",
   },
+  /*
+   * Themes 6 to 10. These do NOT render: the grid is five cards plus a callout,
+   * and `AboutMe.tsx` slices the first five. They are here because the chat
+   * assistant indexes the whole array, so "what are his strengths" can answer
+   * beyond the signature five when someone asks.
+   *
+   * Colours and icons repeat from above and are unused. Kept required rather
+   * than optional so the type does not grow holes for a presentational field,
+   * and so showing ten later needs only a slice change.
+   */
+  {
+    name: "Responsibility",
+    rank: 6,
+    color: "#2563eb",
+    icon: "library",
+    summary:
+      "Treats a commitment as owned the moment it is made; the reason an estimate gets followed up rather than filed.",
+  },
+  {
+    name: "Relator",
+    rank: 7,
+    color: "#0891b2",
+    icon: "flame",
+    summary:
+      "Does his best work inside a few close working relationships rather than a broad network.",
+  },
+  {
+    name: "Restorative",
+    rank: 8,
+    color: "#0d9488",
+    icon: "waves",
+    summary:
+      "Drawn to diagnosing what is broken and fixing it, which is why a failing pipeline reads as interesting rather than annoying.",
+  },
+  {
+    name: "Intellection",
+    rank: 9,
+    color: "#7c3aed",
+    icon: "bookOpen",
+    summary:
+      "Thinks a problem through before and after the decision; prefers a reasoned argument to a quick consensus.",
+  },
+  {
+    name: "Self-Assurance",
+    rank: 10,
+    color: "#ea580c",
+    icon: "sun",
+    summary:
+      "Comfortable deciding under uncertainty and standing behind the call once made.",
+  },
 ];
+
+/** The five that render as cards. The rest are corpus-only. */
+export const signatureStrengths: Strength[] = strengths.slice(0, 5);
