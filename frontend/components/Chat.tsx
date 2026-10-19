@@ -41,6 +41,12 @@ interface Turn {
   tools: ToolTrace[];
   citations: ChatCitation[];
   error?: { code: ChatErrorCode; message: string };
+  /**
+   * Set when the `done` event arrives. Needed to tell "still streaming, no
+   * tools yet" apart from "finished and never called one" — an empty
+   * `tools` array means both until the turn closes.
+   */
+  complete?: boolean;
 }
 
 type Phase = "idle" | "working" | "done";
@@ -169,6 +175,7 @@ function ChatSection() {
               patch((t) => ({ ...t, error: { code: event.code, message: event.message } }));
               break;
             case "done":
+              patch((t) => ({ ...t, complete: true }));
               break;
           }
         }
@@ -264,6 +271,18 @@ function ChatSection() {
                         </ol>
                       )}
                     </div>
+                  )}
+
+                  {/* Say so when the model answered without calling anything.
+                      The claim above this list is that the assistant looks
+                      things up and shows which tools it called; silence here
+                      would let an unsourced answer look identical to a sourced
+                      one. Suppressed on error, where the message is the point. */}
+                  {turn.complete && turn.tools.length === 0 && !turn.error && (
+                    <p className="flex items-center gap-2 eyebrow text-ink-subtle">
+                      <Wrench className="w-3 h-3 shrink-0" />
+                      <span>No lookup · answered from the system prompt</span>
+                    </p>
                   )}
 
                   {turn.error ? (

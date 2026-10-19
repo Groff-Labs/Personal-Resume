@@ -132,42 +132,52 @@ For scale: LZA's security tooling (KMS $6.97 + Macie $0.60 + GuardDuty $0.27)
 was 89% of September's $8.77 bill. The CV site itself was S3 $0.31 and
 CloudFront $0.0000. **The landing zone is the cost; the website is free.**
 
-### 4. The assistant once printed a fabricated tool result
-
-Observed once on dev, 19 Oct 2026. Asked "Tell me about the Azure to AWS
-assessment", the reply opened with the literal line *"Tool result: No relevant
-information found."* and then fell back to the contact handoff. The log for that
-request says `"hops":1,"toolsUsed":[]` — **no tool was called.** The model wrote
-that line as prose.
-
-Two reasons it matters more than a single bad answer. The section header claims
-the assistant "looks things up rather than guessing, and shows you which tools
-it called", and here it guessed while printing something that looks like
-evidence. And the answer was wrong: retrieval handles that query well, measured
-at coverage 1.00 returning the right passage, so the content was there and
-reachable.
-
-Not reproducible on two immediate retries with nearby phrasings, both of which
-called tools (`hops: 2`). So it is intermittent and phrasing-dependent, which is
-why this is an observation rather than a diagnosis. Nova Lite emitting
-pseudo-tool-call prose instead of a real `toolUse` block is a known class of
-small-model behaviour.
-
-Worth considering, cheapest first:
-
-1. **Strip it in the handler.** `stripReasoning` already cleans model
-   scaffolding out of `answer`; a line matching `^Tool result:` is the same kind
-   of artifact and should not reach the user.
-2. **Make the zero-tool case visible.** A turn that answers a specific question
-   with `toolsUsed: []` is the signature. The trace could say that no lookup
-   happened rather than rendering nothing, which would make the UI honest even
-   when the model misbehaves.
-3. Prompt-level nudges are the least reliable of the three and should not be the
-   only fix.
-
 ---
 
 ## Closed
+
+### The assistant can no longer print a fabricated tool result
+
+Seen once on dev, 19 Oct 2026: "Tell me about the Azure to AWS assessment" came
+back opening with the literal line *"Tool result: No relevant information
+found."* while the request logged `hops:1, toolsUsed:[]`. **No tool was called.**
+Nova Lite wrote a plausible tool transcript as prose rather than emitting a
+`toolUse` block, then fell back to the contact handoff. Retrieval handles that
+query at coverage 1.00, so the passage was present and reachable the whole time.
+
+It mattered out of proportion to one bad answer, because the section tells
+visitors the assistant "looks things up rather than guessing, and shows you
+which tools it called". A fabricated result is the one artifact that must never
+reach them: it is indistinguishable from evidence.
+
+Fixed on both sides, because stripping the line alone would have left an
+unsourced answer looking exactly like a sourced one:
+
+- **`stripReasoning` moved to `lambda/chat/sanitize.ts` and extended.** It now
+  drops line-anchored `Tool result:` / `Tool call:` / `Observation:` and the
+  related forms. Anchored to the line start on purpose, since those words are
+  ordinary English and appear in real answers about his own work. Extracted to
+  its own module because `index.ts` cannot be imported from a test: it builds a
+  Bedrock client and calls `awslambda.streamifyResponse` at module scope.
+- **The trace now says when nothing was looked up.** `Chat.tsx` gained a
+  `complete` flag set on the `done` event, needed to tell "still streaming, no
+  tools yet" from "finished and never called one", and renders
+  *"No lookup · answered from the system prompt"* for the latter. Suppressed on
+  error, where the message is the point.
+
+A useful consequence of stripping: when the invented line was the *entire*
+answer, `answer` is now empty, which hits the existing re-prompt path in
+`index.ts` that re-asks with tools withheld. So the visitor gets a real answer
+rather than a blank bubble.
+
+Guarded by `test/sanitize.test.ts`, 12 cases, including the exact observed text
+and a negative case asserting a genuine mid-sentence "tool result" mention
+survives. Stack assertions went from 18 tests to 30.
+
+Not reproducible on retries before the fix, so the trigger is phrasing-dependent
+and the root cause is model behaviour, not a bug in the loop. The handler cannot
+stop the model inventing a lookup; it can stop the invention reaching a reader
+and stop the UI implying evidence that does not exist.
 
 ### Public-repo exposure reviewed: stays public, with the account id pulled
 

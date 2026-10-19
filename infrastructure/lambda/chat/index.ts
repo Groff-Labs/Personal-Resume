@@ -10,6 +10,7 @@ import { applyGuardrail } from './guardrail';
 import { checkJdLimit, checkLimits, estimateMicroUsd, hashIp, recordSpend } from './limits';
 import { systemPrompt } from './prompt';
 import { MAX_JD_CHARS, converseTools, runTool } from './tools';
+import { stripReasoning } from './sanitize';
 import { encodeEvent, type ChatEvent, type ChatRequest, type ChatRequestMessage } from './types';
 
 const bedrock = new BedrockRuntimeClient({});
@@ -27,15 +28,6 @@ const MAX_BODY_BYTES = 16 * 1024;
  * Stripping server-side rather than trusting a prompt rule, because the failure
  * is user-visible and prompt adherence is not guaranteed.
  */
-function stripReasoning(text: string): string {
-  return text
-    .replace(/<thinking>[\s\S]*?<\/thinking>/gi, '')
-    .replace(/<\/?thinking>/gi, '')
-    .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, '')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-}
-
 const FALLBACK_BLOCKED =
   "I can only answer questions about Michael's CV. For anything else, email him directly.";
 
