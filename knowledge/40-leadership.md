@@ -95,35 +95,14 @@ from the start rather than at handover.
 Asked for the hardest problem he has solved, his own framing is the answer:
 almost any technical problem yields to the right approach, so the hard ones are
 the problems where the technology is fine and the people, the incentives or the
-expectations are not. Three he gives, in ascending order of difficulty.
+expectations are not.
 
-**A scope that was technically impossible as written.** Another pre-sales
-architect had scoped a SQL-to-Aurora migration restoring from pgBackRest, which
-neither Aurora nor AWS DMS supports as a restore source. It reached the
-statement of work that way. The fix was a pivot to a supported path, either a
-`pg_dump` and load or a restore to EC2 first and a migration from there, and it
-cost a conversation rather than a replan. He offers this as the *easy* kind of
-wrong: a factual error about a service limit, visible to anyone who checks the
-documentation, and cheap once someone does.
-
-**A customer deliberately going against prescriptive guidance, with a reason.**
-A customer wanted AWS Control Tower's controls without Control Tower, so they
-could tune each one rather than accept it as presented. That is a deviation from
-Well-Architected guidance, and cost is usually the honest motivation behind it,
-as it was here. Harder than the first case because nobody is factually wrong.
-His position is that the job is to make the deviation explicit rather than to
-win it: name which pillar is being traded away, say who will own the control by
-hand once the managed version is gone, and get that written down. A customer
-allowed to deviate without being told what they are giving up has been poorly
-served even if they got what they asked for.
-
-**A technology sold because the word sells.** The one he calls the worst: an
-EKS platform signed for a customer who did not know what Kubernetes was, where
-ECS would have met the requirement. Nothing about it was technically
-undeliverable, which is exactly what makes it the hardest of the three. The
-customer would have paid for a control plane they could not operate, and the
-mismatch was invisible on paper because every individual line of the design was
-defensible.
+**The hardest one he gives: a technology sold because the word sells.** An EKS
+platform signed for a customer who did not know what Kubernetes was, where ECS
+would have met the requirement. Nothing about it was technically undeliverable,
+which is exactly what makes it the hardest of the three he offers. The customer
+would have paid for a control plane they could not operate, and the mismatch was
+invisible on paper because every individual line of the design was defensible.
 
 He is careful about where he puts the blame for that one. It was not a bad
 intention, it was a missing step: nothing in the process forced a technical
@@ -132,6 +111,28 @@ why the adversarial review gate above exists.** The review asks what the
 customer will have to operate after handover, not just whether the design is
 sound, and "could this be simpler" is a question the gate is obliged to ask out
 loud.
+
+Two more he offers, both easier, and useful as contrast.
+
+**A customer deliberately going against prescriptive guidance, with a reason.**
+A customer wanted AWS Control Tower's controls without Control Tower, so they
+could tune each one rather than accept it as presented. That is a deviation from
+Well-Architected guidance, and cost is usually the honest motivation behind it,
+as it was here. Hard because nobody is factually wrong. His position is that the
+job is to make the deviation explicit rather than to win it: name which pillar
+is being traded away, say who will own the control by hand once the managed
+version is gone, and get that written down. A customer allowed to deviate
+without being told what they are giving up has been poorly served even if they
+got what they asked for.
+
+**A scope that was technically impossible as written**, which he offers as the
+*easy* kind of wrong. Another pre-sales architect had scoped a SQL-to-Aurora
+migration restoring from pgBackRest, which neither Aurora nor AWS DMS supports
+as a restore source, and it reached the statement of work that way. The fix was
+a pivot to a supported path, either a `pg_dump` and load or a restore to EC2
+first and a migration from there, and it cost a conversation rather than a
+replan. A factual error about a service limit is visible to anyone who checks
+the documentation, and cheap once someone does.
 
 ## How he handles disagreement
 

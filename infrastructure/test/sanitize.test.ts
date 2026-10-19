@@ -63,3 +63,33 @@ describe('stripReasoning', () => {
     expect(stripReasoning('Tool result: No relevant information found.')).toBe('');
   });
 });
+
+describe('inline source attributions', () => {
+  /*
+   * Observed on dev: an answer ended with "(Source: Leadership -> The hardest
+   * problems are not the technical ones)". Prompt rule 14 forbids it and the
+   * rule did not hold. The arrows and section names are corpus bookkeeping,
+   * and the interface renders provenance separately as citation chips.
+   */
+  it.each([
+    'He fixed it. (Source: Leadership -> The hardest problems are not the technical ones)',
+    'He fixed it. (source: Technical depth -> A mistake)',
+    'He fixed it. [Source: Resume -> Core Competencies]',
+    'He fixed it. (From: About -> Off the clock)',
+    'He fixed it. (Ref: Highlights)',
+  ])('strips %j', (input) => {
+    expect(stripReasoning(input)).toBe('He fixed it.');
+  });
+
+  it('leaves ordinary parentheses alone', () => {
+    const real =
+      'He scoped it (and then delivered it) under a fixed deadline, which the ' +
+      'customer had set for audit reasons.';
+    expect(stripReasoning(real)).toBe(real);
+  });
+
+  it('does not eat a sentence that merely mentions a source', () => {
+    const real = 'The source of truth is LinkedIn, not the site.';
+    expect(stripReasoning(real)).toBe(real);
+  });
+});

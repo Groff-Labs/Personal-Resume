@@ -30,13 +30,30 @@
 const FABRICATED_TOOL_LINE =
   /^[ \t]*(?:tool[ _-]?(?:result|call|output|response|use)|observation|function[ _-]?(?:result|call|response))\s*:.*$/gim;
 
-/** Remove `<thinking>` / `<reasoning>` scaffolding and invented tool lines. */
+/**
+ * Inline source attributions, which leak internal passage labels to the reader.
+ *
+ * Prompt rule 14 forbids these, and the rule is not sufficient: observed on dev
+ * in Oct 2026, an answer ended with
+ * `(Source: Leadership -> The hardest problems are not the technical ones)`.
+ * Those arrows and section names are corpus bookkeeping, and the interface
+ * already renders provenance as citation chips from the anchors the tools
+ * return, so an inline attribution is both redundant and a leak.
+ *
+ * Matched anywhere, not just at line start, because the model appends it to the
+ * end of a sentence.
+ */
+const INLINE_SOURCE =
+  /\s*[([]\s*(?:source|from|per|citation|ref(?:erence)?)\s*[:=][^)\]]*[)\]]/gi;
+
+/** Remove `<thinking>` / `<reasoning>` scaffolding, invented tool lines and source leaks. */
 export function stripReasoning(text: string): string {
   return text
     .replace(/<thinking>[\s\S]*?<\/thinking>/gi, '')
     .replace(/<\/?thinking>/gi, '')
     .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, '')
     .replace(FABRICATED_TOOL_LINE, '')
+    .replace(INLINE_SOURCE, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
