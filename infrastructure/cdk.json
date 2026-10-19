@@ -18,8 +18,8 @@
   },
   "context": {
     "//fork-config": "---------- Fork/deploy config: edit these to make this repo yours ----------",
+    "//account": "Deliberately absent: this repo is public and an account id is the one handle that makes the rest targetable. Supply CDK_DEFAULT_ACCOUNT (CI reads the AWS_ACCOUNT_ID GitHub variable) or pass -c account=<id>. bin/infrastructure.ts throws without it.",
     "domainName": "michaelgroff.info",
-    "account": "421219980479",
     "githubOrg": "Groff-Labs",
     "githubRepo": "Personal-Resume",
     "//resourcePrefix": "Prefix for globally-unique S3 bucket names. Change this when forking or bucket creation will fail (names are taken).",

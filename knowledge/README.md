@@ -32,8 +32,10 @@ These are already recorded as landmines in `CLAUDE.md` and a brain-dump is
 exactly where they creep back in:
 
 - **Customer or client names.** The résumé anonymises deliberately ("a global
-  mining enterprise"). Keep that, and watch for detail that re-identifies:
-  industry plus region plus headcount plus dates can be enough on its own.
+  industrial enterprise"). Keep that, and watch for detail that
+  re-identifies: industry plus region plus headcount plus dates can be enough
+  on its own. Give the industry at the widest label that is still true; a small
+  industry plus a migration plus a date is a short list.
 - **The "Business Impact at a Glance" percentages** (43% time-to-market, 69%
   unplanned downtime, 45% security incidents). They are labelled "(AWS
   benchmark)" in a vendor deck — marketing, not delivered results.
@@ -72,7 +74,8 @@ frequency — rare terms count, ubiquitous ones do not.
 Two consequences for how you write:
 
 - **Put distinctive nouns in the heading and the first sentence.** A passage
-  headed "Azure-to-AWS assessment for a global mining enterprise" is findable;
+  headed "Azure-to-AWS assessment for a global industrial enterprise" is
+  findable;
   one headed "Project 3" is not.
 - **"AWS" is nearly worthless as a search term here** because it appears in
   almost every passage. Write the specific thing: `Landing Zone Accelerator`,

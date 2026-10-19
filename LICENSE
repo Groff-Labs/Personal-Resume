@@ -1,0 +1,42 @@
+MIT License applies to the SOFTWARE in this repository: the CDK
+infrastructure, the Lambda source, the Next.js components and scripts, the
+workflows, and the engineering documentation (CLAUDE.md, CONTEXT.md,
+BACKLOG.md, README.md). Fork it, reuse it, ship your own CV on it.
+
+It does NOT apply to the personal content, which is all rights reserved:
+
+  resume.md and frontend/public/resume.*     the resume itself
+  knowledge/*.md                             biography and engagement write-ups
+  frontend/lib/data/*.ts                     roles, certifications, contact details
+  frontend/public/images/**                  photographs and logos
+  frontend/public/legacy/**                  archived 2015 WordPress CV
+  frontend/public/blog/**                    archived 2015-2020 blog posts
+  frontend/public/michael-groff.vcf          contact card
+
+Those describe a specific person's career and are published so the site and its
+assistant can serve them, not for reuse. If you fork this, replace them with
+your own. Third-party logos belong to their respective owners.
+
+----------------------------------------------------------------------------
+
+MIT License
+
+Copyright (c) 2026 Michael Groff
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

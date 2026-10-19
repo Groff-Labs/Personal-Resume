@@ -53,7 +53,11 @@ step "infra: typecheck"          bash -c 'cd infrastructure && npm run --silent 
 step "infra: typecheck lambda"   bash -c 'cd infrastructure && npm run --silent typecheck:lambda'
 step "infra: stack assertions"   bash -c 'cd infrastructure && npx --no-install jest --silent'
 if [ "$FAST" != "fast" ]; then
-  step "infra: cdk synth"        bash -c 'cd infrastructure && npx --no-install cdk synth --all >/dev/null 2>&1'
+  # CDK_DEFAULT_ACCOUNT has no default in cdk.json any more (public repo), and
+  # bin/infrastructure.ts throws without one. Synth never calls AWS, so a dummy
+  # id keeps the gate runnable with no credentials; the cdk CLI overrides it
+  # with the real account whenever a session happens to be active.
+  step "infra: cdk synth"        bash -c 'cd infrastructure && CDK_DEFAULT_ACCOUNT="${CDK_DEFAULT_ACCOUNT:-000000000000}" npx --no-install cdk synth --all >/dev/null 2>&1'
 fi
 
 # ---------------------------------------------------------------- artifacts

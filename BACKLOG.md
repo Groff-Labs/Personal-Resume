@@ -78,92 +78,131 @@ $0 is not a zero, and check that `Amazon Bedrock` appears in
 `GetDimensionValues` for SERVICE before trusting any figure from it. A CUR query
 would answer both questions properly if CE stays unhelpful.
 
-### 3. Public-repo exposure: three fixes, then it stays public
+### 3. KMS is 80% of the AWS bill, and it is all LZA keys
 
-Reviewed 18 Oct 2026 across all 118 commits. **Verdict: keep it public.** The
-repo's value is that it is public, and nothing found is a reason to reverse
-that. Three concrete items are worth acting on, and one non-item is worth
-recording so it does not get re-litigated.
+Measured 18 Oct 2026. **This repo creates zero customer-managed keys**, so
+nothing here is the lever; the fix, if there is one, is in
+`~/repos/GitHub/grofflabs-lza/`.
 
-**No history rewrite is needed, and that is a measured result rather than an
-assumption.** All 2,948 objects in `--all` history were scanned for `AKIA`/`ASIA`
-keys, `aws_secret_access_key`, PEM private-key headers, Slack `xox*` tokens,
-GitHub `ghp_`/`github_pat_` tokens, `sk-` API keys and JWTs: zero hits. The
-temporary AWS credentials file deleted in Oct 2026 never entered git; it is
-absent from the full list of files ever deleted. Since secret removal is the
-usual reason to rewrite, and there are 0 forks and 0 stars to break, there is no
-trigger. Revisit only if a scan ever finds something.
+The charge is almost purely per-key rent, not usage. September: **$6.9708 for
+6.97 key-months and $0.0004 for 148 requests.** Seven customer-managed keys in
+us-east-1 at $1/month each, every one tagged `Accelerator: AWSAccelerator`,
+all created 2026-04-21. Other regions return `AccessDeniedException` from the
+region-lockdown SCP, so us-east-1 is the whole picture for this account.
 
-#### 3a. Stop publishing the AWS account ID (do this one)
+| Key | Alias |
+|---|---|
+| Lambda env var encryption | `alias/accelerator/kms/lambda/key` |
+| SQS queues | `alias/accelerator/kms/sqs/key` |
+| CloudWatch log groups | `alias/accelerator/kms/cloudwatch/key` |
+| EBS default encryption | `alias/accelerator/ebs/default-encryption/key` |
+| General-purpose S3 | `alias/accelerator/kms/s3/key` |
+| General-purpose S3 | **no alias** |
+| General-purpose S3 | **no alias** |
 
-`421219980479` appears in `infrastructure/cdk.json`, `infrastructure/bin/infrastructure.ts`
-and `CLAUDE.md`. It is not a credential, and with the data-perimeter RCPs in
-place it is not directly exploitable, but it is the handle that makes everything
-else in the repo targetable: support-desk impersonation, cross-account trust
-probing, bucket and ECR name enumeration. There is no upside to publishing it,
-because a forker has to replace it anyway.
+**The lead worth chasing: three keys share the description "general-purpose S3
+buckets created by LZA" and two of them have no alias.** That is the shape of
+orphans from an LZA redeploy, where the alias moves to a new key and the old one
+is retained because LZA sets a retain policy on KMS keys on purpose. If so it is
+~$2/month, about 29% of the KMS bill, for nothing.
 
-Cheap, because the plumbing already exists. `bin/infrastructure.ts:26` is already
-`tryGetContext('account') || process.env.CDK_DEFAULT_ACCOUNT || '421219980479'`,
-and `deploy-infra.yml` already uses `vars.AWS_ACCOUNT_ID` for the role ARN. So:
-drop `account` from `cdk.json`, make the literal a throw instead of a default so
-a misconfigured deploy fails loudly rather than targeting someone else's
-account, pass `CDK_DEFAULT_ACCOUNT` in the workflow, and redact the one mention
-in `CLAUDE.md`.
+**Do not delete them on that inference.** Deleting a key that still protects
+objects makes those objects permanently unreadable, and this was not verifiable
+from this account:
 
-#### 3b. Two engagement write-ups are narrow enough to re-identify
+- `s3:ListAllMyBuckets` is denied by the Root RCP, so bucket-to-key references
+  cannot be enumerated here.
+- A CloudTrail 90-day lookup on all three key ARNs returned **zero events for
+  all three, including the aliased key LZA certainly uses**. That proves the
+  lookup is blind to KMS data-plane events, not that any key is idle. Treating
+  that zero as evidence would have been the wrong call.
 
-`knowledge/20-engagements.md` never names a customer and the gate enforces that,
-but re-identification works on aggregates, which no name check can catch. Two
-sections are thin cover:
+Verify from the management or log-archive account instead, where bucket
+enumeration is permitted, or from a CloudTrail data-event trail if one is on.
 
-- *"global mining enterprise"* plus Azure-to-AWS plus MAP plus Mobilize accepted
-  August 2026 plus a switch to Databricks. There are not many global mining
-  companies, fewer doing that migration with one partner in that window.
-- *"public-sector software vendor"* plus GovCloud plus OMB M-21-31 plus a
-  government contract deadline.
+**On reducing it org-wide, the honest answer is mostly no.** Each key is
+per-account-per-region, so the bill is accounts x regions x enabled key
+features. The EBS and SQS keys cost $1/account/month whether or not any EC2
+instance or queue exists, and dropping them to save $1 each trades a security
+control for pocket change. The real lever is not adding accounts and regions
+that are not needed: at seven keys per account, a five-account org is $35/month
+of key rent. Worth knowing before the org grows, not worth optimising now.
 
-Blur the dates to quarters or drop them, widen the industry label, and the
-engineering content survives intact, which is the part that is actually
-load-bearing for the assistant.
-
-#### 3c. The EKS write-up publishes another company's incident detail
-
-Also in `20-engagements.md`: strict mTLS breaking Fluent Bit log shipping, RDS
-exhausting connection slots, one incident taking down five platform services,
-and Keycloak reading stale secrets because a deployment script overwrote them
-on every run. The last is a security-relevant defect in a specific customer's
-production platform. Anonymised or not, it is the kind of detail that customer
-would object to reading, and the "what he would do differently" paragraph
-already carries the credibility those specifics were there to buy. Recommend
-keeping the mTLS and connection-slot items as generic lessons and cutting the
-Keycloak secret-overwrite specifics.
-
-#### Not an item: the LZA control-plane detail in `CLAUDE.md`
-
-`CLAUDE.md` names SCP and RCP statements, the `LZA:EXC:NET` tag key, the
-`cv-chat-*` carve-out and its being load-bearing, and carries a copy-pasteable
-probe command. This was considered and is being kept. None of it is exploitable
-without credentials already inside the account: the carve-out only helps a
-principal that already holds `lambda:CreateFunction`. It is recon value, not a
-vulnerability, and it is also the single best piece of evidence in the repo that
-the author has operated under a real policy regime. Keeping it is a deliberate
-trade, not an oversight.
-
-#### Also: `BACKLOG.md` should stay, and there is no LICENSE
-
-Keeping this file was the specific question asked. Keep it. The documented
-negative results with numbers, the Glue and Athena experiment that produced
-nothing, the $350 OpenSearch floor, why WAF costs more than it protects, are
-the hardest thing in the repo to fake and carry almost no exposure.
-
-Separately, there is no `LICENSE` file, which contradicts the repo being
-described as a fork-able template: with no license nobody may legally reuse it.
-MIT would match the intent.
+For scale: LZA's security tooling (KMS $6.97 + Macie $0.60 + GuardDuty $0.27)
+was 89% of September's $8.77 bill. The CV site itself was S3 $0.31 and
+CloudFront $0.0000. **The landing zone is the cost; the website is free.**
 
 ---
 
 ## Closed
+
+### Public-repo exposure reviewed: stays public, with the account id pulled
+
+Reviewed 18 Oct 2026 across all 118 commits. **Verdict: keep it public.** The
+repo's value is that it is public, and nothing found was a reason to reverse
+that.
+
+**No history rewrite needed, and that was measured rather than assumed.** All
+2,948 objects in `--all` history were scanned for `AKIA`/`ASIA` keys,
+`aws_secret_access_key`, PEM private-key headers, Slack `xox*` tokens, GitHub
+`ghp_`/`github_pat_` tokens, `sk-` API keys and JWTs: zero hits. The temporary
+AWS credentials file deleted in Oct 2026 never entered git; it is absent from
+the full list of files ever deleted. Secret removal is the usual reason to
+rewrite, so there is no trigger.
+
+**Done: the AWS account id is no longer published.** It is gone from
+`cdk.json`, `bin/infrastructure.ts` and `CLAUDE.md`. Not a credential, and with
+the data-perimeter RCPs not directly exploitable, but it was the one handle that
+made the rest targetable (support-desk impersonation, cross-account trust
+probing, bucket and ECR enumeration) and a forker has to replace it anyway.
+
+`bin/infrastructure.ts` now **throws** instead of defaulting. That is the point
+of the change as much as the removal is: a wrong-but-present id synthesises a
+template aimed at someone else's account and fails late or not at all.
+`deploy-infra.yml` passes `CDK_DEFAULT_ACCOUNT` from the existing
+`vars.AWS_ACCOUNT_ID`, and `ci.yml` falls back to `000000000000` so synth still
+runs in a fork that has set nothing. Verified both ways: the app throws with the
+variable unset, and synths with a dummy id. Note the `cdk` CLI sets
+`CDK_DEFAULT_ACCOUNT` itself once credentials resolve, so a local `cdk synth`
+on an `aws sso login` session needs nothing extra, and testing the throw means
+running the app directly rather than through the CLI.
+
+**Done: two engagement write-ups widened.** `knowledge/20-engagements.md` never
+named a customer and the gate enforces that, but re-identification works on
+aggregates no name check can catch. The extractive-industry label became
+"global industrial enterprise", "a government contract deadline" became "a
+fixed contractual deadline", "US public-sector customers" became
+"public-sector customers", and every exact month describing something that
+happened to a customer became a year or a season. Michael's own role dates
+stayed exact, since they are on his LinkedIn already. No engineering detail was
+trimmed, because that is the value of the file and not the risk. The two rules
+are now written at the top of that file so later edits follow them.
+
+**Declined, deliberately: the EKS incident detail stays.** The strict-mTLS
+Fluent Bit breakage, the RDS connection slots, the five-service outage and the
+Keycloak stale-secret root cause were raised as a customer-sensitivity question
+and the owner's call was to keep them. They are anonymised and they are the
+part of that write-up that demonstrates triage rather than claiming it.
+
+**Also kept: the LZA control-plane detail in `CLAUDE.md`.** It names SCP and RCP
+statements, the `LZA:EXC:NET` tag key, the `cv-chat-*` carve-out and its being
+load-bearing, and carries a copy-pasteable probe command. None of it is
+exploitable without credentials already inside the account: the carve-out only
+helps a principal that already holds `lambda:CreateFunction`. Recon value, not a
+vulnerability, and the best evidence in the repo of operating under a real
+policy regime.
+
+**Also kept: `BACKLOG.md` itself.** Keeping it was the specific question asked.
+The documented negative results with numbers, the Glue and Athena experiment
+that produced nothing, the $350 OpenSearch floor, why WAF costs more than it
+protects, are the hardest thing here to fake and carry almost no exposure.
+
+**Done: added a `LICENSE`.** There was none, which contradicted the repo being
+described as a fork-able template, since with no license nobody may legally
+reuse it. MIT on the software, with the personal content carved out as all
+rights reserved: the resume, `knowledge/`, the data modules, the images, the
+WordPress archives and the vCard describe one person's career and are published
+so the site and its assistant can serve them, not for reuse.
 
 ### The assistant went live in prod, after a config gap hid it
 

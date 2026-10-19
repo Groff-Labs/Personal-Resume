@@ -50,6 +50,12 @@ jobs:
   infrastructure:
     name: Synth infrastructure
     runs-on: ubuntu-latest
+    env:
+      # `bin/infrastructure.ts` throws without an account id, since it is
+      # deliberately not in cdk.json (public repo). Synth does not talk to AWS,
+      # so any syntactically valid id works, and the fallback keeps CI green in
+      # a fork that has not set the variable.
+      CDK_DEFAULT_ACCOUNT: ${{ vars.AWS_ACCOUNT_ID || '000000000000' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7

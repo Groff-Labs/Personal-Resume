@@ -581,8 +581,8 @@ Established while writing it, and worth not relearning:
 
 ### LZA Service Control Policies are active
 
-Account `421219980479` sits under a Landing Zone Accelerator org. Three
-SCP statements have bitten deploys:
+This account sits under a Landing Zone Accelerator org. Three SCP statements
+have bitten deploys:
 
 1. **`InfrastructureProtection-SCP` → `DenyUnencryptedS3Uploads`** denies
    every `s3:PutObject` that doesn't carry the

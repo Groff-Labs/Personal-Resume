@@ -69,7 +69,7 @@ AWS Senior Solutions Architect with 12+ years across cloud and hybrid infrastruc
 - Designed and deployed AWS infrastructure across compute, networking, storage, identity, and security. Implemented infrastructure as code in AWS CDK, CloudFormation, and Terraform, and hardened environments against the AWS Well-Architected Framework.
 - Provided pre-sales architecture support alongside delivery work, per the role remit, which is what led to the move into the pre-sales practice.
 - Delivered **17 AWS engagements across 11 industries** covering landing zones, MAP migrations, modernization, security posture, and cost optimization. Ran **up to 5 concurrently**, typically 3 to 6 months, the largest spanning 14 months and 4+ workstreams.
-- Assessed a global mining enterprise's Azure estate for AWS migration: **a few hundred VMs across multiple regions and dozens of subscriptions**, hundreds of terabytes of data, and high-volume log ingestion under multi-year retention.
+- Assessed a global industrial enterprise's Azure estate for AWS migration: **a few hundred VMs across multiple regions and dozens of subscriptions**, hundreds of terabytes of data, and high-volume log ingestion under multi-year retention.
 - Architected a **multi-tenant SaaS platform of 7 products and ~65 microservices on EKS**, one dedicated AWS account per tenant, replacing in-cluster PostgreSQL, MongoDB, Redis, and RabbitMQ with managed AWS services and implementing US federal M-21-31 logging controls.
 - Deployed **Landing Zone Accelerator across 6 engagements**; delivered Azure-to-AWS, Rackspace-to-AWS, and on-premises-to-AWS migrations.
 - Authored or co-authored **architecture design guides for 9 engagements**, plus the SaaS design guide template reused on 4+ engagements since.

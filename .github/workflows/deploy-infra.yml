@@ -53,6 +53,10 @@ jobs:
     environment: ${{ (github.event.inputs.stage == 'prod' || github.ref == 'refs/heads/main') && 'production' || 'dev' }}
     env:
       STAGE: ${{ github.event.inputs.stage || (github.ref == 'refs/heads/main' && 'prod' || 'dev') }}
+      # The account id is not in cdk.json, because this repo is public.
+      # bin/infrastructure.ts throws without it rather than defaulting, so this
+      # line is load-bearing: drop it and every cdk command here fails.
+      CDK_DEFAULT_ACCOUNT: ${{ vars.AWS_ACCOUNT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7

@@ -12,6 +12,19 @@ Never name the customer. Watch for detail that re-identifies: industry plus
 region plus headcount plus dates can be enough on its own. Say whether he
 delivered or scoped each one, and keep that distinction if you edit.
 
+Two rules came out of an Oct 2026 review, because no customer was named here and
+two sections were still narrow enough to identify:
+
+- **Give the customer's industry at the widest label that is still true.**
+  "Global industrial enterprise" rather than naming the specific extractive
+  industry. Small industries plus a migration plus a date is a short list.
+- **No exact months for anything that happened to the customer.** A year, or
+  "early 2025", carries the same meaning and does not pin a contract. Michael's
+  own role dates stay exact, because those are on his LinkedIn already.
+
+Engineering detail is not the risk and should not be trimmed for this: the
+services, the constraints and the decisions are the whole value of the section.
+
 ## What the 17 AWS engagements are, and what was scoped instead
 
 Michael delivered 17 AWS customer engagements at AllCloud between May 2024 and
@@ -32,7 +45,7 @@ The build was a Landing Zone Accelerator (LZA) foundation, then a rehost with
 AWS Application Migration Service (MGN): replication agents on the source
 servers, site-to-site VPN back to the old environment, single sign-on through
 Azure AD Domain Services, a test migration, and a written cutover runbook.
-Cutover and DNS cutover completed in January 2025, and AllCloud recognised the
+Cutover and DNS cutover completed in early 2025, and AllCloud recognised the
 cutover internally. The customer went on to sign a managed-services contract
 with AllCloud.
 
@@ -42,11 +55,11 @@ replatform.
 
 ## Multi-tenant EKS platform with an AWS account per tenant for a public-sector software vendor
 
-A software vendor serving US public-sector customers ran its products on a
-legacy container orchestrator and needed a managed, repeatable Kubernetes
-platform on AWS.
+A software vendor serving public-sector customers ran its products on a legacy
+container orchestrator and needed a managed, repeatable Kubernetes platform on
+AWS.
 Three constraints shaped the design. The architecture had to be deployable
-unchanged to AWS GovCloud (US). The vendor was working to a government contract
+unchanged to AWS GovCloud (US). The vendor was working to a fixed contractual
 deadline. And the vendor asked for the OMB M-21-31 logging controls to be in
 place.
 
@@ -78,10 +91,10 @@ shipped here, and the reason is cost: an account and cluster per tenant is the
 strongest boundary AWS offers, but it is also the most expensive way to buy it,
 and not every tenant needed that much.
 
-## Azure-to-AWS migration assessment for a global mining enterprise
+## Azure-to-AWS migration assessment for a global industrial enterprise
 
-A global mining enterprise wanted to know whether and how to move its Azure
-estate to AWS: a few hundred virtual machines across multiple regions and
+A global industrial enterprise wanted to know whether and how to move its
+Azure estate to AWS: a few hundred virtual machines across multiple regions and
 dozens of Azure subscriptions, with hundreds of terabytes of data. Michael was
 the lead solutions architect on the MAP Assess.
 
@@ -98,7 +111,7 @@ with AWS DMS and the Schema Conversion Tool for databases and Amazon FSx for
 file shares.
 
 The assessment led directly to a Mobilize engagement, which the customer
-accepted as complete in August 2026. During Mobilize the customer chose
+accepted as complete in 2026. During Mobilize the customer chose
 Databricks on AWS rather than the AWS-native lakehouse in the original scope,
 and Michael wrote the change order that re-scoped the work.
 
@@ -178,4 +191,4 @@ The scoped design replatformed onto Amazon ECS on AWS Fargate with Amazon
 Aurora, plus pilot-light disaster recovery. That gave the customer managed
 containers without running a Kubernetes control plane while preparing for a
 certification audit. The delivery team built it, and the customer signed off in
-May 2026 that the migration to AWS was fully complete.
+2026 that the migration to AWS was fully complete.

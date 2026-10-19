@@ -22,8 +22,31 @@ const resourcePrefix = app.node.tryGetContext('resourcePrefix') || 'cv-michaelgr
 const githubOrg = app.node.tryGetContext('githubOrg') || 'Groff-Labs';
 const githubRepo = app.node.tryGetContext('githubRepo') || 'Personal-Resume';
 
+// The account id is deliberately NOT in cdk.json and has no fallback here.
+// This is a public repo: an account id is not a credential, but it is the one
+// handle that makes everything else in here targetable (support-desk
+// impersonation, cross-account trust probing, bucket and ECR enumeration), and
+// a forker has to replace it anyway, so publishing it buys nothing.
+//
+// Supply it per environment instead:
+//   CI        `CDK_DEFAULT_ACCOUNT` from the `AWS_ACCOUNT_ID` GitHub variable
+//   local     exported in your shell, or `-c account=…`
+//   assumed   `CDK_DEFAULT_ACCOUNT` is set for you by `cdk` when credentials
+//             resolve, so an `aws sso login` session needs nothing extra
+//
+// Throwing beats defaulting. A wrong-but-present id makes CDK synth a template
+// aimed at someone else's account and only fails at deploy time, if at all.
+const account = app.node.tryGetContext('account') || process.env.CDK_DEFAULT_ACCOUNT;
+if (!account) {
+  throw new Error(
+    'No AWS account id. Set CDK_DEFAULT_ACCOUNT (CI reads vars.AWS_ACCOUNT_ID) ' +
+      'or pass -c account=<id>. It is intentionally absent from cdk.json because ' +
+      'this repo is public.',
+  );
+}
+
 const env = {
-  account: app.node.tryGetContext('account') || process.env.CDK_DEFAULT_ACCOUNT || '421219980479',
+  account,
   region: 'us-east-1', // CloudFront requires us-east-1 for ACM certificates
 };
 

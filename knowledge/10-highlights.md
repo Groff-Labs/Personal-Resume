@@ -50,7 +50,7 @@ delivered Azure-to-AWS, Rackspace-to-AWS and on-premises-to-AWS migrations.
 
 ## Assessed a large Azure estate for migration to AWS
 
-At AllCloud, 2025 to 2026, for a global mining enterprise: a few hundred VMs
+At AllCloud, 2025 to 2026, for a global industrial enterprise: a few hundred VMs
 across multiple regions and dozens of subscriptions, with hundreds of terabytes of data and high-volume log
 ingestion under a multi-year retention requirement. Lead solutions architect on
 the MAP Assess, which led directly into a Mobilize engagement.
