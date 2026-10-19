@@ -1056,6 +1056,26 @@ Both are byte-preserved from the source WP installs. Do not try to
 
 ## Known non-issues (don't "fix" without asking)
 
+- **Two branches look stale and are not. Checked 19 Oct 2026 during a cleanup;
+  neither should be deleted.**
+
+  - **`dependabot/npm_and_yarn/frontend/dev/tailwindcss-4.3.3`** is **open PR
+    #12**, the deliberately deferred Tailwind 3→4 migration. It has sat for
+    months because it is a visual-regression change wanting a focused session,
+    not because it was forgotten — see *Deferred: Tailwind 3→4* under Dependency
+    management. **Deleting the branch closes the PR** and throws away the
+    parking along with it.
+  - **`backup-old-history`** (local only, 18 commits, 21 Apr 2026) is the
+    pre-rewrite history. It has **no shared ancestor with `main`** and exists on
+    no remote, so deleting it makes those commits unreachable permanently.
+    Kept on purpose. It is local, so it clutters nobody else's clone and never
+    shows in the GitHub UI, and it is deliberately *not* pushed: it predates the
+    landing-zone sanitisation, so publishing it would undo part of that work.
+
+  `fix/deps-reconcile` was the genuinely stale one — PR #54, squash-merged
+  18 Oct 2026 — and was deleted. The test for "stale" is a merged or closed PR,
+  not age.
+
 - **`npm audit` in `/frontend` reports ~12 findings that cannot be fixed.
   Accepted Oct 2026; don't go chasing them.** The count (roughly 8 high /
   4 moderate) is inflated because npm audit lists every dependent along the
