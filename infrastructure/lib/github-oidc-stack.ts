@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
+import { PERIMETER_EXEMPTION_TAG } from './lza';
 
 export interface GitHubOidcStackProps extends cdk.StackProps {
   githubOrg: string;
@@ -66,14 +67,14 @@ export class GitHubOidcStack extends cdk.Stack {
       ),
     });
 
-    // Landing Zone Accelerator network-perimeter SCP (NetworkPerimeter-SCP) denies
-    // all API calls from principals whose source IP isn't in the org-wide
-    // TrustedSourceIps list. GitHub Actions runners call AWS from GitHub-owned
-    // IP ranges, so without an exemption every deploy would fail.
-    // The SCP's DenyAccessFromUntrustedNetworks statement checks for either
-    // LZA:EXC:NET=true (network perimeter only) or LZA:EXC:ALL=true (all LZA
-    // perimeters). We opt for the tighter NET-only exemption.
-    cdk.Tags.of(this.role).add('LZA:EXC:NET', 'true');
+    // The landing zone's network perimeter denies API calls from principals
+    // whose source IP is not in the org-wide trusted list. GitHub Actions
+    // runners call AWS from GitHub-owned ranges, so without an exception every
+    // deploy would fail. The policy accepts a broad exception and a
+    // network-only one; this takes the narrower of the two.
+    // **Don't drop this tag.** If the landing zone ever overwrites it out of
+    // band, the next `cdk deploy` puts it back.
+    cdk.Tags.of(this.role).add(PERIMETER_EXEMPTION_TAG.key, PERIMETER_EXEMPTION_TAG.value);
 
     this.role.addToPolicy(new iam.PolicyStatement({
       sid: 'AssumeCdkBootstrapRoles',

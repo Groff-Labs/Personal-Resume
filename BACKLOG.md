@@ -169,6 +169,59 @@ tea leaves.
 
 ## Closed
 
+### Landing-zone identifiers pulled out of the public prose
+
+Done 19 Oct 2026, at the owner's instruction, reversing part of the Aug 2026
+exposure review above. That review asked whether the LZA detail was
+*exploitable* and correctly answered no. It did not ask the question that
+mattered.
+
+**What it missed: `knowledge/` is read aloud.** The assistant quotes that
+directory verbatim to anyone who asks, and
+`knowledge/30-technical-depth.md` named four tag keys from the protected
+namespace — the network-perimeter exception, a per-service resource exception,
+the administrative key that can set them, and the graduated kill switch — plus
+the fact that break-glass cannot be tag-excepted and is excepted by ARN instead.
+So this was not repository recon that a reader had to go looking for. It was a
+chatbot that would recite, on request, which tag turns off which control. That
+is a different category from a statement name sitting in an ops file, and it is
+the part of the earlier review that was wrong.
+
+What changed:
+
+- **`knowledge/30-technical-depth.md` keeps the design and loses the keys.** The
+  substance was never the keys: it is that an exception is a tag in a protected
+  namespace rather than a policy edit, one key per perimeter so exceptions stay
+  narrow, every change alarmed, and the enforcing policy also denying
+  modification of the tags that except it. All of that still reads, along with
+  the genuinely interesting structural gap that Identity Center roles cannot
+  carry tags at all. The section now says outright that the keys are withheld
+  and why, which is better CV material than the keys were.
+- **One constant, `infrastructure/lib/lza.ts`.** The tag was applied from four
+  call sites and restated in nine places. `PERIMETER_EXEMPTION_TAG` is now the
+  only place it is written, and the prose names the constant instead of quoting
+  the key. `CHAT_FUNCTION_PREFIX` moved there too, being the same kind of fact:
+  a coupling to a policy this repo does not own.
+- **`CLAUDE.md`, `CONTEXT.md` and this file describe mechanisms, not
+  inventories.** A future session still learns that the tag is required on the
+  role as a principal tag and on the table and log group as resource tags, that
+  it must be set at create time, that SNS must not carry one, and where the
+  value lives. It no longer learns the catalogue of statement names.
+
+**What this does NOT do, stated plainly because it would be easy to assume
+otherwise.** The value is still in this repository, in `lib/lza.ts`, and in
+every commit made before today. Sanitising the current tree does not unpublish
+anything: the repo is public and has been forked as a template. If the key is
+considered sensitive then the only real mitigation is to **rename it in the
+landing-zone configuration**, which this repo deliberately does not control.
+Pulling it from the prose reduces how discoverable it is and stops the assistant
+reciting it; it does not make it secret.
+
+Sourcing the value from `cdk.json` context or a GitHub variable was considered
+and not taken unilaterally, because it trades a public string for a failure mode
+with no deploy-time symptom: unset, the stacks synth and deploy cleanly and the
+function is then denied on its first DynamoDB write at runtime.
+
 ### KMS key rent: answered in the LZA repo, nothing to do here
 
 Investigated 18-19 Oct 2026 in `~/repos/GitHub/grofflabs-lza/` and closed from
@@ -452,12 +505,13 @@ CDK**, which is the step that would otherwise have cost a rolled-back deploy:
 - `sns:*` appears in the org SCP only under `DenyExternalSNS`, which fires when
   `aws:ResourceOrgID` differs from the principal's org. An in-account topic does
   not match.
-- **SNS is absent from the `DenyResourceAccessFromUntrustedNetworks` RCP action
+- **SNS is absent from the resource-perimeter RCP's action
   list** (s3, kms, sqs, secretsmanager, ecr, aoss, sts, dynamodb, logs,
   cognito-identity), so unlike the counters table and the log group this topic
-  needs no `LZA:EXC:NET` tag. A test asserts nobody adds one by copying the
-  table, because `sns:TagResource` with an `LZA:*` key is separately denied.
-- `DenyLZASNSChanges` and `DenyLZACloudWatchAlarmChanges` are scoped to
+  needs no perimeter-exemption tag. A test asserts nobody adds one by copying
+  the table, because tagging SNS with a key in that reserved namespace is
+  separately denied.
+- The landing zone's own SNS and CloudWatch guard statements are scoped to
   `AWSAccelerator-*` ARNs. A test asserts that prefix appears nowhere in the
   template, since using it would make our own resources undeletable by our own
   deploy role.
@@ -659,13 +713,13 @@ Keycloak stale-secret root cause were raised as a customer-sensitivity question
 and the owner's call was to keep them. They are anonymised and they are the
 part of that write-up that demonstrates triage rather than claiming it.
 
-**Also kept: the LZA control-plane detail in `CLAUDE.md`.** It names SCP and RCP
-statements, the `LZA:EXC:NET` tag key, the `cv-chat-*` carve-out and its being
-load-bearing, and carries a copy-pasteable probe command. None of it is
-exploitable without credentials already inside the account: the carve-out only
-helps a principal that already holds `lambda:CreateFunction`. Recon value, not a
-vulnerability, and the best evidence in the repo of operating under a real
-policy regime.
+**Kept at the time, and REVERSED on 19 Oct 2026: the LZA control-plane detail.**
+The original call was to keep the SCP and RCP statement names, the exemption tag
+key and the carve-out, on the grounds that none of it is exploitable without
+credentials already inside the account — the carve-out only helps a principal
+that already holds `lambda:CreateFunction`. That reasoning still holds and is
+not why it changed. See *Landing-zone identifiers pulled out of the public
+prose* below for what the review missed.
 
 **Also kept: `BACKLOG.md` itself.** Keeping it was the specific question asked.
 The documented negative results with numbers, the Glue and Athena experiment

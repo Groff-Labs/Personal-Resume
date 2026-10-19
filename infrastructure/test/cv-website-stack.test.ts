@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import * as cdk from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { CvWebsiteStack } from '../lib/cv-website-stack';
+import { PERIMETER_EXEMPTION_TAG } from '../lib/lza';
 
 /**
  * Synth-time guards for the things that fail *silently* in this stack.
@@ -147,23 +148,26 @@ describe('ChatApi (chat enabled)', () => {
     ).toBeUndefined();
   });
 
-  it('tags the table, log group and role with LZA:EXC:NET', () => {
-    // The Root-attached RCP DenyResourceAccessFromUntrustedNetworks covers
-    // dynamodb:* and logs:* and only exempts resources carrying this tag -- a
-    // RESOURCE tag, so tagging the role alone is not enough. Without these the
-    // first UpdateItem throws AccessDeniedException at runtime, not at deploy.
+  it('tags the table, log group and role with the perimeter exemption', () => {
+    // The Root-attached resource-perimeter RCP covers dynamodb:* and logs:*
+    // and only excepts resources carrying this tag -- a RESOURCE tag, so
+    // tagging the role alone is not enough. Without these the first UpdateItem
+    // throws AccessDeniedException at runtime, not at deploy.
     //
-    // They must also be present from the FIRST deploy: DenyUnauthorizedLZATagModification
-    // denies dynamodb:TagResource / iam:TagRole for LZA:* keys, so adding the
-    // tag in a later stack update would itself be denied.
+    // They must also be present from the FIRST deploy: the tag-modification
+    // SCP denies dynamodb:TagResource / iam:TagRole for keys in the reserved
+    // namespace, so adding the tag in a later stack update is itself denied.
+    //
+    // Asserted through the constant rather than a literal, so the key is
+    // written in exactly one place in this repo.
     for (const type of ['AWS::DynamoDB::Table', 'AWS::Logs::LogGroup', 'AWS::IAM::Role']) {
       const resources = Object.entries(template.findResources(type));
       expect(resources.length).toBeGreaterThan(0);
       for (const [id, r] of resources) {
         const tags = ((r as { Properties: { Tags?: { Key: string; Value: string }[] } })
           .Properties.Tags ?? []);
-        const found = tags.find((t) => t.Key === 'LZA:EXC:NET');
-        expect(found?.Value).toBe('true');
+        const found = tags.find((t) => t.Key === PERIMETER_EXEMPTION_TAG.key);
+        expect(found?.Value).toBe(PERIMETER_EXEMPTION_TAG.value);
         expect(id).toBeTruthy();
       }
     }
@@ -339,12 +343,12 @@ describe('chat alarms', () => {
     prod.hasResourceProperties('AWS::SNS::Subscription', { Protocol: 'email' });
   });
 
-  it('does not tag the SNS topic with an LZA key', () => {
+  it('does not tag the SNS topic from the reserved namespace', () => {
     /*
-     * SNS is absent from the DenyResourceAccessFromUntrustedNetworks RCP action
-     * list, so unlike the counters table and the log group this topic needs no
-     * LZA:EXC:NET tag. Adding one would also be denied: `sns:TagResource` with
-     * an `LZA:*` key is covered by DenyUnauthorizedLZATagModification. This
+     * SNS is absent from the resource-perimeter RCP's action list, so unlike
+     * the counters table and the log group this topic needs no exemption tag.
+     * Adding one would also be denied, because `sns:TagResource` with a
+     * reserved-namespace key is covered by the tag-modification SCP. This
      * asserts nobody "fixes" it by copying the table's tag.
      */
     const topics = prod.findResources('AWS::SNS::Topic');
@@ -355,7 +359,7 @@ describe('chat alarms', () => {
   });
 
   it('keeps alarm and topic names clear of the AWSAccelerator prefix', () => {
-    // DenyLZASNSChanges and DenyLZACloudWatchAlarmChanges are scoped to
+    // The landing zone's SNS and CloudWatch guard statements are scoped to
     // AWSAccelerator-* ARNs. Naming anything with that prefix would make our
     // own resources undeletable by our own deploy role.
     const json = JSON.stringify(prod.toJSON());

@@ -255,9 +255,9 @@ under GDPR/CCPA; this site has no privacy policy today).
 
 Traces left behind, all harmless and deliberately kept:
 
-- The LZA `kill-switch.json` SCP was split so `glue:*` is no longer blanket
-  denied — `DenyGlueBillableCompute` denies jobs/crawlers/dev-endpoints while
-  the free Data Catalog is allowed. Better hygiene than the old blanket rule;
+- The landing zone's kill-switch SCP was split so `glue:*` is no longer
+  blanket denied: a statement scoped to billable compute denies
+  jobs/crawlers/dev-endpoints while the free Data Catalog is allowed. Better hygiene than the old blanket rule;
   revert only if you want Glue fully closed again.
 - The log bucket's expiry rule is prefix-scoped to `cloudfront-logs/` rather
   than bucket-wide.
@@ -321,18 +321,19 @@ aws lambda create-function --function-name zz-probe ...   # same args otherwise
 
 ### Three tags, two policies, and one shot to get them right
 
-- **The execution role needs the *principal* tag `LZA:EXC:NET=true`** for SCP
-  `DenyAccessFromUntrustedNetworks` (`Action:"*" Resource:"*"`).
+- **The execution role needs the perimeter-exemption tag as a *principal*
+  tag** (`PERIMETER_EXEMPTION_TAG`, `lib/lza.ts`), for a landing-zone statement
+  that denies every action on every resource from an untrusted network.
 - **The DynamoDB table and the log group each need the same tag as a *resource*
-  tag**, for the Root-attached RCP `DenyResourceAccessFromUntrustedNetworks`,
-  whose action list includes `dynamodb:*` and `logs:*`. Tagging the role does
-  nothing for the RCP. Without these the Lambda `AccessDeniedException`s on its
-  first `UpdateItem` — at runtime, not at deploy.
-- **All three must be created with their tags.** SCP
-  `DenyUnauthorizedLZATagModification` denies `dynamodb:TagResource` and
-  `iam:TagRole` for `LZA:*` keys, while `CreateTable`/`CreateRole`/`CreateFunction`
-  are not in that list. Adding the tag in a later stack update calls
-  `TagResource` and is denied.
+  tag**, for the Root-attached RCP covering the same perimeter, whose action
+  list includes `dynamodb:*` and `logs:*`. Tagging the role does nothing for
+  the RCP. Without these the Lambda `AccessDeniedException`s on its first
+  `UpdateItem` — at runtime, not at deploy.
+- **All three must be created with their tags.** A landing-zone statement
+  denies `dynamodb:TagResource` and `iam:TagRole` for keys in the reserved
+  namespace, while `CreateTable`/`CreateRole`/`CreateFunction` are not in that
+  list. Adding the tag in a later stack update calls `TagResource` and is
+  denied.
 
 ### `reservedConcurrentExecutions` cannot be set here
 
@@ -481,14 +482,14 @@ Two things about them that are easy to undo by accident:
 - **`treatMissingData` must stay `NOT_BREACHING`.** At this traffic most
   five-minute windows have no datapoints, and the default leaves every alarm
   permanently INSUFFICIENT_DATA, which looks exactly like broken monitoring.
-- **The SNS topic must NOT carry an `LZA:*` tag.** SNS is absent from the
-  `DenyResourceAccessFromUntrustedNetworks` RCP action list, so it does not need
-  the `LZA:EXC:NET` tag the counters table and log group do, and adding one is
-  separately denied by `DenyUnauthorizedLZATagModification`. Do not "fix" it by
-  copying the table. Equally, keep `AWSAccelerator-` out of every alarm and
-  topic name: `DenyLZASNSChanges` and `DenyLZACloudWatchAlarmChanges` are scoped
-  to that prefix and would make our own resources undeletable by our own deploy
-  role. Tests assert both.
+- **The SNS topic must NOT carry a tag from the reserved namespace.** SNS is
+  absent from the resource-perimeter RCP's action list, so it does not need the
+  exemption tag the counters table and log group do, and adding one is
+  separately denied by the tag-modification statement. Do not "fix" it by
+  copying the table. Equally, keep the landing zone's own resource-name prefix
+  out of every alarm and topic name: its SNS and CloudWatch guard statements are
+  scoped to that prefix and would make our resources undeletable by our own
+  deploy role. Tests assert both.
 
 **The email subscription needs one manual confirmation**, and it is the only
 hand step in this repo. AWS sends a link and SNS delivers nothing until it is
@@ -838,12 +839,12 @@ have bitten deploys:
    `BucketDeployment`, the L2 OIDC provider) still fails. Adding a VPC would
    also mean a NAT Gateway (~$32/mo) for internet egress, since `ipinfo.io`
    is IPv4-only.
-3. **`NetworkPerimeter-SCP`** also denies based on source IP unless the
-   principal carries `LZA:EXC:NET=true` (exact case). The GH Actions
-   role gets this tag via CDK in `infrastructure/lib/github-oidc-stack.ts`
-   (`cdk.Tags.of(this.role).add('LZA:EXC:NET', 'true')`). **Don't drop
-   that tag.** If LZA ever overwrites it in an out-of-band run, `cdk
-   deploy` will put it back.
+3. **The same network-perimeter policy** also denies based on source IP
+   unless the principal carries the perimeter-exemption tag (case is
+   significant). The GH Actions role gets it via CDK in
+   `infrastructure/lib/github-oidc-stack.ts`, from `PERIMETER_EXEMPTION_TAG`
+   in `lib/lza.ts`. **Don't drop that tag.** If the landing zone ever
+   overwrites it out of band, `cdk deploy` puts it back.
 
 ### Cache-Control is set per-file
 
@@ -1131,9 +1132,10 @@ Then, outside the repo:
 - **The chat backend needs more than config.** `chatModelId: ""` in `cdk.json`
   leaves it out entirely, which is the right default for a fork. To enable it you
   also need Amazon Nova model access in the target region, and — if you are under
-  an LZA/SCP regime — a carve-out for `cv-chat-*` in any `DenyLambdaWithoutVPC`
-  statement, plus `LZA:EXC:NET=true` on the table and log group if an RCP covers
-  `dynamodb:*`/`logs:*`. See *The chat assistant* above
+  an LZA/SCP regime — a carve-out for the `cv-chat-*` function prefix in any
+  deny-Lambda-outside-a-VPC statement, plus the perimeter-exemption tag on the
+  table and log group if an RCP covers `dynamodb:*`/`logs:*`. See *The chat
+  assistant* above
 - GitHub environments named `production` and `dev` must exist — the OIDC trust
   policy matches on `repo:ORG/REPO:environment:NAME`, so a workflow without an
   `environment:` cannot assume the role
@@ -1269,6 +1271,33 @@ same convention as the owner's other repos. The directory is created on first
 use.
 
 ---
+
+## On naming the landing zone in this repo
+
+Sanitised 19 Oct 2026. The rule applied, so a future session neither re-leaks
+nor over-corrects:
+
+- **No tag keys from the protected namespace, anywhere in prose.** A key is what
+  an exception turns on. The one this repo needs to deploy lives in
+  `infrastructure/lib/lza.ts` as `PERIMETER_EXEMPTION_TAG` and is referred to by
+  that name everywhere else, including in the tests.
+- **Nothing in `knowledge/` names a policy at all**, because the assistant
+  quotes that directory verbatim to any visitor. Describe the control, not its
+  identifier.
+- **Stock LZA statement names are kept** in ops prose and code comments —
+  the deny-unencrypted-upload, deny-Lambda-without-VPC and perimeter statements
+  from the sample configuration. They ship with LZA, so naming one says only
+  that this account runs LZA, which the repo makes obvious anyway, and a future
+  session debugging a denial needs to know which statement fired.
+- **Statements written for this org are not kept.** The kill-switch split, the
+  SNS and CloudWatch guards and anything else bespoke are described by what
+  they do. Those are a control inventory rather than a coupling this repo has
+  to live with.
+
+What sanitising does **not** do: the tag value is still in `lib/lza.ts` and in
+every commit before the cleanup, on a public repo that has been forked. If it is
+ever treated as sensitive, rename it in the landing-zone configuration — this
+repo cannot fix that from here.
 
 ## Don'ts
 

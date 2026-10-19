@@ -18,6 +18,7 @@ import { createHash } from 'crypto';
 // refused question, so they carry the contact details rather than telling
 // someone to "email him directly" without saying where.
 import { contact } from '../../frontend/lib/data/contact';
+import { PERIMETER_EXEMPTION_TAG } from './lza';
 
 export interface ChatApiProps {
   stage: string;
@@ -45,22 +46,22 @@ export interface ChatApiProps {
  *    `arn:aws:lambda:*:*:function:cv-chat-*`, so THE FUNCTION NAME PREFIX IS
  *    LOAD-BEARING. Renaming it breaks the deploy.
  *
- * 2. SCP `DenyAccessFromUntrustedNetworks` is Action:"*" Resource:"*" and
- *    denies unless the *principal* carries LZA:EXC:NET=true. A Lambda calling
- *    Bedrock has no trusted source IP and aws:ViaAWSService=false, so the
- *    execution role needs that tag.
+ * 2. The network-perimeter SCP is Action:"*" Resource:"*" and denies unless
+ *    the *principal* carries PERIMETER_EXEMPTION_TAG (see lib/lza.ts). A
+ *    Lambda calling Bedrock has no trusted source IP and
+ *    aws:ViaAWSService=false, so the execution role needs that tag.
  *
- * 3. RCP `DenyResourceAccessFromUntrustedNetworks` (Root-attached) covers
- *    dynamodb:* and logs:* and only exempts resources tagged
- *    LZA:EXC:NET=true — a RESOURCE tag, so tagging the role does nothing for
- *    it. The table and the log group each need their own tag or the first
- *    UpdateItem throws AccessDeniedException.
+ * 3. The Root-attached RCP for the same perimeter covers dynamodb:* and
+ *    logs:* and only excepts resources carrying that tag as a RESOURCE tag,
+ *    so tagging the role does nothing for it. The table and the log group
+ *    each need their own or the first UpdateItem throws
+ *    AccessDeniedException.
  *
- * 4. SCP `DenyUnauthorizedLZATagModification` denies dynamodb:TagResource /
- *    iam:TagRole for LZA:* tag keys, while CreateTable / CreateRole are NOT in
- *    that action list. So these resources must be CREATED with their tags.
- *    Never add an LZA:* tag in a later stack update — CloudFormation would
- *    call TagResource and be denied.
+ * 4. The tag-modification SCP denies dynamodb:TagResource / iam:TagRole for
+ *    keys in the reserved namespace, while CreateTable / CreateRole are NOT
+ *    in that action list. So these resources must be CREATED with their tags.
+ *    Never add one in a later stack update — CloudFormation would call
+ *    TagResource and be denied.
  *
  * 5. No construct here may spin up a Lambda-backed custom resource: its
  *    generated name won't match `cv-chat-*` and the SCP will deny it. That
@@ -97,7 +98,7 @@ export class ChatApi extends Construct {
       deletionProtection: false,
     });
     // Constraint 3 + 4: resource tag, applied at create time.
-    cdk.Tags.of(table).add('LZA:EXC:NET', 'true');
+    cdk.Tags.of(table).add(PERIMETER_EXEMPTION_TAG.key, PERIMETER_EXEMPTION_TAG.value);
 
     /* ---------------- log group ---------------- */
 
@@ -115,7 +116,7 @@ export class ChatApi extends Construct {
       retention: stage === 'prod' ? logs.RetentionDays.THREE_MONTHS : logs.RetentionDays.TWO_WEEKS,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
-    cdk.Tags.of(logGroup).add('LZA:EXC:NET', 'true');
+    cdk.Tags.of(logGroup).add(PERIMETER_EXEMPTION_TAG.key, PERIMETER_EXEMPTION_TAG.value);
 
     /* ---------------- guardrail ---------------- */
 
@@ -273,7 +274,7 @@ export class ChatApi extends Construct {
       description: 'Execution role for the CV chat assistant Lambda',
     });
     // Constraint 2 + 4: principal tag, applied at create time.
-    cdk.Tags.of(execRole).add('LZA:EXC:NET', 'true');
+    cdk.Tags.of(execRole).add(PERIMETER_EXEMPTION_TAG.key, PERIMETER_EXEMPTION_TAG.value);
 
     logGroup.grantWrite(execRole);
     table.grantReadWriteData(execRole);
@@ -454,9 +455,10 @@ export class ChatApi extends Construct {
      *  - SNS is NOT in the `DenyResourceAccessFromUntrustedNetworks` RCP action
      *    list (s3, kms, sqs, secretsmanager, ecr, aoss, sts, dynamodb, logs,
      *    cognito-identity), so unlike the table and the log group this needs no
-     *    `LZA:EXC:NET` resource tag. Do not add one: `sns:TagResource` with an
+     *    perimeter-exemption resource tag. Do not add one: `sns:TagResource`
+     *    with a reserved-namespace
      *    `LZA:*` key is separately denied.
-     *  - `DenyLZASNSChanges` and `DenyLZACloudWatchAlarmChanges` are scoped to
+     *  - The landing zone's SNS and CloudWatch guard statements are scoped to
      *    `AWSAccelerator-*` names, so `cv-chat-*` is unaffected. Keep the
      *    prefix off anything named AWSAccelerator.
      *  - `EmailSubscription` renders a native `AWS::SNS::Subscription`, not a

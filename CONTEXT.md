@@ -126,8 +126,13 @@ ours to change from this repo.
 
 **SCP / RCP** — Service Control Policy (constrains *principals*) and Resource
 Control Policy (constrains *resources*). The distinction matters: the chat
-Lambda needs `LZA:EXC:NET=true` as a *principal* tag on its role for an SCP and
-as a *resource* tag on its table and log group for an RCP.
+Lambda needs the perimeter-exemption tag as a *principal* tag on its role for an
+SCP and as a *resource* tag on its table and log group for an RCP.
+
+**The perimeter-exemption tag** — `PERIMETER_EXEMPTION_TAG` in
+`infrastructure/lib/lza.ts`, the one place the key is written. Prose in this repo
+names it rather than quoting it, because a tag key that turns a security control
+off is not CV material.
 
 **The carve-out** — the `NotResource` exemption for `arn:aws:lambda:*:*:function:cv-chat-*`
 in LZA's `DenyLambdaWithoutVPC`. It is why the function name prefix is

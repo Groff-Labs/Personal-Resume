@@ -67,7 +67,8 @@ tenant and Amazon Aurora once the team has the skills to run it.
 
 His standing rule with Service Control Policies is to narrow a statement rather
 than remove it. When this site's chat assistant needed one Lambda function in
-an account with no VPC, the org's `DenyLambdaWithoutVPC` control blocked it.
+an account with no VPC, the org's deny-Lambda-outside-a-VPC control blocked
+it.
 Satisfying the control would have meant a NAT Gateway (~$32/month) or a Bedrock
 PrivateLink endpoint, either of which cost more than the feature's entire
 monthly budget and bought nothing: the function only calls the Bedrock API and
@@ -82,8 +83,8 @@ already create functions could pick that name, is written into the commit.
 
 The same narrowing approach applied to Glue. A kill-switch SCP denied `glue:*`
 outright, which also blocked the free Glue Data Catalog that Athena needs. He
-replaced it with `DenyGlueBillableCompute`, which keeps Glue jobs, crawlers,
-triggers and dev endpoints denied while allowing the Data Catalog.
+replaced it with a statement scoped to the billable compute, keeping Glue jobs,
+crawlers, triggers and dev endpoints denied while allowing the Data Catalog.
 
 ### The 5,120-byte SCP size limit
 
@@ -146,15 +147,24 @@ of VPN tunnels for four sites.
 
 ### Perimeter exceptions as protected tags
 
-Every data-perimeter exception in his design is an IAM tag in a protected
-`LZA:*` namespace, for example `LZA:EXC:NET` to bypass the network perimeter
-or `LZA:EXC:RES=S3` for one service's resource perimeter. Only principals
-tagged `LZA:ADMIN` can set them, and any tag change raises a CloudWatch alarm,
-so every exception is explicit and auditable. IAM Identity Center roles cannot
-carry tags, so the break-glass permission set is exempted by ARN instead. It
-has a four-hour session, requires MFA, and every assumption alarms. A
-graduated kill switch (`LZA:KILL` with complete, read-only, network and data
-levels) can lock down any role by tag.
+Every data-perimeter exception in his design is an IAM tag in a reserved,
+protected namespace rather than an edit to the policy itself. There is one tag
+key per perimeter, so a principal can be excepted from the network controls
+without also being excepted from the resource controls. Only an administrative
+principal can set them, every tag change raises a CloudWatch alarm, and the
+policies that enforce a perimeter also deny modification of the tags that
+except it — so an exception is explicit, narrow and auditable, and cannot be
+granted quietly. The same namespace carries a graduated kill switch that can
+drop a role to read-only or cut its network and data access outright.
+
+One structural gap in that approach is worth knowing, because it is a property
+of IAM rather than of the design: IAM Identity Center roles cannot carry tags
+at all. A break-glass path therefore cannot be tag-excepted and has to be
+excepted by ARN, with a short session, MFA, and an alarm on every assumption.
+
+The tag keys themselves are deliberately not written down here. A key is the
+thing an exception turns on, so it belongs in the private repository that owns
+the policies rather than in a public CV.
 
 ### Hub-and-spoke networking, and turning it off
 
