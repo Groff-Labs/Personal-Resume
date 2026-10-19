@@ -78,6 +78,89 @@ $0 is not a zero, and check that `Amazon Bedrock` appears in
 `GetDimensionValues` for SERVICE before trusting any figure from it. A CUR query
 would answer both questions properly if CE stays unhelpful.
 
+### 3. Public-repo exposure: three fixes, then it stays public
+
+Reviewed 18 Oct 2026 across all 118 commits. **Verdict: keep it public.** The
+repo's value is that it is public, and nothing found is a reason to reverse
+that. Three concrete items are worth acting on, and one non-item is worth
+recording so it does not get re-litigated.
+
+**No history rewrite is needed, and that is a measured result rather than an
+assumption.** All 2,948 objects in `--all` history were scanned for `AKIA`/`ASIA`
+keys, `aws_secret_access_key`, PEM private-key headers, Slack `xox*` tokens,
+GitHub `ghp_`/`github_pat_` tokens, `sk-` API keys and JWTs: zero hits. The
+temporary AWS credentials file deleted in Oct 2026 never entered git; it is
+absent from the full list of files ever deleted. Since secret removal is the
+usual reason to rewrite, and there are 0 forks and 0 stars to break, there is no
+trigger. Revisit only if a scan ever finds something.
+
+#### 3a. Stop publishing the AWS account ID (do this one)
+
+`421219980479` appears in `infrastructure/cdk.json`, `infrastructure/bin/infrastructure.ts`
+and `CLAUDE.md`. It is not a credential, and with the data-perimeter RCPs in
+place it is not directly exploitable, but it is the handle that makes everything
+else in the repo targetable: support-desk impersonation, cross-account trust
+probing, bucket and ECR name enumeration. There is no upside to publishing it,
+because a forker has to replace it anyway.
+
+Cheap, because the plumbing already exists. `bin/infrastructure.ts:26` is already
+`tryGetContext('account') || process.env.CDK_DEFAULT_ACCOUNT || '421219980479'`,
+and `deploy-infra.yml` already uses `vars.AWS_ACCOUNT_ID` for the role ARN. So:
+drop `account` from `cdk.json`, make the literal a throw instead of a default so
+a misconfigured deploy fails loudly rather than targeting someone else's
+account, pass `CDK_DEFAULT_ACCOUNT` in the workflow, and redact the one mention
+in `CLAUDE.md`.
+
+#### 3b. Two engagement write-ups are narrow enough to re-identify
+
+`knowledge/20-engagements.md` never names a customer and the gate enforces that,
+but re-identification works on aggregates, which no name check can catch. Two
+sections are thin cover:
+
+- *"global mining enterprise"* plus Azure-to-AWS plus MAP plus Mobilize accepted
+  August 2026 plus a switch to Databricks. There are not many global mining
+  companies, fewer doing that migration with one partner in that window.
+- *"public-sector software vendor"* plus GovCloud plus OMB M-21-31 plus a
+  government contract deadline.
+
+Blur the dates to quarters or drop them, widen the industry label, and the
+engineering content survives intact, which is the part that is actually
+load-bearing for the assistant.
+
+#### 3c. The EKS write-up publishes another company's incident detail
+
+Also in `20-engagements.md`: strict mTLS breaking Fluent Bit log shipping, RDS
+exhausting connection slots, one incident taking down five platform services,
+and Keycloak reading stale secrets because a deployment script overwrote them
+on every run. The last is a security-relevant defect in a specific customer's
+production platform. Anonymised or not, it is the kind of detail that customer
+would object to reading, and the "what he would do differently" paragraph
+already carries the credibility those specifics were there to buy. Recommend
+keeping the mTLS and connection-slot items as generic lessons and cutting the
+Keycloak secret-overwrite specifics.
+
+#### Not an item: the LZA control-plane detail in `CLAUDE.md`
+
+`CLAUDE.md` names SCP and RCP statements, the `LZA:EXC:NET` tag key, the
+`cv-chat-*` carve-out and its being load-bearing, and carries a copy-pasteable
+probe command. This was considered and is being kept. None of it is exploitable
+without credentials already inside the account: the carve-out only helps a
+principal that already holds `lambda:CreateFunction`. It is recon value, not a
+vulnerability, and it is also the single best piece of evidence in the repo that
+the author has operated under a real policy regime. Keeping it is a deliberate
+trade, not an oversight.
+
+#### Also: `BACKLOG.md` should stay, and there is no LICENSE
+
+Keeping this file was the specific question asked. Keep it. The documented
+negative results with numbers, the Glue and Athena experiment that produced
+nothing, the $350 OpenSearch floor, why WAF costs more than it protects, are
+the hardest thing in the repo to fake and carry almost no exposure.
+
+Separately, there is no `LICENSE` file, which contradicts the repo being
+described as a fork-able template: with no license nobody may legally reuse it.
+MIT would match the intent.
+
 ---
 
 ## Closed
