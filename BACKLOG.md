@@ -136,6 +136,95 @@ CloudFront $0.0000. **The landing zone is the cost; the website is free.**
 
 ## Closed
 
+### The assistant denied its own page, and three defects were behind it
+
+A visitor asked *"does Michael like dogs"* and got *"the CV does not mention
+anything about his preference for dogs"*, while the About section said "two
+Huskies". Fixed, and the diagnosis is worth keeping because only one of the
+three causes was about retrieval quality.
+
+**1. The content was never in the corpus.** `corpus.ts` reads data modules,
+`resume.md` and `knowledge/`; it cannot import React. The pets, the hometown and
+the **Top 5 CliftonStrengths** were hardcoded in `AboutMe.tsx`, and the whole
+"About this site" section, including the design trade-offs, in
+`ProjectShowcase.tsx`. So "what are his strengths" and "why no WAF" were
+unanswerable too. Extracted `frontend/lib/data/about.ts` and `project.ts`; the
+components render from them, so the page and the assistant cannot disagree.
+`inCorpus: false` keeps the wife's profession and the daughters out of the
+corpus while the page still shows them.
+
+**2. Retrieval was confidently wrong, which is worse than missing.**
+`queryMass` used `idf.get(q) ?? 1`, so a term absent from the corpus scored 1
+while a merely rare present term scored up to 5.5. `dogs` was absent and worth
+1; `like` appeared in two of 250 passages and was worth 4.83. The query was
+judged almost entirely on "like", matched *"Patterns & Practices: How I like to
+build"*, and reported **0.83** confidence. The model read that, found no dogs,
+and answered correctly: **retrieval lied to it.** An absent term is the
+strongest evidence the corpus cannot answer, so it now weighs
+`UNKNOWN_TERM_WEIGHT`. Same query: 0.47, correctly weak. Two more confident-wrong
+answers went with it ("how is this site built" scored 1.00 on the *availability*
+passage).
+
+**3. The tool catalogue sent specific questions to the wrong tool.**
+`get_highlights` ended with "prefer this over search_experience whenever the
+question does not name a specific technology, employer or metric", and a pets
+question names none of those. Worse, with one unrelated highlight as context the
+model **invented a dog named "Sadie"** while saying the CV did not mention dogs.
+Then, asked for his CliftonStrengths, it listed five plausible Gallup themes with
+three wrong and **no tool call at all** — caught by the "No lookup" notice, which
+fired in a browser for the first time.
+
+The structural fix for that last one is `toolChoice: { any: {} }` on the first
+hop, which Nova documents as "at least one tool will be called". Prompt rule 2
+had enumerated the topics requiring a lookup, so anything off the list was fair
+game to answer from priors; enumerated lists grow gaps. Forcing the call removes
+the option instead of asking for it, and the tools are in-process keyword search
+so it costs nothing.
+
+Verified on dev afterwards: "does Michael like dogs" returns the Huskies and the
+tabby with an `#about` citation; "what is his dog named" answers "he has two
+Huskies" without inventing one; CliftonStrengths returns the correct five;
+"why is there no WAF" gives the real trade-off and the ~$5/month; "does he have
+kids" is refused. Every turn called a tool.
+
+Retrieval is now asserted in `infrastructure/test/retrieval.test.ts` rather than
+an esbuild heredoc in `check.sh`, with the negative cases that matter, and
+`test/markdown-transform.js` gives jest the `*.md` loader esbuild has. 30 tests
+to 57.
+
+Two `.gitignore` traps surfaced on the way, the second a near-repeat of the
+`md.d.ts` incident: the root tsconfig excludes `lambda/` but an import pulls it
+in, so it needs `md.d.ts` via `files`; and `*.js` would have silently swallowed
+the new jest transform, so `test/**/*.js` is now negated.
+
+### Knowledge Base and vector search: re-costed, still no
+
+Settled with current figures rather than October's, since the dogs failure looked
+like it might be the documented trigger for revisiting. Per query, from the
+Price List API:
+
+| Option | Per query | Against a $0.000956 turn |
+|---|---|---|
+| Keyword, today | $0 | — |
+| + the `ALIASES` map | $0 | — |
+| Build-time embeddings in the bundle | ~$0, +$0.00075/deploy | +0% |
+| S3 Vectors | $0.000055 | +5.8% |
+| Managed KB retrieval | $0.001 | **+104%** |
+| OpenSearch Serverless | $88-350/month floor | — |
+
+Titan Embeddings V2 is $0.00002/1K tokens, so embedding all ~270 passages costs
+about $0.00075, and S3 Vectors storage for ~1 MB is ~$0.00006/month. Embeddings
+are affordable; **managed KB retrieval is the one disqualifying number**, which
+is where October landed too.
+
+It was **not** the trigger, and the distinction is the point: the dogs answer was
+never *present*, so no amount of semantic search would have found it. Vocabulary
+gaps that remain real, `dogs` against `Huskies` and `k8s` against `kubernetes`,
+are handled by a curated corpus-aware `ALIASES` map at zero cost. Its length is
+the signal: `retrieval.test.ts` asserts it stays under 30 entries, and if it
+keeps growing, S3 Vectors is the thing to reach for and a managed Knowledge Base
+still is not.
+
 ### The assistant can no longer print a fabricated tool result
 
 Seen once on dev, 19 Oct 2026: "Tell me about the Azure to AWS assessment" came
