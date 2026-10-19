@@ -1,5 +1,17 @@
 # Backlog
 
+> **If you have arrived here from the repository, read this first.**
+>
+> These are working notes, kept in the open deliberately. Each entry records
+> what was measured, what was decided and what was rejected, including defects
+> and the fixes for them. A bug written up here has already been fixed, and the
+> write-up exists so the same mistake is not made twice; several entries
+> describe the site's own chat assistant getting something wrong, which is what
+> finding and fixing a defect looks like when the record is honest.
+>
+> It is not a showcase and it is not polished. The polished version of this
+> repository is [`README.md`](README.md).
+
 Parked work for michaelgroff.info, newest batch first. Each item carries enough
 context to pick up cold. `CLAUDE.md` holds the operational rules; this holds the
 intentions.
@@ -420,8 +432,8 @@ the **Top 5 CliftonStrengths** were hardcoded in `AboutMe.tsx`, and the whole
 `ProjectShowcase.tsx`. So "what are his strengths" and "why no WAF" were
 unanswerable too. Extracted `frontend/lib/data/about.ts` and `project.ts`; the
 components render from them, so the page and the assistant cannot disagree.
-`inCorpus: false` keeps the wife's profession and the daughters out of the
-corpus while the page still shows them.
+`inCorpus: false` keeps certain family details out of the corpus while the
+page still shows them.
 
 **2. Retrieval was confidently wrong, which is worse than missing.**
 `queryMass` used `idf.get(q) ?? 1`, so a term absent from the corpus scored 1

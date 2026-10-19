@@ -92,8 +92,13 @@ step "no customer or colleague names in published prose" bash -c '
   # Names from the private sources file must never reach the repo. Word-boundary
   # matched and case-sensitive, because substrings cause false positives
   # ("Factua" inside "factual", "miax" inside minified CSS).
+  # CLAUDE.md and BACKLOG.md are included because they are public too, and the
+  # original list omitted them: a review found BACKLOG.md naming family
+  # relationships while explaining why they are excluded from the corpus. The
+  # decision belonged there; the specifics did not.
   hits=$(grep -rlwE "Beachhead|Perfecta|AngloGold|Recruitics|Mindoula|Budderfly|Acordex|Harrity|CalcFocus|EngineersGate|PhaseZero|Vaultry" \
-    knowledge/ resume.md frontend/lib/data/ infrastructure/lambda/ 2>/dev/null)
+    knowledge/ resume.md frontend/lib/data/ infrastructure/lambda/ \
+    CLAUDE.md BACKLOG.md CONTEXT.md README.md 2>/dev/null)
   [ -z "$hits" ] || { echo "    customer/colleague name found in: $hits"; exit 1; }'
 
 # ---------------------------------------------------------------- summary

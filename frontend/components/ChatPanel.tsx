@@ -446,7 +446,7 @@ export default function ChatPanel() {
               type="submit"
               disabled={busy || !draft.trim()}
               aria-label="Send question"
-              className="inline-flex items-center justify-center w-9 h-9 rounded-md bg-accent text-white hover:bg-accent-dark transition-colors disabled:opacity-40"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-md bg-accent text-white hover:bg-accent-dark transition-colors disabled:opacity-40"
             >
               <ArrowUp className="w-4 h-4" />
             </button>

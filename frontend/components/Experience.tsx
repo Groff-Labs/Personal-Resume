@@ -127,13 +127,19 @@ export default function Experience() {
 
                       {/* Meta — stacked on sm, inline on md+ */}
                       <div className="flex-1 min-w-0 md:grid md:grid-cols-[minmax(0,auto)_minmax(0,1fr)_auto] md:items-center md:gap-4">
-                        <div className="font-semibold text-ink group-hover:text-accent transition-colors">
+                        {/* `break-words` because wrapping alone is not enough: at
+                            320px the timeline gutter leaves this column 82px, and
+                            "Vivsoft Technologies" is one 104px word with nowhere to
+                            wrap, so the card's `overflow-hidden` cut it mid-glyph.
+                            It only engages when a word cannot fit, so nothing
+                            changes at any width where the name already fits. */}
+                        <div className="font-semibold text-ink break-words group-hover:text-accent transition-colors">
                           {job.company}
                         </div>
                         {/* Not truncated: titles here run long (e.g. "Sr. Pre-Sales
                             Solutions Architect / Team Lead") and clipping them hid
                             the part that matters. Wraps instead. */}
-                        <div className="text-sm text-accent text-pretty">
+                        <div className="text-sm text-accent text-pretty break-words">
                           {job.title}
                           {job.roles && job.roles.length > 1 && (
                             <span className="ml-2 whitespace-nowrap text-xs text-ink-subtle">
@@ -141,7 +147,13 @@ export default function Experience() {
                             </span>
                           )}
                         </div>
-                        <div className="font-mono text-xs text-ink-subtle md:text-right whitespace-nowrap">
+                        {/* `md:whitespace-nowrap`, not `whitespace-nowrap`. Unqualified, it
+                            applied on mobile too, where this column is ~152px and
+                            "September 2023 – December 2024" needs 216px, so the date
+                            overflowed its box by up to 64px on three cards. It was
+                            written for the desktop `md:grid` column, whose width is
+                            `auto`; every sibling class here is already md-scoped. */}
+                        <div className="font-mono text-xs text-ink-subtle md:text-right md:whitespace-nowrap">
                           {job.startDate} – {job.endDate}
                         </div>
                       </div>

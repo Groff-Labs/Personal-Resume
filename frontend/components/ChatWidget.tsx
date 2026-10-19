@@ -125,7 +125,12 @@ function Widget() {
                 type="button"
                 onClick={closeChatPanel}
                 aria-label="Close the assistant"
-                className="shrink-0 rounded-md p-1 text-ink-subtle transition-colors hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                /*
+                 * 44px hit area, pulled back into the header padding with
+                 * the negative margins so the glyph stays where it was:
+                 * the box grows outward, not the icon.
+                 */
+                className="-mr-2 -mt-2 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-ink-subtle transition-colors hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <X className="h-4 w-4" />
               </button>

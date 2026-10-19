@@ -166,6 +166,23 @@ if [ -n "$asset" ]; then
   esac
 fi
 
+# ---------------------------------------------------------------- mobile layout
+# Needs a real browser, so it lives in its own script and skips when no driver
+# is installed. Three defects survived 218 unit tests and every check above,
+# because all three were computed-layout problems invisible without rendering:
+# a table column clipped unreachably, dates overflowing their box, and 36px tap
+# targets. See scripts/mobile-check.mjs.
+if command -v node >/dev/null 2>&1; then
+  printf '\n'
+  if node scripts/mobile-check.mjs "$BASE"; then
+    PASSED=$((PASSED + 1))
+  else
+    FAILED+=("mobile layout checks")
+  fi
+else
+  skip "mobile layout checks" "node not available"
+fi
+
 # ---------------------------------------------------------------- summary
 printf '\n\033[1m%s\033[0m\n' "----------------------------------------"
 if [ ${#FAILED[@]} -eq 0 ]; then

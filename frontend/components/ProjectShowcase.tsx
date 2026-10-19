@@ -88,30 +88,56 @@ export default function ProjectShowcase() {
 
         {/* Comparison table */}
         <div className="card overflow-hidden p-0 mb-8">
-          <table className="w-full text-sm">
-            <thead className="bg-surface-2">
-              <tr>
-                <th className="px-5 py-3 text-left font-semibold text-ink-muted">
-                  Aspect
-                </th>
-                <th className="px-5 py-3 text-left font-semibold text-ink-muted">
-                  WordPress (old)
-                </th>
-                <th className="px-5 py-3 text-left font-semibold text-accent">
-                  Next.js + AWS (new)
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPARISON.map((row, i) => (
-                <tr key={row.aspect} className={i % 2 === 0 ? "" : "bg-surface-1"}>
-                  <td className="px-5 py-3 font-medium text-ink">{row.aspect}</td>
-                  <td className="px-5 py-3 text-ink-muted">{row.wp}</td>
-                  <td className="px-5 py-3 text-ink">{row.aws}</td>
+          {/*
+            This scroll wrapper is load-bearing, and the obvious simplification
+            breaks it. The card keeps `overflow-hidden` so the table's square
+            corners do not poke through its rounded ones; that clips rather than
+            scrolls, so at 320px the table measured 329px inside a 286px card
+            with no scrollable ancestor, and the "Next.js + AWS (new)" column —
+            the entire point of a before/after comparison — was cut off by 26px
+            and unreachable. Moving `overflow-x-auto` up onto the card instead
+            of using this wrapper re-breaks the corners.
+
+            `tabIndex={0}` because a scroll container is not keyboard-reachable
+            without it, which would leave the clipped column unreachable for
+            anyone not using a touchscreen or a trackpad.
+          */}
+          <div
+            className="overflow-x-auto"
+            role="region"
+            aria-label="WordPress and Next.js on AWS compared, scrolls horizontally on narrow screens"
+            tabIndex={0}
+          >
+            <table className="w-full text-sm">
+              <thead className="bg-surface-2">
+                <tr>
+                  {/* Tighter cells below md so the table more often fits with
+                      no scrolling at all, and the Aspect labels stay on one
+                      line while the two comparison columns wrap. */}
+                  <th className="px-3 py-3 md:px-5 text-left font-semibold text-ink-muted whitespace-nowrap">
+                    Aspect
+                  </th>
+                  <th className="px-3 py-3 md:px-5 text-left font-semibold text-ink-muted">
+                    WordPress (old)
+                  </th>
+                  <th className="px-3 py-3 md:px-5 text-left font-semibold text-accent">
+                    Next.js + AWS (new)
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {COMPARISON.map((row, i) => (
+                  <tr key={row.aspect} className={i % 2 === 0 ? "" : "bg-surface-1"}>
+                    <td className="px-3 py-3 md:px-5 font-medium text-ink whitespace-nowrap">
+                      {row.aspect}
+                    </td>
+                    <td className="px-3 py-3 md:px-5 text-ink-muted">{row.wp}</td>
+                    <td className="px-3 py-3 md:px-5 text-ink">{row.aws}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Trade-offs */}

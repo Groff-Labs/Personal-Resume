@@ -49,7 +49,12 @@ export default function ThemeToggle() {
       onClick={cycle}
       aria-label={label}
       title={label}
-      className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-line text-ink-muted hover:text-accent hover:border-accent transition-colors"
+      // 44px on touch widths, where 36px was under the tap minimum, and back to
+      // 36px from md up. Unlike the icon buttons either side of it this box has
+      // a visible border, so an unconditional 44px made it the tallest thing in
+      // the desktop nav row by 8px, next to 36px text links. The hit area only
+      // needs to grow where the finger is.
+      className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-line text-ink-muted transition-colors hover:text-accent hover:border-accent md:h-9 md:w-9"
     >
       <Icon className="w-4 h-4" />
     </button>

@@ -1,5 +1,20 @@
 # CV site — ops notes for future Claude sessions
 
+> **If you have arrived here from the repository, you want
+> [`README.md`](README.md) instead.**
+>
+> This file is operational memory, addressed to whoever works on this repo
+> next, which is usually an AI coding session. It is deliberately long and
+> deliberately blunt: it records the traps that have each cost a debugging
+> cycle, the decisions that were made and why, and the things that look like
+> bugs but are not. Where it describes something going wrong, the fix is in the
+> same paragraph.
+>
+> It is checked in because a trap nobody wrote down gets hit again, and because
+> a repository that claims infrastructure-as-code should be readable all the way
+> down. [`BACKLOG.md`](BACKLOG.md) holds parked work and decided-against items;
+> [`CONTEXT.md`](CONTEXT.md) holds the vocabulary.
+
 Static personal CV at **michaelgroff.info**. Shipped April 2026; mature
 and low-touch. Most future sessions here will be small content updates
 (new role, new cert, copy edit) — not architecture work. The big
@@ -1145,7 +1160,8 @@ return nothing useful:
   scratch again, but the site is mature and most work is content.
 
 `.agent-team/plans/` is where a role agent's plan artifacts go, committed, the
-same convention as the Vaultry repos. The directory is created on first use.
+same convention as the owner's other repos. The directory is created on first
+use.
 
 ---
 

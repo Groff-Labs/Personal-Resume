@@ -223,11 +223,15 @@ export default function CertTimeline() {
       </div>
 
       {/* Vendor filter chips */}
+      {/* `py-3 md:py-1.5` on the pills below: at py-1.5 they were 34px high,
+          under the 44px tap minimum, and they are the only way to filter 36
+          certifications on a phone. py-3 and not py-2.5 because 2.5 measured
+          42px, which is still under. Desktop density is unchanged. */}
       <div className="flex flex-wrap gap-2 mb-6">
         <button
           type="button"
           onClick={() => setActiveVendor(null)}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+          className={`px-3 py-3 md:py-1.5 rounded-full text-sm font-medium transition-colors border ${
             activeVendor === null
               ? "bg-accent border-accent text-white"
               : "border-line text-ink-muted hover:border-accent hover:text-accent"
@@ -240,7 +244,7 @@ export default function CertTimeline() {
             type="button"
             key={v}
             onClick={() => setActiveVendor(activeVendor === v ? null : v)}
-            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+            className={`inline-flex items-center gap-2 px-3 py-3 md:py-1.5 rounded-full text-sm font-medium transition-colors border ${
               activeVendor === v
                 ? "text-white"
                 : "border-line text-ink-muted hover:border-accent hover:text-accent"

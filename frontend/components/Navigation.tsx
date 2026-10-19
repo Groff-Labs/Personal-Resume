@@ -116,19 +116,26 @@ export default function Navigation() {
           </div>
 
           {/* Mobile */}
-          <div className="md:hidden flex items-center gap-2">
+          {/*
+            These three were 36x36, under the 44px minimum, and the hamburger is
+            the only way to navigate the site on a phone. The icons stay at
+            w-5 h-5 and only the hit area grows, so nothing looks bigger: the
+            box is set explicitly rather than with padding, because `p-2` around
+            a 20px icon can never reach 44.
+          */}
+          <div className="md:hidden flex items-center gap-1">
             <a
               href="/resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Download resume"
-              className="p-2 rounded-md text-ink-muted hover:text-accent hover:bg-surface-1 transition-colors"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-md text-ink-muted hover:text-accent hover:bg-surface-1 transition-colors"
             >
               <Download className="w-5 h-5" />
             </a>
             <ThemeToggle />
             <button
-              className="p-2 rounded-md text-ink-muted hover:text-ink hover:bg-surface-1 transition-colors"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-md text-ink-muted hover:text-ink hover:bg-surface-1 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
               aria-expanded={isMobileMenuOpen}
