@@ -185,7 +185,9 @@ function ChatSection() {
         ...t,
         error: {
           code: "internal",
-          message: `Could not reach the assistant. The résumé is at ${contact.resumePdf}.`,
+          message:
+            `Could not reach the assistant. Michael can answer directly: ` +
+            `${contact.email} or ${contact.phone}. The résumé is at ${contact.resumePdf}.`,
         },
       }));
     } finally {

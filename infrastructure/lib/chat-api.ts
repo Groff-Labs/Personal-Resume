@@ -10,6 +10,10 @@ import * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { createHash } from 'crypto';
+// The guardrail's blocked messages are the assistant's last word on a
+// refused question, so they carry the contact details rather than telling
+// someone to "email him directly" without saying where.
+import { contact } from '../../frontend/lib/data/contact';
 
 export interface ChatApiProps {
   stage: string;
@@ -184,9 +188,11 @@ export class ChatApi extends Construct {
     ];
 
     const blockedInputMessaging =
-      "I can only answer questions about Michael's CV: his roles, skills, certifications, and how to reach him. For anything else, email him directly.";
+      "I can only answer questions about Michael's CV: his roles, skills, certifications, " +
+      `and how to reach him. For anything else he is at ${contact.email} or ${contact.phone}.`;
     const blockedOutputsMessaging =
-      "I'd rather not answer that from here. His full resume is at /resume.pdf, and he's reachable by email.";
+      "I'd rather not answer that from here. " +
+      `Michael can: ${contact.email} or ${contact.phone}. His full resume is at ${contact.resumePdf}.`;
 
     const guardrailConfig = {
       topicPolicyConfig: { topicsConfig: topics },

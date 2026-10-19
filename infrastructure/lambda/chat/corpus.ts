@@ -307,11 +307,53 @@ export const passages: Passage[] = (() => {
   return kept;
 })();
 
+/*
+ * Stopwords.
+ *
+ * This was a hand-curated denylist and that was the wrong shape for the job.
+ * Every function word missing from it was a latent confident-wrong answer
+ * waiting for the right phrasing, and the list had already been patched twice
+ * after the fact: `shipped`, then `like`. An audit in Oct 2026 found **43 more
+ * function words that could still carry a query on their own**, and the danger
+ * runs the wrong way round: the rarer the word, the higher its IDF, so the most
+ * dangerous were the ones appearing once or twice. `got` occurred in exactly one
+ * passage, which made "what has he got" reduce to `got` and match that single
+ * passage at coverage 1.00.
+ *
+ * Measured: "what does he not do" returned a passage about this website's
+ * design trade-offs at **1.00 confidence**, because `not` (37 passages) was the
+ * only token the old list left standing.
+ *
+ * So the general English function words come from a standard list rather than
+ * from whatever someone remembered, and the domain-specific entries below are
+ * the only hand-maintained part. Verified not to regress anything: every query
+ * in `test/retrieval.test.ts` keeps its result, "why no WAF" improves from 0.52
+ * to 1.00, and the two cases above correctly become broad.
+ */
 const STOP = new Set([
-  'the', 'and', 'for', 'with', 'that', 'this', 'from', 'into', 'across', 'over',
-  'his', 'her', 'their', 'what', 'which', 'does', 'did', 'has', 'have', 'had',
-  'was', 'were', 'are', 'any', 'all', 'you', 'michael', 'groff', 'about', 'can',
-  'tell', 'more', 'work', 'worked', 'experience', 'how', 'much', 'many', 'who',
+  // General English function words. Only entries longer than two characters
+  // matter, because `tokenize` already drops anything shorter.
+  'about', 'above', 'after', 'again', 'against', 'all', 'along', 'also',
+  'although', 'always', 'among', 'and', 'any', 'are', 'around', 'because',
+  'been', 'before', 'being', 'below', 'between', 'both', 'but', 'came', 'can',
+  'cannot', 'come', 'could', 'did', 'does', 'doing', 'done', 'down', 'during',
+  'each', 'either', 'else', 'even', 'ever', 'every', 'few', 'for', 'from',
+  'further', 'get', 'got', 'had', 'has', 'have', 'having', 'her', 'here', 'him',
+  'his', 'how', 'however', 'into', 'its', 'itself', 'just', 'least', 'less',
+  'like',
+  'made', 'make', 'many', 'may', 'might', 'more', 'most', 'much', 'must',
+  'never', 'new', 'next', 'not', 'now', 'off', 'often', 'once', 'only', 'onto',
+  'other', 'our', 'out', 'over', 'own', 'per', 'perhaps', 'put', 'rather',
+  'really', 'said', 'same', 'say', 'see', 'seem', 'seen', 'several', 'she',
+  'should', 'since', 'some', 'still', 'such', 'take', 'than', 'that', 'the',
+  'their', 'them', 'then', 'there', 'these', 'they', 'this', 'those', 'though',
+  'through', 'thus', 'together', 'too', 'toward', 'under', 'until', 'upon',
+  'use', 'used', 'using', 'very', 'want', 'was', 'way', 'well', 'went', 'were',
+  'what', 'when', 'where', 'whether', 'which', 'while', 'who', 'whom', 'why',
+  'will', 'with', 'within', 'without', 'would', 'yet', 'you', 'your',
+  // Corpus-specific. Everything here is either the subject of every passage
+  // (so it cannot discriminate) or a word people use to ask a broad question.
+  'michael', 'groff', 'across', 'tell', 'work', 'worked', 'experience',
   // Achievement verbs. These are how people phrase a BROAD question ("what has
   // he shipped", "what has he built") and they also occur incidentally in
   // prose, which is the dangerous combination.
@@ -330,12 +372,11 @@ const STOP = new Set([
   // term is lost, because nobody searches for "shipped" as a technology.
   'shipped', 'ship', 'built', 'build', 'delivered', 'deliver', 'done', 'achieved',
   'accomplished', 'good', 'best', 'impressive', 'actually',
-  // Preference verbs, for the same reason and with the same symptom. "like"
-  // occurred in exactly two passages, so its IDF was near the maximum, and
-  // "does Michael like dogs" reduced to it and matched "How I like to build" at
-  // 0.83 confidence. Nobody searches for "like" as a term. The absent-term
-  // weighting above is the structural fix; this removes the bait as well.
-  'like', 'likes', 'prefer', 'prefers', 'favorite', 'favourite', 'enjoy', 'enjoys',
+  // Preference verbs. "like" was the original symptom: it occurred in exactly
+  // two passages, so its IDF was near maximal, and "does Michael like dogs"
+  // reduced to it and matched "How I like to build" at 0.83 confidence. `like`
+  // is in the general list above now; these are its relatives.
+  'likes', 'prefer', 'prefers', 'favorite', 'favourite', 'enjoy', 'enjoys',
 ]);
 
 /**
@@ -377,6 +418,13 @@ const ALIASES: Record<string, string[]> = {
   tf: ['terraform'],
   cicd: ['pipeline', 'actions', 'codepipeline'],
   lz: ['landing'],
+  // "does he have federal government experience" scored 0.35 because the
+  // corpus says "federal" and "DoD" but never "government", so the absent
+  // term dragged the denominator down on a question the corpus can answer.
+  government: ['federal'],
+  governmental: ['federal'],
+  dod: ['defense'],
+  fintech: ['financial'],
   // Personality and working style.
   strength: ['cliftonstrengths', 'gallup'],
   strengths: ['cliftonstrengths', 'gallup'],

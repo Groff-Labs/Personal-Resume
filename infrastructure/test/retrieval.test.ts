@@ -84,13 +84,56 @@ describe('the reported bug: "does Michael like dogs"', () => {
     }
   });
 
+  it('returns only the About passage, not a grab-bag', () => {
+    // With `like` stopworded and `dogs` aliased to `huskies`, the query reduces
+    // to one real term and exactly one passage matches. Before, three did.
+    const hits = searchPassages('Does Michael like dogs', 4);
+    expect(hits.map((h) => h.source)).toEqual(['About -> Off the clock']);
+  });
+
   it('no longer scores 0.83 on "how I like to build"', () => {
     // The original failure. `like` occurred in two passages, so its IDF was
     // near maximal, `dogs` was absent and weighted 1, and the query was judged
     // entirely on `like`. Both halves are fixed: `like` is stopworded and an
     // absent term now weighs what a single-passage term weighs.
     const hits = searchPassages('Does Michael like dogs', 4);
-    expect(hits.map((h) => h.text).join(' ')).not.toContain('Patterns & Practices');
+    expect(hits[0].source).not.toBe('Skills -> Patterns & Practices');
+  });
+});
+
+describe('function words must not be able to carry a query', () => {
+  /*
+   * The whole class, not the two instances that were found the hard way.
+   * `shipped` and `like` were each patched after they caused a wrong answer;
+   * an audit then found 43 more function words that could still carry a query
+   * alone, and the rarer the word the higher its IDF, so the worst offenders
+   * were the ones appearing once or twice. `got` occurred in exactly one
+   * passage, so "what has he got" matched it at coverage 1.00.
+   */
+  it.each([
+    'what does he not do',
+    'what has he got',
+    'what did he use',
+    'how did he make that',
+    'what way does he work',
+    'what else has he done',
+  ])('%j carries no searchable term', (q) => {
+    expect(isBroadQuery(q)).toBe(true);
+  });
+
+  it('keeps real terms that look like function words', () => {
+    // `no` is two characters so tokenize drops it anyway, but the point is that
+    // stripping the question words must leave the technology behind.
+    expect(isBroadQuery('why no WAF')).toBe(false);
+    expect(top('why no WAF')).toBeDefined();
+  });
+});
+
+describe('synonym coverage for terms the corpus words differently', () => {
+  it('finds the federal work when asked about government', () => {
+    // The corpus says "federal" and "DoD" and never "government", so before the
+    // alias this scored 0.35 on a question the corpus answers well.
+    expectResolves('does he have federal government experience');
   });
 });
 

@@ -5,7 +5,7 @@ import {
   type Message,
 } from '@aws-sdk/client-bedrock-runtime';
 
-import { type Citation } from './corpus';
+import { contact, type Citation } from './corpus';
 import { applyGuardrail } from './guardrail';
 import { checkJdLimit, checkLimits, estimateMicroUsd, hashIp, recordSpend } from './limits';
 import { systemPrompt } from './prompt';
@@ -28,8 +28,9 @@ const MAX_BODY_BYTES = 16 * 1024;
  * Stripping server-side rather than trusting a prompt rule, because the failure
  * is user-visible and prompt adherence is not guaranteed.
  */
+/** Only used if the guardrail blocks without returning its configured text. */
 const FALLBACK_BLOCKED =
-  "I can only answer questions about Michael's CV. For anything else, email him directly.";
+  `I can only answer questions about Michael's CV. For anything else he is at ${contact.email} or ${contact.phone}.`;
 
 /** awslambda is injected by the runtime for RESPONSE_STREAM functions. */
 declare const awslambda: {
@@ -154,19 +155,29 @@ async function handle(event: LambdaUrlEvent, stream: ResponseStream): Promise<vo
   if (!verdict.ok) {
     log({ outcome: verdict.code, ipHash });
     send(
+      // Both messages carry the contact details, and that is the point of them.
+      // They used to say "try again in a minute" and "the resume is at
+      // /resume.pdf" and stop there, which wasted the highest-intent moment the
+      // endpoint has: someone who asked eight questions and got cut off is more
+      // interested than someone who asked one. A dead end told them to come back
+      // later instead of telling them how to reach him.
       verdict.code === 'rate_limited'
         ? {
             type: 'error',
             code: 'rate_limited',
             message:
-              'A few too many questions from your network just now. Try again in a minute.',
+              `That is as many questions as this assistant takes in an hour, and it sounds like you have more. ` +
+              `Michael would rather answer them himself: ${contact.email} or ${contact.phone}. ` +
+              `The full resume is at ${contact.resumePdf}.`,
             retryAfter: verdict.retryAfter,
           }
         : {
             type: 'error',
             code: 'budget_exhausted',
             message:
-              'This assistant has hit its daily budget — it runs on a hobby allowance. The full resume is at /resume.pdf.',
+              `This assistant has spent its daily budget; it runs on a hobby allowance. ` +
+              `Ask Michael directly instead: ${contact.email} or ${contact.phone}. ` +
+              `The full resume is at ${contact.resumePdf}.`,
           },
     );
     stream.end();
@@ -411,7 +422,9 @@ export const handler = awslambda.streamifyResponse(
         encodeEvent({
           type: 'error',
           code: 'internal',
-          message: 'Something went wrong on my side. The full resume is at /resume.pdf.',
+          message:
+            `Something went wrong on my side. Michael can answer directly: ` +
+            `${contact.email} or ${contact.phone}. The full resume is at ${contact.resumePdf}.`,
         }),
       );
       wrapped.end();
