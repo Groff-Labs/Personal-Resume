@@ -5,32 +5,23 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ExternalLink, Archive, X } from "lucide-react";
 import { Github } from "@/components/BrandIcons";
+import {
+  archiveNoteParts,
+  architecture,
+  comparison,
+  sourceUrl,
+  summaryParts,
+  tradeoffs,
+} from "@/lib/data/project";
 
-const COMPARISON = [
-  {
-    aspect: "Monthly cost",
-    wp: "BlueHost unlimited plan (shared across ~30 sites)",
-    aws: "Pennies per month (this site alone; actual numbers pending a few weeks of traffic)",
-  },
-  { aspect: "First-load time", wp: "3 to 4 s", aws: "< 1 s" },
-  {
-    aspect: "Security posture",
-    wp: "Theme + plugin patch treadmill",
-    aws: "Zero server; signed OAC; managed TLS",
-  },
-  { aspect: "Update workflow", wp: "FTP or wp-admin clickops", aws: "git push; Actions handles the rest" },
-  { aspect: "Infra definition", wp: "None (clickops)", aws: "AWS CDK in TypeScript" },
-];
-
-const TRADEOFFS = [
-  "CloudFlare for DNS instead of Route 53; keeps this project single-account and lets me skip cross-account delegation. Trade-off: ACM validation needs a manual CNAME.",
-  "No WAF; saves ~$5/mo and a portfolio site doesn't warrant managed-rules cost.",
-  "OAC, not OAI; AWS's 2023+ recommended pattern for signed S3-origin access.",
-  "Static export, not SSR; zero servers and no per-request logic. Fits a resume, not a SaaS.",
-];
-
-const DIAGRAM_ALT =
-  "Architecture diagram: Git push to GitHub triggers GitHub Actions, which assumes an IAM OIDC role to deploy infrastructure (CloudFront, ACM, OAC, S3) via CDK and sync site content to S3. Site visitors reach the site via CloudFlare (CNAME) → CloudFront (TLS via ACM) → OAC → S3.";
+// Content lives in `lib/data/project.ts` so the chat assistant can read it:
+// `corpus.ts` imports data modules and cannot import React, so while these were
+// consts in this file the whole section was invisible to the assistant. "How is
+// this site built" and "why no WAF" had nothing to retrieve, which is the worst
+// possible gap in the one section whose purpose is demonstrating the work.
+const COMPARISON = comparison;
+const TRADEOFFS = tradeoffs;
+const DIAGRAM_ALT = architecture;
 
 function ArchitectureDiagram({ onOpen }: { onOpen: () => void }) {
   return (
@@ -84,9 +75,9 @@ export default function ProjectShowcase() {
             WordPress → Next.js on AWS
           </h2>
           <p className="text-lg text-ink-muted max-w-2xl mx-auto">
-            The previous version of this site was a 2015-era WordPress install on
-            The7 theme. This rewrite is its opposite: no server, no plugins, no
-            database. Infrastructure is code. Deploys are a <code className="font-mono text-sm">git push</code>.
+            {summaryParts.lead}
+            <code className="font-mono text-sm">{summaryParts.code}</code>
+            {summaryParts.tail}
           </p>
         </div>
 
@@ -139,7 +130,7 @@ export default function ProjectShowcase() {
         {/* CTAs */}
         <div className="flex flex-wrap gap-3 justify-center">
           <a
-            href="https://github.com/Groff-Labs/Personal-Resume"
+            href={sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-ink text-surface-0 rounded-md font-medium hover:opacity-90 transition-opacity"
@@ -160,9 +151,9 @@ export default function ProjectShowcase() {
           </a>
         </div>
         <p className="text-center text-xs text-ink-subtle italic mt-4 max-w-xl mx-auto">
-          The original site is preserved as a read-only static snapshot at
-          <code className="font-mono text-[11px] mx-1">/legacy/</code>
-          for posterity; same domain, same bucket, no WordPress runtime involved.
+          {archiveNoteParts.lead}
+          <code className="font-mono text-[11px] mx-1">{archiveNoteParts.code}</code>
+          {archiveNoteParts.tail}
         </p>
       </motion.div>
 

@@ -16,63 +16,34 @@ import {
   Sun,
   X,
 } from "lucide-react";
+import {
+  offTheClock,
+  strengths as gallupStrengths,
+  type AboutIcon,
+  type StrengthIcon,
+} from "@/lib/data/about";
 
 const SHOW_FAMILY_PHOTO = true;
 
-const stats = [
-  { icon: User, label: "Native Texan from Bandera, TX" },
-  { icon: Users, label: "Married to a Texas public school teacher" },
-  { icon: Users, label: "Father of two daughters" },
-  { icon: Sparkles, label: "Fur-father of four; two Huskies, one standard-issue tabby, and one black cat" },
-  { icon: Briefcase, label: "Based in San Antonio, TX" },
-  { icon: Target, label: "Avid tech enthusiast" },
-];
+// The copy lives in `lib/data/about.ts` so the chat assistant can read it;
+// `corpus.ts` imports data modules and cannot import React. Icons stay here,
+// because the data module must not depend on lucide. These two maps are the
+// seam: a new icon key needs an entry here or the build fails on the lookup.
+const factIcons: Record<AboutIcon, typeof User> = {
+  user: User,
+  users: Users,
+  sparkles: Sparkles,
+  briefcase: Briefcase,
+  target: Target,
+};
 
-interface Strength {
-  name: string;
-  color: string;
-  icon: typeof Flame;
-  // One-sentence descriptions adapted from Gallup's published CliftonStrengths themes.
-  summary: string;
-}
-
-const gallupStrengths: Strength[] = [
-  {
-    name: "Input",
-    color: "#2563eb", // blue-600
-    icon: Library,
-    summary:
-      "A need to collect and archive; information, ideas, artifacts, even relationships.",
-  },
-  {
-    name: "Achiever",
-    color: "#0891b2", // cyan-600
-    icon: Flame,
-    summary:
-      "Work hard with great stamina; immense satisfaction from being busy and productive.",
-  },
-  {
-    name: "Adaptability",
-    color: "#0d9488", // teal-600
-    icon: Waves,
-    summary:
-      "Prefer to go with the flow; take things as they come and discover the future one day at a time.",
-  },
-  {
-    name: "Learner",
-    color: "#7c3aed", // violet-600
-    icon: BookOpen,
-    summary:
-      "Continuous desire to learn and improve; the process excites more than the outcome.",
-  },
-  {
-    name: "Positivity",
-    color: "#ea580c", // orange-600
-    icon: Sun,
-    summary:
-      "Contagious enthusiasm; naturally upbeat, energizes others.",
-  },
-];
+const strengthIcons: Record<StrengthIcon, typeof Flame> = {
+  library: Library,
+  flame: Flame,
+  waves: Waves,
+  bookOpen: BookOpen,
+  sun: Sun,
+};
 
 export default function AboutMe() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -105,6 +76,13 @@ export default function AboutMe() {
         <div className="grid lg:grid-cols-2 gap-10 items-start max-w-5xl mx-auto">
           {/* Left: Bio + Stats */}
           <div className="space-y-6">
+            {/* Left as JSX on purpose. This bio is already in the corpus via
+                knowledge/00-overview.md ("the stated design bar is that a
+                system has to run at 2am on a Sunday without waking anyone"), so
+                moving it into a data module would add a second copy of text the
+                assistant can already read, and cost the inline emphasis and
+                arrows. Only the facts and strengths below were actually
+                missing. */}
             <div className="text-ink-muted leading-relaxed space-y-4">
               <p>
                 I&apos;m an AWS Sr. Solutions Architect at{" "}
@@ -142,12 +120,15 @@ export default function AboutMe() {
                 <div className="flex-1">
                   <p className="eyebrow mb-3">Off the clock</p>
                   <ul className="space-y-2 text-sm">
-                    {stats.map((s) => (
-                      <li key={s.label} className="flex items-start gap-2.5 text-ink-muted">
-                        <s.icon className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                        <span>{s.label}</span>
-                      </li>
-                    ))}
+                    {offTheClock.map((s) => {
+                      const Icon = factIcons[s.icon];
+                      return (
+                        <li key={s.label} className="flex items-start gap-2.5 text-ink-muted">
+                          <Icon className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                          <span>{s.label}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>
@@ -169,7 +150,9 @@ export default function AboutMe() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3">
-              {gallupStrengths.map((s, i) => (
+              {gallupStrengths.map((s, i) => {
+                const Icon = strengthIcons[s.icon];
+                return (
                 <div
                   key={s.name}
                   className="card p-4 relative overflow-hidden border-t-2"
@@ -180,7 +163,7 @@ export default function AboutMe() {
                       className="w-8 h-8 rounded-md flex items-center justify-center shrink-0"
                       style={{ backgroundColor: `${s.color}1a`, color: s.color }}
                     >
-                      <s.icon className="w-4 h-4" />
+                      <Icon className="w-4 h-4" />
                     </div>
                     <span className="font-mono text-[11px] text-ink-subtle">
                       #{i + 1}
@@ -193,7 +176,8 @@ export default function AboutMe() {
                     {s.summary}
                   </p>
                 </div>
-              ))}
+                );
+              })}
 
               {/* 6th slot: callout card */}
               <div className="card p-4 border border-dashed border-line bg-surface-1 flex flex-col justify-center">

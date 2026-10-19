@@ -1,5 +1,13 @@
 *.js
 !jest.config.js
+# ...and test/ helpers are hand-written source, not tsc output. `tsc` never
+# emits into test/ (there is no outDir and the sources there are .ts), so
+# anything .js here was written by hand. markdown-transform.js gives jest the
+# `*.md` text loader esbuild has, and without it every retrieval test fails to
+# import the corpus. This negation exists because `md.d.ts` was silently
+# untracked by the rule below for weeks, and the same trap was two minutes from
+# repeating.
+!test/**/*.js
 *.d.ts
 # ...but lambda/ declarations are hand-written source, not build output.
 # md.d.ts declares `*.md` for the esbuild text loader, and without it the Lambda

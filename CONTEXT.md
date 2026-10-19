@@ -45,9 +45,15 @@ to four, which strands the certifications heading. The check script enforces it.
 semicolons, colons or `·`.
 
 **The data modules** — `frontend/lib/data/*.ts`. `jobs.ts`, `certifications.ts`,
-`skills.ts`, `status.ts`, `testimonials.ts`, `chat.ts`, `contact.ts`. Pure
-TypeScript, no React. They are what the page renders *and* what the chat
-assistant reads, which is why they must never disagree with `resume.md`.
+`skills.ts`, `status.ts`, `testimonials.ts`, `chat.ts`, `contact.ts`, `about.ts`,
+`project.ts`. Pure TypeScript, no React. They are what the page renders *and*
+what the chat assistant reads, which is why they must never disagree with
+`resume.md`.
+
+**The rule they exist for:** content hardcoded in a component is invisible to the
+assistant, because `corpus.ts` imports data modules and cannot import React.
+`about.ts` and `project.ts` were extracted in Oct 2026 after exactly that
+happened. **New prose on the page belongs in a data module, not in the `.tsx`.**
 
 **Job vs role** — a `Job` is one employer. It sets *either* `roles` (a promotion
 path, newest first) *or* `responsibilities` (a single title), never both.
@@ -87,6 +93,15 @@ across corpus sizes. Use it to order results, never to judge confidence.
 **Broad query** — a question with no distinctive term left after stopwording, so
 keyword search cannot rank it ("what has he shipped"). Reported `tooBroad` and
 routed to curated highlights instead of a grab-bag.
+
+**Absent term** — a query token the corpus does not contain at all. Weighted
+`UNKNOWN_TERM_WEIGHT`, the most any single term can score, because its absence is
+the strongest evidence the corpus cannot answer. Weighting it `1` was the bug
+behind the assistant denying its own page.
+
+**Alias** — a query-side synonym in `ALIASES` (`dogs` to `husky`, `k8s` to
+`kubernetes`). Corpus-aware: only aliases the corpus contains are added. The
+map's length is the signal for whether semantic search is worth its cost.
 
 **Highlights** — `knowledge/10-highlights.md`, the one file where order matters.
 Backs the `get_highlights` tool and answers broad openers.

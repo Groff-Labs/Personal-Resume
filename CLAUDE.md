@@ -14,13 +14,16 @@ WordPress → Next.js refactor and apex-migration work is already done.
 | New job / promotion | `frontend/lib/data/jobs.ts` + `resume.md` |
 | New certification | `frontend/lib/data/certifications.ts` + `resume.md` |
 | Skills | `frontend/lib/data/skills.ts` |
-| Bio / About copy | `frontend/components/AboutMe.tsx` |
+| Bio / About copy | `frontend/components/AboutMe.tsx` (the two intro paragraphs only) |
+| "Off the clock" facts, CliftonStrengths | `frontend/lib/data/about.ts` — the page renders every fact, the assistant sees only `inCorpus: true` |
+| "About this site" copy and trade-offs | `frontend/lib/data/project.ts` |
 | Hero tagline / title | `frontend/components/Hero.tsx` |
 | Availability status pill (the "open to…" signal under the headshot) | `frontend/lib/data/status.ts` — flip `ACTIVE_STATUS_ID` to a preset id (`open-to-roles`, `open-conversations`, `open-consulting`, `settled`); add a preset by copying an entry. `Hero.tsx` renders the active one; tone drives color + ping |
 | Contact info (phone / email / socials) | `frontend/components/Footer.tsx` **+** `frontend/public/michael-groff.vcf` **+** `resume.md` (all three hold canonical copies) |
 | New headshot | Replace `frontend/public/images/profile/michael-groff.jpg` → prebuild regenerates `.webp` |
 | Resume bullets / layout | `resume.md` — PDF regenerates on next build |
 | What the chat assistant knows | `knowledge/*.md` — plain markdown, no code change needed. A new *file* needs one line in `infrastructure/lambda/chat/knowledge.ts` |
+| Query synonyms (dogs -> husky, k8s -> kubernetes) | `ALIASES` in `infrastructure/lambda/chat/corpus.ts` |
 | Chat behaviour / tone / refusals | `infrastructure/lambda/chat/prompt.ts` |
 | Chat caps and model | `infrastructure/cdk.json` context (`chatModelId`, `chatDailyUsdCap`, `chatIpTurnsPerHour`, …) |
 
@@ -444,6 +447,55 @@ known-bad case scores 0.40.
 **Do not replace coverage with an absolute score threshold again.** If retrieval
 needs tuning, tune `UBIQUITOUS_SHARE` or the chunk size in `knowledge.ts`.
 
+3. **An absent query term did not reduce confidence, and that is how the
+   assistant came to deny something printed on its own page.** Oct 2026, a
+   visitor asked *"does Michael like dogs"* and got *"the CV does not mention
+   anything about his preference for dogs"*, while the About section said "two
+   Huskies". Two causes, and the second is the instructive one.
+
+   First, the pets were never in the corpus: they were hardcoded in
+   `AboutMe.tsx`, and `corpus.ts` reads data modules, not React. Fixed by
+   extracting `frontend/lib/data/about.ts` and `project.ts`.
+
+   Second, and worse, retrieval was **confident**. `queryMass` used
+   `idf.get(q) ?? 1`, so a term the corpus does not contain scored 1 while a
+   merely *rare* present term scored up to 5.5. `dogs` was absent and weighted
+   1; `like` occurred in exactly two of 250 passages and weighted 4.83. The
+   query was therefore judged almost entirely on "like", matched *"Patterns &
+   Practices: How I like to build"*, and scored **0.83**. The model read that,
+   found no dogs, and answered correctly. **Retrieval lied to the model.**
+
+   `tools.ts` already had the guard for this — its comment says "one
+   rare-but-incidental word can rescue an otherwise broad query and produce a
+   confident non-answer" — but the metric feeding it could not fall far enough
+   to trip it.
+
+   An absent term is the *strongest* evidence the corpus cannot answer, so it is
+   now weighted as `UNKNOWN_TERM_WEIGHT`, what a term appearing in exactly one
+   passage is worth. Same query: **0.47**, correctly weak. Every query the gate
+   asserts stayed at 1.00. `queryTermWeight` is used for both the numerator and
+   the denominator so they cannot drift.
+
+   Two more confident-wrong answers came from the same defect and are fixed with
+   it: *"how is this site built"* scored 1.00 on the **availability** passage,
+   and *"why no WAF"* 0.54 on a WAF skills line.
+
+**The vocabulary gap is covered by a curated `ALIASES` map, not embeddings.**
+"dogs" and "Huskies" share no token, so indexing the pets line does not by
+itself answer the question; same for `k8s` against `kubernetes`. The map is
+query-side only and **corpus-aware**, which is the subtle part: an earlier
+version that merely added every alias would have made things worse, because an
+alias absent from the corpus adds `UNKNOWN_TERM_WEIGHT` to the denominator and
+never matches, so `pets` expanding to four aliases with one present would score
+~0.25. Only aliases the corpus contains are added, and an absent original is
+dropped once an alias replaces it.
+
+**Watch the length of `ALIASES`.** It exists to cover a handful of known
+mismatches, not to become a hand-built thesaurus. If it keeps growing, that is
+the evidence that semantic search has become worth paying for, and
+`test/retrieval.test.ts` asserts it stays under 30 entries so the signal is not
+missed. See *Why there is no Knowledge Base* for what to reach for then.
+
 Re-measure after a significant corpus change:
 
 ```
@@ -552,6 +604,29 @@ costs nothing, adds no infrastructure, and has no cold start. If the corpus ever
 reaches the point where keyword retrieval genuinely fails — not "returns a
 mediocre hit", but misses answers that are present — revisit **S3 Vectors**,
 which has no OCU floor, and not OpenSearch.
+
+**Re-costed Oct 2026 against the Price List API, per query**, when the dogs
+failure looked like it might be that trigger:
+
+| Option | Per query | Against a $0.000956 turn |
+|---|---|---|
+| Keyword, today | $0 | — |
+| + the `ALIASES` map | $0 | — |
+| Build-time embeddings in the bundle | ~$0, +$0.00075/deploy | +0% |
+| **S3 Vectors** | **$0.000055** | **+5.8%** |
+| Managed KB retrieval | $0.001 | **+104%** |
+| OpenSearch Serverless | $88–350/month floor | — |
+
+Titan Embeddings V2 text is $0.00002/1K tokens, so embedding all ~270 passages
+costs about **$0.00075** total, and S3 Vectors storage for ~1 MB of vectors is
+~$0.00006/month. **Embeddings are affordable; managed KB retrieval is the one
+disqualifying number**, unchanged in substance from the original costing.
+
+It was **not** the trigger, and the distinction is worth keeping: the dogs
+answer was never *present*, so no amount of semantic search would have found it.
+The gap was corpus coverage plus a broken confidence metric, both free to fix.
+`test/retrieval.test.ts` is now the instrument — adopt vectors on a failing case
+there, not on another round of estimates.
 
 ### Content rules for `knowledge/`
 
@@ -920,9 +995,17 @@ would imply a workspace that does not exist.
 It runs lint, both typechecks, the stack assertions, `cdk synth`, and the
 artifact invariants that have each regressed at least once — résumé page count,
 no em dashes, the published Markdown having no leaked comments, no HTML comments
-left in `knowledge/`, retrieval still separating broad from narrow queries, and
-no customer or colleague name in published prose. `./scripts/check.sh fast`
+left in `knowledge/`, and no customer or colleague name in published prose.
+`./scripts/check.sh fast`
 skips the Next build and `cdk synth` for a quick loop.
+
+Retrieval assertions live in `infrastructure/test/retrieval.test.ts` rather than
+in the gate script. They were an inline esbuild heredoc in `check.sh`, because
+jest could not import `resume.md`; `test/markdown-transform.js` gives jest the
+same text loader esbuild uses, so they now run inside *infra: stack assertions*
+with per-case names and a test count. Keep the negative cases: a retriever that
+answers confidently for every question is worse than one that admits a miss,
+because the model believes it.
 
 It reports every failure rather than stopping at the first, and exits 1.
 

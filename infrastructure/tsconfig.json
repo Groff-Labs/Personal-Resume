@@ -30,6 +30,10 @@
       "./node_modules/@types"
     ]
   },
+  "//files": "test/retrieval.test.ts imports lambda/chat/corpus.ts, which imports resume.md and knowledge/*.md. `exclude` stops lambda/ being a root of this program but cannot stop an import pulling it in, so this program needs the *.md declaration too. `files` is exempt from `exclude`, which is why this works. The declaration stays under lambda/ rather than moving somewhere shared because .gitignore ignores *.d.ts with a single negation for lambda/**, and moving it would silently untrack it again.",
+  "files": [
+    "lambda/chat/md.d.ts"
+  ],
   "exclude": [
     "node_modules",
     "cdk.out",

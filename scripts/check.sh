@@ -82,29 +82,11 @@ step "corpus: no unresolved TODO markers" bash -c '
   n=$(grep -c "<!--" knowledge/[0-9]*.md 2>/dev/null | awk -F: "{s+=\$2} END{print s+0}")
   [ "$n" = "0" ] || { echo "    $n HTML comment(s) left in knowledge/ -- git publishes these"; exit 1; }'
 
-step "corpus: retrieval still separates broad from narrow" bash -c '
-  cd infrastructure
-  cat > .check-retrieval.mjs <<"EOF"
-import { build } from "esbuild";
-const r = await build({ entryPoints: ["lambda/chat/corpus.ts"], bundle: true,
-  write: false, format: "esm", platform: "node", target: "node22",
-  loader: { ".md": "text" } });
-const m = await import("data:text/javascript;base64," +
-  Buffer.from(r.outputFiles[0].text).toString("base64"));
-// Broad openers must route to curated highlights; specific terms must resolve.
-const broad  = ["what has he shipped on AWS", "what has he built", "is he any good"];
-const narrow = ["landing zone", "multi-tenant SaaS", "M-21-31", "Istio"];
-let bad = [];
-for (const q of broad)  if (!m.isBroadQuery(q)) bad.push(`"${q}" should be BROAD`);
-for (const q of narrow) {
-  const h = m.searchPassages(q, 1)[0];
-  if (!h || h.coverage < m.MIN_COVERAGE) bad.push(`"${q}" should resolve`);
-}
-if (bad.length) { console.error("    " + bad.join("\n    ")); process.exit(1); }
-EOF
-  node .check-retrieval.mjs; rc=$?
-  rm -f .check-retrieval.mjs
-  exit $rc'
+# Retrieval used to be checked here by an inline esbuild script, because jest
+# could not import `resume.md`. `test/markdown-transform.js` fixes that, so the
+# assertions now live in `test/retrieval.test.ts` and run inside
+# "infra: stack assertions" above: in the test count, with per-case names, and
+# covering negative cases a shell heredoc could not express readably.
 
 step "no customer or colleague names in published prose" bash -c '
   # Names from the private sources file must never reach the repo. Word-boundary
