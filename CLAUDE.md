@@ -644,6 +644,14 @@ the assistant reports as "the CV does not mention it" — the confident wrong
 denial that the absent-term weighting was introduced to stop. `test/retrieval.test.ts`
 asserts them for that reason.
 
+**It does not follow that the model mediates everything.** It rewrites what it
+believes is misspelled and passes through what it does not, and the difference
+is visible in the same verification. Asked "tell me about his CI/CD work" it
+called `search_experience` with `"CI/CD work"`, the visitor's own wording
+unchanged — which is why the `ci/cd` normalisation in `tokenize` is
+load-bearing where the typo tier is insurance. Before that normalisation this
+exact query was broad with zero matches; after it, four matches at 0.97.
+
 The practical consequence for a future session: **if `chatModelId` changes, the
 value of this tier changes with it**, in either direction. A model that
 normalises less makes it load-bearing; a model that normalises more makes it
