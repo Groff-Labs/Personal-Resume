@@ -23,78 +23,7 @@ decided no" is worth more than silence.
 
 ## Open
 
-### 1. Update the Lucid architecture diagram for the chat feature
-
-**Owner: Michael, targeted for the week of 19 Oct 2026.** Not a code change.
-
-Existing diagram: <https://lucid.app/lucidchart/aef5844e-526a-4261-9fb8-258ca20973c8/edit>
-
-Wanted: a **new page** cloning the current one, then the chat path added, so the
-original stays as the pre-chat architecture. New elements:
-
-```
-browser ──> CloudFront ──> /api/chat ──> Lambda Function URL (OAC, AWS_IAM,
-                                          RESPONSE_STREAM)
-                                            │
-                              cv-chat-api-<stage>  (no VPC)
-                                            ├─> DynamoDB cv-chat-counters-<stage>
-                                            │     per-IP + daily budget counters
-                                            ├─> Bedrock ApplyGuardrail  (in, out)
-                                            └─> Bedrock Converse  (Nova Lite)
-                                                  tool-use loop, max 4 hops
-```
-
-Worth showing on the diagram because they are the non-obvious parts: the
-guardrail sits on both sides of the model call, the function has no VPC (via an
-SCP carve-out), and the corpus is bundled at synth time rather than fetched.
-
-`frontend/public/images/diagrams/cv_infra_diagram.png` is the exported copy the
-site renders, and it is in the image-optimiser exclusion list so it keeps full
-resolution for the lightbox. Re-export to the same path.
-
-### 2. Corpus content only Michael can supply
-
-**Owner: Michael, targeted for end of week, 19 Oct 2026.**
-
-From a 49-question recruiter audit, Oct 2026. Everything that was a *vocabulary*
-gap is already fixed; these are the ones where the fact genuinely is not written
-down anywhere, so they need him rather than a code change. Roughly in order of
-how often a recruiter asks.
-
-**1. The eleven industries, named.** The résumé claims "17 AWS engagements across
-11 industries" and the corpus can name six: security software, public sector,
-heavy industry, HR technology, healthcare, and software/SaaS. "Has he worked in
-<industry>" is a screening question, and today the honest answer for retail,
-manufacturing, energy, education, logistics and so on is silence. Needs the
-list, and the anonymisation rules in `knowledge/README.md` still apply: sector
-only, no customer, no re-identifying combination.
-
-**2. Compliance frameworks beyond the ones recorded.** HITRUST, IL4/IL5, DISA
-SRG and OMB M-21-31 are covered. SOC 2, PCI DSS, GDPR, ISO 27001 and NIST
-800-53 return nothing. Any of these is a hard filter on a job spec, so a yes
-worth claiming is worth writing down, and a no is worth saying plainly.
-
-**3. The hardest problem he has solved.** Scores 0.39. The corpus has failures
-(the TGW change, the Glue experiment) and engagement detail, but nothing framed
-as "the hardest thing", which is the single most common depth probe in a
-hiring-manager screen. One section, one problem, why it was hard and what the
-constraint was.
-
-**4. How he handles disagreement.** Scores 0.42. The adversarial review gate and
-the over-optimistic architect are both in the leadership notes, but neither is
-written as "here is how I disagree with someone senior and still ship". Common
-behavioural question and he clearly has the material.
-
-**5. Notice period and start availability.** Partly covered by the availability
-signal, but "when could you start" and "what is your notice" get a vague answer.
-Cheap to fix and asked in the first five minutes of every screen.
-
-Deliberately NOT to be filled, because the current behaviour is right:
-compensation (guardrail-denied), visa sponsorship and work authorisation (rule
-10, protected characteristics), references (not public), and whether he is
-interviewing elsewhere.
-
-### 3. Decide on S3 Vectors from two months of real traffic
+### 1. Decide on S3 Vectors from two months of real traffic
 
 **Deliberately waiting until ~20 Dec 2026, with instrumentation added first.**
 
@@ -168,6 +97,62 @@ tea leaves.
 ---
 
 ## Closed
+
+### The architecture diagram covers the chat path
+
+Done 19 Oct 2026 and live on prod. A new Lucid page clones the Apr 2026
+architecture and adds the chat path, so the original survives as the pre-chat
+state; the export replaces
+`frontend/public/images/diagrams/cv_infra_diagram.png`.
+
+**It was not a drop-in, and that is the part to remember.** The old export was
+1497x820, wide and short. The new one is 1912x1968, near enough square, because
+the chat path roughly doubled the height, and three places had the old shape
+hardcoded: the thumbnail's `aspect-[1500/810]`, and `width`/`height` plus an
+explicit `w-[min(95vw,1500px)]` on the lightbox. A stale aspect ratio does not
+crop — `object-contain` prevents that — it **letterboxes**, so the diagram
+would have rendered at about 44% of the available width behind white bars.
+**Re-measure those three numbers on every re-export.**
+
+Two inaccuracies in the diagram itself were noticed and left, since neither is
+worth a re-export on its own. Fix them whenever it is next opened:
+
+- It labels CloudFront "3 path behaviours" while drawing four (`/*` default,
+  `/api/chat`, `/js/*`, `/api/event`). There are three *additional* behaviours
+  plus the default.
+- The "conditional write" arrow starts at the bundled-corpus node rather than
+  the Lambda. The corpus is a read-only artefact in the bundle; the function
+  does the write.
+
+The published export carries no policy names, tag keys or account identifiers,
+which matters because it is rendered on the live site and opened in a lightbox.
+See *Landing-zone identifiers pulled out of the public prose*.
+
+### The corpus gaps only Michael could fill are filled
+
+Closed 19 Oct 2026, verified by measurement rather than by recollection. All
+five items of the Oct 2026 recruiter audit now resolve at or above
+`MIN_COVERAGE`:
+
+| Gap | Then | Now |
+|---|---|---|
+| The industries, named | 6 of 11 nameable | 15 named, 1.00 |
+| Compliance frameworks | SOC 2 / PCI DSS / GDPR / ISO 27001 / NIST 800-53 all missed | all 1.00 |
+| The hardest problem | 0.39 | 1.00 |
+| Handling disagreement | 0.42 | 0.92 |
+| Notice period and start date | vague | 1.00 |
+
+Three of those queries rank a *different* passage first — "logistics
+experience" leads with "What he is looking for next", "education experience"
+with his degree, "when could he start" with the team-running section. That is
+not a content gap. `search_experience` returns up to four matches and the
+correct passage is inside the set every time, which is what the model actually
+reads. Worth knowing before someone reads a first-place source line and
+reopens this.
+
+The deliberate omissions still stand and are still right: compensation
+(guardrail-denied), visa sponsorship and work authorisation (protected
+characteristics), references, and whether he is interviewing elsewhere.
 
 ### Landing-zone identifiers pulled out of the public prose
 
