@@ -12,13 +12,13 @@
     "typecheck:lambda": "tsc --noEmit -p lambda/tsconfig.json"
   },
   "devDependencies": {
-    "@aws-sdk/client-bedrock-runtime": "^3.1152.0",
-    "@aws-sdk/client-dynamodb": "^3.1152.0",
-    "@aws-sdk/lib-dynamodb": "^3.1152.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.1156.0",
+    "@aws-sdk/client-dynamodb": "^3.1156.0",
+    "@aws-sdk/lib-dynamodb": "^3.1156.0",
     "@smithy/types": "^4.19.0",
     "@types/jest": "^30",
     "@types/node": "^26.6.5",
-    "aws-cdk": "^2.1145.0",
+    "aws-cdk": "^2.1146.1",
     "esbuild": "^0.28.2",
     "jest": "^30",
     "ts-jest": "^29.4.15",
